@@ -36,3 +36,11 @@ require('./setting/setting.schema.js');
 require('./label/label.schema.js');
 require('./bookmark/bookmark.schema.js');
 require('./user/user.schema.js');
+
+
+
+/*
+How to use in other files:
+	var mongoose = require( 'mongoose' ),  
+    Team = mongoose.model('Team'); 
+*/

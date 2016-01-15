@@ -2,6 +2,7 @@
 //DEPENDENCIES
 var os = require('os');
 var fs = require('fs');
+var https = require('https');
 var express = require('express');
 var app = express();
 require('./modules/connectDB.js');
@@ -13,18 +14,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //checking the OS to determine the log file path
-var logPath;
-if(os.platform() === 'linux'){
-	logPath = '/var/log/bookmarkHQ/';
-	if(!fs.lstatSync(logPath).isDirectory()){
-		fs.mkdirSynch(logPath);
-	}
-}
-else{
+// var logPath;
+// if(os.platform() === 'linux'){
+// 	logPath = '/var/log/bookmarkHQ/';
+// 	if(!fs.lstatSync(logPath).isDirectory()){
+// 		fs.mkdirSynch(logPath);
+// 	}
+// }
+// else{
+// 	logPath = 'C:\\';
+// 	if(!fs.lstatSync(logPath).isDirectory()){
+// 		fs.mkdirSynch(logPath);
+// 	}
+// }
 
-}
-
-var log = bunyan.createLogger({name:'mainLog'});
+// var log = bunyan.createLogger({name:'mainLog'});
 
 var router = express.Router();
 // middleware to use for all requests
@@ -61,6 +65,20 @@ router.route('/users')
 
 	.post(function(req, res){
 		res.send('User test POST');
+
+		var user = require('modules/users/users.model.js').createUser(req.body);
+
+		var bear = new Bear();      // create a new instance of the Bear model
+        bear.name = req.body.name;  // set the bears name (comes from the request)
+
+        //save the bear and check for errors
+        // bear.save(function(err) {
+        //     if (err)
+        //         res.send(err);
+
+        //     res.json({ message: 'Bear created!' });
+        // }
+
 	});
 router.route('/users/:user_id')
 	.get(function(req, res){
@@ -131,11 +149,21 @@ app.use('/', router);
 app.use(express.static('public/assets'));
 
 //#### START SERVER #####
-var server = app.listen(3000, function(){
-	var host = server.address().address;
-	var port = server.address().port;
 
-	console.log('Example app listening at http://%s:%s', host, port);
+//normal http server 
+// var server = app.listen(3000, function(){
+// 	var host = server.address().address;
+// 	var port = server.address().port;
+
+// 	console.log('Example app listening at http://%s:%s', host, port);
+// });
+
+//https server. requires https for whole domain
+https.createServer({
+	key: fs.readFileSync('certs/key.pem'),
+	cert: fs.readFileSync('certs/cert.pem')
+}, app).listen(3000, function(){
+	var host = this.address().address;
+	var port = this.address().port;
+	console.log('Server is listening at http://%s:%s', host, port);
 });
-
-

@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bookmark = new mongoose.Schema({
 	title: {type: String, required: true},
 	description: {type: String},
-	url: {type: String, required;true},
+	url: {type: String, required:true},
 	favicon: {type: String},
 	tags:[{type: mongoose.Schema.Types.ObjectId, ref: 'Label'}],
 	created: {type: Date, default: Date.now},
