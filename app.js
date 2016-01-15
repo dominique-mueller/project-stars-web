@@ -8,7 +8,7 @@ var app = express();
 require('./modules/connectDB.js');
 var mongoose = require('mongoose');			
 var bodyParser = require('body-parser');
-var bunyan = require('bunyan');
+var logger = require('./adapters/logger.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -28,13 +28,12 @@ app.use(bodyParser.json());
 // 	}
 // }
 
-// var log = bunyan.createLogger({name:'mainLog'});
+
 
 var router = express.Router();
 // middleware to use for all requests
 router.use(function(req, res, next) {
-    // do logging (e.g. request IP)
-    console.log('A Request');
+    logger.info('A request');
     next(); // make sure we go to the next routes and don't stop here
 });
 
@@ -53,7 +52,7 @@ router.get('',function(req, res){
 // 	req.user = require(MODELS_PATH +'user.js').;
 // });
 router.all('', function(req, res, next){
-	console.log('Universial api request print');
+	logger.info('Universial api request print');
 	next();
 });
 
@@ -155,7 +154,7 @@ app.use(express.static('public/assets'));
 // 	var host = server.address().address;
 // 	var port = server.address().port;
 
-// 	console.log('Example app listening at http://%s:%s', host, port);
+// 	logger.info('Example app listening at http://%s:%s', host, port);
 // });
 
 //https server. requires https for whole domain
@@ -165,5 +164,5 @@ https.createServer({
 }, app).listen(3000, function(){
 	var host = this.address().address;
 	var port = this.address().port;
-	console.log('Server is listening at http://%s:%s', host, port);
+	logger.info('Server is listening at http://%s:%s', host, port);
 });
