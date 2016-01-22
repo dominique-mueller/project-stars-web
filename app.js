@@ -5,6 +5,7 @@ var fs = require('fs');
 var https = require('https');
 var express = require('express');
 var app = express();
+var router = require('./router.js');
 require('./modules/connectDB.js');
 var mongoose = require('mongoose');			
 var bodyParser = require('body-parser');
@@ -12,130 +13,6 @@ var logger = require('./adapters/logger.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-//checking the OS to determine the log file path
-// var logPath;
-// if(os.platform() === 'linux'){
-// 	logPath = '/var/log/bookmarkHQ/';
-// 	if(!fs.lstatSync(logPath).isDirectory()){
-// 		fs.mkdirSynch(logPath);
-// 	}
-// }
-// else{
-// 	logPath = 'C:\\';
-// 	if(!fs.lstatSync(logPath).isDirectory()){
-// 		fs.mkdirSynch(logPath);
-// 	}
-// }
-
-
-
-var router = express.Router();
-// middleware to use for all requests
-router.use(function(req, res, next) {
-    logger.info('A request');
-    next(); // make sure we go to the next routes and don't stop here
-});
-
-
-//###### Frontend API ######
-
-router.get('',function(req, res){
-	res.send('Hello World!');
-});
-
-
-//###### RestAPI ######
-
-
-// router.param(':user_id', function(req, res, next, id){
-// 	req.user = require(MODELS_PATH +'user.js').;
-// });
-router.all('', function(req, res, next){
-	logger.info('Universial api request print');
-	next();
-});
-
-
-router.route('/users')
-	.get(function(req, res){
-		res.send('User test GET');
-	})
-
-	.post(function(req, res){
-		res.send('User test POST');
-
-		var user = require('modules/users/users.model.js').createUser(req.body);
-
-		var bear = new Bear();      // create a new instance of the Bear model
-        bear.name = req.body.name;  // set the bears name (comes from the request)
-
-        //save the bear and check for errors
-        // bear.save(function(err) {
-        //     if (err)
-        //         res.send(err);
-
-        //     res.json({ message: 'Bear created!' });
-        // }
-
-	});
-router.route('/users/:user_id')
-	.get(function(req, res){
-		res.send('User GET id: ' + req.params.user_id);
-	})
-
-	.put(function(req, res){
-
-	})
-
-	.delete(function(req, res){
-
-	});
-
-
-router.route('/bookmarks')
-	.get(function(req, res){
-		res.send('Bookḿarks test GET');
-	})
-
-	.post(function(req, res){
-		res.send('Bookmark test POST');
-	});
-router.route('/bookmarks/:bookmark_id')
-	.get(function(req, res){
-		res.send('User GET id: ' + req.params.bookmark_id);
-	})
-
-	.put(function(req, res){
-
-	})
-
-	.delete(function(req, res){
-
-	});
-
-
-router.route('/labels')
-	.get(function(req, res){
-		res.send('Label test GET');
-	})
-
-	.post(function(req, res){
-		res.send('Label test POST');
-	});
-router.route('/labels/:label_id')
-	.get(function(req, res){
-		res.send('Label GET id: ' + req.params.label_id);
-	})
-
-	.put(function(req, res){
-
-	})
-
-	.delete(function(req, res){
-
-	});
-
 
 //###### REGISTER THE ROUTES ######
 /*The order of app.use is very important
@@ -147,8 +24,8 @@ app.use('/', router);
 //for static file requests
 app.use(express.static('public/assets'));
 
-//#### START SERVER #####
 
+//#### START SERVER #####
 //normal http server 
 // var server = app.listen(3000, function(){
 // 	var host = server.address().address;
