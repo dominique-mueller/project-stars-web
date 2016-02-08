@@ -9,4 +9,5 @@ var device = new mongoose.Schema({
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
 });
 
-var Device = module.export = mongoose.model('Device', device);
+var Device = mongoose.model('Device', device);
+module.exports = Device;

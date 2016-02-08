@@ -26,21 +26,3 @@ process.on('exit', function(){
 	});
 });
 
-
-/*
-LOAD ALL SCHEMAS & MODELS
-This makes it possible for other modules to use the ODM models
-*/
-require('./device/device.schema.js');
-require('./setting/setting.schema.js');
-require('./label/label.schema.js');
-require('./bookmark/bookmark.schema.js');
-require('./user/user.schema.js');
-
-
-
-/*
-How to use in other files:
-	var mongoose = require( 'mongoose' ),  
-    Team = mongoose.model('Team'); 
-*/

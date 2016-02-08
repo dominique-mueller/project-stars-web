@@ -15,4 +15,4 @@ var bookmark = new mongoose.Schema({
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 
-var Bookmark = module.export = mongoose.model('Bookmark', bookmark);
+var Bookmark = module.exports = mongoose.model('Bookmark', bookmark);

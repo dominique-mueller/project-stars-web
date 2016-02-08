@@ -7,10 +7,10 @@ var logPath = createLogPath();
 var logger = bunyan.createLogger({
 	name:'stars-web',
 	streams:[
-		// {
-		// 	level: 'debug',
-		// 	stream: process.stdout
-		// },
+		{
+			level: 'debug',
+			stream: process.stdout
+		},
 		{
 			level: 'info',
 			stream: process.stdout

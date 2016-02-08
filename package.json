@@ -1,19 +1,24 @@
 {
   "name": "bookmark-HQ",
+  "private": true,
   "version": "0.0.0",
   "description": "Organize your bookmarks from every browser on every device in every way you want to",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "xx"
   },
   "author": "Dominique Mueller",
   "license": "BSD-2-Clause",
-  "depencencies": {
-    "express": "~4.x"
-  },
   "dependencies": {
-    "express": "~4.13.3",
-    "path-to-regexp": "=1.2.0",
-    "bunyan": "~1.5.1"
+    "express": "4.13.x",
+    "path-to-regexp": "1.2.0",
+    "bunyan": "1.5.x",
+    "mongoose": "4.3.x",
+    "body-parser": "1.14.x"
+  },
+  "devDependencies": {
+    "chai": "3.5.x",
+    "jasmine": "2.4.x",
+    "mocha": "2.4.x"
   }
 }

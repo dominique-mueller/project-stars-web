@@ -1,33 +1,34 @@
 var logger = require('./adapters/logger.js');
-var router = require('express').Router();
+var routerBackend = require('express').Router(), routerFrontend = require('express').Router();
 
 // middleware to use for all requests
-router.use(function(req, res, next) {
-    logger.info('A request');
-    next(); // make sure we go to the next routes and don't stop here
+routerFrontend.use(function(req, res, next) {
+    logger.debug('A frontend request');
+    next(); //continue with route matching
+});
+routerBackend.use(function(req, res, next) {
+    logger.debug('A backend request');
+    next(); //continue with route matching
 });
 
 
 //###### Frontend API ######
 
-router.get('',function(req, res){
+routerFrontend.get('',function(req, res){
 	res.send('Hello World!');
 });
 
 
 //###### RestAPI ######
 
-
-// router.param(':user_id', function(req, res, next, id){
-// 	req.user = require(MODELS_PATH +'user.js').;
-// });
-router.all('', function(req, res, next){
-	logger.info('Universial api request print');
+routerBackend.all('', function(req, res, next){
+	//api request on 'api/vX/'
+	logger.debug('Universal api request print');
 	next();
 });
 
 
-router.route('/users')
+routerBackend.route('/users')
 	.get(function(req, res){
 		res.send('User test GET');
 	})
@@ -49,7 +50,7 @@ router.route('/users')
         // }
 
 	});
-router.route('/users/:user_id')
+routerBackend.route('/users/:user_id')
 	.get(function(req, res){
 		res.send('User GET id: ' + req.params.user_id);
 	})
@@ -63,15 +64,15 @@ router.route('/users/:user_id')
 	});
 
 
-router.route('/bookmarks')
+routerBackend.route('/bookmarks')
 	.get(function(req, res){
-		res.send('Bookḿarks test GET');
+		res.send('Bookmarks test GET');
 	})
 
 	.post(function(req, res){
 		res.send('Bookmark test POST');
 	});
-router.route('/bookmarks/:bookmark_id')
+routerBackend.route('/bookmarks/:bookmark_id')
 	.get(function(req, res){
 		res.send('User GET id: ' + req.params.bookmark_id);
 	})
@@ -85,7 +86,7 @@ router.route('/bookmarks/:bookmark_id')
 	});
 
 
-router.route('/labels')
+routerBackend.route('/labels')
 	.get(function(req, res){
 		res.send('Label test GET');
 	})
@@ -93,7 +94,7 @@ router.route('/labels')
 	.post(function(req, res){
 		res.send('Label test POST');
 	});
-router.route('/labels/:label_id')
+routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
 		res.send('Label GET id: ' + req.params.label_id);
 	})
@@ -107,5 +108,8 @@ router.route('/labels/:label_id')
 	});
 
 
-//##### export the router so it can be used by an express app #####
-module.exports = router;
+//##### export the routerBackend and routerFrontend so it can be used by an express app #####
+module.exports = {
+	'Backend': routerBackend,
+	'Frontend': routerFrontend
+};

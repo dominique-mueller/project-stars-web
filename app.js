@@ -19,8 +19,8 @@ app.use(bodyParser.json());
 From the most specific sub url to the top url (DOMAIN/)
 Otherwise, there will be unnecessary comparisons or even worth.
 */
-app.use('/api/v1',router);
-app.use('/', router);
+app.use('/api/v1',router.Backend);
+app.use('/', router.Frontend);
 //for static file requests
 app.use(express.static('public/assets'));
 
