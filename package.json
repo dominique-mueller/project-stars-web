@@ -14,7 +14,8 @@
     "path-to-regexp": "1.2.0",
     "bunyan": "1.5.x",
     "mongoose": "4.3.x",
-    "body-parser": "1.14.x"
+    "body-parser": "1.14.x",
+    "jsonwebtoken": "5.5.x"
   },
   "devDependencies": {
     "chai": "3.5.x",

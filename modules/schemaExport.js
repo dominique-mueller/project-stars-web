@@ -7,7 +7,8 @@ module.exports = {
 	 "Setting": require('./setting/setting.schema.js'),
 	 "Label": require('./label/label.schema.js'),
 	 "Bookmark": require('./bookmark/bookmark.schema.js'),
-	 "User": require('./user/user.schema.js')
+	 "User": require('./user/user.schema.js'),
+	 "Session": require('./session/session.schema.js')
 };
 
 

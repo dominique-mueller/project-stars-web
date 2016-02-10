@@ -1,14 +1,18 @@
 
 //DEPENDENCIES
+
 var os = require('os');
 var fs = require('fs');
+// web server requirements
 var https = require('https');
 var express = require('express');
 var app = express();
 var router = require('./router.js');
+var bodyParser = require('body-parser');
+//database requirements
 require('./modules/connectDB.js');
 var mongoose = require('mongoose');			
-var bodyParser = require('body-parser');
+//miscellaneous
 var logger = require('./adapters/logger.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));

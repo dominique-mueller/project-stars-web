@@ -8,16 +8,16 @@ var logger = bunyan.createLogger({
 	name:'stars-web',
 	streams:[
 		{
-			level: 'debug',
+			level: bunyan.DEBUG,
 			stream: process.stdout
 		},
 		{
-			level: 'info',
-			stream: process.stdout
+			level: bunyan.INFO,
+			path: logPath + 'info.json'
 		},
 		{
-			level: 'error',
-			path: logPath+'error.log'
+			level: bunyan.ERROR,
+			path: logPath + 'error.json'
 		}
 	]
 });
@@ -34,16 +34,18 @@ module.exports = logger;
 	mac os is not supportet
 */
 function createLogPath(){
+	var logPath;
 	if(os.platform() === 'linux'){
 		//os is linux
 		logPath = '/var/log/stars-web/';
-		createDirPath(logPath);
+		// createDirPath(logPath);
 	}
 	else{
 		//os is windows
 		logPath = 'C:\\stars-web\\';
-		createDirPath(logPath);
+		// createDirPath(logPath);
 	}
+	return logPath;
 }
 
 /*

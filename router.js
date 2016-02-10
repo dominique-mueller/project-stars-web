@@ -106,6 +106,11 @@ routerBackend.route('/labels/:label_id')
 	.delete(function(req, res){
 
 	});
+routerBackend.route('/labels/colors/:color')
+	.get(function(req, res){
+		
+		res.send('GET all Labels with color: ' + req.params.color);
+	});
 
 
 //##### export the routerBackend and routerFrontend so it can be used by an express app #####
