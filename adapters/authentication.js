@@ -1,23 +1,20 @@
-var jwt = require('jsonwebtoken');
+// var jwt = require('jsonwebtoken');
 var logger = require('./logger');
 var config = require('../config.js');
 
 
 // #### Public Functions #### 
 module.exports = {
-
-	function signIn(payload){
+	signIn: function(payload){
 		
 
 		// return jwt.sign(payload, config.jwt.secret);
+	},
+	getUser_Id: function(){
+
+
 	}
-
-	function getUser_Id(){
-
-
-	}
-
-}
+};
 
 
 // #### Private Functions ####

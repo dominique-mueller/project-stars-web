@@ -88,11 +88,21 @@ routerBackend.route('/bookmarks/:bookmark_id')
 
 routerBackend.route('/labels')
 	.get(function(req, res){
-		res.send('Label test GET');
+		require('./modules/label/labels.model.js').findAll(function(result){
+			res.send('Label test GET ' + result );
+		});
 	})
 
 	.post(function(req, res){
-		res.send('Label test POST');
+		require('./modules/label/labels.model.js').create(req.body, function(result){
+			if(typeof result == 'undefined' && !result){
+				//if result is NOT set
+			}
+			else{
+				//if result is set
+				res.send('Label test POST' + String(result));
+			}
+		});
 	});
 routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
@@ -106,11 +116,11 @@ routerBackend.route('/labels/:label_id')
 	.delete(function(req, res){
 
 	});
-routerBackend.route('/labels/colors/:color')
-	.get(function(req, res){
+// routerBackend.route('/labels/colors/:color')
+// 	.get(function(req, res){
 		
-		res.send('GET all Labels with color: ' + req.params.color);
-	});
+// 		res.send('GET all Labels with color: ' + req.params.color);
+// 	});
 
 
 //##### export the routerBackend and routerFrontend so it can be used by an express app #####

@@ -1,6 +1,7 @@
 var bunyan = require('bunyan');
 var fs = require('fs');
 var os = require('os');
+var path = require('path');
 var logPath = createLogPath();
 
 //configure bunyan logger
@@ -37,12 +38,12 @@ function createLogPath(){
 	var logPath;
 	if(os.platform() === 'linux'){
 		//os is linux
-		logPath = './log/';
+		
 		// createDirPath(logPath);
 	}
 	else{
 		//os is windows
-		logPath = '.\\log\\';
+		logPath = path.join(__dirname, 'log\\');
 		// createDirPath(logPath);
 	}
 	return logPath;
