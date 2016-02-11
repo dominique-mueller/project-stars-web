@@ -37,12 +37,12 @@ function createLogPath(){
 	var logPath;
 	if(os.platform() === 'linux'){
 		//os is linux
-		logPath = '/var/log/stars-web/';
+		logPath = './log/';
 		// createDirPath(logPath);
 	}
 	else{
 		//os is windows
-		logPath = 'C:\\stars-web\\';
+		logPath = '.\\log\\';
 		// createDirPath(logPath);
 	}
 	return logPath;
