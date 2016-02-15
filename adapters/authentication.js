@@ -11,7 +11,7 @@ module.exports = {
 		// return jwt.sign(payload, config.jwt.secret);
 	},
 	getUser_Id: function(){
-
+		
 
 	}
 };

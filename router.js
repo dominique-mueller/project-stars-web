@@ -88,20 +88,31 @@ routerBackend.route('/bookmarks/:bookmark_id')
 
 routerBackend.route('/labels')
 	.get(function(req, res){
-		require('./modules/label/labels.model.js').findAll(function(result){
-			res.send('Label test GET ' + result );
+		var result = require('./modules/label/labels.model.js').findAll();
+		result.then(function(msg){
+			res.send('Label test GET ' + msg);
+		})
+		.catch(function(reason){
+			res.send("FAILED")
 		});
 	})
 
 	.post(function(req, res){
-		require('./modules/label/labels.model.js').create(req.body, function(result){
-			if(typeof result == 'undefined' && !result){
-				//if result is NOT set
-			}
-			else{
-				//if result is set
-				res.send('Label test POST' + String(result));
-			}
+		// require('./modules/label/labels.model.js').create(req.body, function(result){
+		// 	if(typeof result == 'undefined' && !result){
+		// 		//if result is NOT set
+		// 	}
+		// 	else{
+		// 		//if result is set
+		// 		res.send('Label test POST' + result);
+		// 	}
+		// });
+		var result = require('./modules/label/labels.model.js').create(req.body);
+		result.then(function() {
+			
+		})
+		.catch(function() {
+			
 		});
 	});
 routerBackend.route('/labels/:label_id')
@@ -116,15 +127,10 @@ routerBackend.route('/labels/:label_id')
 	.delete(function(req, res){
 
 	});
-// routerBackend.route('/labels/colors/:color')
-// 	.get(function(req, res){
-		
-// 		res.send('GET all Labels with color: ' + req.params.color);
-// 	});
 
 
 //##### export the routerBackend and routerFrontend so it can be used by an express app #####
 module.exports = {
 	'Backend': routerBackend,
 	'Frontend': routerFrontend
-};
+};  
