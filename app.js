@@ -42,8 +42,15 @@ app.use(express.static('public/assets'));
 https.createServer({
 	key: fs.readFileSync('certs/key.pem'),
 	cert: fs.readFileSync('certs/cert.pem')
-}, app).listen(3000, function(){
+}, app).listen(443, "localhost", function(){
 	var host = this.address().address;
 	var port = this.address().port;
 	logger.info('Server is listening at http://%s:%s', host, port);
 });
+
+// Redirect from http port 80 to https
+var http = require('http');
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(80);
