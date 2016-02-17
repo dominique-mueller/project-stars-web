@@ -40,6 +40,7 @@
 		"gulp-util": "3.0.x",
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
+		"npm-check-updates": "2.5.x",
 		"run-sequence": "1.1.x"
 	},
 	"private": true
