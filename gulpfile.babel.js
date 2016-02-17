@@ -4,9 +4,10 @@
 import envNpm 			from './tools/gulp_tasks/env_npm';
 import gulp 			from 'gulp';
 import runSequence		from 'run-sequence';
-import sassLint 		from './tools/gulp_tasks/sass_lint';
 import sassBuild 		from './tools/gulp_tasks/sass_build';
+import sassLint 		from './tools/gulp_tasks/sass_lint';
 import typescriptBuild 	from './tools/gulp_tasks/typescript_build';
+import typescriptLint 	from './tools/gulp_tasks/typescript_lint';
 
 /**
  * Build development task
@@ -16,7 +17,7 @@ import typescriptBuild 	from './tools/gulp_tasks/typescript_build';
 gulp.task( 'build-dev', ( done ) => {
 
 	runSequence(
-		[ 'sass.lint' ],
+		[ 'sass.lint', 'typescript.lint' ],
 		[ 'sass.build', 'typescript.build' ],
 		done
 	);
@@ -32,7 +33,7 @@ gulp.task( 'build-prod', ( done ) => {
 
 	runSequence(
 		[ 'env.npm' ],
-		[ 'sass.lint' ],
+		[ 'sass.lint', 'typescript.lint' ],
 		[ 'sass.build', 'typescript.build' ],
 		done
 	);

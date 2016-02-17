@@ -14,9 +14,9 @@ export default gulp.task( 'typescript.build', () => {
 	return gulp
 
 		// Get all typescript files
-		.src( `${config.paths.app.src}**/*.ts` )
+		.src( `${config.paths.app.src}/**/*.ts` )
 
-		// Compile TS into JS
+		// Compile TS into JS (and report problems)
 		.pipe( typescript( typescriptOptions.compilerOptions, undefined, typescript.reporter.fullReporter() ) )
 
 		// Save JavaScript file
