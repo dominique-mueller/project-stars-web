@@ -13,7 +13,9 @@ const scsslintOptions = {
 };
 
 /**
- * SASS linter gulp task
+ * Gulp task
+ * ---------
+ * Lint all SASS files
  */
 export default gulp.task( 'sass.lint', () => {
 

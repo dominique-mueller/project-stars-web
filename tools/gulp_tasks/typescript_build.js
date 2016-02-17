@@ -7,7 +7,9 @@ import typescript 			from 'gulp-typescript';
 import typescriptOptions 	from '../../tsconfig.json';
 
 /**
- * Typescript build gulp task
+ * Gulp task
+ * ---------
+ * Transpile all Typescript files into ES5 JavaScript files
  */
 export default gulp.task( 'typescript.build', () => {
 

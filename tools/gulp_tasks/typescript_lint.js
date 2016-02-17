@@ -6,7 +6,9 @@ import gulp 	from 'gulp';
 import tslint 	from 'gulp-tslint';
 
 /**
- * Typescript lint gulp task
+ * Gulp task
+ * ---------
+ * Lint all Typescript files
  */
 export default gulp.task( 'typescript.lint', () => {
 

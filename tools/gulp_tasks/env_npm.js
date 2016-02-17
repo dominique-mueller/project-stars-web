@@ -13,7 +13,9 @@ const ncuOptions = {
 };
 
 /**
- * npm env gulp task
+ * Gulp task
+ * ---------
+ * Check for possible NPM dependency updates (output as information only, not warnings or errors)
  */
 export default gulp.task( 'env.npm', () => {
 
