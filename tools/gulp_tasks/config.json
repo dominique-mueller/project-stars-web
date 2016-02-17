@@ -5,7 +5,7 @@
 			"dest": "./public_build/"
 		},
 		"app": {
-			"src": "./public/app/**/*.ts",
+			"src": "./public/app/",
 			"dest": "./public_build/"
 		},
 		"styles": {

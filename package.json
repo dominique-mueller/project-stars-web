@@ -37,6 +37,7 @@
 		"gulp-rename": "1.2.x",
 		"gulp-sass": "2.2.x",
 		"gulp-scss-lint": "0.3.x",
+		"gulp-typescript": "2.11.x",
 		"gulp-util": "3.0.x",
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
