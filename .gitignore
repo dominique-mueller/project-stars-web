@@ -1,5 +1,9 @@
 # Dependencies
 node_modules
+Gemfile.lock
+
+# Build folders
+public_build
 
 # Generated error logs
 undefinederror.json
