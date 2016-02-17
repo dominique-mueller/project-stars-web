@@ -1,0 +1,20 @@
+{
+	"paths": {
+		"project": {
+			"src": "./public/",
+			"dest": "./public_build/"
+		},
+		"app": {
+			"src": "./public/app/**/*.ts",
+			"dest": "./public_build/"
+		},
+		"styles": {
+			"src": "./public/styles/",
+			"dest": "./public_build/"
+		}
+	},
+	"names": {
+		"app": "app.min.js",
+		"styles": "style.min.css"
+	}
+}
