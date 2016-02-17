@@ -1,6 +1,9 @@
 # Dependencies
 node_modules
 
+# Build folders
+public_build
+
 # Generated error logs
 undefinederror.json
 undefinedinfo.json
