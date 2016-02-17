@@ -1,3 +1,6 @@
-node_modules/
+# Dependencies
+node_modules
+
+# Generated error logs
 undefinederror.json
 undefinedinfo.json

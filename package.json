@@ -1,25 +1,36 @@
 {
-  "name": "bookmark-HQ",
-  "private": true,
-  "version": "0.0.0",
-  "description": "Organize your bookmarks from every browser on every device in every way you want to",
-  "main": "index.js",
-  "scripts": {
-    "test": "xx"
-  },
-  "author": "Dominique Mueller",
-  "license": "BSD-2-Clause",
-  "dependencies": {
-    "express": "4.13.x",
-    "path-to-regexp": "1.2.0",
-    "bunyan": "1.5.x",
-    "mongoose": "4.3.x",
-    "body-parser": "1.14.x",
-    "jsonwebtoken": "5.5.x"
-  },
-  "devDependencies": {
-    "chai": "3.5.x",
-    "jasmine": "2.4.x",
-    "mocha": "2.4.x"
-  }
+	"name": "bookmark-HQ",
+	"description": "Organize your bookmarks - in every browser, on every device, in every way you want to.",
+	"version": "0.0.0",
+	"contributors": [
+		"Dominique Müller <hello@dominique-mueller.de>",
+		"Marco Rönfeldt"
+	],
+	"homepage": "https://stars.dominique-mueller.de/",
+	"license": "BSD-2-Clause",
+	"repository": {
+		"type": "git",
+		"url": "https://gitlab.dominique-mueller.de/dominique-mueller/project-stars-web.git"
+	},
+	"bugs": {
+		"url": "https://gitlab.dominique-mueller.de/dominique-mueller/project-stars-web/issues"
+	},
+	"main": "index.js",
+	"scripts": {
+		"test": "echo 'TODO: Test here.'"
+	},
+	"dependencies": {
+		"body-parser": "1.15.x",
+		"bunyan": "1.6.x",
+		"express": "4.13.x",
+		"jsonwebtoken": "5.7.x",
+		"mongoose": "4.4.x",
+		"path-to-regexp": "1.2.x"
+	},
+	"devDependencies": {
+		"chai": "3.5.x",
+		"jasmine": "2.4.x",
+		"mocha": "2.4.x"
+	},
+	"private": true
 }
