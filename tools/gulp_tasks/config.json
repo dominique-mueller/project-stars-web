@@ -1,16 +1,16 @@
 {
 	"paths": {
 		"project": {
-			"src": "./public/",
-			"dest": "./public_build/"
+			"src": "./public",
+			"dest": "./public_build"
 		},
 		"app": {
-			"src": "./public/app/",
-			"dest": "./public_build/"
+			"src": "./public/app",
+			"dest": "./public_build"
 		},
 		"styles": {
-			"src": "./public/styles/",
-			"dest": "./public_build/"
+			"src": "./public/styles",
+			"dest": "./public_build"
 		}
 	},
 	"names": {

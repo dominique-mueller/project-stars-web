@@ -20,7 +20,7 @@ export default gulp.task( 'sass.lint', () => {
 	return gulp
 
 		// Get all SASS files
-		.src( `${config.paths.styles.src}**/*.scss` )
+		.src( `${config.paths.styles.src}/**/*.scss` )
 
 		// Lint
 		.pipe( scsslint( scsslintOptions ) )

@@ -31,7 +31,7 @@ export default gulp.task( 'sass.build', () => {
 	return gulp
 
 		// Get main SASS files
-		.src( `${config.paths.styles.src}style.scss` )
+		.src( `${config.paths.styles.src}/style.scss` )
 
 		// Compile SASS into CSS
 		.pipe( sass( sassOptions ).on( 'error', sass.logError ) )
