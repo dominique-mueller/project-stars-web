@@ -12,6 +12,7 @@ import runSequence	from 'run-sequence';
 gulp.task( 'build-dev', ( done ) => {
 
 	runSequence(
+		[ 'sass.lint' ],
 		done
 	);
 
@@ -25,6 +26,7 @@ gulp.task( 'build-dev', ( done ) => {
 gulp.task( 'build-prod', ( done ) => {
 
 	runSequence(
+		[ 'sass.lint' ],
 		done
 	);
 

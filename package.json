@@ -33,6 +33,7 @@
 		"chai": "3.5.x",
 		"gulp": "3.9.x",
 		"gulp-rename": "1.2.x",
+		"gulp-scss-lint": "0.3.x",
 		"gulp-util": "3.0.x",
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
