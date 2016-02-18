@@ -14,11 +14,13 @@ var logger = bunyan.createLogger({
 		},
 		{
 			level: bunyan.INFO,
-			path: logPath + 'info.json'
+			// path: logPath + 'info.json'
+			stream: process.stdout
 		},
 		{
 			level: bunyan.ERROR,
-			path: logPath + 'error.json'
+			// path: logPath + 'error.json'
+			stream: process.stdout
 		}
 	]
 });
