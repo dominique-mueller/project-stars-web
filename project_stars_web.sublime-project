@@ -8,8 +8,12 @@
 	"build_systems":
 	[
 		{
-			"name": "Gulp Dev Task",
-			"shell_cmd": "gulp build.dev"
+			"name": "Gulp Build Dev Task",
+			"shell_cmd": "gulp build:dev"
+		},
+		{
+			"name": "Gulp Build Prod Task",
+			"shell_cmd": "gulp build:prod"
 		}
 	]
 }

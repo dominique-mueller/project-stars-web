@@ -10,7 +10,7 @@ import gulp 	from 'gulp';
  * ---------
  * Clean build folder (including all files)
  */
-export default gulp.task( 'env.clean', () => {
+export default gulp.task( 'env:clean', () => {
 
 	// Delete folder and files
 	return del( [

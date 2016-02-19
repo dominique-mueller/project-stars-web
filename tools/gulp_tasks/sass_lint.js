@@ -17,7 +17,7 @@ const scsslintOptions = {
  * ---------
  * Lint all SASS files
  */
-export default gulp.task( 'sass.lint', () => {
+export default gulp.task( 'sass:lint', () => {
 
 	return gulp
 

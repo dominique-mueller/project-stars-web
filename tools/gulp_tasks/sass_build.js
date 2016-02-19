@@ -28,7 +28,7 @@ const autoprefixerOptions = {
  * ---------
  * Compile all SASS files into one autoprefixed and minified CSS file
  */
-export default gulp.task( 'sass.build', () => {
+export default gulp.task( 'sass:build', () => {
 
 	return gulp
 

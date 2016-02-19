@@ -11,7 +11,7 @@ import typescriptOptions 	from '../../tsconfig.json';
  * ---------
  * Transpile all Typescript files into ES5 JavaScript files
  */
-export default gulp.task( 'typescript.build', () => {
+export default gulp.task( 'typescript:build', () => {
 
 	return gulp
 

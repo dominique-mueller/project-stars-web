@@ -17,12 +17,12 @@ import typescriptLint 	from './tools/gulp_tasks/typescript_lint';
  * - If linting was successful, we then clean the build directory
  * - After that we build the CSS and JavaScript files
  */
-gulp.task( 'build.dev', ( done ) => {
+gulp.task( 'build:dev', ( done ) => {
 
 	runSequence(
-		[ 'sass.lint', 'typescript.lint' ],
-		[ 'env.clean' ],
-		[ 'sass.build', 'typescript.build' ],
+		[ 'sass:lint', 'typescript:lint' ],
+		[ 'env:clean' ],
+		[ 'sass:build', 'typescript:build' ],
 		done
 	);
 
@@ -36,13 +36,13 @@ gulp.task( 'build.dev', ( done ) => {
  * - If linting was successful, we then clean the build directory
  * - After that we build the CSS and JavaScript files
  */
-gulp.task( 'build.prod', ( done ) => {
+gulp.task( 'build:prod', ( done ) => {
 
 	runSequence(
-		[ 'env.npm' ],
-		[ 'sass.lint', 'typescript.lint' ],
-		[ 'env.clean' ],
-		[ 'sass.build', 'typescript.build' ],
+		[ 'env:npm' ],
+		[ 'sass:lint', 'typescript:lint' ],
+		[ 'env:clean' ],
+		[ 'sass:build', 'typescript:build' ],
 		done
 	);
 

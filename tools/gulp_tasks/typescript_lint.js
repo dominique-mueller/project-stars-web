@@ -10,7 +10,7 @@ import tslint 	from 'gulp-tslint';
  * ---------
  * Lint all Typescript files
  */
-export default gulp.task( 'typescript.lint', () => {
+export default gulp.task( 'typescript:lint', () => {
 
 	return gulp
 
