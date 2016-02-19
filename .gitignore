@@ -8,3 +8,6 @@ public_build
 # Generated error logs
 undefinederror.json
 undefinedinfo.json
+
+# Editor settings
+*.sublime-workspace
