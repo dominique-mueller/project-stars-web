@@ -10,7 +10,7 @@ var logger = bunyan.createLogger({
 	streams:[
 		{
 			level: bunyan.DEBUG,
-			stream: process.stdout
+			stream: process.stderr
 		},
 		{
 			level: bunyan.INFO,
@@ -20,7 +20,7 @@ var logger = bunyan.createLogger({
 		{
 			level: bunyan.ERROR,
 			// path: logPath + 'error.json'
-			stream: process.stdout
+			stream: process.stderr
 		}
 	]
 });
