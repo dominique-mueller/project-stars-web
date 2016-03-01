@@ -1,9 +1,10 @@
 # Dependencies
 node_modules
+typings
 Gemfile.lock
 
 # Build folders
-public_build
+build
 
 # Generated error logs
 undefinederror.json

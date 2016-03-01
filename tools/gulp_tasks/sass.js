@@ -1,12 +1,33 @@
 /**
- * Imports
+ * Import configuration
+ */
+import config 			from './config.json';
+
+/**
+ * Gulp imports
  */
 import autoprefixer 	from 'gulp-autoprefixer';
-import config 			from './config.json';
+import browserSync 		from 'browser-sync';
 import cssmin 			from 'gulp-cssmin';
 import gulp 			from 'gulp';
 import rename 			from 'gulp-rename';
 import sass 			from 'gulp-sass';
+import scsslint 		from 'gulp-scss-lint';
+
+/**
+ * autoprefixer options
+ */
+const autoprefixerOptions = {
+	'path': 'browserlist'
+};
+
+
+/**
+ * scsslint options
+ */
+const scsslintOptions = {
+	'config': '.scss-lint.yml'
+};
 
 /**
  * sass options
@@ -17,18 +38,27 @@ const sassOptions = {
 };
 
 /**
- * autoprefixer options
+ * Gulp task: Lint SASS
  */
-const autoprefixerOptions = {
-	'path': 'browserlist'
-};
+export const sassLint = gulp.task( 'sass:lint', () => {
+
+	return gulp
+
+		// Get all SASS files
+		.src( `${config.paths.styles.src}/**/*.scss` )
+
+		// Lint
+		.pipe( scsslint( scsslintOptions ) )
+
+		// Report problems
+		.pipe( scsslint.failReporter() );
+
+} );
 
 /**
- * Gulp task
- * ---------
- * Compile all SASS files into one autoprefixed and minified CSS file
+ * Gulp task: Build SASS
  */
-export default gulp.task( 'sass:build', () => {
+export const sassBuild = gulp.task( 'sass:build', () => {
 
 	return gulp
 

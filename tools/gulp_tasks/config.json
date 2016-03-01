@@ -2,15 +2,18 @@
 	"paths": {
 		"project": {
 			"src": "./public",
-			"dest": "./public_build"
+			"dest": "./build"
 		},
 		"app": {
 			"src": "./public/app",
-			"dest": "./public_build"
+			"dest": "./build"
 		},
 		"styles": {
 			"src": "./public/styles",
-			"dest": "./public_build"
+			"dest": "./build"
+		},
+		"typings": {
+			"default": "./typings"
 		}
 	},
 	"names": {

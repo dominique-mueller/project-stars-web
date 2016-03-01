@@ -1,14 +1,16 @@
 /**
- * Imports
+ * Gulp imports
  */
-import envClean 		from './tools/gulp_tasks/env_clean';
-import envNpm 			from './tools/gulp_tasks/env_npm';
+import browserSync 		from 'browser-sync';
 import gulp 			from 'gulp';
 import runSequence		from 'run-sequence';
-import sassBuild 		from './tools/gulp_tasks/sass_build';
-import sassLint 		from './tools/gulp_tasks/sass_lint';
-import typescriptBuild 	from './tools/gulp_tasks/typescript_build';
-import typescriptLint 	from './tools/gulp_tasks/typescript_lint';
+
+/**
+ * Import our gulp tasks
+ */
+import * as env 		from './tools/gulp_tasks/env';
+import * as sass 		from './tools/gulp_tasks/sass';
+import * as typescript 	from './tools/gulp_tasks/typescript';
 
 /**
  * Build development task
@@ -20,9 +22,8 @@ import typescriptLint 	from './tools/gulp_tasks/typescript_lint';
 gulp.task( 'build:dev', ( done ) => {
 
 	runSequence(
-		[ 'sass:lint', 'typescript:lint' ],
 		[ 'env:clean' ],
-		[ 'sass:build', 'typescript:build' ],
+		[ 'env:setup', 'sass:build', 'typescript:build' ],
 		done
 	);
 
@@ -42,8 +43,29 @@ gulp.task( 'build:prod', ( done ) => {
 		[ 'env:npm' ],
 		[ 'sass:lint', 'typescript:lint' ],
 		[ 'env:clean' ],
-		[ 'sass:build', 'typescript:build' ],
+		[ 'env:setup', 'sass:build', 'typescript:build' ],
 		done
 	);
+
+} );
+
+/**
+ * Watcher task
+ * ------------
+ * We are watching our typescript, html and sass files. When a file changes, we run the
+ * correct gulp task to update the build and reload the app in the browser.
+ */
+gulp.task( 'watch', [ 'build:dev' ], () => {
+
+	// Initialize browsersync
+	browserSync.init( {
+		server: './build/'
+	} );
+
+	// Setup watchers
+	gulp.watch( './public/styles/**/*.scss', [ 'sass:build' ] );
+	gulp.watch( './public/app/**/*', [ 'typescript:build' ] );
+
+	gulp.watch( './build/**/*' ).on( 'change', browserSync.reload );
 
 } );

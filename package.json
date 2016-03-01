@@ -7,7 +7,7 @@
 		"Marco Rönfeldt"
 	],
 	"homepage": "https://stars.dominique-mueller.de/",
-	"license": "BSD-2-Clause",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://gitlab.dominique-mueller.de/dominique-mueller/project-stars-web.git"
@@ -17,19 +17,28 @@
 	},
 	"main": "index.js",
 	"scripts": {
+		"typings": "typings",
+		"postinstall": "typings install",
 		"test": "echo 'TODO: Test here.'"
 	},
 	"dependencies": {
+		"angular2": "2.0.0-beta.7",
 		"body-parser": "1.15.x",
-		"bunyan": "1.6.x",
+		"bunyan": "1.7.x",
+		"es6-promise": "3.1.x",
+		"es6-shim": "0.33.x",
 		"express": "4.13.x",
 		"jsonwebtoken": "5.7.x",
 		"mongoose": "4.4.x",
-		"path-to-regexp": "1.2.x"
+		"path-to-regexp": "1.2.x",
+		"reflect-metadata": "0.1.2",
+		"rxjs": "5.0.0-beta.2",
+		"zone.js": "0.5.x"
 	},
 	"devDependencies": {
-		"babel-core": "6.5.x",
-		"babel-preset-es2015": "6.5.x",
+		"babel-core": "6.6.x",
+		"babel-preset-es2015": "6.6.x",
+		"browser-sync": "2.11.x",
 		"chai": "3.5.x",
 		"del": "2.2.x",
 		"gulp": "3.9.x",
@@ -39,12 +48,16 @@
 		"gulp-sass": "2.2.x",
 		"gulp-scss-lint": "0.3.x",
 		"gulp-tslint": "4.3.x",
-		"gulp-typescript": "2.11.x",
 		"gulp-util": "3.0.x",
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
 		"npm-check-updates": "2.5.x",
-		"run-sequence": "1.1.x"
+		"run-sequence": "1.1.x",
+		"tslint": "3.5.x",
+		"ts-loader": "0.8.x",
+		"typescript": "1.8.x",
+		"typings": "0.6.x",
+		"webpack-stream": "3.1.x"
 	},
 	"private": true
 }
