@@ -1,27 +1,32 @@
-var mongoose = require('mongoose');
-var Label = require('../schemaExport').Label;
-var user_id = require('../../adapters/authentication.js').getUser_Id();
+// var mongoose = require('mongoose');
+var Label = require('../schemaExport.js').Label;
 var logger = require('../../adapters/logger.js');
 var errorHandler = require('../../helpers/errorHandler.js');
 
 module.exports = {
-	create: function(labelData) {
-		logger.debug('create Label. param labelData:' + labelData);
+	create: function(labelData, userIdPromise) {
+		logger.debug('create Label. param labelData:' + labelData.name + '::' + labelData.color + '::'+userId);
 		return new Promise(function(resolve, reject){
-			var label = new Label();
-			logger.debug(data);
-			label.name = data.name;
-			label.color = data.color;
-			label.owner = user_id;
-			label.save(function(err, label){
-				if(err){
-					logger.debug('failed to create label');
-					reject(errorHandler.handleMongooseError(err, Label));
-				}
-				else{
-					logger.debug('label created: ' + label);
-					resolve(label);
-				}
+			userIdPromise.then(function(userId){	
+				var label = new Label({
+					name: labelData.name,
+					color: labelData.color,
+					owner: userId,
+				});
+				label.save(function(err, label){
+					if(err){
+						logger.debug('failed to create label');
+						reject(err);
+					}
+					else{
+						logger.debug('label created: ' + label);
+						resolve(label);
+					}
+				});
+			})
+			.catch(function(err){
+				logger.error("Failed to get userId in label create");
+				reject(err);
 			});
 		});
 	},
@@ -34,7 +39,7 @@ module.exports = {
 			Label.findByIdAndUpdate(labelId, labelData, {new:true}, function(err){
 				if(err){
 					logger.debug('failed to update label');
-					reject(errorHandler.handleMongooseError(err, Label));	
+					reject(err);	
 				}
 				else{
 					logger.debug('label updated');
@@ -49,7 +54,7 @@ module.exports = {
 		return new Promise(function(resolve, reject){
 			Label.findByIdAndRemove(labelId, function(err){
 				if(err){
-					reject(errorHandler.handleMongooseError(err, Label));	
+					reject(err);	
 				}
 				else{
 					resolve();
@@ -63,7 +68,7 @@ module.exports = {
 		return new Promise(function(resolve, reject){
 			Label.findById(labelId, function(err, label){
 				if(err){
-					reject(errorHandler.handleMongooseError(err, Label));
+					reject(err);
 				} 
 				else{
 					resolve(label);
@@ -72,16 +77,23 @@ module.exports = {
 		});
 	},
 
-	findAll: function(userId){
-		logger.debug('findAll labels');
+	findAll: function(userIdPromise){
+		logger.debug('findAll labels with userId: ' + userId);
 		return new Promise(function(resolve, reject){
-			Label.find({}, function(err, labels){
-				if(err){
-					reject(errorHandler.handleMongooseError(err, Label));
-				}
-				else{
-					resolve(labels);
-				}
+			userIdPromise.then(function(userId){	
+				Label.find({owner:userId}, function(err, labels){
+					if(err){
+						reject(err);
+					}
+					else{
+						logger.debug("these labels were found: " + JSON.stringify(labels));
+						resolve(labels);
+					}
+				});
+			})
+			.catch(function(err){
+				logger.error("Failed to get userId in label findAll");
+				reject(err);
 			});
 		});
 	}

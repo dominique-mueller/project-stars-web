@@ -44,7 +44,6 @@ https.createServer({
 	logger.info('Server is listening at http://%s:%s', host, port);
 });
 
-
 //Redirect http requests to https 
 var http = require('http');
 http.createServer(redirectHTTP).listen(80); //listen on http default port 80

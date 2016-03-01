@@ -11,7 +11,7 @@ module.exports = {
 		logger.error(error);
 
 		if(error.name == 'ValidationError'){
-			errorMessage = validationError(error, Label);
+			errorMessage = validationError(error, definedSchema);
 		}
 		return errorMessage;
 	}
@@ -19,25 +19,25 @@ module.exports = {
 
 
 function validationError(error, definedSchema){
-	var errorMessage = defaultValidateMsg, 
-	matchinputValueAndSchemaField = error.message.match(/`(.+?)`.*?`(.+?)`/),
-	schemaField = null,
-	inputValue;
+	var errorMessage = defaultValidateMsg;
+	// matchinputValueAndSchemaField = error.message.match(/`(.+?)`.*?(`(.+?)`)+?/),
+	// schemaField = null,
+	// inputValue;
 
-	if(definedSchema.schema.paths.hasOwnProperty(matchinputValueAndSchemaField[1])){
-		schemaField = 1;
-		inputValue = 2;
-	}
-	else if(definedSchema.schema.paths.hasOwnProperty(matchinputValueAndSchemaField[2])){
-		schemaField = 2;
-		inputValue = 1;
-	}
+	// if(definedSchema.schema.paths.hasOwnProperty(matchinputValueAndSchemaField[1])){
+	// 	schemaField = 1;
+	// 	inputValue = 3;
+	// }
+	// else if(definedSchema.schema.paths.hasOwnProperty(matchinputValueAndSchemaField[3])){
+	// 	schemaField = 3;
+	// 	inputValue = 1;
+	// }
 
-	if(!(schemaField == null)){
-		errorMessage = 'Invalid inputValue data: The inputValue value "'
-			+ matchinputValueAndSchemaField[inputValue] 
-			+ '" is not valid for the field "' + matchinputValueAndSchemaField[schemaField]
-			+ '" in "' + definedSchema.modelName + '".';
-	}
+	// if(!(schemaField == null)){
+	// 	errorMessage = 'Invalid inputValue data: The inputValue value "'
+	// 		+ matchinputValueAndSchemaField[inputValue] 
+	// 		+ '" is not valid for the field "' + matchinputValueAndSchemaField[schemaField]
+	// 		+ '" in "' + definedSchema.modelName + '".';
+	// }
 	return errorMessage;
 };
