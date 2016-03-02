@@ -1,1 +1,28 @@
-// To BE CONTINUED ...
+// STYLES
+// * The architecture is inspiredby the ITCSS concept
+// * All components are designed after the OOCSS principles
+// * States are named after SMACSS
+
+// LAYER 01: SETTINGS
+@import "settings/colors";
+@import "settings/breakpoints";
+@import "settings/typography";
+@import "settings/animations";
+
+// LAYER 02: TOOLS
+@import "tools/breakpoints";
+@import "tools/typography";
+
+// LAYER 03: GENERIC
+@import "../../node_modules/normalize.css/normalize"; // External library
+@import "generic/boxsizing";
+
+// LAYER 04: BASE
+@import "base/site";
+
+// LAYER 05: OBJECTS
+
+// LAYER 06: COMPONENTS
+
+// EXTRA: TEMP (TODO: remove me some day)
+@import "temp";

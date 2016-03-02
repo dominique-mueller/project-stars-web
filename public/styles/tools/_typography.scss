@@ -1,0 +1,16 @@
+// TOOLS: TYPOGRAPHY
+// Inspired by an article from Smashing Magazine
+// (https://www.smashingmagazine.com/2015/06/responsive-typography-with-sass-maps/)
+
+// Automatically generate typography media queries
+@mixin font-size($map) {
+	@each $breakpoint, $values in $map {
+		@if $breakpoint == null {
+			font-size: $values;
+		} @else {
+			@media screen and (min-width: map-get($breakpoints, $breakpoint)) {
+				font-size: $values;
+			}
+		}
+	}
+}

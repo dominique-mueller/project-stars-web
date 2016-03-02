@@ -1,0 +1,15 @@
+// SETTINGS: TYPOGRAPHY
+
+// Font families
+$font-family-default: "Roboto", "Open Sans", "Tahoma", "Trebuchet MS", "Helvetica", "Arial", sans-serif;
+
+// Font weights
+$font-weight-thin: 300;
+$font-weight-regular: 400;
+$font-weight-bold: 700;
+
+// Font sizes for standard text
+$font-size-text: (
+	null: 		1.4rem,
+	desktop: 	1.6rem
+);
