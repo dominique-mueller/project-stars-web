@@ -58,7 +58,7 @@
 		"ts-loader": "0.8.x",
 		"typescript": "1.8.x",
 		"typings": "0.6.x",
-		"webpack-stream": "3.1.x"
+		"webpack": "1.12.x"
 	},
 	"private": true
 }

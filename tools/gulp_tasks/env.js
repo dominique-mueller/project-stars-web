@@ -12,13 +12,6 @@ import gutil 	from 'gulp-util';
 import ncu 		from 'npm-check-updates';
 
 /**
- * ncu options
- */
-const ncuOptions = {
-	'packageFile': './package.json'
-};
-
-/**
  * Gulp task: Clean build folder
  */
 export const envClean = gulp.task( 'env:clean', () => {
@@ -34,7 +27,7 @@ export const envClean = gulp.task( 'env:clean', () => {
 export const envNpm = gulp.task( 'env:npm', () => {
 
 	// Check for npm dependency updates
-	ncu.run( ncuOptions ).then( ( results ) => {
+	ncu.run().then( ( results ) => {
 
 		// Print (pretty) results
 		if ( Object.keys( results ).length === 0 ) {

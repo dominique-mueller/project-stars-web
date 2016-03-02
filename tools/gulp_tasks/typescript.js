@@ -6,26 +6,41 @@ import config 		from './config.json';
 /**
  * Gulp imports
  */
-import browserSync 	from 'browser-sync';
 import gulp 		from 'gulp';
+import gutil 		from 'gulp-util';
 import tslint 		from 'gulp-tslint';
-import webpack 		from 'webpack-stream';
+import webpack 		from 'webpack';
 
 /**
  * webpack options
  */
 const webpackOptions = {
+	entry: {
+		app: `${ config.paths.app.src }/main`,
+		vendor: [
+			'angular2/core',
+			'angular2/platform/browser'
+		]
+	},
 	output: {
-		filename: config.names.app
+		filename: `${ config.paths.app.dest }/${config.names.app}`
 	},
 	resolve: {
 		extensions: [ '', '.ts', '.js' ]
 	},
 	module: {
-		loaders: [
-			{ test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ }
-		]
-	}
+		loaders: [ {
+			test: /\.ts$/,
+			exclude: [ 'node_modules' ],
+			loader: 'ts-loader'
+		} ]
+	},
+	plugins: [
+		new webpack.optimize.CommonsChunkPlugin( {
+			name: 'vendor',
+			filename: `${ config.paths.app.dest }/${config.names.vendor}`
+		} )
+	]
 };
 
 /**
@@ -49,17 +64,24 @@ export const typescriptLint = gulp.task( 'typescript:lint', () => {
 /**
  * Gulp task: Build TypeScript
  */
-export const typescriptBuild = gulp.task( 'typescript:build', () => {
+export const typescriptBuild = gulp.task( 'typescript:build', ( done ) => {
 
-	return gulp
+	// Run webpack
+	webpack( webpackOptions, function( error, stats ) {
 
-		// Get the typescript entry file
-		.src( `${ config.paths.app.src }/main.ts` )
+		// Check if an error occured
+		if( error ) {
+			throw new gutil.PluginError( 'webpack', error );
+		}
 
-		// Compile and bundle
-		.pipe( webpack( webpackOptions ) )
+		// Log output
+		gutil.log( '[ webpack ]', stats.toString( {
+			colors: true,
+			chunks: false
+		} ) );
 
-		// Save JavaScript file
-		.pipe( gulp.dest( config.paths.app.dest ) );
+		done();
+
+	} );
 
 } );

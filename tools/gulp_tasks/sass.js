@@ -7,27 +7,11 @@ import config 			from './config.json';
  * Gulp imports
  */
 import autoprefixer 	from 'gulp-autoprefixer';
-import browserSync 		from 'browser-sync';
 import cssmin 			from 'gulp-cssmin';
 import gulp 			from 'gulp';
 import rename 			from 'gulp-rename';
 import sass 			from 'gulp-sass';
 import scsslint 		from 'gulp-scss-lint';
-
-/**
- * autoprefixer options
- */
-const autoprefixerOptions = {
-	'path': 'browserlist'
-};
-
-
-/**
- * scsslint options
- */
-const scsslintOptions = {
-	'config': '.scss-lint.yml'
-};
 
 /**
  * sass options
@@ -48,7 +32,7 @@ export const sassLint = gulp.task( 'sass:lint', () => {
 		.src( `${config.paths.styles.src}/**/*.scss` )
 
 		// Lint
-		.pipe( scsslint( scsslintOptions ) )
+		.pipe( scsslint() )
 
 		// Report problems
 		.pipe( scsslint.failReporter() );
@@ -69,7 +53,7 @@ export const sassBuild = gulp.task( 'sass:build', () => {
 		.pipe( sass( sassOptions ).on( 'error', sass.logError ) )
 
 		// Autoprefix CSS
-		.pipe( autoprefixer( autoprefixerOptions ) )
+		.pipe( autoprefixer() )
 
 		// Minify CSS
 		.pipe( cssmin() )

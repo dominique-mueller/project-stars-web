@@ -1,4 +1,9 @@
 /**
+ * Import configuration
+ */
+import config 			from './tools/gulp_tasks/config.json';
+
+/**
  * Gulp imports
  */
 import browserSync 		from 'browser-sync';
@@ -59,13 +64,14 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 
 	// Initialize browsersync
 	browserSync.init( {
-		server: './build/'
+		server: config.paths.project.dest
 	} );
 
 	// Setup watchers
-	gulp.watch( './public/styles/**/*.scss', [ 'sass:build' ] );
-	gulp.watch( './public/app/**/*', [ 'typescript:build' ] );
+	gulp.watch( `${config.paths.styles.src}/**/*.scss`, [ 'sass:build' ] );
+	gulp.watch( `${config.paths.app.src}/**/*`, [ 'typescript:build' ] );
 
-	gulp.watch( './build/**/*' ).on( 'change', browserSync.reload );
+	// Reload browser on change
+	gulp.watch( `${config.paths.project.dest}/**/*` ).on( 'change', browserSync.reload );
 
 } );

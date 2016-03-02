@@ -18,6 +18,7 @@
 	},
 	"names": {
 		"app": "app.min.js",
+		"vendor": "vendor.min.js",
 		"styles": "style.min.css"
 	}
 }
