@@ -49,7 +49,7 @@ routerBackend.route('/authenticate/logout')
 
 routerBackend.route('/users/register')
 	.post(function(req, res){
-
+		
 	});
 
 
@@ -72,6 +72,14 @@ routerBackend.route('/users')
 	});	
 routerBackend.route('/users/:user_id')
 	.get(function(req, res){
+		//Possible value for :user_id is 'tokenUserId', which takes the userId from the authToken
+		if(req.params.user_id == 'tokenUserId'){
+			//TODO Code Review
+			require('./modules/user/users.model.js').findOne(require('./helpers/generalHelpers.js').waitForUserIdFromPromise(authentication.getUserId()));
+		}
+		else{
+
+		}
 		res.send('User GET id: ' + req.params.user_id);
 	})
 
@@ -146,7 +154,7 @@ routerBackend.route('/settings/:setting_id')
 	})
 
 	.delete(function(req, res){
-
+		
 	});
 
 

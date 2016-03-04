@@ -23,18 +23,40 @@ module.exports = {
 
 	},
 
-	find: function(filterCriteria){
-		User.find(filterCriteria, function(err, user){
+	deactivate: function(userId){
 
+	},
+
+	find: function(filterCriteria){
+		return new Promise(function(resolve, reject){
+			User.find(filterCriteria, function(err, users){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(users);
+				}
+			});
 		});
 	},
 
 	findOne: function(userId){
+		return new Promsie(function(resolve, reject){
 
+		});
 	},
 
 	findAll: function(){
-
+		return new Promise(function(resolve, reject){
+			User.find({}, function(err, users){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(users);
+				}
+			});
+		});
 	}
 }
 

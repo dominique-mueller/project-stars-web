@@ -2,7 +2,8 @@
 see: https://github.com/scotch-io/node-token-authentication/blob/master/server.js
 */
 var jwt = require('jsonwebtoken');
-var passwordHash = require('password-hash');
+var scrypt = require('scrypt');
+var scryptParameters = scrypt.paramsSync(0.1);
 var logger = require('./logger');
 var secret = require('../config.js').authentication.secret;
 
@@ -13,7 +14,7 @@ module.exports = {
 	login: function(payload){
 		return new Promise(function(resolve, reject){
 			getUser(payload.emailAddress, function(user){
-				if(passwordHash.verify(payload.password, user.password)){
+				if( scrypt.verifyKdfSync(payload.password, user.password) ){
 					resolve(jwt.sign({
 						userId: user._id,
 						admin: user.admin
@@ -52,7 +53,7 @@ module.exports = {
 	convertRawPassword: function(pw1, pw2){
 		return new Promise(function(resolve, reject){
 			if(pw1 == pw2){
-				resolve(passwordHash.generate(pw1));	//resolve with the hashed password
+				resolve(scrypt.kdfSync(pw1, scryptParameters));	//resolve with the hashed password
 			}
 			else{
 				reject(new Error('passwords are not euqal')); 
@@ -64,7 +65,7 @@ module.exports = {
 
 // #### Private Functions ####
 function getUser(emailAddress, callback){
-	var result = require('..\modules\user\users.module.js').find({'emailAddress':emailAddress});
+	var result = require('../modules/user/users.model.js').find({'emailAddress':emailAddress});
 	result.then(function(user){
 		callback(user);
 	})
