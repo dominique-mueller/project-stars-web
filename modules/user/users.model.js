@@ -1,48 +1,62 @@
-var mongoose = require('mongoose');
-var passwordHash = require('password-hash');
+var User = require('../schemaExport.js').User;
 
-/* 	@param data: all the data required to create a new user in js object structure
-	@return: function returns a new object from type user
-*/
-function create(data){
-	// var user = new mongoose.model('User');
-	// user.firstName = data.firstName;
-	// user.lastName = data.lastName;
-	// user.emailAddress = data.emailAddress;
-	// //validate password length before hashing
-	// if(!(data.password.length < 8 || data.password.length > 32)){
-	// 	user.password = passwordHash.generate(data.password);
-	// }
-	// else{
-	// 	//TODO throw validation error
-	// }
 
-	// user.save(function(err, ){
+module.exports = {
+	create: function(userData){
+		return new Promise(function(resolve, reject){
+			var user = new User({
+				firstName = userData.firstName,
+				lastName = userData.lastName,
+				emailAddress = userData.emailAddress,
+				password = userData.password,
+				profileImage = userData.profileImage,
+			});
+		});
+	},
 
-	// });
+	update: function(userData){
+		var userId = userData.id; // safe the label id
+		delete userData.id; //remove the user id from the data set, because it isn't needed
+	},
 
-	return user;
-}
+	delete: function(userId){
 
-function update(data){
+	},
 
-}
+	deactivate: function(userId){
 
-function delete(data){
+	},
 
-}
+	find: function(filterCriteria){
+		return new Promise(function(resolve, reject){
+			User.find(filterCriteria, function(err, users){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(users);
+				}
+			});
+		});
+	},
 
-function find(data){
-	// if(!data){ 	//if there are no data as param the function will behave like findAll()
-	// 	return findAll();
-	// }
-}
+	findOne: function(userId){
+		return new Promsie(function(resolve, reject){
 
-function findOne(data){
+		});
+	},
 
-}
-
-function findAll(data){
-
+	findAll: function(){
+		return new Promise(function(resolve, reject){
+			User.find({}, function(err, users){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(users);
+				}
+			});
+		});
+	}
 }
 

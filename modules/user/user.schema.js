@@ -6,6 +6,7 @@ var user = new mongoose.Schema({
 	lastName: {type: String, required: true},
 	emailAddress: {type: String, match: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i, unique: true, required: true},
 	password: {type: String, required: true},
+	admin: boolean,
 	profileImage: String,
 	registered: {type: Date, default: Date.now},
 	connectedSocialServices:{
