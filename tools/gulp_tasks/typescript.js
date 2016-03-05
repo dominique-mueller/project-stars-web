@@ -23,14 +23,22 @@ const webpackOptions = {
 		]
 	},
 	output: {
-		filename: `${ config.paths.app.dest }/${config.names.app}`
+		path: config.paths.app.dest,
+		filename: config.names.app
 	},
 	resolve: {
-		extensions: [ '', '.ts', '.js' ]
+		modulesDirectories: [
+			'node_modules'
+		],
+		extensions: [
+			'.ts',
+			'.js',
+			''
+		]
 	},
 	module: {
 		loaders: [ {
-			test: /\.ts$/,
+			test: /\.ts/,
 			exclude: [ 'node_modules' ],
 			loader: 'ts-loader'
 		} ]
@@ -38,7 +46,7 @@ const webpackOptions = {
 	plugins: [
 		new webpack.optimize.CommonsChunkPlugin( {
 			name: 'vendor',
-			filename: `${ config.paths.app.dest }/${config.names.vendor}`
+			filename: config.names.vendor
 		} )
 	]
 };

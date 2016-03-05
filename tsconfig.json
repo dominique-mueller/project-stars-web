@@ -11,6 +11,7 @@
 	},
 	"files": [
 		"typings/browser.d.ts",
+		"typings/browser",
 		"public/app/main.ts"
 	]
 }

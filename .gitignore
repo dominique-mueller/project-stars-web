@@ -12,3 +12,6 @@ undefinedinfo.json
 
 # Editor settings
 *.sublime-workspace
+
+# Development files
+*.todo

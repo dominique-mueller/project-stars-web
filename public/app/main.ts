@@ -5,6 +5,13 @@ import { bootstrap } 		from 'angular2/platform/browser';
 import { AppComponent } 	from './components/app/app.component';
 
 /**
- * We use the AppComponent as the root component for our application
+ * Bootstrap Angular 2
  */
-bootstrap( AppComponent );
+bootstrap( AppComponent )
+	.then( ( success: any ) => {
+		console.log( 'Angular 2 bootstrap success.' );
+	} )
+	.catch( ( error: any ) => {
+		console.log( 'Angular 2 bootstrap error.' );
+		console.log( error );
+	} );
