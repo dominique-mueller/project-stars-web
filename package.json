@@ -34,6 +34,7 @@
 		"path-to-regexp": "1.2.x",
 		"reflect-metadata": "0.1.2",
 		"rxjs": "5.0.0-beta.2",
+		"systemjs": "0.19.22",
 		"zone.js": "0.5.15"
 	},
 	"devDependencies": {
@@ -45,20 +46,19 @@
 		"gulp": "3.9.x",
 		"gulp-autoprefixer": "3.1.x",
 		"gulp-cssmin": "0.1.x",
+		"gulp-inline-ng2-template": "1.1.x",
 		"gulp-rename": "1.2.x",
 		"gulp-sass": "2.2.x",
 		"gulp-scss-lint": "0.3.x",
 		"gulp-tslint": "4.3.x",
+		"gulp-typescript": "2.12.x",
 		"gulp-util": "3.0.x",
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
 		"npm-check-updates": "2.5.x",
 		"run-sequence": "1.1.x",
 		"tslint": "3.5.x",
-		"ts-loader": "0.8.x",
-		"typescript": "1.8.x",
-		"typings": "0.6.x",
-		"webpack": "1.12.x"
+		"typings": "0.6.x"
 	},
 	"private": true
 }

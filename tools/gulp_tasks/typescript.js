@@ -1,54 +1,32 @@
 /**
  * Import configurations
  */
-import config 		from './config.json';
+import config 				from './config.json';
 
 /**
  * Gulp imports
  */
-import gulp 		from 'gulp';
-import gutil 		from 'gulp-util';
-import tslint 		from 'gulp-tslint';
-import webpack 		from 'webpack';
+import browserSync 			from 'browser-sync';
+import gulp 				from 'gulp';
+import gutil 				from 'gulp-util';
+import inlineNg2Template 	from 'gulp-inline-ng2-template';
+import tslint 				from 'gulp-tslint';
+import typescript 			from 'gulp-typescript';
 
 /**
- * webpack options
+ * typescript project
  */
-const webpackOptions = {
-	entry: {
-		app: `${ config.paths.app.src }/main`,
-		vendor: [
-			'angular2/core',
-			'angular2/platform/browser'
-		]
-	},
-	output: {
-		path: config.paths.app.dest,
-		filename: config.names.app
-	},
-	resolve: {
-		modulesDirectories: [
-			'node_modules'
-		],
-		extensions: [
-			'.ts',
-			'.js',
-			''
-		]
-	},
-	module: {
-		loaders: [ {
-			test: /\.ts/,
-			exclude: [ 'node_modules' ],
-			loader: 'ts-loader'
-		} ]
-	},
-	plugins: [
-		new webpack.optimize.CommonsChunkPlugin( {
-			name: 'vendor',
-			filename: config.names.vendor
-		} )
-	]
+const typescriptProject = typescript.createProject( './tsconfig.json' );
+
+/**
+ * inlineNg2TemplateOptions options
+ */
+const inlineNg2TemplateOptions = {
+	base: './public/app',
+	indent: 0,
+	target: 'es6',
+	templateExtension: '.html',
+	useRelativePaths: true
 };
 
 /**
@@ -72,24 +50,26 @@ export const typescriptLint = gulp.task( 'typescript:lint', () => {
 /**
  * Gulp task: Build TypeScript
  */
-export const typescriptBuild = gulp.task( 'typescript:build', ( done ) => {
+export const typescriptBuild = gulp.task( 'typescript:build', () => {
 
-	// Run webpack
-	webpack( webpackOptions, function( error, stats ) {
+	return gulp
 
-		// Check if an error occured
-		if( error ) {
-			throw new gutil.PluginError( 'webpack', error );
-		}
+		// Get al typescript files
+		.src( [
+			`${ config.paths.app.src }/**/*.ts`,
+			`${ config.paths.typings.default }/browser.d.ts`
+		] )
 
-		// Log output
-		gutil.log( '[ webpack ]', stats.toString( {
-			colors: true,
-			chunks: false
-		} ) );
+		// Inline Angular 2 component templates
+		.pipe( inlineNg2Template( inlineNg2TemplateOptions ) )
 
-		done();
+		// Transpile
+		.pipe( typescript( typescriptProject ), undefined, typescript.reporter.fullReporter() )
 
-	} );
+		// Save
+		.pipe( gulp.dest( config.paths.app.dest ) )
+
+		// Trigger BrowserSync
+		.pipe( browserSync.stream( { once: true } ) );
 
 } );

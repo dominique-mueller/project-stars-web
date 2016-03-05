@@ -17,7 +17,7 @@ import ncu 		from 'npm-check-updates';
 export const envClean = gulp.task( 'env:clean', () => {
 
 	// Delete folder and files
-	return del( `${config.paths.app.dest}/**/*` );
+	return del( `${config.paths.project.dest}/**/*` );
 
 } );
 
@@ -49,15 +49,17 @@ export const envNpm = gulp.task( 'env:npm', () => {
  */
 export const html = gulp.task( 'env:setup', () => {
 
-	return gulp
-
-		// Get all typescript files
-		.src( [
-			`${config.paths.project.src}/index.html`,
-			'./node_modules/angular2/bundles/angular2-polyfills.js'
-		] )
-
-		// Report problems
+	// Copy index.html file
+	gulp.src( `${config.paths.project.src}/index.html` )
 		.pipe( gulp.dest( config.paths.project.dest ) );
+
+	// Copy vendor files
+	gulp.src( [
+			'node_modules/angular2/bundles/angular2-polyfills.js',
+			'node_modules/systemjs/dist/system.src.js',
+			'node_modules/rxjs/bundles/Rx.js',
+			'node_modules/angular2/bundles/angular2.dev.js'
+		] )
+		.pipe( gulp.dest( config.paths.app.vendor ) );
 
 } );

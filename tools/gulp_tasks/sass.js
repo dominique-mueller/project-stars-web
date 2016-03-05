@@ -7,6 +7,7 @@ import config 			from './config.json';
  * Gulp imports
  */
 import autoprefixer 	from 'gulp-autoprefixer';
+import browserSync 		from 'browser-sync';
 import cssmin 			from 'gulp-cssmin';
 import gulp 			from 'gulp';
 import rename 			from 'gulp-rename';
@@ -62,6 +63,9 @@ export const sassBuild = gulp.task( 'sass:build', () => {
 		.pipe( rename( config.names.styles ) )
 
 		// Save CSS file
-		.pipe( gulp.dest( config.paths.styles.dest ) );
+		.pipe( gulp.dest( config.paths.styles.dest ) )
+
+		// Trigger BrowserSync
+		.pipe( browserSync.stream( { once: true } ) );
 
 } );

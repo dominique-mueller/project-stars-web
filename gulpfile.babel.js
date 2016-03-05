@@ -64,14 +64,16 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 
 	// Initialize browsersync
 	browserSync.init( {
-		server: config.paths.project.dest
+		server: {
+			baseDir: config.paths.project.dest,
+			index: 'index.html'
+		},
+		logPrefix: 'Browsersync',
+		logConnections: true
 	} );
 
 	// Setup watchers
 	gulp.watch( `${config.paths.styles.src}/**/*.scss`, [ 'sass:build' ] );
 	gulp.watch( `${config.paths.app.src}/**/*`, [ 'typescript:build' ] );
-
-	// Reload browser on change
-	gulp.watch( `${config.paths.project.dest}/**/*` ).on( 'change', browserSync.reload );
 
 } );

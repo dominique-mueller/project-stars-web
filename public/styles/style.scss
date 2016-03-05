@@ -5,8 +5,8 @@
 
 // LAYER 01: SETTINGS
 @import "settings/colors";
-@import "settings/breakpoints";
 @import "settings/typography";
+@import "settings/breakpoints";
 @import "settings/animations";
 
 // LAYER 02: TOOLS
@@ -14,11 +14,15 @@
 @import "tools/typography";
 
 // LAYER 03: GENERIC
-@import "../../node_modules/normalize.css/normalize"; // External library
+@import "../../node_modules/normalize.css/normalize"; // Default normalize.css library
+@import "generic/normalize";
 @import "generic/boxsizing";
 
 // LAYER 04: BASE
 @import "base/site";
+@import "base/headings";
+@import "base/hyperlinks";
+@import "base/selection";
 
 // LAYER 05: OBJECTS
 

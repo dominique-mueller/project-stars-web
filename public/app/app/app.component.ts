@@ -8,6 +8,6 @@ import { Component } from 'angular2/core';
  */
 @Component( {
 	selector: 'app',
-	template: '<h1>Welcome to Project Stars.</h1>'
+	templateUrl: './app.component.html'
 } )
 export class AppComponent { }

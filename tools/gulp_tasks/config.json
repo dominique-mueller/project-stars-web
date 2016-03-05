@@ -6,19 +6,18 @@
 		},
 		"app": {
 			"src": "./public/app",
-			"dest": "./build"
+			"dest": "./build/app",
+			"vendor": "./build/vendor"
 		},
 		"styles": {
 			"src": "./public/styles",
-			"dest": "./build"
+			"dest": "./build/assets"
 		},
 		"typings": {
 			"default": "./typings"
 		}
 	},
 	"names": {
-		"app": "app.min.js",
-		"vendor": "vendor.min.js",
 		"styles": "style.min.css"
 	}
 }
