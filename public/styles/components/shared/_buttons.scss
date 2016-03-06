@@ -1,0 +1,15 @@
+// COMPONENTS: BUTTONS
+
+.button {
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+.button-invisible {
+
+	&:focus {
+		outline: none;
+	}
+
+}

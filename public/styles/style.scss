@@ -22,11 +22,20 @@
 @import "base/site";
 @import "base/headings";
 @import "base/hyperlinks";
+@import "base/inputs";
 @import "base/selection";
 
 // LAYER 05: OBJECTS
 
 // LAYER 06: COMPONENTS
+@import "components/search"; // TODO: Group somehow?
+
+// LAYER 06: COMPONENTS - SITE
+@import "components/site/header";
+
+// LAYER 06: COMPONENTS - SHARED
+@import "components/shared/buttons";
+@import "components/shared/icons";
 
 // EXTRA: TEMP (TODO: remove me some day)
 @import "temp";

@@ -10,6 +10,12 @@ $font-weight-bold: 700;
 
 // Font sizes for standard text
 $font-size-text: (
-	null: 		1.4rem,
-	desktop: 	1.6rem
+	null: 		1.3rem,
+	desktop: 	1.5rem
+);
+
+// Font sizes for header title
+$font-size-h1: (
+	null: 		1.5rem,
+	desktop:  	1.9rem
 );

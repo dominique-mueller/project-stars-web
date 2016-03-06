@@ -1,5 +1,7 @@
 // BASE: TYPOGRAPHY
 
 h1 {
-	// TODO
+	@include font-size($font-size-h1);
+	font-weight: $font-weight-regular;
+	letter-spacing: .05rem;
 }

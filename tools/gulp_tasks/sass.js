@@ -57,7 +57,7 @@ export const sassBuild = gulp.task( 'sass:build', () => {
 		.pipe( autoprefixer() )
 
 		// Minify CSS
-		.pipe( cssmin() )
+		// .pipe( cssmin() )
 
 		// Rename CSS file name
 		.pipe( rename( config.names.styles ) )

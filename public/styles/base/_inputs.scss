@@ -1,0 +1,10 @@
+// BASE: INPUTS
+
+input {
+
+	&:focus {
+		outline: .1rem solid orange;
+		outline-offset: -.1rem;
+	}
+
+}
