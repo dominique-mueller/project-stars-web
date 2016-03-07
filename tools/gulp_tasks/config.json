@@ -16,6 +16,10 @@
 		"icons": {
 			"src": "./public/assets/icons"
 		},
+		"documentation": {
+			"base": "./docs",
+			"frontend": "./docs/frontend"
+		},
 		"typings": {
 			"default": "./typings"
 		}

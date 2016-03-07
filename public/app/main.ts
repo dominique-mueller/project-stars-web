@@ -1,8 +1,8 @@
 /**
  * Imports
  */
-import { bootstrap } 		from 'angular2/platform/browser';
-import { AppComponent } 	from './layout/app/app.component';
+import { bootstrap } from 'angular2/platform/browser';
+import { AppComponent } from './layout/app/app.component';
 
 /**
  * Bootstrap Angular 2

@@ -20,27 +20,45 @@ export { DropdownItemModel } from './dropdownItem.model';
 } )
 export class DropdownComponent {
 
+	/**
+	 * Input: List of dropdown items
+	 */
 	@Input()
 	private items: DropdownItemModel[];
 
+	/**
+	 * Output: Select event
+	 */
 	@Output()
 	private select: EventEmitter<any>;
 
+	/**
+	 * Status of the dropdown menu
+	 */
 	private isOpen: boolean;
 
-	// Constructor (set default values)
+	/**
+	 * Constructor
+	 */
 	constructor() {
 		this.select = new EventEmitter();
 		this.isOpen = false;
 	}
 
 	// Emit event when clicking on dropdown list item
+
+	/**
+	 * Choose a dropdown item
+	 * @param {string} value Dropdown item value
+	 */
 	private choose( value: string ): void {
 		this.isOpen = false;
 		this.select.emit( value );
 	}
 
-	// Toggle dropdown list
+	/**
+	 * Toggle dropdown visibility
+	 */
 	private toggle(): void {
 		this.isOpen = !this.isOpen;
 	}

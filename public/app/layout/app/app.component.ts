@@ -20,7 +20,9 @@ export class AppComponent {
 	private name: string = 'Niklas Agethen';
 	private dropdownItems: DropdownItemModel[];
 
-	// Constructor
+	/**
+	 * Constructor
+	 */
 	constructor() {
 
 		this.dropdownItems = [

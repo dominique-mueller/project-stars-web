@@ -53,6 +53,7 @@
 		"gulp-scss-lint": "0.3.x",
 		"gulp-svgstore": "5.0.x",
 		"gulp-tslint": "4.3.x",
+		"gulp-typedoc": "1.2.x",
 		"gulp-typescript": "2.12.x",
 		"gulp-util": "3.0.x",
 		"jasmine": "2.4.x",

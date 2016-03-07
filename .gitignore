@@ -3,8 +3,9 @@ node_modules
 typings
 Gemfile.lock
 
-# Build folders
+# Build and docs folders
 build
+docs
 
 # Generated error logs
 undefinederror.json
