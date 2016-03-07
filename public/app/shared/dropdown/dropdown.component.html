@@ -1,0 +1,11 @@
+<button class="dropdown-button" type="button">
+	<span><ng-content></ng-content></span>
+	<app-icon name="dropdown" color="#555" size="24"></app-icon>
+</button>
+<ul class="dropdown-list">
+	<li class="dropdown-list-item" *ngFor="#item of items">
+		<a class="dropdown-list-link" href="#" (click)="choose(item.value)">
+			{{ item.label }}
+		</a>
+	</li>
+</ul>

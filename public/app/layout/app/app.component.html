@@ -9,9 +9,13 @@
 		<input class="search-input" type="search" placeholder="Search ...">
 	</form>
 
-	<button type="button" class="header-user button button-invisible">
+	<!-- <button type="button" class="header-user button button-invisible">
 		<span>{{ name }}</span>
 		<app-icon name="dropdown" color="#555" size="24"></app-icon>
-	</button>
+	</button> -->
+
+	<app-dropdown [items]="dropdownItems" (select)="log($event)">
+		{{ name }}
+	</app-dropdown>
 
 </header>
