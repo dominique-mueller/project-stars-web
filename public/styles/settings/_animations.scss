@@ -1,9 +1,11 @@
 // SETTINGS: ANIMATIONS
 
 // Animation speeds
-$anim-speed-fast:	.1s;
-$anim-speed-normal: .25s;
-$anim-speed-slow: 	.4s;
+$anim-speed-instant: 	0s;
+$anim-speed-fast:		.1s;
+$anim-speed-normal: 	.25s;
+$anim-speed-slow: 		.4s;
 
 // Animation easing
 $anim-easing: ease;
+$anim-linear: linear;

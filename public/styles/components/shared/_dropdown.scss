@@ -1,19 +1,82 @@
 // COMPONENTS: DROPDOWN
 
 .dropdown-button {
+	position: relative;
+	width: 100%;
+	padding: 0 2rem 0 2.4rem;
+	transition: background-color $anim-speed-normal $anim-easing;
+	text-align: left;
 	white-space: nowrap;
+	z-index: 1;
+
+	&:hover,
+	&:active,
+	&.is-active {
+		background-color: $color-seashell;
+	}
+
+	.icon {
+		transform: rotate(0);
+		transition: transform $anim-speed-slow $anim-easing;
+	}
+
+	&.is-active .icon {
+		transform: rotate(180deg);
+	}
+
 }
 
 .dropdown-list {
-	background-color: #CCC;
+	position: relative;
+	min-width: 15rem;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+	transform: translateY(-1.4rem);
+	transition: opacity $anim-speed-slow $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-slow,
+				transform $anim-speed-slow $anim-easing;
+	background-color: $color-white;
+	line-height: 1;
+	box-shadow: 0 .1rem .3rem rgba($color-black, .1);
+	opacity: 0;
+	visibility: hidden;
+
+	&.is-visible {
+		transform: translateY(0);
+		transition: opacity $anim-speed-slow $anim-easing,
+					visibility $anim-speed-instant $anim-linear,
+					transform $anim-speed-slow $anim-easing;
+		opacity: 1;
+		visibility: visible;
+
+		> .dropdown-list-item {
+			transition: opacity $anim-speed-slow $anim-easing;
+			opacity: 1;
+		}
+
+	}
+
 }
 
 .dropdown-list-item {
-	display: block;
-	background-color: green;
+	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: 0;
+}
+
+.dropdown-list-divider {
+	margin-top: .5rem;
+	margin-bottom: .5rem;
+	border-bottom: .1rem solid $color-seashell;
 }
 
 .dropdown-list-link {
 	display: block;
-	background-color: blue;
+	padding: 1rem 2.4rem;
+	transition: background-color $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:active {
+		background-color: $color-seashell;
+	}
+
 }

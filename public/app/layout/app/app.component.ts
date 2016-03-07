@@ -17,16 +17,21 @@ export class AppComponent {
 
 	// TODO: Put them somewhere else (maybe a service?)
 	private app: string = 'Project Stars';
-	private name: string = 'John Doe';
+	private name: string = 'Niklas Agethen';
 	private dropdownItems: DropdownItemModel[];
 
 	// Constructor
 	constructor() {
 
 		this.dropdownItems = [
-			new DropdownItemModel( 'settings', 'Settings' ),
-			new DropdownItemModel( 'info', 'App info' ),
-			new DropdownItemModel( 'logout', 'Logout' )
+			new DropdownItemModel( 'link', 'settings', 'Settings' ),
+			new DropdownItemModel( 'link', 'apps', 'Apps' ),
+			new DropdownItemModel( 'divider' ),
+			new DropdownItemModel( 'link', 'help', 'Help' ),
+			new DropdownItemModel( 'link', 'feedback', 'Feedback' ),
+			new DropdownItemModel( 'link', 'about', 'About this app' ),
+			new DropdownItemModel( 'divider' ),
+			new DropdownItemModel( 'link', 'logout', 'Logout' )
 		];
 
 	}

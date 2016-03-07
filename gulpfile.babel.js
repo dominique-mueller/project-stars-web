@@ -70,7 +70,17 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 			index: 'index.html'
 		},
 		logPrefix: 'Browsersync',
-		logConnections: true
+		logConnections: true,
+		notify: {
+			styles: {
+				top: 'auto',
+				bottom: '0',
+				right: 'auto',
+				left: '50%',
+				transform: 'translateX(-50%)',
+				borderRadius: '0'
+			}
+		}
 	} );
 
 	// Watch SASS files

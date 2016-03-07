@@ -26,14 +26,23 @@ export class DropdownComponent {
 	@Output()
 	private select: EventEmitter<any>;
 
-	// Constructor
+	private isOpen: boolean;
+
+	// Constructor (set default values)
 	constructor() {
 		this.select = new EventEmitter();
+		this.isOpen = false;
 	}
 
-	// Emit event on click
+	// Emit event when clicking on dropdown list item
 	private choose( value: string ): void {
+		this.isOpen = false;
 		this.select.emit( value );
+	}
+
+	// Toggle dropdown list
+	private toggle(): void {
+		this.isOpen = !this.isOpen;
 	}
 
 }
