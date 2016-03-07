@@ -21,9 +21,6 @@ export class IconComponent {
 	@Input()
 	private size: number = 24;
 
-	// TOOD: Extract into an service
-	private icons: {} = {
-		'dropdown': 'M7 10l5 5 5-5z'
-	};
+	private prefix: string = '#icon-';
 
 }

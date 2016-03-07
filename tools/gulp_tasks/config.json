@@ -13,6 +13,9 @@
 			"src": "./public/styles",
 			"dest": "./build/assets"
 		},
+		"icons": {
+			"src": "./public/assets/icons"
+		},
 		"typings": {
 			"default": "./typings"
 		}

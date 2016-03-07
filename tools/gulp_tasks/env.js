@@ -43,23 +43,3 @@ export const envNpm = gulp.task( 'env:npm', () => {
 	} );
 
 } );
-
-/**
- * Gulp task: Seup env
- */
-export const html = gulp.task( 'env:setup', () => {
-
-	// Copy index.html file
-	gulp.src( `${config.paths.project.src}/index.html` )
-		.pipe( gulp.dest( config.paths.project.dest ) );
-
-	// Copy vendor files
-	gulp.src( [
-			'node_modules/angular2/bundles/angular2-polyfills.js',
-			'node_modules/systemjs/dist/system.src.js',
-			'node_modules/rxjs/bundles/Rx.js',
-			'node_modules/angular2/bundles/angular2.dev.js'
-		] )
-		.pipe( gulp.dest( config.paths.app.vendor ) );
-
-} );
