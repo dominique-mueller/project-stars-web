@@ -2,6 +2,7 @@
  * Imports
  */
 import { Component } from 'angular2/core';
+import { IconComponent } from '../../shared/icon/icon.component';
 import {
 	DropdownComponent,
 	DropdownItem, DropdownLink, DropdownDivider
@@ -11,11 +12,16 @@ import {
  * Header Component
  */
 @Component( {
-	directives: [ DropdownComponent ],
+	directives: [ IconComponent, DropdownComponent ],
 	selector: 'app-header',
 	templateUrl: './header.component.html'
 } )
 export class HeaderComponent {
+
+	/**
+	 * Search input data
+	 */
+	private search: string;
 
 	// TODO: Put them somewhere else (maybe a service or a config?)
 	private app: string = 'Project Stars';
@@ -51,6 +57,13 @@ export class HeaderComponent {
 	 */
 	private log( value: string ): void {
 		console.log( value ); // TODO
+	}
+
+	/**
+	 * Clear search input field
+	 */
+	private clear(): void {
+		this.search = '';
 	}
 
 }

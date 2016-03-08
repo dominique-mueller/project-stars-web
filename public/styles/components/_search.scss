@@ -1,12 +1,35 @@
 // COMPONENTS: SEARCH
 
 .search {
-
+	position: relative;
 }
 
 .search-input {
 	width: 100%;
-	padding: 0 2rem;
+	padding: 0 5.9rem 0 5.9rem;
 	border: none;
 	line-height: inherit;
+}
+
+.search-icon {
+	position: absolute;
+	top: 0;
+	left: 2rem;
+}
+
+.search-button-clear {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding-right: 2rem;
+	padding-left: 2rem;
+
+	.icon {
+		transition: fill $anim-speed-normal $anim-easing;
+	}
+
+	&:hover .icon {
+		fill: #888;
+	}
+
 }

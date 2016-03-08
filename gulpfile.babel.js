@@ -88,7 +88,7 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 	// Watch index file and svg icon files
 	gulp.watch( [
 		`${config.paths.project.src}/index.html`,
-		`${config.paths.icons.src}>/*.svg`
+		`${config.paths.icons.src}/*.svg`
 	], [ 'setup:index' ] );
 
 } );

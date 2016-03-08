@@ -6,7 +6,11 @@
 	</a>
 
 	<form class="header-search search">
-		<input class="search-input" type="search" placeholder="Search ...">
+		<input class="search-input" type="search" placeholder="Search ..." [(ngModel)]="search">
+		<app-icon class="search-icon" name="search" color="#CCC" size="24"></app-icon>
+		<button class="button button-invisible search-button-clear" type="button" (click)="clear()">
+			<app-icon name="close" color="#CCC" size="20"></app-icon>
+		</button>
 	</form>
 
 	<app-dropdown [items]="dropdownItems" (select)="log($event)">
