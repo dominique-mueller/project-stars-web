@@ -2,13 +2,13 @@
  * Imports
  */
 import { Component, Input, Output, EventEmitter } from 'angular2/core';
-import { DropdownItemModel } from './dropdownItem.model';
+import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 import { IconComponent } from '../icon/icon.component';
 
 /**
  * Exports
  */
-export { DropdownItemModel } from './dropdownItem.model';
+export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 
 /**
  * Dropdown Component
@@ -24,7 +24,7 @@ export class DropdownComponent {
 	 * Input: List of dropdown items
 	 */
 	@Input()
-	private items: DropdownItemModel[];
+	private items: DropdownItem[];
 
 	/**
 	 * Output: Select event

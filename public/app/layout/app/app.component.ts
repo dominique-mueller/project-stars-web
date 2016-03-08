@@ -3,7 +3,7 @@
  */
 import { Component } from 'angular2/core';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { DropdownComponent, DropdownItemModel } from '../../shared/dropdown/dropdown.component';
+import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider } from '../../shared/dropdown/dropdown.component';
 
 /**
  * App Component
@@ -18,22 +18,23 @@ export class AppComponent {
 	// TODO: Put them somewhere else (maybe a service?)
 	private app: string = 'Project Stars';
 	private name: string = 'Niklas Agethen';
-	private dropdownItems: DropdownItemModel[];
+	private dropdownItems: DropdownItem[];
 
 	/**
 	 * Constructor
 	 */
 	constructor() {
 
+		// Set dropdown values
 		this.dropdownItems = [
-			new DropdownItemModel( 'link', 'settings', 'Settings' ),
-			new DropdownItemModel( 'link', 'apps', 'Apps' ),
-			new DropdownItemModel( 'divider' ),
-			new DropdownItemModel( 'link', 'help', 'Help' ),
-			new DropdownItemModel( 'link', 'feedback', 'Feedback' ),
-			new DropdownItemModel( 'link', 'about', 'About this app' ),
-			new DropdownItemModel( 'divider' ),
-			new DropdownItemModel( 'link', 'logout', 'Logout' )
+			new DropdownLink(  'settings', 'Settings' ),
+			new DropdownLink(  'apps', 'Apps' ),
+			new DropdownDivider(),
+			new DropdownLink( 'help', 'Help' ),
+			new DropdownLink( 'feedback', 'Feedback' ),
+			new DropdownLink( 'about', 'About this app' ),
+			new DropdownDivider(),
+			new DropdownLink( 'logout', 'Logout' )
 		];
 
 	}

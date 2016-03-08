@@ -4,7 +4,7 @@
 </button>
 <ul class="dropdown-list" [class.is-visible]="isOpen">
 	<li class="dropdown-list-item" *ngFor="#item of items" [class.dropdown-list-divider]="item.type === 'divider'">
-		<a *ngIf="item.type === 'link'" class="dropdown-list-link" href="#" (click)="choose(item.value)">
+		<a *ngIf="item.type === 'link'" class="dropdown-list-link" (click)="choose(item.value)">
 			{{ item.label }}
 		</a>
 	</li>

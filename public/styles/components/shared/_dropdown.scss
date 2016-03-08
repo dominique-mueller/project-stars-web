@@ -73,6 +73,7 @@
 	display: block;
 	padding: 1rem 2.4rem;
 	transition: background-color $anim-speed-normal $anim-easing;
+	cursor: pointer;
 
 	&:hover,
 	&:active {
