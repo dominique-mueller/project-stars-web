@@ -29,8 +29,8 @@
 .dropdown-list {
 	position: relative;
 	min-width: 15rem;
-	padding-top: .5rem;
-	padding-bottom: .5rem;
+	padding-top: .7rem;
+	padding-bottom: .7rem;
 	transform: translateY(-1.4rem);
 	transition: opacity $anim-speed-slow $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-slow,
@@ -64,8 +64,8 @@
 }
 
 .dropdown-list-divider {
-	margin-top: .5rem;
-	margin-bottom: .5rem;
+	margin-top: .7rem;
+	margin-bottom: .7rem;
 	border-bottom: .1rem solid $color-seashell;
 }
 

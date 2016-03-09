@@ -1,0 +1,34 @@
+{
+	"data": [
+		{
+			"id": 0,
+			"title": "Google",
+			"description": "The best search engine ever",
+			"url": "https://www.google.de/"
+		},
+		{
+			"id": 1,
+			"title": "Facebook",
+			"description": "Press like every freakin day",
+			"url": "https://www.facebook.com/"
+		},
+		{
+			"id": 2,
+			"title": "Twitter",
+			"description": "So much to say but so little amount of text",
+			"url": "https://twitter.com/"
+		},
+		{
+			"id": 3,
+			"title": "YouTube",
+			"description": "Freakin cat vids every day",
+			"url": "https://www.youtube.com/"
+		},
+		{
+			"id": 4,
+			"title": "Angular 2",
+			"description": "It's awesome so try it out now",
+			"url": "https://www.angular.io/"
+		}
+	]
+}

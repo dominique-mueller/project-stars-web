@@ -6,7 +6,7 @@ export class DropdownItem {
 	/**
 	 * Type of the dropdown item
 	 */
-	public type: string;
+	public type: String;
 
 }
 
@@ -18,19 +18,19 @@ export class DropdownLink extends DropdownItem {
 	/**
 	 * Dropdowm item value
 	 */
-	private value: string;
+	private value: String;
 
 	/**
 	 * Dropdown item label
 	 */
-	private label: string;
+	private label: String;
 
 	/**
 	 * Constructor
 	 * @param {string} value Dropdown item value
 	 * @param {string} label Dropdown item label
 	 */
-	constructor(value: string, label: string) {
+	constructor(value: String, label: String) {
 
 		// Call super class
 		super();

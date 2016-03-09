@@ -66,7 +66,8 @@ export const html = gulp.task( 'setup:vendor', () => {
 			'node_modules/angular2/bundles/angular2-polyfills.js',
 			'node_modules/systemjs/dist/system.src.js',
 			'node_modules/rxjs/bundles/Rx.js',
-			'node_modules/angular2/bundles/angular2.dev.js'
+			'node_modules/angular2/bundles/angular2.dev.js',
+			'node_modules/angular2/bundles/http.dev.js'
 		] )
 		.pipe( gulp.dest( config.paths.app.vendor ) );
 

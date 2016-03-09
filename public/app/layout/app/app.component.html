@@ -1,5 +1,15 @@
 <app-header></app-header>
 
-<main>
-	TODO
+<main class="main">
+
+	<h2>Bookmarks</h2>
+
+	<ul>
+		<li *ngFor="#bookmark of bookmarks">
+			<a [href]="bookmark.url" target="_blank">
+				<strong>{{ bookmark.title }}</strong><br>{{ bookmark.description }}
+			</a>
+		</li>
+	</ul>
+
 </main>
