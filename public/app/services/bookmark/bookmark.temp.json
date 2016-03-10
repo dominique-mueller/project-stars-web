@@ -4,13 +4,15 @@
 			"id": 0,
 			"title": "Google",
 			"description": "The best search engine ever",
-			"url": "https://www.google.de/"
+			"url": "https://www.google.de/",
+			"labels": [0, 1]
 		},
 		{
 			"id": 1,
 			"title": "Facebook",
 			"description": "Press like every freakin day",
-			"url": "https://www.facebook.com/"
+			"url": "https://www.facebook.com/",
+			"labels": [1]
 		},
 		{
 			"id": 2,

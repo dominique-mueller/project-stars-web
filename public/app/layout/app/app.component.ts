@@ -4,16 +4,18 @@
 import { Component, OnInit, OnDestroy } from 'angular2/core';
 import { HTTP_PROVIDERS } from 'angular2/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 import { Subscription } from 'rxjs/Subscription';
 import { HeaderComponent } from '../header/header.component';
 import { BookmarkService, Bookmark } from '../../services/bookmark/bookmark.service';
+import { LabelService, Label } from '../../services/label/label.service';
 
 /**
  * App Component
  */
 @Component( {
 	directives: [ HeaderComponent ],
-	providers: [ HTTP_PROVIDERS, BookmarkService ],
+	providers: [ HTTP_PROVIDERS, BookmarkService, LabelService ],
 	selector: 'app',
 	templateUrl: './app.component.html'
 } )
@@ -25,9 +27,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	private bookmarkService: BookmarkService;
 
 	/**
+	 * Label service
+	 */
+	private labelService: LabelService;
+
+	/**
 	 * Bookmark service scubscription
 	 */
-	private bookmarkServiceSubscription: Subscription;
+	private serviceSubscription: Subscription;
 
 	/**
 	 * Bookmarks
@@ -35,11 +42,17 @@ export class AppComponent implements OnInit, OnDestroy {
 	private bookmarks: Bookmark[];
 
 	/**
+	 * Labels
+	 */
+	private labels: Label[];
+
+	/**
 	 * Constructor
 	 * @param {BookmarkService} bookmarkService Bookmark service
 	 */
-	constructor( bookmarkService: BookmarkService ) {
+	constructor( bookmarkService: BookmarkService, labelService: LabelService ) {
 		this.bookmarkService = bookmarkService;
+		this.labelService = labelService;
 	}
 
 	/**
@@ -48,18 +61,41 @@ export class AppComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
+		// Setup bookmarks subscription
+		this.bookmarkService.bookmarks.subscribe( ( data: Bookmark[] ) => {
+			this.bookmarks = data;
+			console.log (this.bookmarks );
+		} );
+
+		// Setup labels subscription
+		this.labelService.labels.subscribe( ( data: Label[] ) => {
+			this.labels = data;
+			console.log( this.labels );
+		} );
+
+		// Get all bookmarks
+		this.bookmarkService.getBookmarks();
+
+		// Get all labels
+		this.labelService.getLabels();
+
 		// Get all bookmarks by subscribing to the service
-		this.bookmarkServiceSubscription = this.bookmarkService
-			.getBookmarks()
-			.subscribe(
-				( bookmarks: Bookmark[] ) => {
-					this.bookmarks = bookmarks;
-				},
-				( error: any ) => {
-					alert( 'Opps, something went terribly wrong.' ); // Please some proper error handling
-					console.log( error );
-				}
-			);
+		// this.serviceSubscription = Observable.forkJoin(
+		// 	this.bookmarkService.getBookmarks(),
+		// 	this.labelService.getLabels()
+		// );
+		// .subscribe(
+		// 	( data: any[] ) => {
+		// 		this.bookmarks = data[0];
+		// 		console.log( this.bookmarks );
+		// 		this.labels = data[1];
+		// 		console.log( this.labels );
+		// 	},
+		// 	(error: any) => {
+		// 		alert( 'Opps, something went terribly wrong.' ); // Please some proper error handling
+		// 		console.log( error );
+		// 	}
+		// );
 
 	}
 
@@ -69,7 +105,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 
 		// Unsubscribe from the bookmark service
-		this.bookmarkServiceSubscription.unsubscribe();
+		this.serviceSubscription.unsubscribe();
 
 	}
 

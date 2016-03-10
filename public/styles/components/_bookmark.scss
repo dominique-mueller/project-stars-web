@@ -1,0 +1,52 @@
+// COMPONENTS: BOOKMARK
+
+.bookmark-list {
+
+}
+
+.bookmark-item {
+	display: flex;
+	width: 100%;
+	background-color: $color-white;
+	transition: background-color $anim-speed-normal $anim-easing;
+
+	+ .bookmark-item {
+		border-top: .1rem solid $color-seashell;
+	}
+
+	&:hover {
+		background-color: $color-seashell;
+	}
+
+}
+
+.bookmark-link {
+	display: block;
+	width: 100%;
+	padding: 1.3rem 1.8rem;
+	flex: 1;
+}
+
+.bookmark-icon {
+	float: left;
+	width: 3.2rem;
+	height: 3.2rem;
+	margin-right: 1.6rem;
+	border-radius: 50%;
+	background-color: #CCC;
+}
+
+.bookmark-title {
+	float: left;
+	width: calc(100% - 4.8rem);
+	font-weight: $font-weight-bold;
+	line-height: 1.8rem;
+}
+
+.bookmark-url {
+	float: left;
+	width: calc(100% - 4.8rem);
+	color: #999;
+	font-size: 1.2rem; // TODO
+	line-height: 1.4rem;
+}

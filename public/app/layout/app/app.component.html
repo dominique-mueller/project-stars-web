@@ -2,14 +2,30 @@
 
 <main class="main">
 
-	<h2>Bookmarks</h2>
+	<div class="main-bookmarks">
 
-	<ul>
-		<li *ngFor="#bookmark of bookmarks">
-			<a [href]="bookmark.url" target="_blank">
-				<strong>{{ bookmark.title }}</strong><br>{{ bookmark.description }}
-			</a>
-		</li>
-	</ul>
+		<h2 style="margin-top: 1.5rem; margin-bottom: 1.5rem;">Bookmarks</h2>
+
+		<ul class="bookmark-list">
+			<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
+				<a class="bookmark-link" [href]="bookmark.url" target="_blank">
+					<div class="bookmark-icon"></div>
+					<div class="bookmark-title">
+					{{ bookmark.title }}
+					<!-- <ul>
+						<li *ngFor="#label of bookmark.labels">
+							{{ labels[label.id].name }}
+						</li>
+					</ul> -->
+					</div>
+					<div class="bookmark-url">{{ bookmark.url }}</div>
+				</a>
+				<button class="button button-invisible" type="button">
+					INFO
+				</button>
+			</li>
+		</ul>
+
+	</div>
 
 </main>

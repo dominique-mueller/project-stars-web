@@ -1,0 +1,14 @@
+{
+	"data": [
+		{
+			"id": 0,
+			"name": "study",
+			"color": "red"
+		},
+		{
+			"id": 1,
+			"name": "important",
+			"color": "red"
+		}
+	]
+}

@@ -1,9 +1,4 @@
 /**
- * Imports
- */
-import { Label } from '../label/label.model';
-
-/**
  * Bookmark Model
  */
 export class Bookmark {
@@ -36,7 +31,7 @@ export class Bookmark {
 	/**
 	 * List of labels assigned to this bookmark
 	 */
-	public labes: Label[];
+	public labels: Number[];
 
 	/**
 	 * Time when this bookmark was created
