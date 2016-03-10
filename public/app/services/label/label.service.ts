@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/share';
-import 'rxjs/add/observable/throw';
 import { Label } from './label.model';
 
 /**
@@ -22,11 +21,6 @@ export { Label } from './label.model';
  */
 @Injectable()
 export class LabelService {
-
-	/**
-	 * Http service
-	 */
-	public http: Http;
 
 	/**
 	 * Labels
@@ -44,6 +38,11 @@ export class LabelService {
 	private labelStore: {
 		labels: Label[]
 	};
+
+	/**
+	 * Http service
+	 */
+	private http: Http;
 
 	/**
 	 * Constructor
@@ -88,11 +87,15 @@ export class LabelService {
 
 					// Push to observable stream
 					this.labelObserver.next( this.labelStore.labels );
+					this.labelObserver.complete();
 
 				},
 				(error: any) => {
-					alert('Opps, something went terribly wrong.'); // Please some proper error handling
+
+					// TODO: Service specific error handling
 					console.log(error);
+					this.labelObserver.error(error);
+
 				}
 			);
 

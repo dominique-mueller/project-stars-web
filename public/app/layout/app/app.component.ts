@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import { Subscription } from 'rxjs/Subscription';
 import { HeaderComponent } from '../header/header.component';
+import { BookmarkListComponent } from '../../components/bookmarkList/bookmarkList.component';
 import { BookmarkService, Bookmark } from '../../services/bookmark/bookmark.service';
 import { LabelService, Label } from '../../services/label/label.service';
 
@@ -14,7 +15,7 @@ import { LabelService, Label } from '../../services/label/label.service';
  * App Component
  */
 @Component( {
-	directives: [ HeaderComponent ],
+	directives: [HeaderComponent, BookmarkListComponent],
 	providers: [ HTTP_PROVIDERS, BookmarkService, LabelService ],
 	selector: 'app',
 	templateUrl: './app.component.html'
@@ -32,9 +33,15 @@ export class AppComponent implements OnInit, OnDestroy {
 	private labelService: LabelService;
 
 	/**
+	 * Service subscription
+	 */
+	private serviceSubscription: Subscription;
+
+	/**
 	 * Bookmarks
 	 */
-	private bookmarks: Bookmark[];
+	private bookmarks: any[];
+	private folders: any[];
 
 	/**
 	 * Labels
@@ -56,32 +63,27 @@ export class AppComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		// Setup bookmarks subscription
-		this.bookmarkService.bookmarks.subscribe(
-			( data: Bookmark[] ) => {
-				this.bookmarks = data;
+		// Setup bookmark and label subscriptions
+		this.serviceSubscription = Observable
+		.forkJoin(
+			this.bookmarkService.bookmarks,
+			this.labelService.labels
+		)
+		.subscribe(
+			( data: any[] ) => {
+				this.bookmarks = data[0].bookmarks;
+				this.folders = data[0].folders;
+				this.labels = data[1];
 				console.log( this.bookmarks ); // TODO
+				// console.log( this.labels ); // TODO
 			},
 			( error: any ) => {
 				console.log( 'Component error message' );
 			}
 		);
 
-		// Setup labels subscription
-		this.labelService.labels.subscribe(
-			( data: Label[] ) => {
-				this.labels = data;
-				console.log( this.labels ); // TODO
-			},
-			( error: any ) => {
-				console.log( 'Component error message' );
-			}
-		);
-
-		// Get all bookmarks
+		// Get all bookmarks and labels
 		this.bookmarkService.getBookmarks();
-
-		// Get all labels
 		this.labelService.getLabels();
 
 	}
@@ -92,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 
 		// Unsubscribe from services
-		// this.bookmarkService.bookmarks.unsubscribe();
+		this.serviceSubscription.unsubscribe();
 
 	}
 

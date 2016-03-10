@@ -1,0 +1,10 @@
+<p *ngIf="name"><strong>{{ name }}</strong></p>
+<ul style="margin-left: 2rem;">
+	<li *ngFor="#folder of folders">
+		<app-bookmark-list [bookmarks]="folder.bookmarks" [folders]="folder.folders" [name]="folder.name">
+		</app-bookmark-list>
+	</li>
+	<li *ngFor="#bookmark of bookmarks">
+		{{ bookmark.title }}
+	</li>
+</ul>

@@ -5,20 +5,23 @@
 			"title": "Google",
 			"description": "The best search engine ever",
 			"url": "https://www.google.de/",
-			"labels": [0, 1]
+			"labels": [0, 1],
+			"path": [ "favourites" ]
 		},
 		{
 			"id": 1,
 			"title": "Facebook",
 			"description": "Press like every freakin day",
 			"url": "https://www.facebook.com/",
-			"labels": [1]
+			"labels": [1],
+			"path": [ "favourites", "social" ]
 		},
 		{
 			"id": 2,
 			"title": "Twitter",
 			"description": "So much to say but so little amount of text",
-			"url": "https://twitter.com/"
+			"url": "https://twitter.com/",
+			"path": [ "favourites", "social" ]
 		},
 		{
 			"id": 3,
