@@ -32,11 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
 	private labelService: LabelService;
 
 	/**
-	 * Bookmark service scubscription
-	 */
-	private serviceSubscription: Subscription;
-
-	/**
 	 * Bookmarks
 	 */
 	private bookmarks: Bookmark[];
@@ -62,40 +57,32 @@ export class AppComponent implements OnInit, OnDestroy {
 	public ngOnInit(): void {
 
 		// Setup bookmarks subscription
-		this.bookmarkService.bookmarks.subscribe( ( data: Bookmark[] ) => {
-			this.bookmarks = data;
-			console.log (this.bookmarks );
-		} );
+		this.bookmarkService.bookmarks.subscribe(
+			( data: Bookmark[] ) => {
+				this.bookmarks = data;
+				console.log( this.bookmarks ); // TODO
+			},
+			( error: any ) => {
+				console.log( 'Component error message' );
+			}
+		);
 
 		// Setup labels subscription
-		this.labelService.labels.subscribe( ( data: Label[] ) => {
-			this.labels = data;
-			console.log( this.labels );
-		} );
+		this.labelService.labels.subscribe(
+			( data: Label[] ) => {
+				this.labels = data;
+				console.log( this.labels ); // TODO
+			},
+			( error: any ) => {
+				console.log( 'Component error message' );
+			}
+		);
 
 		// Get all bookmarks
 		this.bookmarkService.getBookmarks();
 
 		// Get all labels
 		this.labelService.getLabels();
-
-		// Get all bookmarks by subscribing to the service
-		// this.serviceSubscription = Observable.forkJoin(
-		// 	this.bookmarkService.getBookmarks(),
-		// 	this.labelService.getLabels()
-		// );
-		// .subscribe(
-		// 	( data: any[] ) => {
-		// 		this.bookmarks = data[0];
-		// 		console.log( this.bookmarks );
-		// 		this.labels = data[1];
-		// 		console.log( this.labels );
-		// 	},
-		// 	(error: any) => {
-		// 		alert( 'Opps, something went terribly wrong.' ); // Please some proper error handling
-		// 		console.log( error );
-		// 	}
-		// );
 
 	}
 
@@ -104,8 +91,8 @@ export class AppComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnDestroy(): void {
 
-		// Unsubscribe from the bookmark service
-		this.serviceSubscription.unsubscribe();
+		// Unsubscribe from services
+		// this.bookmarkService.bookmarks.unsubscribe();
 
 	}
 

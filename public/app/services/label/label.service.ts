@@ -77,7 +77,7 @@ export class LabelService {
 			.get( 'label.temp.json' )
 
 			// Convert data
-			.map( ( response: Response ) => <Label[]> response.json().data)
+			.map( ( response: Response ) => <Label[]> response.json().data )
 
 			// Subscription
 			.subscribe(

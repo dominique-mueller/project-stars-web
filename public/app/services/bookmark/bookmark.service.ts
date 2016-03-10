@@ -92,8 +92,11 @@ export class BookmarkService {
 
 				},
 				( error: any ) => {
-					alert( 'Opps, something went terribly wrong.' ); // Please some proper error handling
+
+					// TODO: Service specific error handling
 					console.log( error );
+					this.bookmarkObserver.error( error );
+
 				}
 
 			);
