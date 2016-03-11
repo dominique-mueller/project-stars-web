@@ -8,6 +8,7 @@ import config 				from './tools/gulp_tasks/config.json';
  */
 import browserSync 			from 'browser-sync';
 import gulp 				from 'gulp';
+import historyApiFallback 	from 'connect-history-api-fallback';
 import runSequence			from 'run-sequence';
 
 /**
@@ -63,7 +64,7 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 	browserSync.init( {
 		server: {
 			baseDir: config.paths.project.dest,
-			index: 'index.html'
+			middleware: [ historyApiFallback() ]
 		},
 		logPrefix: 'Browsersync',
 		logConnections: true,
