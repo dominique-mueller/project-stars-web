@@ -68,170 +68,175 @@ export class BookmarkService {
 	/**
 	 * Get all bookmarks
 	 */
-	public getBookmarks(): void {
+	public getBookmarks( preferCached: boolean = true ): void {
 
-		// First up return cached values
+		// Return cached data
 		if ( this.bookmarkStore.bookmarks.length > 0 ) {
 			this.bookmarkObserver.next( this.bookmarkStore.bookmarks );
 			this.bookmarkObserver.complete();
 		}
 
-		// Then make the HTTP request
-		this.http
+		// Return fresh data
+		if ( !preferCached || this.bookmarkStore.bookmarks.length === 0 ) {
 
-			// Get data from API
-			// TODO: Switch that to the REST API route, get base from some config service
-			.get( 'http://localhost:3000/bookmark.temp.json' )
+			// Then make the HTTP request
+			this.http
 
-			// Convert data
-			.map( ( response: Response ) => <any[]> response.json().data )
+				// Get data from API
+				// TODO: Switch that to the REST API route, get base from some config service
+				.get( 'http://localhost:3000/bookmark.temp.json' )
 
-			// Subscription
-			.subscribe(
-				( data: any[] ) => {
+				// Convert data
+				.map( ( response: Response ) => <any[]> response.json().data )
 
-					// DESCRIPTION
-					// In the following we convert the flat bookmark hierarchy into a deeply structured one
-					// TODO: Maybe do this server-side?
+				// Subscription
+				.subscribe(
+					( data: any[] ) => {
 
-					// Setup result
-					// let result: any = {
-					// 	'name': 'root',
-					// 	'bookmarks': [],
-					// 	'folders': []
-					// };
+						// DESCRIPTION
+						// In the following we convert the flat bookmark hierarchy into a deeply structured one
+						// TODO: Maybe do this server-side?
 
-					// // Iterate through bookmarks
-					// for ( const bookmark of data ) {
+						// Setup result
+						// let result: any = {
+						// 	'name': 'root',
+						// 	'bookmarks': [],
+						// 	'folders': []
+						// };
 
-					// 	// Check if the bookmark is on root or in a subfolder
-					// 	if ( bookmark.hasOwnProperty( 'path' ) ) {
+						// // Iterate through bookmarks
+						// for ( const bookmark of data ) {
 
-					// 		// Create all folders
-					// 		let currentPath: any = result;
-					// 		const pathLength: number = bookmark.path.length;
+						// 	// Check if the bookmark is on root or in a subfolder
+						// 	if ( bookmark.hasOwnProperty( 'path' ) ) {
 
-					// 		// Loop through all folders (improved native for loop here)
-					// 		for ( let i: number = pathLength - 1; i >= 0; i-- ) {
+						// 		// Create all folders
+						// 		let currentPath: any = result;
+						// 		const pathLength: number = bookmark.path.length;
 
-					// 			// Get the new folder name
-					// 			let folderName: String = bookmark.path[ pathLength - i - 1 ];
+						// 		// Loop through all folders (improved native for loop here)
+						// 		for ( let i: number = pathLength - 1; i >= 0; i-- ) {
 
-					// 			// Check if folder already exists
-					// 			let folderPosition: number = -1;
-					// 			let foldersLength: number = currentPath.folders.length;
-					// 			for (let i: number = foldersLength - 1; i >= 0; i--) {
-					// 				if (currentPath.folders[i].name === folderName) {
-					// 					folderPosition = i;
-					// 					break;
-					// 				}
-					// 			}
+						// 			// Get the new folder name
+						// 			let folderName: String = bookmark.path[ pathLength - i - 1 ];
 
-					// 			// Create folder (if it doesn't exist yet)
-					// 			if ( folderPosition === -1 ) {
+						// 			// Check if folder already exists
+						// 			let folderPosition: number = -1;
+						// 			let foldersLength: number = currentPath.folders.length;
+						// 			for (let i: number = foldersLength - 1; i >= 0; i--) {
+						// 				if (currentPath.folders[i].name === folderName) {
+						// 					folderPosition = i;
+						// 					break;
+						// 				}
+						// 			}
 
-					// 				// Create folder
-					// 				let folder: {} = {
-					// 					'name': folderName,
-					// 					'bookmarks': [],
-					// 					'folders': []
-					// 				};
+						// 			// Create folder (if it doesn't exist yet)
+						// 			if ( folderPosition === -1 ) {
 
-					// 				// Push folde to folders list
-					// 				let position: number = currentPath.folders.push( folder );
+						// 				// Create folder
+						// 				let folder: {} = {
+						// 					'name': folderName,
+						// 					'bookmarks': [],
+						// 					'folders': []
+						// 				};
 
-					// 				// Set current handle to new folder
-					// 				currentPath = currentPath.folders[ position - 1 ];
+						// 				// Push folde to folders list
+						// 				let position: number = currentPath.folders.push( folder );
 
-					// 			} else {
+						// 				// Set current handle to new folder
+						// 				currentPath = currentPath.folders[ position - 1 ];
 
-					// 				// Set current handle to existing folder
-					// 				currentPath = currentPath.folders[ folderPosition ];
+						// 			} else {
 
-					// 			}
+						// 				// Set current handle to existing folder
+						// 				currentPath = currentPath.folders[ folderPosition ];
 
-					// 			// Check if the path building is done
-					// 			if ( i === 0 ) {
-					// 				currentPath.bookmarks.push( bookmark );
-					// 			}
+						// 			}
 
-					// 		}
+						// 			// Check if the path building is done
+						// 			if ( i === 0 ) {
+						// 				currentPath.bookmarks.push( bookmark );
+						// 			}
 
-					// 	} else {
-					// 		result.bookmarks.push( bookmark );
-					// 	}
+						// 		}
 
-					// }
+						// 	} else {
+						// 		result.bookmarks.push( bookmark );
+						// 	}
 
-					// Folder structure setup
-					let folderStructure: any[] = [
-						{
-							'name': '',
-							'folders': []
-						}
-					];
+						// }
 
-					// Iterate through all paths
-					for ( const path of data ) {
+						// Folder structure setup
+						let folderStructure: any[] = [
+							{
+								'name': '',
+								'folders': []
+							}
+						];
 
-						// Check if there is a path
-						if ( path.hasOwnProperty( 'path' ) && path.path.length > 0 && path.path[0] !== '' ) {
+						// Iterate through all paths
+						for ( const path of data ) {
 
-							// Save current path
-							let currentPath: any = folderStructure[ 0 ].folders;
+							// Check if there is a path
+							if ( path.hasOwnProperty( 'path' ) && path.path.length > 0 && path.path[0] !== '' ) {
 
-							// Iterate through path folders
-							for ( const currentFolder of path.path ) {
+								// Save current path
+								let currentPath: any = folderStructure[ 0 ].folders;
 
-								// Iterate thgouth existing folders
-								let folderPosition: number = -1;
-								let numberOfFolders: number = currentPath.length;
-								for ( let i: number = numberOfFolders - 1; i >= 0; i-- ) {
-									if ( currentPath[ i ].name === currentFolder ) {
-										folderPosition = i;
-										break;
+								// Iterate through path folders
+								for ( const currentFolder of path.path ) {
+
+									// Iterate thgouth existing folders
+									let folderPosition: number = -1;
+									let numberOfFolders: number = currentPath.length;
+									for ( let i: number = numberOfFolders - 1; i >= 0; i-- ) {
+										if ( currentPath[ i ].name === currentFolder ) {
+											folderPosition = i;
+											break;
+										}
 									}
-								}
-								// Create folder if it doesn't exist yet
-								if ( folderPosition === -1 ) {
-									let folder: any = {
-										'name': currentFolder,
-										'folders': []
-									};
-									folderPosition = currentPath.push( folder ) - 1;
-								}
+									// Create folder if it doesn't exist yet
+									if ( folderPosition === -1 ) {
+										let folder: any = {
+											'name': currentFolder,
+											'folders': []
+										};
+										folderPosition = currentPath.push( folder ) - 1;
+									}
 
-								// Update current path
-								currentPath = currentPath[ folderPosition ].folders;
+									// Update current path
+									currentPath = currentPath[ folderPosition ].folders;
+
+								}
 
 							}
 
 						}
 
+						console.log('BOOKMARK DATA');
+						console.log(data);
+
+						console.log('FOLDER STRUCTURE');
+						console.log(folderStructure);
+
+						// Update bookmark store
+						this.bookmarkStore.bookmarks = data;
+
+						// Push to observable stream
+						this.bookmarkObserver.next( this.bookmarkStore.bookmarks );
+						this.bookmarkObserver.complete();
+
+					},
+					( error: any ) => {
+
+						// TODO: Service specific error handling
+						console.log( error );
+						this.bookmarkObserver.error( error );
+
 					}
+				);
 
-					console.log('BOOKMARK DATA');
-					console.log(data);
-
-					console.log('FOLDER STRUCTURE');
-					console.log(folderStructure);
-
-					// Update bookmark store
-					this.bookmarkStore.bookmarks = data;
-
-					// Push to observable stream
-					this.bookmarkObserver.next( this.bookmarkStore.bookmarks );
-					this.bookmarkObserver.complete();
-
-				},
-				( error: any ) => {
-
-					// TODO: Service specific error handling
-					console.log( error );
-					this.bookmarkObserver.error( error );
-
-				}
-			);
+		}
 
 	}
 
