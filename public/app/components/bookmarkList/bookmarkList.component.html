@@ -1,4 +1,27 @@
-<p *ngIf="name"><strong>{{ name }}</strong></p>
+<h1>BOOKMARK LIST COMPONENT</h1>
+
+<a (click)="navigate()">
+	CHANGE THE ROUTE
+</a>
+
+<ul>
+	<li style="margin-left: 2rem; padding: 1rem; list-style-type: square;" *ngFor="#folder of folders">
+		<a (click)="navigate(folder)" style="cursor: pointer; background-color: yellow;">
+			{{ folder }}
+		</a>
+	</li>
+	<li style="margin-left: 2rem; padding: 1rem; list-style-type: disc;" *ngFor="#bookmark of bookmarks">
+		{{ bookmark.title }}
+	</li>
+</ul>
+
+
+
+
+
+
+
+<!-- <p *ngIf="name"><strong>{{ name }}</strong></p>
 <ul style="margin-left: 2rem;">
 	<li *ngFor="#folder of folders">
 		<app-bookmark-list [bookmarks]="folder.bookmarks" [folders]="folder.folders" [name]="folder.name">
@@ -8,3 +31,4 @@
 		{{ bookmark.title }}
 	</li>
 </ul>
+ -->

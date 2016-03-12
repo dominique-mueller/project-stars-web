@@ -6,32 +6,32 @@ export class Bookmark {
 	/**
 	 * Bookmark ID
 	 */
-	public id: Number;
+	public id: number;
 
 	/**
 	 * Bookmark title
 	 */
-	public title: String;
+	public title: string;
 
 	/**
 	 * Bookmark description
 	 */
-	public description: String;
+	public description: string;
 
 	/**
 	 * Bookmark url
 	 */
-	public url: String;
+	public url: string;
 
 	/**
 	 * Bookmark favicon, BASE64 encoded
 	 */
-	public favicon: String;
+	public favicon: string;
 
 	/**
 	 * List of labels assigned to this bookmark
 	 */
-	public labels: Number[];
+	public labels: number[];
 
 	/**
 	 * Time when this bookmark was created
@@ -51,11 +51,11 @@ export class Bookmark {
 	/**
 	 * Full path of this bookmark
 	 */
-	public path: String[];
+	public path: string[];
 
 	/**
 	 * Bookmark position number
 	 */
-	public position: Number;
+	public position: number;
 
 }

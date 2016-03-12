@@ -7,28 +7,28 @@
 
 	<title>Project Stars</title>
 
-	<base href="/">
-
-	<link rel="stylesheet" href="assets/style.min.css">
+	<link rel="stylesheet" href="http://localhost:3000/assets/style.min.css">
 
 	<!-- Load Angular 2 libraries -->
-	<script src="vendor/angular2-polyfills.js"></script>
-	<script src="vendor/system.src.js"></script>
-	<script src="vendor/Rx.js"></script>
-	<script src="vendor/angular2.dev.js"></script>
-	<script src="vendor/http.dev.js"></script>
+	<script src="http://localhost:3000/vendor/angular2-polyfills.js"></script>
+	<script src="http://localhost:3000/vendor/system.src.js"></script>
+	<script src="http://localhost:3000/vendor/Rx.js"></script>
+	<script src="http://localhost:3000/vendor/angular2.dev.js"></script>
+	<script src="http://localhost:3000/vendor/http.dev.js"></script>
+	<script src="http://localhost:3000/vendor/router.dev.js"></script>
 
 	<!-- Configure SystemJS -->
 	<script>
 		System.config( {
+			baseUrl: 'http://localhost:3000',
 			packages: {
-				app: {
+				'/app': {
 					format: 'register',
 					defaultExtension: 'js'
 				}
 			}
 		} );
-		System.import( 'app/main' )
+		System.import( '/app/main.js' )
 			  .then( null, console.error.bind( console ) );
 	</script>
 

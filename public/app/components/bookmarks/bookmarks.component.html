@@ -4,17 +4,24 @@
 
 	<div class="main-bookmarks">
 
-		<h2 style="margin-top: 1.5rem; margin-bottom: 1.5rem;">Bookmarks</h2>
+		<h2 style="margin-top: 2rem; margin-bottom: 2rem;">Bookmarks</h2>
 
-		{{ bookmarks | json }}
+		<!-- <a (click)="navigate()">
+			CHANGE THE ROUTE
+		</a> -->
 
 		<!-- <ul>
-			<li *ngFor="#bookmark of bookmarks">
+			<li style="margin-left: 2rem; list-style-type: square;" *ngFor="#folder of folders">
+				<a (click)="navigate(folder)">{{ folder }}</a>
+			</li>
+			<li style="margin-left: 2rem; list-style-type: disc;" *ngFor="#bookmark of bookmarks">
 				{{ bookmark.title }}
 			</li>
 		</ul> -->
 
-		<app-bookmark-list [bookmarks]="bookmarks" [folders]="folders"></app-bookmark-list>
+		<!-- <app-bookmark-list [bookmarks]="bookmarks" [folders]="folders"></app-bookmark-list> -->
+
+		<router-outlet></router-outlet>
 
 		<!-- <ul class="bookmark-list"> -->
 			<!-- <li class="bookmark-item" *ngFor="#bookmark of bookmarks">
@@ -39,3 +46,4 @@
 	</div>
 
 </main>
+
