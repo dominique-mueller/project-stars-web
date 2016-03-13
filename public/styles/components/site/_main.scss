@@ -1,10 +1,16 @@
 // COMPONENTS: MAIN
 
 .main {
+	display: flex;
 	padding-top: 6.4rem;
 }
 
 .main-bookmarks {
 	width: calc(100% - 28rem);
-	margin-left: 28rem;
+	background-color: #CCC; // TODO - Remove me
+}
+
+.main-folders {
+	width: 28rem;
+	background-color: #FAFAFA; // TODO - Remove me
 }

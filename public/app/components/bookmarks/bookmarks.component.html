@@ -2,48 +2,29 @@
 
 <main class="main">
 
+	<div class="main-folders">
+
+		<h2 style="margin-top: 3rem; margin-bottom: 2.8rem;">Folders</h2>
+
+		<a (click)="navigateToFolder('')">
+			<span *ngIf="currentPath === ''">>> </span>
+			Bookmarks
+		</a>
+		<app-bookmark-directory
+			[directories]="folderStructure"
+			[currentPath]="currentPath"
+			(select)="navigateToFolder( $event )">
+		</app-bookmark-directory>
+
+	</div>
+
 	<div class="main-bookmarks">
 
-		<h2 style="margin-top: 2rem; margin-bottom: 2rem;">Bookmarks</h2>
+		<h2 style="margin-top: 3rem; margin-bottom: 2.8rem;">Bookmarks</h2>
 
-		<!-- <a (click)="navigate()">
-			CHANGE THE ROUTE
-		</a> -->
-
-		<!-- <ul>
-			<li style="margin-left: 2rem; list-style-type: square;" *ngFor="#folder of folders">
-				<a (click)="navigate(folder)">{{ folder }}</a>
-			</li>
-			<li style="margin-left: 2rem; list-style-type: disc;" *ngFor="#bookmark of bookmarks">
-				{{ bookmark.title }}
-			</li>
-		</ul> -->
-
-		<!-- <app-bookmark-list [bookmarks]="bookmarks" [folders]="folders"></app-bookmark-list> -->
-
-		<router-outlet></router-outlet>
-
-		<!-- <ul class="bookmark-list"> -->
-			<!-- <li class="bookmark-item" *ngFor="#bookmark of bookmarks">
-				<a class="bookmark-link" [href]="bookmark.url" target="_blank">
-					<div class="bookmark-icon"></div>
-					<div class="bookmark-title">
-					{{ bookmark.title }}
-					<ul>
-						<li *ngFor="#label of labels">
-							{{ label.name }}
-						</li>
-					</ul>
-					</div>
-					<div class="bookmark-url">{{ bookmark.url }}</div>
-				</a>
-				<button class="button button-invisible" type="button">
-					INFO
-				</button>
-			</li> -->
-		<!-- </ul> -->
+		<app-bookmark-router-outlet (pathChange)="onPathChange( $event )">
+		</app-bookmark-router-outlet>
 
 	</div>
 
 </main>
-

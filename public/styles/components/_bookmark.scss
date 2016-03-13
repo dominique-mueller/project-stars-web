@@ -4,7 +4,8 @@
 
 }
 
-.bookmark-item {
+.bookmark-item,
+.folder-item {
 	display: flex;
 	width: 100%;
 	background-color: $color-white;
@@ -20,14 +21,20 @@
 
 }
 
-.bookmark-link {
+.bookmark-link,
+.folder-link {
 	display: block;
 	width: 100%;
-	padding: 1.3rem 1.8rem;
+	padding: 1.4rem 1.8rem;
 	flex: 1;
 }
 
-.bookmark-icon {
+.folder-link {
+	cursor: pointer;
+}
+
+.bookmark-icon,
+.folder-icon {
 	float: left;
 	width: 3.2rem;
 	height: 3.2rem;
@@ -36,11 +43,19 @@
 	background-color: #CCC;
 }
 
-.bookmark-title {
+.bookmark-title,
+.folder-title {
 	float: left;
 	width: calc(100% - 4.8rem);
 	font-weight: $font-weight-bold;
+}
+
+.bookmark-title {
 	line-height: 1.8rem;
+}
+
+.folder-title {
+	line-height: 3.2rem;
 }
 
 .bookmark-url {

@@ -17,8 +17,22 @@
 				}
 			],
 			"folders": [
-				"favourites"
+				"favourites",
+				"news"
 			]
+		},
+		{
+			"path": [ "news" ],
+			"bookmarks": [
+				{
+					"id": 5,
+					"title": "The Verge",
+					"description": "Apple fanboys",
+					"url": "http://www.theverge.com/",
+					"path": [ "news" ]
+				}
+			],
+			"folders": []
 		},
 		{
 			"path": [ "favourites" ],

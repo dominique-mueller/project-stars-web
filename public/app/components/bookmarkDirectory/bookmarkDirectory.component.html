@@ -1,0 +1,10 @@
+<ul>
+	<li *ngFor="#directory of directories" style="list-style-type: disc; margin-left: 2rem; padding-top: 1.5rem;">
+		<a (click)="navigate( directory.path )">
+			<span *ngIf="currentPath === directory.path">>> </span>
+			{{ directory.name }}
+		</a>
+		<app-bookmark-directory [directories]="directory.folders" [currentPath]="currentPath" (select)="pipeThrough( $event )">
+		</app-bookmark-directory>
+	</li>
+</ul>

@@ -68,7 +68,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 
 		// TODO: Show a loading animation
 
-		// Setup bookmark and label subscriptions
+		//  Get bookmarks
 		this.serviceSubscription = Observable
 			.forkJoin(
 				this.bookmarkService.bookmarks
@@ -157,7 +157,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		}
 
 		// Navigate to the created url
-		this.router.navigateByUrl( url );
+		this.router.parent.navigateByUrl( url );
 
 	}
 
