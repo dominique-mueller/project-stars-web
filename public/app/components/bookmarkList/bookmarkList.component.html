@@ -1,8 +1,8 @@
 <ul>
 	<li class="folder-item" *ngFor="#folder of folders">
-		<a class="folder-link" (click)="navigate(folder)">
+		<a class="folder-link" (click)="goToFolder( folder.path )">
 			<div class="folder-icon"></div>
-			<div class="folder-title">{{ folder }}</div>
+			<div class="folder-title">{{ folder.path }}</div>
 		</a>
 	</li>
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">

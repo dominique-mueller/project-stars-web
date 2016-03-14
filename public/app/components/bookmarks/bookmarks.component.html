@@ -6,14 +6,13 @@
 
 		<h2 style="margin-top: 3rem; margin-bottom: 2.8rem;">Folders</h2>
 
-		<a (click)="navigateToFolder('')">
-			<span *ngIf="currentPath === ''">>> </span>
-			Bookmarks
+		<a (click)="goToFolder( '' )">
+			>> Bookmarks
 		</a>
 		<app-bookmark-directory
-			[directories]="folderStructure"
-			[currentPath]="currentPath"
-			(select)="navigateToFolder( $event )">
+			[directories]="folders"
+			[activePath]="activePath"
+			(select)="goToFolder( $event )">
 		</app-bookmark-directory>
 
 	</div>
@@ -22,7 +21,7 @@
 
 		<h2 style="margin-top: 3rem; margin-bottom: 2.8rem;">Bookmarks</h2>
 
-		<app-bookmark-router-outlet (pathChange)="onPathChange( $event )">
+		<app-bookmark-router-outlet (pathChange)="updateCurrentPath( $event )">
 		</app-bookmark-router-outlet>
 
 	</div>

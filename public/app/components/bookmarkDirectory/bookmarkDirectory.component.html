@@ -1,10 +1,14 @@
 <ul>
 	<li *ngFor="#directory of directories" style="list-style-type: disc; margin-left: 2rem; padding-top: 1.5rem;">
-		<a (click)="navigate( directory.path )">
-			<span *ngIf="currentPath === directory.path">>> </span>
-			{{ directory.name }}
+		<a (click)="goToFolder( directory.path )">
+			<span *ngIf="activeFolder === directory.path.toLowerCase() && !isFinalFolder">[X] </span>
+			<span *ngIf="activeFolder === directory.path.toLowerCase() && isFinalFolder">[XXX] </span>
+			{{ directory.path }}
 		</a>
-		<app-bookmark-directory [directories]="directory.folders" [currentPath]="currentPath" (select)="pipeThrough( $event )">
+		<app-bookmark-directory
+			[directories]="directory.folders"
+			[activePath]="activeFolder === directory.path.toLowerCase() ? childActivePath : [ '' ]"
+			(select)="pipeThrough( $event, directory.path )">
 		</app-bookmark-directory>
 	</li>
 </ul>

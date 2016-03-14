@@ -28,11 +28,6 @@ export class BookmarkService {
 	public bookmarks: Observable<Array<any>>;
 
 	/**
-	 * Folder structure
-	 */
-	public folderStructure: Observable<Array<any>>;
-
-	/**
 	 * Bookmarks observer
 	 */
 	private bookmarksObserver: Observer<Array<any>>;
@@ -43,11 +38,10 @@ export class BookmarkService {
 	private folderStructureObserver: Observer<Array<any>>;
 
 	/**
-	 * Bookmark data store - TODO - have flat and structured bookmarks
+	 * Bookmark data store
 	 */
 	private bookmarkStore: {
-		bookmarks: any[], // TODO - Create model
-		folderStructure: any[] // TODO - Create model
+		bookmarks: any[] // TODO - Create model
 	};
 
 	/**
@@ -56,10 +50,10 @@ export class BookmarkService {
 	private http: Http;
 
 	/**
-	 * List of ongoing requests (for preventing multiple parallel requests)
+	 * Details about ongoing requests (for preventing multiple parallel requests)
 	 */
-	private currentHttpRequests: {
-		'getAll': boolean
+	private isDoingHttpRequests: {
+		get: boolean
 	};
 
 	/**
@@ -74,117 +68,17 @@ export class BookmarkService {
 		// Setup bookmarks observable
 		this.bookmarks = new Observable( ( observer: Observer<Array<any>> ) => {
 			this.bookmarksObserver = observer;
-		} ).share();
-
-		// Setup folder structur observable
-		this.folderStructure = new Observable( ( observer: Observer<Array<any>> ) => {
-			this.folderStructureObserver = observer;
-		} ).share();
+		} ).share(); // Make it hot
 
 		// Setup bookmark store
 		this.bookmarkStore = {
-			bookmarks: [],
-			folderStructure: []
+			bookmarks: []
 		};
 
 		// Setup current http requests object
-		this.currentHttpRequests = {
-			'getAll': false
+		this.isDoingHttpRequests = {
+			get: false
 		};
-
-	}
-
-	/**
-	 * Get folder structure
-	 */
-	public getFolderStructure( preferCached: boolean = true ): void {
-
-		// Return cached data
-		if ( this.bookmarkStore.folderStructure.length > 0 ) {
-			this.bookmarksObserver.next( this.bookmarkStore.folderStructure );
-			this.bookmarksObserver.complete();
-		}
-
-		// Return fresh data
-		if ( !preferCached || this.bookmarkStore.folderStructure.length === 0 ) {
-
-			// Setup temp bookmarks subscription
-			let tempSubscription: Subscription = this.bookmarks
-				.subscribe(
-					( data: any[] ) => {
-
-						// Unsubscibe directly
-						tempSubscription.unsubscribe();
-
-						// Folder structure setup
-						let folderStructure: any[] = [
-							{
-								'name': '',
-								'path': '',
-								'folders': []
-							}
-						];
-
-						// Iterate through all paths
-						for (const path of data) {
-
-							// Check if there is a path
-							if (path.hasOwnProperty('path') && path.path.length > 0 && path.path[0] !== '') {
-
-								// Save current path
-								let currentPath: any = folderStructure[0].folders;
-
-								// Iterate through path folders
-								for (const currentFolder of path.path) {
-
-									// Iterate thgouth existing folders
-									let folderPosition: number = -1;
-									let numberOfFolders: number = currentPath.length;
-									for (let i: number = numberOfFolders - 1; i >= 0; i--) {
-										if (currentPath[i].name === currentFolder) {
-											folderPosition = i;
-											break;
-										}
-									}
-									// Create folder if it doesn't exist yet
-									if (folderPosition === -1) {
-										let folder: any = {
-											'name': currentFolder,
-											'path': path.path.join( '/' ),
-											'folders': []
-										};
-										folderPosition = currentPath.push(folder) - 1;
-									}
-
-									// Update current path
-									currentPath = currentPath[folderPosition].folders;
-
-								}
-
-							}
-
-						}
-
-						// console.log('FOLDER STRUCTURE');
-						// console.log(folderStructure);
-
-						// Update bookmark store
-						this.bookmarkStore.folderStructure = folderStructure;
-
-						// Push to observable stream
-						this.folderStructureObserver.next( this.bookmarkStore.folderStructure );
-						this.folderStructureObserver.complete();
-
-					},
-					(error: any) => {
-						console.log( 'Service error message' ); // TODO: Throw an error back (like below)
-					}
-				);
-
-			// Get bookmarks
-			this.getBookmarks();
-
-		}
 
 	}
 
@@ -193,24 +87,30 @@ export class BookmarkService {
 	 * @param {boolean = true} preferCached Per default cached values are prefered, but setting this to false will
 	 * ensure that we're getting fresh data from the server
 	 */
-	public getBookmarks( preferCached: boolean = true ): void {
+	public loadBookmarks( preferCached: boolean = true ): void {
 
-		// Choice 1: Return cached data first
-		if ( this.bookmarkStore.bookmarks.length > 0 ) {
-			this.bookmarksObserver.next(this.bookmarkStore.bookmarks);
+		// Precalc bookmarks length
+		let numberOfBookmarks: number = this.bookmarkStore.bookmarks.length;
+
+		// Check 1:
+		// Return cached bookmarks first (no matter what you do, this will happen every time!)
+		if ( numberOfBookmarks > 0 ) {
+			this.bookmarksObserver.next( this.bookmarkStore.bookmarks );
 			this.bookmarksObserver.complete();
 		}
 
-		// Choice 2: Someone is already requesting that data, he will get that data via the subscription automatically
-		if ( this.currentHttpRequests.getAll ) {
+		// Check 2:
+		// If someone is already requesting that data, the caller will get it via its subscription automatically
+		if ( this.isDoingHttpRequests.get ) {
 			return;
 		}
 
-		// Choice 3: Load fresh data from the server
-		if ( !preferCached || this.bookmarkStore.bookmarks.length === 0 ) {
+		// Check 3:
+		// Load fresh data from the server
+		if ( !preferCached || numberOfBookmarks === 0 ) {
 
-			// We are requesting data now
-			this.currentHttpRequests.getAll = true;
+			// Starting http request
+			this.isDoingHttpRequests.get = true;
 
 			// Then make the HTTP request
 			this.http
@@ -220,14 +120,11 @@ export class BookmarkService {
 				.get( 'http://localhost:3000/bookmark.temp.json' )
 
 				// Convert data
-				.map( ( response: Response ) => <any[]> response.json().data )
+				.map( ( response: Response ) => <any[]> response.json().data ) // TODO: Switch to model
 
 				// Subscription
 				.subscribe(
 					( data: any[] ) => {
-
-						// console.log('BOOKMARK DATA');
-						// console.log(data);
 
 						// Update bookmark store
 						this.bookmarkStore.bookmarks = data;
@@ -236,101 +133,68 @@ export class BookmarkService {
 						this.bookmarksObserver.next( this.bookmarkStore.bookmarks );
 						this.bookmarksObserver.complete();
 
-						// We are done here
-						this.currentHttpRequests.getAll = false;
-
-						// DESCRIPTION
-						// In the following we convert the flat bookmark hierarchy into a deeply structured one
-						// TODO: Maybe do this server-side?
-
-						// Setup result
-						// let result: any = {
-						// 	'name': 'root',
-						// 	'bookmarks': [],
-						// 	'folders': []
-						// };
-
-						// // Iterate through bookmarks
-						// for ( const bookmark of data ) {
-
-						// 	// Check if the bookmark is on root or in a subfolder
-						// 	if ( bookmark.hasOwnProperty( 'path' ) ) {
-
-						// 		// Create all folders
-						// 		let currentPath: any = result;
-						// 		const pathLength: number = bookmark.path.length;
-
-						// 		// Loop through all folders (improved native for loop here)
-						// 		for ( let i: number = pathLength - 1; i >= 0; i-- ) {
-
-						// 			// Get the new folder name
-						// 			let folderName: String = bookmark.path[ pathLength - i - 1 ];
-
-						// 			// Check if folder already exists
-						// 			let folderPosition: number = -1;
-						// 			let foldersLength: number = currentPath.folders.length;
-						// 			for (let i: number = foldersLength - 1; i >= 0; i--) {
-						// 				if (currentPath.folders[i].name === folderName) {
-						// 					folderPosition = i;
-						// 					break;
-						// 				}
-						// 			}
-
-						// 			// Create folder (if it doesn't exist yet)
-						// 			if ( folderPosition === -1 ) {
-
-						// 				// Create folder
-						// 				let folder: {} = {
-						// 					'name': folderName,
-						// 					'bookmarks': [],
-						// 					'folders': []
-						// 				};
-
-						// 				// Push folde to folders list
-						// 				let position: number = currentPath.folders.push( folder );
-
-						// 				// Set current handle to new folder
-						// 				currentPath = currentPath.folders[ position - 1 ];
-
-						// 			} else {
-
-						// 				// Set current handle to existing folder
-						// 				currentPath = currentPath.folders[ folderPosition ];
-
-						// 			}
-
-						// 			// Check if the path building is done
-						// 			if ( i === 0 ) {
-						// 				currentPath.bookmarks.push( bookmark );
-						// 			}
-
-						// 		}
-
-						// 	} else {
-						// 		result.bookmarks.push( bookmark );
-						// 	}
-
-						// }
-
-						// Update bookmark store
-						// this.bookmarkStore.folderStructure = folderStructure;
-
-						// Push to observable stream
-						// this.folderStructureObserver.next( this.bookmarkStore.folderStructure );
-						// this.folderStructureObserver.complete();
+						// Done with http request
+						this.isDoingHttpRequests.get = false;
 
 					},
 					( error: any ) => {
 
 						// TODO: Service specific error handling
 						console.log( error );
-						this.bookmarksObserver.error( error );
-						this.folderStructureObserver.error( error );
+						this.bookmarksObserver.error( error ); // TODO: Do I need complete() here ?
 
 					}
 				);
 
 		}
+
+	}
+
+	/**
+	 * Utility function: Get bookmaks by providing a path
+	 * @param  {any[]}  	 data Bookmark data
+	 * @param  {string} 	 path Provided bookmark folder path
+	 * @return {any|boolean}      Specific bookmark data or false when an erro occurs
+	 */
+	public getBookmarksByPath( data: any[], path: string ): any|boolean {
+
+		// Set current path (to bookmarks root folder)
+		let currentPath: any|boolean = data[ 0 ];
+
+		// Only run the algorithm if we are not in the root folder
+		// (because then we know the bookmarks already)
+		if ( path !== '' ) {
+
+			// Split path by '/'s
+			let pathSections: string[] = path.split( '/' );
+
+			// Iterate through path sections
+			let pathDepth: number = pathSections.length - 1;
+			for ( let i: number = pathDepth; i >= 0; i-- ) {
+
+				// Iterate through available folders
+				let numberOfFolders: number = currentPath.folders.length - 1;
+				for ( let j: number = numberOfFolders; j >= 0; j-- ) {
+
+					// Find the folder that matches the path section
+					if ( pathSections[ pathDepth - i ].toLowerCase() === currentPath.folders[ j ].path.toLowerCase() ) {
+						currentPath = currentPath.folders[ j ];
+						break;
+					}
+
+					// If we did not break out of the loop yet, the bookmark folder does not exist
+					if ( j === 0 ) {
+						currentPath = false;
+					}
+
+				}
+
+			}
+
+		}
+
+		// Done
+		return currentPath;
 
 	}
 

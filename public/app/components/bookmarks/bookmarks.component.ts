@@ -53,9 +53,12 @@ export class BookmarksComponent implements OnInit {
 	/**
 	 * Folder structure
 	 */
-	private folderStructure: any[];
+	private folders: any[];
 
-	private currentPath: string;
+	/**
+	 * Currently active path
+	 */
+	private activePath: string[];
 
 	/**
 	 * Constructor
@@ -74,13 +77,12 @@ export class BookmarksComponent implements OnInit {
 		// TODO: Show a loading animation
 
 		// Setup folder structure subscription
-		this.serviceSubscription = this.bookmarkService.folderStructure
+		this.serviceSubscription = this.bookmarkService.bookmarks
 			.subscribe(
 				( data: any[] ) => {
 
-					// Set data
-					this.folderStructure = data[0].folders;
-					console.log(this.folderStructure);
+					// Set data (skip bookmark root folder)
+					this.folders = data[0].folders;
 
 				},
 				( error: any ) => {
@@ -89,19 +91,24 @@ export class BookmarksComponent implements OnInit {
 			);
 
 		// Get folders
-		this.bookmarkService.getFolderStructure();
+		this.bookmarkService.loadBookmarks();
 
 	}
 
 	/**
-	 * Navigate to folder
+	 * Navigate to the requested folder
+	 * @param {string} path Path of the folder
 	 */
-	private navigateToFolder( selectedPath: string ): void {
-		this.router.navigateByUrl( `bookmarks/${ selectedPath }` );
+	private goToFolder( path: string ): void {
+		this.router.navigateByUrl( `bookmarks/${ path.toLowerCase() }` );
 	}
 
-	private onPathChange( path: string ): void {
-		this.currentPath = path;
+	/**
+	 * Update current path for the directory view
+	 * @param {string} path The all new current path
+	 */
+	private updateCurrentPath( path: string ): void {
+		this.activePath = path.split( '/' );
 	}
 
 }

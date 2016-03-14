@@ -66,9 +66,9 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		// TODO: Show a loading animation
+		// TODO: Show a loading / transition animation
 
-		//  Get bookmarks
+		// Setup bookmarks subscription
 		this.serviceSubscription = Observable
 			.forkJoin(
 				this.bookmarkService.bookmarks
@@ -76,7 +76,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 			.subscribe(
 				( data: any[] ) => {
 
-					// Read, fix and set route param (which is going to be the current bookmarks subroute)
+					// Get the current route url from the route params
 					let routeParam: string = this.routeParams.get( '*' ); // This can either be null or a string
 					if ( routeParam === null ) {
 						this.currentPath = '';
@@ -84,8 +84,16 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 						this.currentPath = routeParam;
 					}
 
-					// Set data for this route
-					this.setData( data[ 0 ] );
+					// Get bookmarks depending on the current path
+					let result: any|boolean = this.bookmarkService.getBookmarksByPath( data[ 0 ], this.currentPath );
+
+					// Set data or navigate to bookmark root folder when an error occurs
+					if ( result === false ) {
+						this.router.navigateByUrl( 'bookmarks' );
+					} else {
+						this.bookmarks = result.bookmarks;
+						this.folders = result.folders;
+					}
 
 				},
 				( error: any ) => {
@@ -93,8 +101,8 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 				}
 			);
 
-		// Update the data on every route init
-		this.bookmarkService.getBookmarks();
+		// Load bookmarks
+		this.bookmarkService.loadBookmarks();
 
 	}
 
@@ -109,55 +117,21 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Set data for the route / view
-	 * @param {any[]} data Data from the bookmark service
-	 */
-	private setData( data: any[] ): void {
-
-		// Setup default path position (root folder)
-		let currentPathPosition: number = 0;
-
-		// Get current path position in dataset
-		if ( this.currentPath !== '' ) {
-
-			// Iterate through all paths (except the root which is the first one)
-			let numberOfPaths: number = data.length;
-			for ( let i: number = numberOfPaths - 1; i >= 1; i-- ) {
-				if ( this.currentPath === data[ i ].path.join( '/' ) ) {
-					currentPathPosition = i;
-					break;
-				}
-			}
-
-			// If we couldn't find a path then the path does not exist - we are thrown out
-			if ( currentPathPosition === 0 ) {
-				this.router.navigateByUrl( 'bookmarks' ); // TODO: Maybe show a notification ?
-			}
-
-		}
-
-		// Set data
-		this.bookmarks = data[ currentPathPosition ].bookmarks;
-		this.folders = data[ currentPathPosition ].folders;
-
-	}
-
-	/**
 	 * Navigate to another route
 	 * @param {string} folderName Name of the subfolder
 	 */
-	private navigate( folderName: string ): void {
+	private goToFolder( folderName: string ): void {
 
-		// Create new router url
+		// Create new router url (in lower case, of course)
 		let url: string;
 		if ( this.currentPath === '' ) {
-			url = `bookmarks/${ folderName }`;
+			url = `bookmarks/${ folderName.toLowerCase() }`;
 		} else {
-			url = `bookmarks/${ this.currentPath }/${ folderName }`;
+			url = `bookmarks/${ this.currentPath }/${ folderName.toLowerCase() }`;
 		}
 
 		// Navigate to the created url
-		this.router.parent.navigateByUrl( url );
+		this.router.navigateByUrl( url );
 
 	}
 

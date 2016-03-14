@@ -1,75 +1,88 @@
 {
 	"data": [
 		{
-			"path": [ "" ],
+			"path": "Bookmarks",
 			"bookmarks": [
 				{
-					"id": 3,
-					"title": "YouTube",
-					"description": "Freakin cat vids every day",
-					"url": "https://www.youtube.com/"
-				},
-				{
-					"id": 4,
+					"id": 7,
 					"title": "Angular 2",
-					"description": "It's awesome so try it out now",
 					"url": "https://www.angular.io/"
 				}
 			],
 			"folders": [
-				"favourites",
-				"news"
-			]
-		},
-		{
-			"path": [ "news" ],
-			"bookmarks": [
 				{
-					"id": 5,
-					"title": "The Verge",
-					"description": "Apple fanboys",
-					"url": "http://www.theverge.com/",
-					"path": [ "news" ]
-				}
-			],
-			"folders": []
-		},
-		{
-			"path": [ "favourites" ],
-			"bookmarks": [
-				{
-					"id": 0,
-					"title": "Google",
-					"description": "The best search engine ever",
-					"url": "https://www.google.de/",
-					"labels": [0, 1],
-					"path": [ "favourites" ]
-				}
-			],
-			"folders": [
-				"social"
-			]
-		},
-		{
-			"path": [ "favourites", "social" ],
-			"bookmarks": [
-				{
-					"id": 1,
-					"title": "Facebook",
-					"description": "Press like every freakin day",
-					"url": "https://www.facebook.com/",
-					"labels": [1],
-					"path": [ "favourites", "social" ]
+					"path": "Searching",
+					"bookmarks": [
+						{
+							"id": 0,
+							"title": "Google",
+							"url": "https://www.google.de/"
+						},
+						{
+							"id": 1,
+							"title": "Bing",
+							"url": "https://www.bing.com/"
+						}
+					],
+                    "folders": []
 				},
 				{
-					"id": 2,
-					"title": "Twitter",
-					"description": "So much to say but so little amount of text",
-					"url": "https://twitter.com/",
-					"path": [ "favourites", "social" ]
+					"path": "Favourites",
+					"bookmarks": [
+						{
+							"id": 2,
+							"title": "YouTube",
+							"url": "https://www.youtube.com/"
+						}
+					],
+					"folders": [
+						{
+							"path": "News",
+							"bookmarks": [
+								{
+									"id": 3,
+									"title": "The Verge",
+									"url": "http://www.theverge.com/"
+								},
+								{
+									"id": 4,
+									"title": "t3n Magazin",
+									"url": "http://www.t3n.de/"
+								}
+							],
+                            "folders": [
+                                {
+                                    "path": "Tech",
+                                    "bookmarks": [],
+                                    "folders": []
+                                }
+                            ]
+						},
+						{
+							"path": "Social",
+							"bookmarks": [
+								{
+									"id": 5,
+									"title": "Facebook",
+									"url": "https://www.facebook.com/"
+								},
+								{
+									"id": 6,
+									"title": "Twitter",
+									"url": "https://twitter.com/"
+								}
+							],
+                            "folders": [
+                                {
+                                    "path": "Management",
+                                    "bookmarks": [],
+                                    "folders": []
+                                }
+                            ]
+						}
+					]
 				}
-			],
-			"folders": []
+			]
 		}
 	]
 }
