@@ -1,19 +1,12 @@
-// COMPONENTS: BOOKMARK
-
-.bookmark-list {
-
-}
+// COMPONENTS: BOOKMARK LIST
 
 .bookmark-item,
 .folder-item {
 	display: flex;
 	width: 100%;
-	background-color: $color-white;
 	transition: background-color $anim-speed-normal $anim-easing;
-
-	+ .bookmark-item {
-		border-top: .1rem solid $color-seashell;
-	}
+	border-bottom: .1rem solid $color-seashell;
+	background-color: $color-white;
 
 	&:hover {
 		background-color: $color-seashell;
@@ -25,7 +18,8 @@
 .folder-link {
 	display: block;
 	width: 100%;
-	padding: 1.4rem 1.8rem;
+	height: 6rem;
+	padding: 1.4rem 2.8rem;
 	flex: 1;
 }
 
@@ -36,11 +30,15 @@
 .bookmark-icon,
 .folder-icon {
 	float: left;
-	width: 3.2rem;
-	height: 3.2rem;
+	width: 2.4rem;
+	height: 2.4rem;
+	margin-top: .5rem;
 	margin-right: 1.6rem;
+}
+
+.bookmark-icon {
 	border-radius: 50%;
-	background-color: #CCC;
+	background-color: #DFDFDF;
 }
 
 .bookmark-title,
@@ -55,7 +53,7 @@
 }
 
 .folder-title {
-	line-height: 3.2rem;
+	line-height: 3.4rem;
 }
 
 .bookmark-url {

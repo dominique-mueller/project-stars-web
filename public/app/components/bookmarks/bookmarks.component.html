@@ -2,12 +2,14 @@
 
 <main class="main">
 
-	<div class="main-folders">
+	<div class="main-bookmark-directory">
 
-		<h2 style="margin-top: 3rem; margin-bottom: 2.8rem;">Folders</h2>
+		<h2 style="margin-top: 3.5rem; margin-bottom: 3rem;">Folders</h2>
 
-		<a (click)="goToFolder( '' )">
-			>> Bookmarks
+		<a class="directory-link" (click)="goToFolder( '' )"
+			[class.is-active]="activePath[ 0 ] === ''" [class.is-final]="activePath[ 0 ] === ''">
+			<app-icon name="folder_special" size="24" color="#666"></app-icon>
+			<span class="directory-name">Bookmarks</span>
 		</a>
 		<app-bookmark-directory
 			[directories]="folders"
@@ -17,9 +19,9 @@
 
 	</div>
 
-	<div class="main-bookmarks">
+	<div class="main-bookmark-list">
 
-		<h2 style="margin-top: 3rem; margin-bottom: 2.8rem;">Bookmarks</h2>
+		<h2 style="margin-top: 3.5rem; margin-bottom: 3rem; margin-left: 2.8rem;">Bookmarks</h2>
 
 		<app-bookmark-router-outlet (pathChange)="updateCurrentPath( $event )">
 		</app-bookmark-router-outlet>

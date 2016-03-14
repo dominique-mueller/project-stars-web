@@ -6,7 +6,7 @@
 
 .search-input {
 	width: 100%;
-	padding: 0 5.9rem 0 5.9rem;
+	padding: 0 6.4rem;
 	border: none;
 	line-height: inherit;
 }
@@ -14,15 +14,15 @@
 .search-icon {
 	position: absolute;
 	top: 0;
-	left: 2rem;
+	left: 2.4rem;
 }
 
 .search-button-clear {
 	position: absolute;
 	top: 0;
 	right: 0;
-	padding-right: 2rem;
-	padding-left: 2rem;
+	padding-right: 2.2rem;
+	padding-left: 2.2rem;
 
 	.icon {
 		transition: fill $anim-speed-normal $anim-easing;

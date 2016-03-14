@@ -30,16 +30,19 @@
 
 // LAYER 06: COMPONENTS
 @import "components/search"; // TODO: Group somehow?
-@import "components/bookmark";
-
-// LAYER 06: COMPONENTS - SITE
-@import "components/site/header";
-@import "components/site/main";
 
 // LAYER 06: COMPONENTS - SHARED
 @import "components/shared/buttons";
 @import "components/shared/icons";
 @import "components/shared/dropdown";
+
+// LAYER 06: COMPONENTS - SITE
+@import "components/site/header";
+@import "components/site/main";
+
+// LAYER 06: COMPONENTS - BOOKMARK
+@import "components/bookmarks/list";
+@import "components/bookmarks/directory";
 
 // EXTRA: TEMP (TODO: remove me some day)
 @import "temp";

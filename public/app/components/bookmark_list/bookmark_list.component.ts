@@ -1,16 +1,24 @@
 /**
- * Imports
+ * External imports
  */
 import { Component, OnInit, OnDestroy } from 'angular2/core';
 import { Router, RouteParams } from 'angular2/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/forkJoin';
+
+/**
+ * Internal imports
+ */
+import { IconComponent } from '../../shared/icon/icon.component';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 
 @Component( {
+	directives: [
+		IconComponent
+	],
 	selector: 'app-bookmark-list',
-	templateUrl: './bookmarkList.component.html'
+	templateUrl: './bookmark_list.component.html'
 } )
 export class BookmarkListComponent implements OnInit, OnDestroy {
 

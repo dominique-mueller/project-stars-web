@@ -1,5 +1,5 @@
 /**
- * Imports
+ * External imports
  */
 import { Injectable } from 'angular2/core';
 import { Http, Response } from 'angular2/http';
@@ -9,6 +9,10 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/share';
+
+/**
+ * Internal imports
+ */
 import { Bookmark } from './bookmark.model';
 
 /**

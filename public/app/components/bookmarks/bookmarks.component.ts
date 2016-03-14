@@ -1,14 +1,19 @@
 /**
- * Imports
+ * External imports
  */
 import { Component, OnInit } from 'angular2/core';
 import { ROUTER_DIRECTIVES, RouteConfig, Router } from 'angular2/router';
 import { Subscription } from 'rxjs/Subscription';
+
+/**
+ * Internal imports
+ */
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { HeaderComponent } from '../header/header.component';
-import { BookmarkListComponent } from '../../components/bookmarkList/bookmarkList.component';
-import { BookmarkDirectoryComponent } from '../bookmarkDirectory/bookmarkDirectory.component';
-import { BookmarkRouterOutlet } from '../bookmarkList/bookmarkList.router';
+import { BookmarkListComponent } from '../bookmark_list/bookmark_list.component';
+import { BookmarkDirectoryComponent } from '../bookmark_directory/bookmark_directory.component';
+import { BookmarkRouterOutlet } from './bookmarks.router';
 
 /**
  * Bookmark components
@@ -16,6 +21,7 @@ import { BookmarkRouterOutlet } from '../bookmarkList/bookmarkList.router';
 @Component( {
 	directives: [
 		ROUTER_DIRECTIVES,
+		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
 		BookmarkDirectoryComponent,
@@ -67,6 +73,7 @@ export class BookmarksComponent implements OnInit {
 	constructor( router: Router, bookmarkService: BookmarkService ) {
 		this.router = router;
 		this.bookmarkService = bookmarkService;
+		this.activePath = [ '' ];
 	}
 
 	/**

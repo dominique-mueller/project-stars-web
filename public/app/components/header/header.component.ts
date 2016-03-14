@@ -1,18 +1,23 @@
 /**
- * Imports
+ * External imports
  */
 import { Component } from 'angular2/core';
+
+/**
+ * Internal imports
+ */
 import { IconComponent } from '../../shared/icon/icon.component';
-import {
-	DropdownComponent,
-	DropdownItem, DropdownLink, DropdownDivider
-} from '../../shared/dropdown/dropdown.component';
+import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
+	from '../../shared/dropdown/dropdown.component';
 
 /**
  * Header Component
  */
 @Component( {
-	directives: [ IconComponent, DropdownComponent ],
+	directives: [
+		IconComponent,
+		DropdownComponent
+	],
 	selector: 'app-header',
 	templateUrl: './header.component.html'
 } )
@@ -39,14 +44,14 @@ export class HeaderComponent {
 
 		// Set dropdown values
 		this.dropdownItems = [
-			new DropdownLink('settings', 'Settings'),
-			new DropdownLink('apps', 'Apps'),
+			new DropdownLink( 'settings', 'Settings' ),
+			new DropdownLink( 'apps', 'Apps' ),
 			new DropdownDivider(),
-			new DropdownLink('help', 'Help'),
-			new DropdownLink('feedback', 'Feedback'),
-			new DropdownLink('about', 'About this app'),
+			new DropdownLink( 'help', 'Help' ),
+			new DropdownLink( 'feedback', 'Feedback' ),
+			new DropdownLink( 'about', 'About this app' ),
 			new DropdownDivider(),
-			new DropdownLink('logout', 'Logout')
+			new DropdownLink( 'logout', 'Logout' )
 		];
 
 	}

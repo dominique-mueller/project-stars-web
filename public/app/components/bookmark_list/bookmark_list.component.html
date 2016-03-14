@@ -1,7 +1,7 @@
 <ul>
 	<li class="folder-item" *ngFor="#folder of folders">
 		<a class="folder-link" (click)="goToFolder( folder.path )">
-			<div class="folder-icon"></div>
+			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
 			<div class="folder-title">{{ folder.path }}</div>
 		</a>
 	</li>
@@ -11,8 +11,5 @@
 			<div class="bookmark-title">{{ bookmark.title }}</div>
 			<div class="bookmark-url">{{ bookmark.url }}</div>
 		</a>
-		<button class="button button-invisible" type="button">
-			details
-		</button>
 	</li>
 </ul>

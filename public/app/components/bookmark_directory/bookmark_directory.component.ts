@@ -1,17 +1,23 @@
 /**
- * Imports
+ * External imports
  */
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChange } from 'angular2/core';
+
+/**
+ * Internal imports
+ */
+import { IconComponent } from '../../shared/icon/icon.component';
 
 /**
  * Bookmark directory component (recursive)
  */
 @Component( {
 	directives: [
-		BookmarkDirectoryComponent
+		BookmarkDirectoryComponent,
+		IconComponent
 	],
 	selector: 'app-bookmark-directory',
-	templateUrl: 'bookmarkDirectory.component.html'
+	templateUrl: 'bookmark_directory.component.html'
 } )
 export class BookmarkDirectoryComponent implements OnChanges {
 

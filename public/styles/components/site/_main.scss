@@ -1,16 +1,25 @@
 // COMPONENTS: MAIN
 
 .main {
+	position: relative;
+	z-index: 0;
 	display: flex;
+	height: 100%;
 	padding-top: 6.4rem;
 }
 
-.main-bookmarks {
-	width: calc(100% - 28rem);
-	background-color: #CCC; // TODO - Remove me
+.main-bookmark-directory {
+	position: relative;
+	z-index: 1;
+	width: 30rem;
+	height: 100%;
+	padding-left: 2.4rem;
+	background-color: $color-white;
 }
 
-.main-folders {
-	width: 28rem;
-	background-color: #FAFAFA; // TODO - Remove me
+.main-bookmark-list {
+	position: relative;
+	width: calc(100% - 30rem);
+	height: 100%;
+	border-left: .1rem solid $color-seashell;
 }
