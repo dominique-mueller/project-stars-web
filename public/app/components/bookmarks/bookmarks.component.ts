@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES, RouteConfig, Router } from 'angular2/router';
+import { ROUTER_DIRECTIVES, RouteConfig, Router, Location } from 'angular2/router';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
@@ -45,6 +45,7 @@ export class BookmarksComponent implements OnInit {
 	 * Router
 	 */
 	private router: Router;
+	private location: Location;
 
 	/**
 	 * Bookmark service
@@ -70,8 +71,9 @@ export class BookmarksComponent implements OnInit {
 	 * Constructor
 	 * @param {BookmarkService} bookmarkService Bookmark service
 	 */
-	constructor( router: Router, bookmarkService: BookmarkService ) {
+	constructor( router: Router, location: Location, bookmarkService: BookmarkService ) {
 		this.router = router;
+		this.location = location;
 		this.bookmarkService = bookmarkService;
 		this.activePath = [ '' ];
 	}
@@ -82,6 +84,9 @@ export class BookmarksComponent implements OnInit {
 	public ngOnInit(): void {
 
 		// TODO: Show a loading animation
+
+		console.log('##### LOCATION PATH:');
+		console.log(this.location.path());
 
 		// Setup folder structure subscription
 		this.serviceSubscription = this.bookmarkService.bookmarks

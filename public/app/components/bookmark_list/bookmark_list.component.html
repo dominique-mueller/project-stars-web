@@ -1,15 +1,36 @@
-<ul>
+<input type="text" placeholder="TEST SEARCH" [(ngModel)]="searchValue">
+
+<ul *ngIf="searchValue.length === 0">
+	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
+		<a class="bookmark-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
+			<div class="bookmark-icon"></div>
+			<div class="bookmark-title">{{ bookmark.title }}</div>
+			<div class="bookmark-url">{{ bookmark.url }}</div>
+		</a>
+	</li>
 	<li class="folder-item" *ngFor="#folder of folders">
 		<a class="folder-link" (click)="goToFolder( folder.path )">
 			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
 			<div class="folder-title">{{ folder.path }}</div>
 		</a>
 	</li>
-	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
+</ul>
+
+<ul *ngIf="searchValue.length > 0">
+	<li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;">Search results in this folder</li>
+	<li class="bookmark-item" *ngFor="#bookmark of bookmarks | search : searchValue">
 		<a class="bookmark-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
 			<div class="bookmark-icon"></div>
 			<div class="bookmark-title">{{ bookmark.title }}</div>
 			<div class="bookmark-url">{{ bookmark.url }}</div>
+		</a>
+	</li>
+	<li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;">Search results in all subfolders</li>
+	<li class="folder-item" *ngFor="#bookmarkInFolder of folders | flaten | search : searchValue">
+		<a class="bookmark-link" [href]="bookmarkInFolder.url" target="_blank" rel="noreferrer noopener">
+			<div class="bookmark-icon"></div>
+			<div class="bookmark-title">{{ bookmarkInFolder.title }}</div>
+			<div class="bookmark-url">{{ bookmarkInFolder.url }}</div>
 		</a>
 	</li>
 </ul>

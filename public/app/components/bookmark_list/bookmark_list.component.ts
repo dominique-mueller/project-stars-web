@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, OnDestroy } from 'angular2/core';
-import { Router, RouteParams } from 'angular2/router';
+import { Router, RouteParams, Location } from 'angular2/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/forkJoin';
@@ -11,11 +11,17 @@ import 'rxjs/add/observable/forkJoin';
  * Internal imports
  */
 import { BookmarkService, Directory, Bookmark } from '../../services/bookmark/bookmark.service';
+import { BookmarkSearchPipe } from './bookmark_search.pipe';
+import { BookmarkFlatenPipe } from './bookmark_flaten.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component( {
 	directives: [
 		IconComponent
+	],
+	pipes: [
+		BookmarkSearchPipe,
+		BookmarkFlatenPipe
 	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark_list.component.html'
@@ -31,6 +37,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 * Route params service
 	 */
 	private routeParams: RouteParams;
+	private location: Location;
 
 	/**
 	 * Bookmark service
@@ -57,16 +64,20 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	private folders: Directory[];
 
+	private searchValue: string;
+
 	/**
 	 * Constructor
 	 * @param {Router}          router          Router service
 	 * @param {RouteParams}     routeParams     Route params service
 	 * @param {BookmarkService} bookmarkService Bookmark service
 	 */
-	constructor( router: Router, routeParams: RouteParams, bookmarkService: BookmarkService ) {
+	constructor( router: Router, routeParams: RouteParams, location: Location, bookmarkService: BookmarkService ) {
 		this.router = router;
 		this.routeParams = routeParams;
+		this.location = location;
 		this.bookmarkService = bookmarkService;
+		this.searchValue = '';
 	}
 
 	/**
@@ -74,7 +85,10 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		// TODO: Show a loading / transition animation
+		// TODO: Show a loading / transition animation ?
+
+		console.log('##### LOCATION SUBPATH:');
+		console.log(this.location.path());
 
 		// Setup bookmarks subscription
 		this.serviceSubscription = Observable
@@ -86,14 +100,18 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 
 					// Get the current route url from the route params
 					let routeParam: string = this.routeParams.get( '*' ); // This can either be null or a string
+
 					if ( routeParam === null ) {
 						this.currentPath = '';
 					} else {
 						this.currentPath = routeParam;
 					}
 
+					// this.bookmarks = data[ 0 ][ 0 ].bookmarks;
+					// this.folders = data[ 0 ][ 0 ].folders;
+
 					// Get bookmarks depending on the current path, navigate to root on error
-					this.bookmarkService.getBookmarksByPath(data[0], this.currentPath)
+					this.bookmarkService.getBookmarksByPath( data[ 0 ], this.currentPath )
 						.then( ( result: Directory ) => {
 							this.bookmarks = result.bookmarks;
 							this.folders = result.folders;
