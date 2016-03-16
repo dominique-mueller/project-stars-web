@@ -6,7 +6,7 @@
 		</a>
 	</li>
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
-		<a class="bookmark-link" [href]="bookmark.url" target="_blank">
+		<a class="bookmark-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
 			<div class="bookmark-icon"></div>
 			<div class="bookmark-title">{{ bookmark.title }}</div>
 			<div class="bookmark-url">{{ bookmark.url }}</div>
