@@ -6,6 +6,7 @@ import { Component } from 'angular2/core';
 /**
  * Internal imports
  */
+import { AppService } from '../../services/app/app.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	from '../../shared/dropdown/dropdown.component';
@@ -24,12 +25,21 @@ import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 export class HeaderComponent {
 
 	/**
+	 * App service
+	 */
+	private appService: AppService;
+
+	/**
 	 * Search input data
 	 */
 	private search: string;
 
+	/**
+	 * App name
+	 */
+	private app: string;
+
 	// TODO: Put them somewhere else (maybe a service or a config?)
-	private app: string = 'Project Stars';
 	private name: string = 'Niklas Agethen';
 
 	/**
@@ -40,7 +50,13 @@ export class HeaderComponent {
 	/**
 	 * Constructor
 	 */
-	constructor() {
+	constructor( appService: AppService ) {
+
+		// Initialize services
+		this.appService = appService;
+
+		// Set app name
+		this.app = appService.APP_NAME;
 
 		// Set dropdown values
 		this.dropdownItems = [

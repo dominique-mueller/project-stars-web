@@ -13,6 +13,7 @@ import 'rxjs/add/operator/share';
 /**
  * Internal imports
  */
+import { AppService } from '../app/app.service';
 import { Bookmark } from './bookmark.model';
 import { Directory } from './directory.model';
 
@@ -51,6 +52,11 @@ export class BookmarkService {
 	private http: Http;
 
 	/**
+	 * App service
+	 */
+	private appService: AppService;
+
+	/**
 	 * Details about ongoing requests (for preventing multiple parallel requests)
 	 */
 	private isDoingHttpRequests: {
@@ -59,12 +65,14 @@ export class BookmarkService {
 
 	/**
 	 * Constructor
-	 * @param {Http} http Http service
+	 * @param {Http}       http       Http service
+	 * @param {AppService} appService App service
 	 */
-	constructor( http: Http ) {
+	constructor( http: Http, appService: AppService ) {
 
-		// Initialize http service
+		// Initialize services
 		this.http = http;
+		this.appService = appService;
 
 		// Setup bookmarks observable
 		this.bookmarks = new Observable( ( observer: Observer<Array<any>> ) => {
@@ -118,7 +126,7 @@ export class BookmarkService {
 
 				// Get data from API
 				// TODO: Switch that to the REST API route, get base from some config service
-				.get( 'http://localhost:3000/bookmark.temp.json' )
+				.get( `${ this.appService.API_URL }/bookmark.temp.json` )
 
 				// Convert data
 				.map( ( response: Response ) => <Directory[]> response.json().data )

@@ -8,6 +8,7 @@ import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig } from 'angular2/route
 /**
  * Internal imports
  */
+import { AppService } from '../../services/app/app.service';
 import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 
 /**
@@ -19,7 +20,8 @@ import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 	],
 	providers: [
 		HTTP_PROVIDERS,
-		ROUTER_PROVIDERS
+		ROUTER_PROVIDERS,
+		AppService
 	],
 	selector: 'app',
 	templateUrl: './app.component.html'
