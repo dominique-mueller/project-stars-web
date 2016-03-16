@@ -7,6 +7,21 @@
 					"id": 7,
 					"title": "Angular 2",
 					"url": "https://www.angular.io/"
+				},
+				{
+					"id": 10,
+					"title": "IMDb",
+					"url": "http://www.imdb.com/"
+				},
+				{
+					"id": 11,
+					"title": "GitHub",
+					"url": "https://github.com/"
+				},
+				{
+					"id": 12,
+					"title": "Aerotwist - Home",
+					"url": "http://aerotwist.com/"
 				}
 			],
 			"folders": [
@@ -22,9 +37,14 @@
 							"id": 1,
 							"title": "Bing",
 							"url": "https://www.bing.com/"
+						},
+						{
+							"id": 8,
+							"title": "Yahoo",
+							"url": "https://de.yahoo.com/"
 						}
 					],
-                    "folders": []
+					"folders": []
 				},
 				{
 					"path": "Favourites",
@@ -48,15 +68,13 @@
 									"id": 4,
 									"title": "t3n Magazin",
 									"url": "http://www.t3n.de/"
+								},
+								{
+									"id": 9,
+									"title": "Dr. Windows",
+									"url": "http://www.drwindows.de/"
 								}
-							],
-                            "folders": [
-                                {
-                                    "path": "Tech",
-                                    "bookmarks": [],
-                                    "folders": []
-                                }
-                            ]
+							]
 						},
 						{
 							"path": "Social",
@@ -71,14 +89,7 @@
 									"title": "Twitter",
 									"url": "https://twitter.com/"
 								}
-							],
-                            "folders": [
-                                {
-                                    "path": "Management",
-                                    "bookmarks": [],
-                                    "folders": []
-                                }
-                            ]
+							]
 						}
 					]
 				}

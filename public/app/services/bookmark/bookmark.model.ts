@@ -1,5 +1,5 @@
 /**
- * Bookmark Model
+ * Bookmark model
  */
 export class Bookmark {
 
@@ -29,7 +29,7 @@ export class Bookmark {
 	public favicon: string;
 
 	/**
-	 * List of labels assigned to this bookmark
+	 * List of labels (ids only) assigned to this bookmark
 	 */
 	public labels: number[];
 

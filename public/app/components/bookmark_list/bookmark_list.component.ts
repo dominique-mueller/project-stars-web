@@ -10,8 +10,8 @@ import 'rxjs/add/observable/forkJoin';
 /**
  * Internal imports
  */
+import { BookmarkService, Directory, Bookmark } from '../../services/bookmark/bookmark.service';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { BookmarkService } from '../../services/bookmark/bookmark.service';
 
 @Component( {
 	directives: [
@@ -50,12 +50,12 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	/**
 	 * Bookmarks
 	 */
-	private bookmarks: any;
+	private bookmarks: Bookmark[];
 
 	/**
 	 * Folders
 	 */
-	private folders: any;
+	private folders: Directory[];
 
 	/**
 	 * Constructor
@@ -82,7 +82,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 				this.bookmarkService.bookmarks
 			)
 			.subscribe(
-				( data: any[] ) => {
+				( data: Array<Directory[]> ) => {
 
 					// Get the current route url from the route params
 					let routeParam: string = this.routeParams.get( '*' ); // This can either be null or a string
@@ -92,16 +92,15 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 						this.currentPath = routeParam;
 					}
 
-					// Get bookmarks depending on the current path
-					let result: any|boolean = this.bookmarkService.getBookmarksByPath( data[ 0 ], this.currentPath );
-
-					// Set data or navigate to bookmark root folder when an error occurs
-					if ( result === false ) {
-						this.router.navigateByUrl( 'bookmarks' );
-					} else {
-						this.bookmarks = result.bookmarks;
-						this.folders = result.folders;
-					}
+					// Get bookmarks depending on the current path, navigate to root on error
+					this.bookmarkService.getBookmarksByPath(data[0], this.currentPath)
+						.then( ( result: Directory ) => {
+							this.bookmarks = result.bookmarks;
+							this.folders = result.folders;
+						} )
+						.catch( () => {
+							this.router.navigateByUrl( 'bookmarks' );
+						} );
 
 				},
 				( error: any ) => {

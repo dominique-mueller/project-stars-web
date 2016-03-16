@@ -14,11 +14,13 @@ import 'rxjs/add/operator/share';
  * Internal imports
  */
 import { Bookmark } from './bookmark.model';
+import { Directory } from './directory.model';
 
 /**
  * Exports
  */
 export { Bookmark } from './bookmark.model';
+export { Directory } from './directory.model';
 
 /**
  * Bookmark service
@@ -29,23 +31,18 @@ export class BookmarkService {
 	/**
 	 * Bookmarks
 	 */
-	public bookmarks: Observable<Array<any>>;
+	public bookmarks: Observable<Directory[]>;
 
 	/**
 	 * Bookmarks observer
 	 */
-	private bookmarksObserver: Observer<Array<any>>;
-
-	/**
-	 * Folder structure observer
-	 */
-	private folderStructureObserver: Observer<Array<any>>;
+	private bookmarksObserver: Observer<Directory[]>;
 
 	/**
 	 * Bookmark data store
 	 */
 	private bookmarkStore: {
-		bookmarks: any[] // TODO - Create model
+		bookmarks: Directory[]
 	};
 
 	/**
@@ -124,7 +121,7 @@ export class BookmarkService {
 				.get( 'http://localhost:3000/bookmark.temp.json' )
 
 				// Convert data
-				.map( ( response: Response ) => <any[]> response.json().data ) // TODO: Switch to model
+				.map( ( response: Response ) => <Directory[]> response.json().data )
 
 				// Subscription
 				.subscribe(
@@ -155,50 +152,55 @@ export class BookmarkService {
 	}
 
 	/**
-	 * Utility function: Get bookmaks by providing a path
-	 * @param  {any[]}  	 data Bookmark data
-	 * @param  {string} 	 path Provided bookmark folder path
-	 * @return {any|boolean}      Specific bookmark data or false when an erro occurs
+	 * Utilify unction: Get bookmarks by a provided path
+	 * @param  {Directory[]}        data Bookmark data
+	 * @param  {string}             path Provided path
+	 * @return {Promise<Directory>}      Resolves with data or rejects with error message
 	 */
-	public getBookmarksByPath( data: any[], path: string ): any|boolean {
+	public getBookmarksByPath( data: Directory[], path: string ): Promise<Directory> {
 
-		// Set current path (to bookmarks root folder)
-		let currentPath: any|boolean = data[ 0 ];
+		// Return promise
+		return new Promise<Directory>( ( resolve: ( result: Directory ) => void, reject: ( reason: string ) => void ) => {
 
-		// Only run the algorithm if we are not in the root folder
-		// (because then we know the bookmarks already)
-		if ( path !== '' ) {
+			// Set current path (to bookmarks root folder)
+			let currentPath: Directory = data[ 0 ];
 
-			// Split path by '/'s
-			let pathSections: string[] = path.split( '/' );
+			// Only run the algorithm if we are not in the root folder
+			// (because then we know the bookmarks already)
+			if ( path !== '' ) {
 
-			// Iterate through path sections
-			let pathDepth: number = pathSections.length - 1;
-			for ( let i: number = pathDepth; i >= 0; i-- ) {
+				// Split path by '/'s
+				let pathSections: string[] = path.split( '/' );
 
-				// Iterate through available folders
-				let numberOfFolders: number = currentPath.folders.length - 1;
-				for ( let j: number = numberOfFolders; j >= 0; j-- ) {
+				// Iterate through path sections
+				let pathDepth: number = pathSections.length - 1;
+				for ( let i: number = pathDepth; i >= 0; i-- ) {
 
-					// Find the folder that matches the path section
-					if ( pathSections[ pathDepth - i ].toLowerCase() === currentPath.folders[ j ].path.toLowerCase() ) {
-						currentPath = currentPath.folders[ j ];
-						break;
-					}
+					// Iterate through available folders
+					let numberOfFolders: number = currentPath.folders.length - 1;
+					for ( let j: number = numberOfFolders; j >= 0; j-- ) {
 
-					// If we did not break out of the loop yet, the bookmark folder does not exist
-					if ( j === 0 ) {
-						currentPath = false;
+						// Find the folder that matches the path section
+						if ( pathSections[ pathDepth - i ].toLowerCase() === currentPath.folders[ j ].path.toLowerCase() ) {
+							currentPath = currentPath.folders[ j ];
+							break;
+						}
+
+						// If we did not break out of the loop yet, the bookmark folder does not exist
+						if (j === 0) {
+							reject( 'Bookmark path does not exist.' );
+						}
+
 					}
 
 				}
 
 			}
 
-		}
+			// RESOLVE
+			resolve( currentPath );
 
-		// Done
-		return currentPath;
+		} );
 
 	}
 

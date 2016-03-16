@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 /**
  * Internal imports
  */
-import { BookmarkService } from '../../services/bookmark/bookmark.service';
+import { BookmarkService, Directory } from '../../services/bookmark/bookmark.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { HeaderComponent } from '../header/header.component';
 import { BookmarkListComponent } from '../bookmark_list/bookmark_list.component';
@@ -59,7 +59,7 @@ export class BookmarksComponent implements OnInit {
 	/**
 	 * Folder structure
 	 */
-	private folders: any[];
+	private folders: Directory[];
 
 	/**
 	 * Currently active path
@@ -86,10 +86,10 @@ export class BookmarksComponent implements OnInit {
 		// Setup folder structure subscription
 		this.serviceSubscription = this.bookmarkService.bookmarks
 			.subscribe(
-				( data: any[] ) => {
+				( data: Directory[] ) => {
 
 					// Set data (skip bookmark root folder)
-					this.folders = data[0].folders;
+					this.folders = data[ 0 ].folders;
 
 				},
 				( error: any ) => {
