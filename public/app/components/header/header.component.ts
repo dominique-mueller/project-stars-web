@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component } from 'angular2/core';
+import { Component, Output, EventEmitter } from 'angular2/core';
 
 /**
  * Internal imports
@@ -23,6 +23,12 @@ import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	templateUrl: './header.component.html'
 } )
 export class HeaderComponent {
+
+	/**
+	 * Search update event
+	 */
+	@Output()
+	private searchUpdate: EventEmitter<{}>;
 
 	/**
 	 * App service
@@ -58,6 +64,9 @@ export class HeaderComponent {
 		// Set app name
 		this.app = appService.APP_NAME;
 
+		// Initialize event emitter
+		this.searchUpdate = new EventEmitter();
+
 		// Set dropdown values
 		this.dropdownItems = [
 			new DropdownLink( 'settings', 'Settings' ),
@@ -85,6 +94,21 @@ export class HeaderComponent {
 	 */
 	private clear(): void {
 		this.search = '';
+	}
+
+	/**
+	 * Submit search update
+	 * @param {string} value Search value
+	 */
+	private submitSearch( value: string ): void {
+
+		console.log('### SEARCH START ...');
+
+		// Emit search update event
+		this.searchUpdate.emit( {
+			value: value
+		} );
+
 	}
 
 }

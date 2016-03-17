@@ -13,10 +13,14 @@ export class BookmarkFlatenPipe implements PipeTransform {
 
 	public transform( value: any[], args: any[] ): any {
 
+		console.log('>>> FLAT PIPE START');
+
 		// Skip if data is empty
 		if (typeof value === 'undefined' || value.length === 0 ) {
 			return value;
 		}
+
+		console.log('>>> FLAT PIPE END');
 
 		// Flatten the tree recursively
 		return this.flatten(value);

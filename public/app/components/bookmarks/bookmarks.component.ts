@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES, RouteConfig, Router, Location } from 'angular2/router';
+import { ROUTER_DIRECTIVES, RouteConfig, RouteParams, Router, Location } from 'angular2/router';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
@@ -36,6 +36,11 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
 @RouteConfig( [
 	{
 		component: BookmarkListComponent,
+		path: '/',
+		useAsDefault: true
+	},
+	{
+		component: BookmarkListComponent,
 		path: '/**'
 	}
 ] )
@@ -45,6 +50,7 @@ export class BookmarksComponent implements OnInit {
 	 * Router
 	 */
 	private router: Router;
+	private routeParams: RouteParams;
 	private location: Location;
 
 	/**
@@ -71,8 +77,9 @@ export class BookmarksComponent implements OnInit {
 	 * Constructor
 	 * @param {BookmarkService} bookmarkService Bookmark service
 	 */
-	constructor( router: Router, location: Location, bookmarkService: BookmarkService ) {
+	constructor( router: Router, routeParams: RouteParams, location: Location, bookmarkService: BookmarkService ) {
 		this.router = router;
+		this.routeParams = routeParams;
 		this.location = location;
 		this.bookmarkService = bookmarkService;
 		this.activePath = [ '' ];
@@ -84,9 +91,6 @@ export class BookmarksComponent implements OnInit {
 	public ngOnInit(): void {
 
 		// TODO: Show a loading animation
-
-		console.log('##### LOCATION PATH:');
-		console.log(this.location.path());
 
 		// Setup folder structure subscription
 		this.serviceSubscription = this.bookmarkService.bookmarks
@@ -121,6 +125,26 @@ export class BookmarksComponent implements OnInit {
 	 */
 	private updateCurrentPath( path: string ): void {
 		this.activePath = path.split( '/' );
+	}
+
+	private search( searchParameters: any ): void {
+
+		// console.log('### SEARCH PARAMETER');
+		// console.log(searchParameters.value);
+
+		// console.log('### CURRENT PATH');
+		// console.log(this.location.path());
+
+		// Get current base path
+		let currentPath: string = this.location.path().split( '/;' )[ 0 ];
+
+		// Navigate
+		if ( searchParameters.value.length === 0 ) {
+			this.router.navigateByUrl( currentPath );
+		} else {
+			this.router.navigateByUrl( `${ currentPath }/;value=${ searchParameters.value }` );
+		}
+
 	}
 
 }

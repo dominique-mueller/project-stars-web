@@ -1,5 +1,3 @@
-<input type="text" placeholder="TEST SEARCH" [(ngModel)]="searchValue">
-
 <ul *ngIf="searchValue.length === 0">
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
 		<a class="bookmark-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">

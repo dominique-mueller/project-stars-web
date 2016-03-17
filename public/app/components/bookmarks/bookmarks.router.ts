@@ -34,7 +34,7 @@ export class BookmarkRouterOutlet extends RouterOutlet {
 	 * We step into the moment when the route gets activated and emit the path change event
 	 */
 	public activate( instruction: ComponentInstruction ): Promise<any> {
-		this.pathChange.emit( instruction.urlPath );
+		this.pathChange.emit( instruction.urlPath.split( '/;' )[ 0 ] );
 		return super.activate( instruction );
 	}
 

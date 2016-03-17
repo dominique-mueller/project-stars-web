@@ -87,8 +87,23 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 
 		// TODO: Show a loading / transition animation ?
 
-		console.log('##### LOCATION SUBPATH:');
-		console.log(this.location.path());
+		// Get the current route url from the route params
+		let routeParams: any = this.routeParams.get( '*' ); // This can either be null or a string
+
+		// Set path and search value
+		if ( routeParams === null ) {
+			this.currentPath = '';
+		} else {
+
+			// First position contains folder path
+			let splitParams: string[] = routeParams.split( '/;' );
+			this.currentPath = splitParams[ 0 ];
+
+			// Second position (if exist) contains search params
+			if ( splitParams.length > 1 ) {
+				this.searchValue = splitParams[ 1 ].split( ';' )[ 0 ].split( '=' )[ 1 ];
+			}
+		}
 
 		// Setup bookmarks subscription
 		this.serviceSubscription = Observable
@@ -97,18 +112,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 			)
 			.subscribe(
 				( data: Array<Directory[]> ) => {
-
-					// Get the current route url from the route params
-					let routeParam: string = this.routeParams.get( '*' ); // This can either be null or a string
-
-					if ( routeParam === null ) {
-						this.currentPath = '';
-					} else {
-						this.currentPath = routeParam;
-					}
-
-					// this.bookmarks = data[ 0 ][ 0 ].bookmarks;
-					// this.folders = data[ 0 ][ 0 ].folders;
 
 					// Get bookmarks depending on the current path, navigate to root on error
 					this.bookmarkService.getBookmarksByPath( data[ 0 ], this.currentPath )
