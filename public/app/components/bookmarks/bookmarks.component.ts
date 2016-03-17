@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES, RouteConfig, RouteParams, Router, Location } from 'angular2/router';
+import { ROUTER_DIRECTIVES, RouteConfig, Router } from 'angular2/router';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
@@ -36,8 +36,12 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
 @RouteConfig( [
 	{
 		component: BookmarkListComponent,
-		path: '/**',
+		path: '/',
 		useAsDefault: true
+	},
+	{
+		component: BookmarkListComponent,
+		path: '/**'
 	}
 ] )
 export class BookmarksComponent implements OnInit {
@@ -46,8 +50,6 @@ export class BookmarksComponent implements OnInit {
 	 * Router
 	 */
 	private router: Router;
-	private routeParams: RouteParams;
-	private location: Location;
 
 	/**
 	 * Bookmark service
@@ -73,10 +75,8 @@ export class BookmarksComponent implements OnInit {
 	 * Constructor
 	 * @param {BookmarkService} bookmarkService Bookmark service
 	 */
-	constructor( router: Router, routeParams: RouteParams, location: Location, bookmarkService: BookmarkService ) {
+	constructor( router: Router, bookmarkService: BookmarkService ) {
 		this.router = router;
-		this.routeParams = routeParams;
-		this.location = location;
 		this.bookmarkService = bookmarkService;
 		this.activePath = [ '' ];
 	}
@@ -126,13 +126,16 @@ export class BookmarksComponent implements OnInit {
 	private search( searchParameters: any ): void {
 
 		// Get current base path
-		let currentPath: string = this.location.path().split( '/;' )[ 0 ];
+		let basePath: string = '';
+		if ( this.activePath[ 0 ].length !== 0 ) {
+			basePath = `/${ this.activePath.join('/') }`;
+		}
 
 		// Navigate
 		if ( searchParameters.value.length === 0 ) {
-			this.router.navigateByUrl( currentPath );
+			this.router.navigateByUrl( basePath );
 		} else {
-			this.router.navigateByUrl( `${ currentPath }/;value=${ searchParameters.value }` );
+			this.router.navigateByUrl( `bookmarks${ basePath }/;value=${searchParameters.value}` );
 		}
 
 	}

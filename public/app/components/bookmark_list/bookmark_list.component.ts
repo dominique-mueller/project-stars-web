@@ -86,8 +86,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		console.log('>>> CALLING ROUTE');
-
 		// TODO: Show a loading / transition animation ?
 
 		// Get the current route url from the route params
@@ -95,9 +93,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 
 		// Set path and search value
 		if ( routeParams !== null ) {
-
-			console.log('####################### INIT');
-			// console.log(routeParams);
 
 			// Check if we search and are on the root folder
 			if ( routeParams.charAt( 0 ) === ';' ) {
@@ -122,9 +117,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 			}
 
 		}
-
-		console.log('FINAL SEARCH VALUE: ' + this.searchValue);
-		console.log('FINAL CURRENT PATH: ' + this.currentPath);
 
 		// Setup bookmarks subscription
 		this.serviceSubscription = Observable
