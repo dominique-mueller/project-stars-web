@@ -123,6 +123,9 @@ export class BookmarksComponent implements OnInit {
 		this.activePath = path.split( '/' );
 	}
 
+	/**
+	 * Search
+	 */
 	private search( searchParameters: any ): void {
 
 		// Get current base path
@@ -131,9 +134,9 @@ export class BookmarksComponent implements OnInit {
 			basePath = `/${ this.activePath.join('/') }`;
 		}
 
-		// Navigate
+		// Navigate to route, with or without search parameters
 		if ( searchParameters.value.length === 0 ) {
-			this.router.navigateByUrl( basePath );
+			this.router.navigateByUrl( `bookmarks${ basePath }` );
 		} else {
 			this.router.navigateByUrl( `bookmarks${ basePath }/;value=${searchParameters.value}` );
 		}

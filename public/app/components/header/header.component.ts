@@ -102,7 +102,7 @@ export class HeaderComponent {
 	 */
 	private submitSearch( value: string ): void {
 
-		console.log('### SEARCH START ...');
+		console.log('SUBMIT SEARCH');
 
 		// Emit search update event
 		this.searchUpdate.emit( {

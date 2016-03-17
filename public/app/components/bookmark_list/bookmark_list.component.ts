@@ -88,33 +88,32 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 
 		// TODO: Show a loading / transition animation ?
 
-		// Get the current route url from the route params
-		let routeParams: any = this.routeParams.get( '*' ); // This can either be null or a string
+		// Set path and search params
+		if ( Object.keys( this.routeParams.params ).length > 0 ) {
 
-		// Set path and search value
-		if ( routeParams !== null ) {
+			let routeParams: any = this.routeParams.get( '*' );
+			if ( routeParams !== null ) {
 
-			// Check if we search and are on the root folder
-			if ( routeParams.charAt( 0 ) === ';' ) {
-
-				routeParams = routeParams.substring( 1 );
-				this.searchValue = routeParams.split( '=' )[ 1 ];
+				// One of the bookmark subfolders, maybe searching
+				let splitParams: string[] = routeParams.split( '/;' );
+				this.currentPath = splitParams[0];
+				if ( splitParams.length > 1 ) {
+					this.searchValue = splitParams[1].split('=')[1]; // TODO: Better split
+				}
 
 			} else {
 
-				// Split params into url and search params
-				let splitParams: string[] = routeParams.split( '/;' );
-
-				// Check if we are in the bookmarks root folder
-				if ( splitParams.length > 1 ) {
-					this.currentPath = splitParams[ 0 ];
-					this.searchValue = splitParams[ 1 ].split( '=' )[ 1 ]; // TODO: Better split
-				} else {
-					this.currentPath = splitParams[ 0 ];
-					this.searchValue = ''; // TODO: Better split
-				}
+				// Root bookmark folder, searching
+				this.currentPath = '';
+				this.searchValue = this.routeParams.get( 'value' ); // TODO: Refactoring
 
 			}
+
+		} else {
+
+			// Root bookmarks folder, no searching
+			this.currentPath = '';
+			this.searchValue = '';
 
 		}
 
