@@ -1,15 +1,15 @@
 <ul *ngIf="searchValue.length === 0">
+	<li class="folder-item" *ngFor="#folder of folders">
+		<a class="folder-link" (click)="goToFolder( folder.path )">
+			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
+			<div class="folder-title">{{ folder.path }}</div>
+		</a>
+	</li>
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
 		<a class="bookmark-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
 			<div class="bookmark-icon"></div>
 			<div class="bookmark-title">{{ bookmark.title }}</div>
 			<div class="bookmark-url">{{ bookmark.url }}</div>
-		</a>
-	</li>
-	<li class="folder-item" *ngFor="#folder of folders">
-		<a class="folder-link" (click)="goToFolder( folder.path )">
-			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
-			<div class="folder-title">{{ folder.path }}</div>
 		</a>
 	</li>
 </ul>

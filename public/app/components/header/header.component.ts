@@ -102,8 +102,6 @@ export class HeaderComponent {
 	 */
 	private submitSearch( value: string ): void {
 
-		console.log('SUBMIT SEARCH');
-
 		// Emit search update event
 		this.searchUpdate.emit( {
 			value: value.toLowerCase()

@@ -15,6 +15,9 @@ import { BookmarkSearchPipe } from './bookmark_search.pipe';
 import { BookmarkFlatenPipe } from './bookmark_flaten.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
 
+/**
+ * Bookmark list component
+ */
 @Component( {
 	directives: [
 		IconComponent
