@@ -106,7 +106,7 @@ export class HeaderComponent {
 
 		// Emit search update event
 		this.searchUpdate.emit( {
-			value: value
+			value: value.toLowerCase()
 		} );
 
 	}

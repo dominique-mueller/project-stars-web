@@ -36,12 +36,8 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
 @RouteConfig( [
 	{
 		component: BookmarkListComponent,
-		path: '/',
+		path: '/**',
 		useAsDefault: true
-	},
-	{
-		component: BookmarkListComponent,
-		path: '/**'
 	}
 ] )
 export class BookmarksComponent implements OnInit {
@@ -128,12 +124,6 @@ export class BookmarksComponent implements OnInit {
 	}
 
 	private search( searchParameters: any ): void {
-
-		// console.log('### SEARCH PARAMETER');
-		// console.log(searchParameters.value);
-
-		// console.log('### CURRENT PATH');
-		// console.log(this.location.path());
 
 		// Get current base path
 		let currentPath: string = this.location.path().split( '/;' )[ 0 ];

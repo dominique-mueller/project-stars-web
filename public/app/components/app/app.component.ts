@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component } from 'angular2/core';
+import { Component, OnInit } from 'angular2/core';
 import { HTTP_PROVIDERS } from 'angular2/http';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig, Router } from 'angular2/router';
 
@@ -33,7 +33,7 @@ import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 		path: '/bookmarks/...'
 	}
 ] )
-export class AppComponent {
+export class AppComponent implements OnInit {
 
 	// TODO: Decide which route to take depending on whether we are logged in or not
 
@@ -43,8 +43,9 @@ export class AppComponent {
 		this.router = router;
 	}
 
-	private doIt(): void {
-		this.router.navigate( [ 'Bookmarks' ] );
+	// TEMP
+	public ngOnInit(): void {
+		this.router.navigate(['Bookmarks']);
 	}
 
 }
