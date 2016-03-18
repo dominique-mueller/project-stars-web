@@ -1,7 +1,9 @@
 /**
  * External imports
  */
-import { Component, Output, EventEmitter } from 'angular2/core';
+import { Component, Output, EventEmitter, OnInit } from 'angular2/core';
+import { Control, ControlGroup, FormBuilder } from 'angular2/common';
+import 'rxjs/add/operator/debounceTime';
 
 /**
  * Internal imports
@@ -22,7 +24,7 @@ import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	selector: 'app-header',
 	templateUrl: './header.component.html'
 } )
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
 	/**
 	 * Search update event
@@ -31,14 +33,14 @@ export class HeaderComponent {
 	private searchUpdate: EventEmitter<{}>;
 
 	/**
+	 * Search form model
+	 */
+	private searchForm: ControlGroup;
+
+	/**
 	 * App service
 	 */
 	private appService: AppService;
-
-	/**
-	 * Search input data
-	 */
-	private search: string;
 
 	/**
 	 * App name
@@ -56,7 +58,7 @@ export class HeaderComponent {
 	/**
 	 * Constructor
 	 */
-	constructor( appService: AppService ) {
+	constructor( appService: AppService, formBuilder: FormBuilder ) {
 
 		// Initialize services
 		this.appService = appService;
@@ -66,6 +68,11 @@ export class HeaderComponent {
 
 		// Initialize event emitter
 		this.searchUpdate = new EventEmitter();
+
+		// Create search form
+		this.searchForm = formBuilder.group( {
+			'search': ''
+		} );
 
 		// Set dropdown values
 		this.dropdownItems = [
@@ -82,6 +89,25 @@ export class HeaderComponent {
 	}
 
 	/**
+	 * Call this when the view gets initialized
+	 */
+	public ngOnInit(): void {
+
+		// Subscribe to search form value updates
+		this.searchForm.valueChanges
+			.debounceTime( 250 ) // Debounce in ms
+			.subscribe(
+				( data: any ) => {
+					this.submitSearch();
+				},
+				( error: any ) => {
+					console.log( 'Angular 2 form error.' ); // TODO
+				}
+			);
+
+	}
+
+	/**
 	 * Dropdown event handler
 	 * @param {string} value Value of the dropdown item
 	 */
@@ -90,23 +116,20 @@ export class HeaderComponent {
 	}
 
 	/**
-	 * Clear search input field
+	 * Reset search form (currently search input only)
 	 */
-	private clear(): void {
-		this.search = '';
+	private reset(): void {
+		let searchInput: any = <Control> this.searchForm.find( 'search' ); // Cast from AbstractControl
+		searchInput.updateValue('');
 	}
 
 	/**
-	 * Submit search update
-	 * @param {string} value Search value
+	 * Submit search form, emit update
 	 */
-	private submitSearch( value: string ): void {
-
-		// Emit search update event
+	private submitSearch(): void {
 		this.searchUpdate.emit( {
-			value: value.toLowerCase()
+			value: this.searchForm.value.search.toLowerCase()
 		} );
-
 	}
 
 }

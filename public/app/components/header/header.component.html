@@ -5,10 +5,10 @@
 		<h1 class="header-product-name">{{ app }}</h1>
 	</a>
 
-	<form class="header-search search" #searchForm="ngForm" (ngSubmit)="submitSearch( searchForm.value.name )">
-		<input class="search-input" type="search" placeholder="Search and filter ..." ngControl="name" (keyup)="searchForm.onSubmit()">
+	<form class="header-search search" [ngFormModel]="searchForm" (ngSubmit)="submitSearch()">
+		<input class="search-input" type="search" placeholder="Search and filter ..." [ngFormControl]="searchForm.find( 'search' )" (blur)="reset()">
 		<app-icon class="search-icon" name="search" color="#CCC" size="24"></app-icon>
-		<button class="button button-invisible search-button-clear" type="button" (click)="clear( searchForm.value.name )">
+		<button class="button button-invisible search-button-clear" type="button" (click)="reset()">
 			<app-icon name="close" color="#CCC" size="20"></app-icon>
 		</button>
 	</form>
