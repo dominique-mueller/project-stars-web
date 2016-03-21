@@ -6,7 +6,7 @@ var bookmark = new mongoose.Schema({
 	description: {type: String},
 	url: {type: String, required:true},
 	favicon: {type: String},
-	tags:[{type: mongoose.Schema.Types.ObjectId, ref: 'Label'}],
+	labels:[{type: mongoose.Schema.Types.ObjectId, ref: 'Label'}],
 	created: {type: Date, default: Date.now},
 	updated: Date,
 	archived: Date,

@@ -1,7 +1,7 @@
 var logger = require('./adapters/logger.js');
-var httpSta
-tus = require('./config.js').httpStatus;
+var httpStatus = require('./config.js').httpStatus;
 var authentication = require('./adapters/authentication.js');
+var sync = require('synchronize');
 var routerBackend = require('express').Router(), 
 	routerFrontend = require('express').Router()
 	routerHTTPRedirect = require('express').Router();
@@ -16,6 +16,14 @@ routerHTTPRedirect.use(function(req, res, next) {
     next(); //continue with route matching
 });
 
+
+routerBackend.use(function(req, res, next){
+	logger.debug('REQ.BODY.testObject:: '+req.body.testObject);
+	logger.debug('req.headers.authorization.Authorization: ' + req.headers.authorization);
+	logger.debug('REQ.PARAM:: '+req.query.testParam);
+
+	next();
+});
 
 //###### Frontend API ######
 
@@ -47,22 +55,44 @@ routerBackend.route('/authenticate/logout')
 		});
 	});
 
+routerBackend.route('/authenticate/accountActivation')
+	.get(function(req, res){
+		//TODO
+	});
+
 routerBackend.route('/users/register')
 	.post(function(req, res){
-		
+		require('./controller/usersController.js')(req, res).post();
 	});
 
 
 // do for all following backend requests
 routerBackend.use(function(req, res, next) {
-    //TODO: verify token
-    next(); //continue with route matching
+	//if the Authorization is set in the request header and this token is vaild (our token & not expired)
+    var message = null;
+    if(req.headers.authorization){
+    	var result = sync.await(authentication.verifyToken(req.headers.authorization));
+    	if(result === true){
+    		next(); //continue with route matching
+    	}
+	    else{	//send access Forbidden message
+	    	console.log(result);
+	    	if(result.prototype.isPrototypeOf(Error) && result.name == 'TokenExpiredError'){
+	    		message = 'Toked expired. Authentication failed.';
+	    	}
+	    }
+    }
+    if(!message){ //authentication failed but it is not a TokenExpiredError
+    	message = 'Token authentication failed.';
+    }
+	res.status(httpStatus.UNAUTHORIZED).send(message);
+	res.end();
 });
 
 
 routerBackend.route('/users')
 	.get(function(req, res){
-		res.send('User test GET');
+		require('./controller/usersController.js')(req, res).getAll();
 	})
 
 	.post(function(req, res){
@@ -73,22 +103,27 @@ routerBackend.route('/users')
 routerBackend.route('/users/:user_id')
 	.get(function(req, res){
 		//Possible value for :user_id is 'tokenUserId', which takes the userId from the authToken
-		if(req.params.user_id == 'tokenUserId'){
-			//TODO Code Review
-			require('./modules/user/users.model.js').findOne(require('./helpers/generalHelpers.js').waitForUserIdFromPromise(authentication.getUserId()));
-		}
-		else{
+		// if(req.params._id == 'tokenUserId'){
+		// 	//TODO Code Review
+		// 	require('./modules/user/users.model.js').findOne(
+		// 		require('./helpers/generalHelpers.js').waitForUserIdFromPromise(
+		// 			authentication.getUserId(req.headers.authorization)
+		// 		)
+		// 	);
+		// }
+		// else{
 
-		}
-		res.send('User GET id: ' + req.params.user_id);
+		// }
+		// res.send('User GET id: ' + req.params._id);
+		require('./controller.usersController.js')(req, res).get();
 	})
 
 	.put(function(req, res){
-
+		require('./controller.usersController.js')(req, res).put();
 	})
 
 	.delete(function(req, res){
-		//Different functionalaty for admins and non-admins
+		require('./controller.usersController.js')(req, res).delete();
 	});
 
 
@@ -102,7 +137,7 @@ routerBackend.route('/bookmarks')
 	});
 routerBackend.route('/bookmarks/:bookmark_id')
 	.get(function(req, res){
-		res.send('User GET id: ' + req.params.bookmark_id);
+		res.send('User GET id: ' + req.query._id);
 	})
 
 	.put(function(req, res){
@@ -110,6 +145,35 @@ routerBackend.route('/bookmarks/:bookmark_id')
 	})
 
 	.delete(function(req, res){
+
+	});
+routerBackend.route('/bookmarks/folders')
+	.get(function(req, res){
+
+	});
+
+routerBackend.route('/folders')
+	.get(function(req, res){
+		
+	})
+
+	.post(function(req, res){
+		
+	});
+routerBackend.route('/folders/:folder_id')
+	.get(function(req, res){
+		
+	})
+
+	.put(function(req, res){
+
+	})
+
+	.delete(function(req, res){
+
+	});
+routerBackend.route('/folders/bookmarks')
+	.get(function(req, res){
 
 	});
 
@@ -124,7 +188,7 @@ routerBackend.route('/devices')
 	});
 routerBackend.route('/devices/:device_id')
 	.get(function(req, res){
-		res.end(req.params.deviceId);
+		res.end(req.query._id);
 	})
 
 	.put(function(req, res){
@@ -146,7 +210,7 @@ routerBackend.route('/settings')
 	});
 routerBackend.route('/settings/:setting_id')
 	.get(function(req, res){
-		res.send(req.params.settingId);
+		res.send(req.query._id);
 	})
 
 	.put(function(req, res){
@@ -160,9 +224,9 @@ routerBackend.route('/settings/:setting_id')
 
 routerBackend.route('/labels')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findAll(authentication.getUserId());
+		var result = require('./modules/label/labels.model.js').findAll(authentication.getUserId(req.headers.authorization));
 		result.then(function(labels){
-			res.json(labels);
+			res.json({data:labels});
 		})
 		.catch(function(reason){
 			res.send("FAILED")
@@ -170,9 +234,9 @@ routerBackend.route('/labels')
 	})
 
 	.post(function(req, res){
-		var result = require('./modules/label/labels.model.js').create(req.body, authentication.getUserId());
+		var result = require('./modules/label/labels.model.js').create(req.body.data, authentication.getUserId(req.headers.authorization));
 		result.then(function(label) {
-			res.json(label);
+			res.json({data:label});
 		})
 		.catch(function() {
 			res.send("FAILED")
@@ -180,9 +244,9 @@ routerBackend.route('/labels')
 	});
 routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findOne(req.body.id);
+		var result = require('./modules/label/labels.model.js').findOne(req.query._id);
 		result.then(function(label){
-			res.json(label);
+			res.json({data:label});
 		})
 		.catch(function(reason){
 			res.send("FAILED")
@@ -191,7 +255,7 @@ routerBackend.route('/labels/:label_id')
 	})
 
 	.put(function(req, res){
-		var result = require('./modules/label/labels.model.js').update(req.body);
+		var result = require('./modules/label/labels.model.js').update(req.body.data);
 		result.then(function(){
 			res.end();
 		})
@@ -201,7 +265,7 @@ routerBackend.route('/labels/:label_id')
 	})
 
 	.delete(function(req, res){
-		var result = require('./modules/label/labels.model.js').delete(req.body.id);
+		var result = require('./modules/label/labels.model.js').delete(req.body.data._id);
 		result.then(function(msg){
 			res.end();
 		})
@@ -218,7 +282,7 @@ routerHTTPRedirect.route('/api/').all(httpAPIRequest);
 
 routerHTTPRedirect.route('*').all(function(req, res){
 	logger.debug('http standard redirect route');
-    res.redirect(httpStatus.PERMANENT_REDIRECT, 'https://' + req.headers['host'] + req.url);
+    res.redirect(httpStatus.PERMANENT_REDIRECT, 'https://' + req.headers.authorization['host'] + req.url);
 });
 
 

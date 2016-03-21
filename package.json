@@ -16,12 +16,14 @@
     "mongoose": "4.3.x",
     "body-parser": "1.14.x",
     "jsonwebtoken": "5.5.x",
-    "scrypt": "6.0.x"	
+    "scrypt": "6.0.x",
+    "synchronize": "0.9.x"	
   },
   "devDependencies": {
     "chai": "3.5.x",
     "jasmine": "2.4.x",
     "mocha": "2.4.x",
-    "chai-as-promised": "5.2.x"
+    "chai-as-promised": "5.2.x",
+    "mockery": "x.x.x"
   }
 }

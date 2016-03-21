@@ -34,8 +34,8 @@ module.exports = {
 	update: function(labelData){
 		logger.debug('update label. param labelData: ' + labelData);
 		return new Promise(function(resolve, reject){
-			var labelId = labelData.id; // safe the label id
-			delete labelData.id; //remove the label id from the data set, because it isn't needed
+			var labelId = labelData._id; // safe the label id
+			delete labelData._id; //remove the label id from the data set, because it isn't needed
 			Label.findByIdAndUpdate(labelId, labelData, {new:true}, function(err){
 				if(err){
 					logger.debug('failed to update label');

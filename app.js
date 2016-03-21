@@ -1,8 +1,8 @@
-
 //DEPENDENCIES
 
 var os = require('os');
 var fs = require('fs');
+require('es6-promise').polyfill();
 // web server requirements
 var https = require('https');
 var express = require('express');

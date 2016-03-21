@@ -4,9 +4,9 @@ module.exports = {
 	getMongooseInputObject: function(schemaName, data){
 		var schema = schemas[schemaName];
 		var inputData = {};
-		var reqPaths = schema.requiredPaths;
+		var paths, reqPaths = schema.paths, schema.requiredPaths;
 
-		for(var i = 0, i < reqPaths.length, i++){
+		for(var i = 0; i < reqPaths.length; i++){
 			if(data.hasOwnProperty(reqPaths[i])){
 				inputData[reqPaths[i]] = data[reqPaths[i]];
 			}
@@ -14,6 +14,7 @@ module.exports = {
 				throw new Error("required property is missing in data: " + reqPaths[i]);
 			}
 		}
+		// for(var i = 0; i < )
 
 		schema.eachPath(additionalInputData);
 		/*
