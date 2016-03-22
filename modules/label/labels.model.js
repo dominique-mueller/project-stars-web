@@ -4,29 +4,23 @@ var logger = require('../../adapters/logger.js');
 var errorHandler = require('../../helpers/errorHandler.js');
 
 module.exports = {
-	create: function(labelData, userIdPromise) {
+	create: function(labelData, userId) {
 		logger.debug('create Label. param labelData:' + labelData.name + '::' + labelData.color + '::'+userId);
-		return new Promise(function(resolve, reject){
-			userIdPromise.then(function(userId){	
-				var label = new Label({
-					name: labelData.name,
-					color: labelData.color,
-					owner: userId,
-				});
-				label.save(function(err, label){
-					if(err){
-						logger.debug('failed to create label');
-						reject(err);
-					}
-					else{
-						logger.debug('label created: ' + label);
-						resolve(label);
-					}
-				});
-			})
-			.catch(function(err){
-				logger.error("Failed to get userId in label create");
-				reject(err);
+		return new Promise(function(resolve, reject){	
+			var label = new Label({
+				name: labelData.name,
+				color: labelData.color,
+				owner: userId,
+			});
+			label.save(function(err, label){
+				if(err){
+					logger.debug('failed to create label');
+					reject(err);
+				}
+				else{
+					logger.debug('label created: ' + label);
+					resolve(label);
+				}
 			});
 		});
 	},
@@ -77,23 +71,17 @@ module.exports = {
 		});
 	},
 
-	findAll: function(userIdPromise){
+	findAll: function(userId){
 		logger.debug('findAll labels with userId: ' + userId);
 		return new Promise(function(resolve, reject){
-			userIdPromise.then(function(userId){	
-				Label.find({owner:userId}, function(err, labels){
-					if(err){
-						reject(err);
-					}
-					else{
-						logger.debug("these labels were found: " + JSON.stringify(labels));
-						resolve(labels);
-					}
-				});
-			})
-			.catch(function(err){
-				logger.error("Failed to get userId in label findAll");
-				reject(err);
+			Label.find({owner:userId}, function(err, labels){
+				if(err){
+					reject(err);
+				}
+				else{
+					logger.debug("these labels were found: " + JSON.stringify(labels));
+					resolve(labels);
+				}
 			});
 		});
 	}

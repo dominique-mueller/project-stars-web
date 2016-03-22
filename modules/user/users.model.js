@@ -17,9 +17,19 @@ module.exports = {
 		});
 	},
 
-	update: function(userData){
-		var userId = userData._id; // safe the user id
-		delete userData._id; //remove the user id from the data set, because it isn't needed
+	update: function(userId, userData){
+		return new Promise(function(resolve, reject){
+			User.findByIdAndUpdate(userId, userData, {new:true}, function(err){
+				if(err){
+					logger.debug('failed to update user');
+					reject(err);	
+				}
+				else{
+					logger.debug('user updated');
+					resolve();
+				}
+			});
+		});
 	},
 
 	delete: function(userId){

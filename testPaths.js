@@ -1,13 +1,63 @@
 require('es6-promise').polyfill();
 var auth = require('./adapters/authentication.js');
+var User = require('./modules/schemaExport.js').User;
 
-// var test = auth.convertRawPassword('right', 'right');
-// test.then(function(result){
-// 	console.log(result);
-// })
-// .catch(function(err){
-// 	console.log(err);
-// });
+
+
+// function MyClass(){
+// 	this.publicAttribute;
+// 	var privateAttrbute;
+// 	var the = this; 
+
+// 	function privateFunction(){
+// 		console.log('I am here in the private function');
+// 		console.log('publicAttribute: ' + the.publicAttribute);
+// 		console.log('privateAttribute: ' + privateAttrbute);
+// 	};
+
+// 	this.thisPrivateFunction = function(){
+// 		console.log('I am here in the this private function');
+// 		console.log('publicAttribute: ' + this.publicAttribute);
+// 		console.log('privateAttribute: ' + privateAttrbute);
+// 		privateFunction();
+// 	};
+
+// 	this.thisPrivateFunctionTwo = function(){
+// 		console.log('something');
+// 	};
+
+// 	console.log('I am the contructor');
+// 	this.publicAttribute = 5;
+// 	privateAttrbute = 10;
+// }
+
+
+// MyClass.prototype.publicFunction = function(){
+// 	console.log('I am here in the public function');
+// 	console.log('publicAttribute: ' + this.publicAttribute);
+// 	//console.log('privateAttribute: ' + privateAttrbute);
+// 	// privateFunction();
+// 	this.thisPrivateFunction();
+// }
+
+
+// var myClass = new MyClass();
+// myClass.publicFunction();
+// // myClass.thisPrivateFunction();
+
+// console.log('myClass pub Attr:' + myClass.publicAttribute);
+// console.log('myClass priv Attr: ' + myClass.privateAttribute);
+
+
+
+
+
+
+
+
+
+
+
 
 var jwt = require('jsonwebtoken');
 var scrypt = require('scrypt');
@@ -16,11 +66,11 @@ var secret = require('./config.js').authentication.secret;
 var sync = require('synchronize');
 
 // var token =  jwt.sign({
-// 	userId: 1234567890,
+// 	userId: new User()._id,
 // 	admin: true,
-// }, secret,{expiresIn: 1440});
+// }, secret,{expiresIn: '90d'});
 
-var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEyMzQ1Njc4OTAsImFkbWluIjp0cnVlLCJpYXQiOjE0NTgxMzAwNTksImV4cCI6MTQ1ODEzMTQ5OX0.pxoxLRYLl_Vy4FtnfTztijHSbwzb4T0S1OWQdKsNnBs';
+var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YWI0NGE1MGU4ODExNTEiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDU4NjQ2Nzg2LCJleHAiOjE0NjY0MjI3ODZ9.JlmMUO9e5_ozs-1O7lXQSdZINfFhRFxygs7K2e8XLLw';
 
 console.log('Token: ' + token);
 var getDecodePromise = function (){
@@ -51,13 +101,31 @@ var fullfilDecodePromise = function(callback){
 }
 
 
-var result = sync.await(fullfilDecodePromise(sync.defer()));
-console.log('Awaited result: ' + result);
+// //var result = sync.await(fullfilDecodePromise(sync.defer()));
+// //console.log('Awaited result: ' + result);
 
 result = null;
 fullfilDecodePromise(function(resultCallback){
 	console.log('Not awaited result: ' + resultCallback);
 });
+
+
+
+
+
+
+
+
+
+
+
+// var test = auth.convertRawPassword('right', 'right');
+// test.then(function(result){
+// 	console.log(result);
+// })
+// .catch(function(err){
+// 	console.log(err);
+// });
 
 
 

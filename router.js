@@ -1,6 +1,7 @@
 var logger = require('./adapters/logger.js');
 var httpStatus = require('./config.js').httpStatus;
-var authentication = require('./adapters/authentication.js');
+var authenticationReq = require('./adapters/authentication.js');
+var authentication;
 var sync = require('synchronize');
 var routerBackend = require('express').Router(), 
 	routerFrontend = require('express').Router()
@@ -18,10 +19,10 @@ routerHTTPRedirect.use(function(req, res, next) {
 
 
 routerBackend.use(function(req, res, next){
-	logger.debug('REQ.BODY.testObject:: '+req.body.testObject);
-	logger.debug('req.headers.authorization.Authorization: ' + req.headers.authorization);
-	logger.debug('REQ.PARAM:: '+req.query.testParam);
-
+	authentication = new authenticationReq();
+// 	logger.debug('REQ.BODY.testObject:: '+req.body.testObject);
+// 	logger.debug('req.headers.authorization.Authorization: ' + req.headers.authorization);
+// 	logger.debug('REQ.PARAM:: '+req.query.testParam);
 	next();
 });
 
@@ -36,7 +37,7 @@ routerFrontend.get('',function(req, res){
 
 routerBackend.route('/authenticate/login')
 	.post(function(req, res){
-		var result = require('./adapters/authentication.js').login();
+		var result = authentication.login();
 		result.then(function(){
 
 		})
@@ -46,7 +47,7 @@ routerBackend.route('/authenticate/login')
 	});
 routerBackend.route('/authenticate/logout')
 	.delete(function(req, res){
-		var result = require('./adapters/authentication.js').logout();
+		var result = authentication.logout();
 		result.then(function(){
 			
 		})
@@ -62,37 +63,64 @@ routerBackend.route('/authenticate/accountActivation')
 
 routerBackend.route('/users/register')
 	.post(function(req, res){
-		require('./controller/usersController.js')(req, res).post();
+		require('./controller/usersController.js')(req, res, authentication).post();
 	});
 
 
 // do for all following backend requests
 routerBackend.use(function(req, res, next) {
+	// logger.debug('authenticatie the token');
 	//if the Authorization is set in the request header and this token is vaild (our token & not expired)
     var message = null;
     if(req.headers.authorization){
-    	var result = sync.await(authentication.verifyToken(req.headers.authorization));
-    	if(result === true){
-    		next(); //continue with route matching
-    	}
-	    else{	//send access Forbidden message
-	    	console.log(result);
-	    	if(result.prototype.isPrototypeOf(Error) && result.name == 'TokenExpiredError'){
-	    		message = 'Toked expired. Authentication failed.';
-	    	}
-	    }
+    	// logger.debug('authorization header is set');
+    	authentication.setToken(req.headers.authorization, function(err){
+    		// logger.debug('in the callback function of authentication.setToken');
+    		if(err){ //Everything in this if body is error handling and redirecting
+    			logger.debug('setToken threw error');
+    			if(err.name == 'TokenExpiredError'){
+    				//TODO: Redirect + info message
+    				message = 'Toked expired. Authentication failed.';
+    				// res.redirect(httpStatus.PERMANENT_REDIRECT, 'https://stars-web.de/login');
+    			}
+    			else{
+    				message = 'Token authentication failed.';
+    			}
+    			res.status(httpStatus.UNAUTHORIZED).send(message);
+				res.end();
+    		}
+    		else{ //token is valid - not expired and from this website - 
+    			logger.debug('authentication successful!' + authentication.isAdmin);
+    			next(); //continue with route matching
+    		}
+    	});
     }
-    if(!message){ //authentication failed but it is not a TokenExpiredError
-    	message = 'Token authentication failed.';
-    }
-	res.status(httpStatus.UNAUTHORIZED).send(message);
-	res.end();
+
+ //    var message = null;
+ //    if(req.headers.authorization){
+	// 	authentication.setToken(req.headers.authorization);
+ //    	var result = authentication.tokenVerified;
+ //    	if(result === true){
+ //    		next(); //continue with route matching
+ //    	}
+	//     else{	//send access Forbidden message
+	//     	console.log(result);
+	//     	if(result.prototype.isPrototypeOf(Error) && result.name == 'TokenExpiredError'){
+	//     		message = 'Toked expired. Authentication failed.';
+	//     	}
+	//     }
+ //    }
+ //    if(!message){ //authentication failed but it is not a TokenExpiredError
+ //    	message = 'Token authentication failed.';
+ //    }
+	// res.status(httpStatus.UNAUTHORIZED).send(message);
+	// res.end();
 });
 
 
 routerBackend.route('/users')
 	.get(function(req, res){
-		require('./controller/usersController.js')(req, res).getAll();
+		require('./controller/usersController.js')(req, res, authentication).getAll();
 	})
 
 	.post(function(req, res){
@@ -115,15 +143,15 @@ routerBackend.route('/users/:user_id')
 
 		// }
 		// res.send('User GET id: ' + req.params._id);
-		require('./controller.usersController.js')(req, res).get();
+		require('./controller.usersController.js')(req, res, authentication).get();
 	})
 
 	.put(function(req, res){
-		require('./controller.usersController.js')(req, res).put();
+		require('./controller.usersController.js')(req, res, authentication).put();
 	})
 
 	.delete(function(req, res){
-		require('./controller.usersController.js')(req, res).delete();
+		require('./controller.usersController.js')(req, res, authentication).delete();
 	});
 
 
@@ -224,22 +252,28 @@ routerBackend.route('/settings/:setting_id')
 
 routerBackend.route('/labels')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findAll(authentication.getUserId(req.headers.authorization));
+		logger.debug('/labels request');
+		var result = require('./modules/label/labels.model.js').findAll(authentication.tokenUserId);
 		result.then(function(labels){
 			res.json({data:labels});
+			res.end();
 		})
 		.catch(function(reason){
-			res.send("FAILED")
+			res.send('{"error":"Failed to get Labels"}');
 		});
 	})
 
 	.post(function(req, res){
-		var result = require('./modules/label/labels.model.js').create(req.body.data, authentication.getUserId(req.headers.authorization));
+		// var data = JSON.parse(req.body.data);
+		// logger.debug('REQ.BODY: ' + req.body.data + ' :: data.name: ' + data.name);
+		logger.debug('CREATE LABEL userId: ' + authentication.tokenUserId)
+		var result = require('./modules/label/labels.model.js').create(JSON.parse(req.body.data), authentication.tokenUserId);
 		result.then(function(label) {
 			res.json({data:label});
+			res.end();
 		})
 		.catch(function() {
-			res.send("FAILED")
+			res.send('{"error":"Failed to create Label"}');
 		});
 	});
 routerBackend.route('/labels/:label_id')
@@ -247,30 +281,32 @@ routerBackend.route('/labels/:label_id')
 		var result = require('./modules/label/labels.model.js').findOne(req.query._id);
 		result.then(function(label){
 			res.json({data:label});
+			res.end();
 		})
 		.catch(function(reason){
-			res.send("FAILED")
+			res.send('{"error":"Failed to get Label"}');
 		});
 		// res.send('Label GET id: ' + req.params.label_id);
 	})
 
 	.put(function(req, res){
-		var result = require('./modules/label/labels.model.js').update(req.body.data);
+		var result = require('./modules/label/labels.model.js').update(JSON.parse(req.body.data));
 		result.then(function(){
+			res.status(httpStatus.NO_CONTENT);
 			res.end();
 		})
 		.catch(function(reason){
-			res.send("FAILED")
+			res.send('{"error":"Failed to update Label"}');
 		});
 	})
 
 	.delete(function(req, res){
-		var result = require('./modules/label/labels.model.js').delete(req.body.data._id);
+		var result = require('./modules/label/labels.model.js').delete(JSON.parse(req.body.data)._id);
 		result.then(function(msg){
 			res.end();
 		})
 		.catch(function(reason){
-			res.status(httpStatus.INVALID_INPUT).send("FAILED")
+			res.status(httpStatus.INVALID_INPUT).send('{"error":"Failed to delete Label"}');
 		});
 	});
 
