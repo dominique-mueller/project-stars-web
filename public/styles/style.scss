@@ -41,7 +41,8 @@
 @import "components/site/main";
 
 // LAYER 06: COMPONENTS - BOOKMARK
-@import "components/bookmarks/list";
+@import "components/bookmarks/bookmark";
+@import "components/bookmarks/label";
 @import "components/bookmarks/directory";
 
 // EXTRA: TEMP (TODO: remove me some day)

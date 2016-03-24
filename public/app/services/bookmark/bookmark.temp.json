@@ -6,17 +6,20 @@
 				{
 					"id": 7,
 					"title": "Angular 2",
-					"url": "https://www.angular.io/"
+					"url": "https://www.angular.io/",
+                    "labels": [ 0, 1 ]
 				},
 				{
 					"id": 10,
 					"title": "IMDb",
-					"url": "http://www.imdb.com/"
+					"url": "http://www.imdb.com/",
+                    "labels": [ 1 ]
 				},
 				{
 					"id": 11,
 					"title": "GitHub",
-					"url": "https://github.com/"
+					"url": "https://github.com/",
+                    "labels": [ 0, 1 ]
 				},
 				{
 					"id": 12,

@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, OnDestroy } from 'angular2/core';
-import { Router, RouteParams, Location } from 'angular2/router';
+import { Router, RouteParams } from 'angular2/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/forkJoin';
@@ -11,6 +11,7 @@ import 'rxjs/add/observable/forkJoin';
  * Internal imports
  */
 import { BookmarkService, Directory, Bookmark } from '../../services/bookmark/bookmark.service';
+import { LabelService, Label } from '../../services/label/label.service';
 import { BookmarkSearchPipe } from './bookmark_search.pipe';
 import { BookmarkFlatenPipe } from './bookmark_flaten.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -40,7 +41,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 * Route params service
 	 */
 	private routeParams: RouteParams;
-	private location: Location;
 
 	/**
 	 * Bookmark service
@@ -48,14 +48,14 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	private bookmarkService: BookmarkService;
 
 	/**
+	 * Label service
+	 */
+	private labelService: LabelService;
+
+	/**
 	 * Service subcription
 	 */
 	private serviceSubscription: Subscription;
-
-	/**
-	 * Current folder path
-	 */
-	private currentPath: string;
 
 	/**
 	 * Bookmarks
@@ -67,6 +67,19 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	private folders: Directory[];
 
+	/**
+	 * Labels
+	 */
+	private labels: Label[];
+
+	/**
+	 * Current folder path
+	 */
+	private currentPath: string;
+
+	/**
+	 * Search value
+	 */
 	private searchValue: string;
 
 	/**
@@ -74,12 +87,13 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 * @param {Router}          router          Router service
 	 * @param {RouteParams}     routeParams     Route params service
 	 * @param {BookmarkService} bookmarkService Bookmark service
+	 * @param {LabelService}    labelService    Label service
 	 */
-	constructor( router: Router, routeParams: RouteParams, location: Location, bookmarkService: BookmarkService ) {
+	constructor( router: Router, routeParams: RouteParams, bookmarkService: BookmarkService, labelService: LabelService ) {
 		this.router = router;
 		this.routeParams = routeParams;
-		this.location = location;
 		this.bookmarkService = bookmarkService;
+		this.labelService = labelService;
 		this.currentPath = '';
 		this.searchValue = '';
 	}
@@ -121,12 +135,18 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		}
 
 		// Setup bookmarks subscription
+		// TODO: Split this obervable
 		this.serviceSubscription = Observable
 			.forkJoin(
-				this.bookmarkService.bookmarks
+				this.bookmarkService.bookmarks,
+				this.labelService.labels
 			)
 			.subscribe(
-				( data: Array<Directory[]> ) => {
+				( data: any[] ) => {
+
+					console.log('### LABELS');
+					console.log(data[ 1 ]);
+					this.labels = data[ 1 ];
 
 					// Get bookmarks depending on the current path, navigate to root on error
 					this.bookmarkService.getBookmarksByPath( data[ 0 ], this.currentPath )
@@ -144,8 +164,9 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 				}
 			);
 
-		// Load bookmarks
+		// Load bookmarks and labels
 		this.bookmarkService.loadBookmarks();
+		this.labelService.loadLabels();
 
 	}
 

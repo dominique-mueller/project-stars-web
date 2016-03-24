@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
  * Internal imports
  */
 import { BookmarkService, Directory } from '../../services/bookmark/bookmark.service';
+import { LabelService } from '../../services/label/label.service';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { HeaderComponent } from '../header/header.component';
 import { BookmarkListComponent } from '../bookmark_list/bookmark_list.component';
@@ -28,7 +29,8 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
 		BookmarkRouterOutlet
 	],
 	providers: [
-		BookmarkService
+		BookmarkService,
+		LabelService
 	],
 	selector: 'app-bookmarks',
 	templateUrl: './bookmarks.component.html'

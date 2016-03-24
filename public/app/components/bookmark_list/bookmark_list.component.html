@@ -5,13 +5,30 @@
 			<div class="folder-title">{{ folder.path }}</div>
 		</a>
 	</li>
+
+
+
+
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
-		<a class="bookmark-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
-			<div class="bookmark-icon"></div>
-			<div class="bookmark-title">{{ bookmark.title }}</div>
-			<div class="bookmark-url">{{ bookmark.url }}</div>
+		<a class="bookmark-item-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
+			<!-- <div class="bookmark-item-icon"></div> -->
+			<img class="bookmark-item-icon" src="https://angular.io/favicon.ico">
+			<div class="bookmark-item-content">
+				<span class="bookmark-item-title">{{ bookmark.title }}</span>
+				<ul class="bookmark-item-labels">
+					<li class="bookmark-item-label" *ngFor="#label of bookmark.labels" [style.backgroundColor]="labels[ label ].color">
+						{{ labels[ label ].name }}
+					</li>
+				</ul>
+			</div>
+			<div class="bookmark-item-url"><strong style="color: #666;">{{ bookmark.url }}</strong>sub/site/here</div>
 		</a>
 	</li>
+
+
+
+
+
 </ul>
 
 <ul *ngIf="searchValue.length > 0">

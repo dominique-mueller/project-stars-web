@@ -57,7 +57,7 @@ export class BookmarkService {
 	private appService: AppService;
 
 	/**
-	 * Details about ongoing requests (for preventing multiple parallel requests)
+	 * Details about ongoing requests (prevents multiple parallel requests)
 	 */
 	private isDoingHttpRequests: {
 		get: boolean
@@ -98,7 +98,7 @@ export class BookmarkService {
 	 */
 	public loadBookmarks( preferCached: boolean = true ): void {
 
-		// Precalc bookmarks length
+		// Precalc numbero of bookmarks
 		let numberOfBookmarks: number = this.bookmarkStore.bookmarks.length;
 
 		// Check 1:
@@ -118,10 +118,10 @@ export class BookmarkService {
 		// Load fresh data from the server
 		if ( !preferCached || numberOfBookmarks === 0 ) {
 
-			// Starting http request
+			// Start with http request
 			this.isDoingHttpRequests.get = true;
 
-			// Then make the HTTP request
+			// Then we make the HTTP request
 			this.http
 
 				// Get data from API

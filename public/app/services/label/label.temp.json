@@ -3,12 +3,12 @@
 		{
 			"id": 0,
 			"name": "study",
-			"color": "red"
+			"color": "#4F86C6"
 		},
 		{
 			"id": 1,
 			"name": "important",
-			"color": "red"
+			"color": "#754F44"
 		}
 	]
 }

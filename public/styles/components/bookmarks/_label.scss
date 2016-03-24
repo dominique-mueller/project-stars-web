@@ -1,0 +1,23 @@
+// COMPONENTS: BOOKMARKS LABEL
+
+.bookmark-item-labels {
+	display: inline-block;
+	margin-left: .7rem;
+	transform-origin: left center;
+	transition: transform $anim-speed-fast $anim-easing;
+}
+
+.bookmark-item-label {
+	display: inline-block;
+	margin-top: .2rem;
+	margin-left: .42rem;
+	padding-right: .8rem;
+	padding-left: .8rem;
+	border-radius: .1rem;
+	color: $color-seashell;
+	font-size: 1.1rem;
+	font-weight: $font-weight-regular;
+	letter-spacing: .01rem;
+	line-height: 2rem;
+	vertical-align: top;
+}
