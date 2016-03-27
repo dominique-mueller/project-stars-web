@@ -5,16 +5,14 @@ import { Component, OnInit, OnDestroy } from 'angular2/core';
 import { Router, RouteParams } from 'angular2/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/combineLatest';
 
 /**
  * Internal imports
  */
-import { BookmarkService, Directory, Bookmark } from '../../services/bookmark/bookmark.service';
-import { LabelService, Label } from '../../services/label/label.service';
-import { BookmarkSearchPipe } from './bookmark_search.pipe';
-import { BookmarkFlatenPipe } from './bookmark_flaten.pipe';
-import { IconComponent } from '../../shared/icon/icon.component';
+import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
+import { FolderService, IFolder } from './../../services/folder/folder.service';
+import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
  * Bookmark list component
@@ -22,10 +20,6 @@ import { IconComponent } from '../../shared/icon/icon.component';
 @Component( {
 	directives: [
 		IconComponent
-	],
-	pipes: [
-		BookmarkSearchPipe,
-		BookmarkFlatenPipe
 	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark_list.component.html'
@@ -50,27 +44,22 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	/**
 	 * Label service
 	 */
-	private labelService: LabelService;
+	private folderService: FolderService;
 
 	/**
-	 * Service subcription
+	 * Service subscription reference
 	 */
 	private serviceSubscription: Subscription;
 
 	/**
 	 * Bookmarks
 	 */
-	private bookmarks: Bookmark[];
+	private bookmarks: IBookmark[];
 
 	/**
 	 * Folders
 	 */
-	private folders: Directory[];
-
-	/**
-	 * Labels
-	 */
-	private labels: Label[];
+	private folders: IFolder[];
 
 	/**
 	 * Current folder path
@@ -78,24 +67,16 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	private currentPath: string;
 
 	/**
-	 * Search value
+	 * Constructor - TODO: Docs
 	 */
-	private searchValue: string;
-
-	/**
-	 * Constructor
-	 * @param {Router}          router          Router service
-	 * @param {RouteParams}     routeParams     Route params service
-	 * @param {BookmarkService} bookmarkService Bookmark service
-	 * @param {LabelService}    labelService    Label service
-	 */
-	constructor( router: Router, routeParams: RouteParams, bookmarkService: BookmarkService, labelService: LabelService ) {
+	constructor(
+		router: Router, routeParams: RouteParams,
+		bookmarkService: BookmarkService, folderService: FolderService
+	) {
 		this.router = router;
 		this.routeParams = routeParams;
 		this.bookmarkService = bookmarkService;
-		this.labelService = labelService;
-		this.currentPath = '';
-		this.searchValue = '';
+		this.folderService = folderService;
 	}
 
 	/**
@@ -103,70 +84,44 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		// TODO: Show a loading / transition animation ?
+		// Get current route
+		this.currentPath = ( this.routeParams.get( '*' ) || '' ).toLowerCase();
 
-		// Set path and search params
-		if ( Object.keys( this.routeParams.params ).length > 0 ) {
+		// Get folders and bookmarks from their services
+		this.serviceSubscription = Observable.combineLatest(
+			this.folderService.folders,
+			this.bookmarkService.bookmarks
+		).subscribe(
+			( data: any ) => {
 
-			let routeParams: any = this.routeParams.get( '*' );
-			if ( routeParams !== null ) {
+				// Wait until we have all date (no fetching is going on any longer)
+				if ( !this.folderService.isFetching && !this.bookmarkService.isFetching ) {
 
-				// One of the bookmark subfolders, maybe searching
-				let splitParams: string[] = routeParams.split( '/;' );
-				this.currentPath = splitParams[0];
-				if ( splitParams.length > 1 ) {
-					this.searchValue = splitParams[1].split('=')[1]; // TODO: Better split
+					// Get the current folder
+					let currentFolder: IFolder = this.folderService.getFolderByPath( data[ 0 ], this.currentPath );
+
+					// Error Handling:
+					// Check if we were able to find the path, if not the path doesn't exist
+					if ( typeof currentFolder === 'undefined' ) {
+						this.router.navigateByUrl( 'bookmarks' ); // TODO: Show some notification?
+					} else {
+
+						// Get folders for this path
+						this.folders = this.folderService.getFoldersByFolderId( data[ 0 ], currentFolder.id );
+
+						// Get bookmarks for this path
+						this.bookmarks = this.bookmarkService.getBookmarksByFolderId( data[ 1 ], currentFolder.id );
+
+					}
+
 				}
 
-			} else {
-
-				// Root bookmark folder, searching
-				this.currentPath = '';
-				this.searchValue = this.routeParams.get( 'value' ); // TODO: Refactoring
-
+			},
+			( error: any ) => {
+				console.log('!! COMPONENT ERROR'); // TODO: Better error handling
+				console.log(error);
 			}
-
-		} else {
-
-			// Root bookmarks folder, no searching
-			this.currentPath = '';
-			this.searchValue = '';
-
-		}
-
-		// Setup bookmarks subscription
-		// TODO: Split this obervable
-		this.serviceSubscription = Observable
-			.forkJoin(
-				this.bookmarkService.bookmarks,
-				this.labelService.labels
-			)
-			.subscribe(
-				( data: any[] ) => {
-
-					console.log('### LABELS');
-					console.log(data[ 1 ]);
-					this.labels = data[ 1 ];
-
-					// Get bookmarks depending on the current path, navigate to root on error
-					this.bookmarkService.getBookmarksByPath( data[ 0 ], this.currentPath )
-						.then( ( result: Directory ) => {
-							this.bookmarks = result.bookmarks;
-							this.folders = result.folders;
-						} )
-						.catch( () => {
-							this.router.navigateByUrl( 'bookmarks' );
-						} );
-
-				},
-				( error: any ) => {
-					console.log( 'Component error message' ); // TODO
-				}
-			);
-
-		// Load bookmarks and labels
-		this.bookmarkService.loadBookmarks();
-		this.labelService.loadLabels();
+		);
 
 	}
 
@@ -175,7 +130,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnDestroy(): void {
 
-		// Unsubscribe from all services
+		// Unsubscribe from all services (free resources)
 		this.serviceSubscription.unsubscribe();
 
 	}
@@ -186,16 +141,16 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	private goToFolder( folderName: string ): void {
 
-		// Create new router url (in lower case, of course)
-		let url: string;
+		// Create new route url, again special treatment for the root bookmarks folder here
+		let routeUrl: string;
 		if ( this.currentPath === '' ) {
-			url = `bookmarks/${ folderName.toLowerCase() }`;
+			routeUrl = `bookmarks/${ folderName.toLowerCase() }`;
 		} else {
-			url = `bookmarks/${ this.currentPath }/${ folderName.toLowerCase() }`;
+			routeUrl = `bookmarks/${ this.currentPath }/${ folderName.toLowerCase() }`;
 		}
 
 		// Navigate to the created url
-		this.router.navigateByUrl( url );
+		this.router.navigateByUrl( routeUrl );
 
 	}
 

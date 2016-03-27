@@ -57,7 +57,7 @@ export const icons = gulp.task( 'setup:index', () => {
 /**
  * Gulp task: Setup vendor files
  */
-export const html = gulp.task( 'setup:vendor', () => {
+export const vendor = gulp.task( 'setup:vendor', () => {
 
 	// Copy vendor files
 	return gulp
@@ -68,8 +68,26 @@ export const html = gulp.task( 'setup:vendor', () => {
 			'node_modules/rxjs/bundles/Rx.js',
 			'node_modules/angular2/bundles/angular2.dev.js',
 			'node_modules/angular2/bundles/http.dev.js',
-			'node_modules/angular2/bundles/router.dev.js'
+			'node_modules/angular2/bundles/router.dev.js',
+			'node_modules/@ngrx/store/dist/*.js'
 		] )
 		.pipe( gulp.dest( config.paths.app.vendor ) );
+
+} );
+
+/**
+ * Gulp task: Setup temp api data
+ */
+export const api = gulp.task( 'setup:api', () => {
+
+	// Copy data files
+	return gulp
+
+		.src( [
+			'public/app/services/bookmark/bookmarks.mock.json',
+			'public/app/services/folder/folders.mock.json'
+			// 'public/app/services/label/label.temp.json'
+		] )
+		.pipe( gulp.dest( config.paths.project.dest ) );
 
 } );

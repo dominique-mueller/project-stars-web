@@ -4,11 +4,14 @@
 import { Component, OnInit } from 'angular2/core';
 import { HTTP_PROVIDERS } from 'angular2/http';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig } from 'angular2/router';
+import { provideStore } from '@ngrx/store';
 
 /**
  * Internal imports
  */
 import { AppService } from '../../services/app/app.service';
+import { bookmarks } from './../../services/bookmark/bookmark.store';
+import { folders, selectedFolder } from './../../services/folder/folder.store';
 import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 
 /**
@@ -21,6 +24,7 @@ import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 	providers: [
 		HTTP_PROVIDERS,
 		ROUTER_PROVIDERS,
+		provideStore( { bookmarks, folders, selectedFolder } ),
 		AppService
 	],
 	selector: 'app',

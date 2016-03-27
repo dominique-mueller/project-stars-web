@@ -26,7 +26,7 @@ import * as typescript 		from './tools/gulp_tasks/typescript';
 gulp.task( 'build:dev', ( done ) => {
 	runSequence(
 		[ 'env:clean' ],
-		[ 'setup:index', 'setup:vendor', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'setup:vendor', 'setup:api', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );

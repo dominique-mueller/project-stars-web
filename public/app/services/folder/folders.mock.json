@@ -1,0 +1,33 @@
+{
+	"data": [
+		{
+			"id": 0,
+			"name": "Bookmarks",
+			"position": 1
+		},
+		{
+			"id": 1,
+			"name": "Searching",
+			"path": 0,
+			"position": 2
+		},
+		{
+			"id": 2,
+			"name": "Favourites",
+			"path": 0,
+			"position": 1
+		},
+		{
+			"id": 3,
+			"name": "News",
+			"path": 2,
+			"position": 2
+		},
+		{
+			"id": 4,
+			"name": "Social",
+			"path": 2,
+			"position": 1
+		}
+	]
+}

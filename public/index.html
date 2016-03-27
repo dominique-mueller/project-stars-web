@@ -25,7 +25,14 @@
 				'/app': {
 					format: 'register',
 					defaultExtension: 'js'
+				},
+				'@ngrx/store': {
+					format: 'cjs',
+					main: 'index.js'
 				}
+			},
+			map: {
+				'@ngrx/store': 'http://localhost:3000/vendor'
 			}
 		} );
 		System.import( '/app/main.js' )

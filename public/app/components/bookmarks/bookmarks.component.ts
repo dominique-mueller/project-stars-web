@@ -2,18 +2,19 @@
  * External imports
  */
 import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES, RouteConfig, Router } from 'angular2/router';
+import { RouteConfig, Router } from 'angular2/router';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Internal imports
  */
-import { BookmarkService, Directory } from '../../services/bookmark/bookmark.service';
-import { LabelService } from '../../services/label/label.service';
-import { IconComponent } from '../../shared/icon/icon.component';
-import { HeaderComponent } from '../header/header.component';
-import { BookmarkListComponent } from '../bookmark_list/bookmark_list.component';
-import { BookmarkDirectoryComponent } from '../bookmark_directory/bookmark_directory.component';
+import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
+import { FolderService, IFolder } from './../../services/folder/folder.service';
+import { LabelService } from './../../services/label/label.service';
+import { IconComponent } from './../../shared/icon/icon.component';
+import { HeaderComponent } from './../header/header.component';
+import { BookmarkListComponent } from './../bookmark_list/bookmark_list.component';
+import { BookmarkDirectoryComponent } from './../bookmark_directory/bookmark_directory.component';
 import { BookmarkRouterOutlet } from './bookmarks.router';
 
 /**
@@ -21,7 +22,6 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
  */
 @Component( {
 	directives: [
-		ROUTER_DIRECTIVES,
 		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
@@ -30,6 +30,7 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
 	],
 	providers: [
 		BookmarkService,
+		FolderService,
 		LabelService
 	],
 	selector: 'app-bookmarks',
@@ -59,28 +60,43 @@ export class BookmarksComponent implements OnInit {
 	private bookmarkService: BookmarkService;
 
 	/**
+	 * Folder service
+	 */
+	private folderService: FolderService;
+
+	/**
+	 * Bookmarks
+	 */
+	private bookmarks: IBookmark[];
+
+	/**
+	 * Folders
+	 */
+	private folders: IFolder[];
+
+	/**
 	 * Service subscription
 	 */
-	private serviceSubscription: Subscription;
+	// private serviceSubscription: Subscription;
 
 	/**
 	 * Folder structure
 	 */
-	private folders: Directory[];
+	// private folders: Directory[];
 
 	/**
 	 * Currently active path
 	 */
-	private activePath: string[];
+	// private activePath: string[];
 
 	/**
 	 * Constructor
-	 * @param {BookmarkService} bookmarkService Bookmark service
 	 */
-	constructor( router: Router, bookmarkService: BookmarkService ) {
+	constructor( router: Router, bookmarkService: BookmarkService, folderService: FolderService ) {
 		this.router = router;
 		this.bookmarkService = bookmarkService;
-		this.activePath = [ '' ];
+		this.folderService = folderService;
+		// this.activePath = [ '' ];
 	}
 
 	/**
@@ -88,24 +104,33 @@ export class BookmarksComponent implements OnInit {
 	 */
 	public ngOnInit(): void {
 
+		// Fetch initial data from server
+		this.folderService.loadFolders();
+		this.bookmarkService.loadBookmarks();
+
+
+
+
+
+
 		// TODO: Show a loading animation
 
 		// Setup folder structure subscription
-		this.serviceSubscription = this.bookmarkService.bookmarks
-			.subscribe(
-				( data: Directory[] ) => {
+		// this.serviceSubscription = this.bookmarkService.bookmarks
+		// 	.subscribe(
+		// 		( data: Directory[] ) => {
 
-					// Set data (skip bookmark root folder)
-					this.folders = data[ 0 ].folders;
+		// 			// Set data (skip bookmark root folder)
+		// 			this.folders = data[ 0 ].folders;
 
-				},
-				( error: any ) => {
-					console.log( 'Component error message' ); // TODO
-				}
-			);
+		// 		},
+		// 		( error: any ) => {
+		// 			console.log( 'Component error message' ); // TODO
+		// 		}
+		// 	);
 
 		// Get folders
-		this.bookmarkService.loadBookmarks();
+		// this.bookmarkService.loadBookmarks();
 
 	}
 
@@ -114,7 +139,7 @@ export class BookmarksComponent implements OnInit {
 	 * @param {string} path Path of the folder
 	 */
 	private goToFolder( path: string ): void {
-		this.router.navigateByUrl( `bookmarks/${ path.toLowerCase() }` );
+		// this.router.navigateByUrl( `bookmarks/${ path.toLowerCase() }` );
 	}
 
 	/**
@@ -122,7 +147,7 @@ export class BookmarksComponent implements OnInit {
 	 * @param {string} path The all new current path
 	 */
 	private updateCurrentPath( path: string ): void {
-		this.activePath = path.split( '/' );
+		// this.activePath = path.split( '/' );
 	}
 
 	/**
@@ -131,17 +156,17 @@ export class BookmarksComponent implements OnInit {
 	private search( searchParameters: any ): void {
 
 		// Get current base path
-		let basePath: string = '';
-		if ( this.activePath[ 0 ].length !== 0 ) {
-			basePath = `/${ this.activePath.join('/') }`;
-		}
+		// let basePath: string = '';
+		// if ( this.activePath[ 0 ].length !== 0 ) {
+		// 	basePath = `/${ this.activePath.join('/') }`;
+		// }
 
-		// Navigate to route, with or without search parameters
-		if ( searchParameters.value.length === 0 ) {
-			this.router.navigateByUrl( `bookmarks${ basePath }` );
-		} else {
-			this.router.navigateByUrl( `bookmarks${ basePath }/;value=${searchParameters.value}` );
-		}
+		// // Navigate to route, with or without search parameters
+		// if ( searchParameters.value.length === 0 ) {
+		// 	this.router.navigateByUrl( `bookmarks${ basePath }` );
+		// } else {
+		// 	this.router.navigateByUrl( `bookmarks${ basePath }/;value=${searchParameters.value}` );
+		// }
 
 	}
 

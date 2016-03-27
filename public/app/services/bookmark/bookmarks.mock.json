@@ -1,0 +1,103 @@
+{
+	"data": [
+		{
+			"id": 0,
+			"title": "Google",
+			"description": "Google Search Engine",
+			"url": "https://www.google.de/",
+			"labels": [ 1, 2 ],
+			"path": 1,
+			"position": 1
+		},
+		{
+			"id": 1,
+			"title": "Bing",
+			"description": "Microsoft Bing",
+			"url": "https://www.bing.com/",
+			"labels": [ 1 ],
+			"path": 1,
+			"position": 3
+		},
+		{
+			"id": 2,
+			"title": "Yahoo",
+			"description": "Yahoo - The search engine no one uses",
+			"url": "https://de.yahoo.com/",
+			"labels": [ 1, 2 ],
+			"path": 1,
+			"position": 2
+		},
+		{
+			"id": 3,
+			"title": "Angular 2",
+			"description": "Angular 2 - The web framework by Google",
+			"url": "http://www.angular.io",
+			"labels": [],
+			"path": 0,
+			"position": 1
+		},
+		{
+			"id": 4,
+			"title": "IMBd",
+			"description": "The movie database",
+			"url": "http://www.imdb.com/",
+			"labels": [ 2 ],
+			"path": 2,
+			"position": 1
+		},
+		{
+			"id": 5,
+			"title": "t3n Magazin",
+			"description": "t3n Magazin online",
+			"url": "http://www.t3n.de/",
+			"labels": [],
+			"path": 3,
+			"position": 2
+		},
+		{
+			"id": 6,
+			"title": "The Verge",
+			"description": "The Verge - worst Apple fanboys ever",
+			"url": "http://www.theverge.com/",
+			"labels": [ 2 ],
+			"path": 3,
+			"position": 1
+		},
+		{
+			"id": 7,
+			"title": "Dr. Windows",
+			"description": "Your daily windows news",
+			"url": "http://www.drwindows.de/",
+			"labels": [ 1 ],
+			"path": 3,
+			"position": 3
+		},
+		{
+			"id": 8,
+			"title": "Twitter",
+			"description": "Write it all in 140 characters",
+			"url": "https://twitter.com/",
+			"labels": [],
+			"path": 4,
+			"position": 2
+		},
+		{
+			"id": 9,
+			"title": "Facebook",
+			"description": "Mark Zuckerberg did it",
+			"url": "https://www.facebook.com/",
+			"labels": [ 2 ],
+			"path": 4,
+			"position": 1
+		},
+		{
+			"id": 10,
+			"title": "GitHub",
+			"description": "The Open Source Platform",
+			"url": "https://www.github.com",
+			"labels": [],
+			"path": 0,
+			"position": 2
+		}
+	]
+}

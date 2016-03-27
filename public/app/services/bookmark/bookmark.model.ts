@@ -1,61 +1,61 @@
 /**
- * Bookmark model
+ * Bookmark model interface
  */
-export class Bookmark {
+export interface IBookmark {
 
 	/**
 	 * Bookmark ID
 	 */
-	public id: number;
+	id: number;
 
 	/**
 	 * Bookmark title
 	 */
-	public title: string;
+	title: string;
 
 	/**
 	 * Bookmark description
 	 */
-	public description: string;
+	description?: string;
 
 	/**
 	 * Bookmark url
 	 */
-	public url: string;
+	url: string;
 
 	/**
-	 * Bookmark favicon, BASE64 encoded
+	 * Bookmark favicon (base64 encoded image)
 	 */
-	public favicon: string;
+	favicon?: string;
 
 	/**
-	 * List of labels (ids only) assigned to this bookmark
+	 * List of label ids
 	 */
-	public labels: number[];
+	labels?: number[];
 
 	/**
 	 * Time when this bookmark was created
 	 */
-	public created: Date;
+	created: Date;
 
 	/**
 	 * Time when this bookmark was last updated
 	 */
-	public updated: Date;
+	updated?: Date;
 
 	/**
 	 * Time when this bookmark was archived
 	 */
-	public archived: Date;
+	archived?: Date;
 
 	/**
-	 * Full path of this bookmark
+	 * Folder id
 	 */
-	public path: string[];
+	path: number;
 
 	/**
 	 * Bookmark position number
 	 */
-	public position: number;
+	position: number;
 
 }
