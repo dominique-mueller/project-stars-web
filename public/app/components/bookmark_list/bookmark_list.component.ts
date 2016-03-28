@@ -12,7 +12,9 @@ import 'rxjs/add/observable/combineLatest';
  */
 import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
 import { FolderService, IFolder } from './../../services/folder/folder.service';
-import { BookmarkSearchPipe } from './bookmark_search.pipe';
+import { LabelService, ILabel } from './../../services/label/label.service';
+import { SearchPipe } from './search.pipe';
+import { UrlPipe } from './url.pipe';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -23,7 +25,8 @@ import { IconComponent } from './../../shared/icon/icon.component';
 		IconComponent
 	],
 	pipes: [
-		BookmarkSearchPipe
+		SearchPipe,
+		UrlPipe
 	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark_list.component.html'
@@ -46,9 +49,14 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	private bookmarkService: BookmarkService;
 
 	/**
-	 * Label service
+	 * Folder service
 	 */
 	private folderService: FolderService;
+
+	/**
+	 * Label service
+	 */
+	private labelService: LabelService;
 
 	/**
 	 * Service subscription reference
@@ -66,21 +74,33 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	private folders: IFolder[];
 
 	/**
+	 * Labels
+	 */
+	private labels: ILabel[];
+
+	/**
 	 * Current folder path
 	 */
 	private currentPath: string;
 
+	/**
+	 * Search options
+	 */
 	private searchOptions: {
-		isSearching: boolean,
-		value: string
+		isSearching: boolean, // Search status toggle
+		value: string // Search input value
 	};
 
 	/**
-	 * Constructor - TODO: Docs
+	 * Constructor
+	 * @param {Router}          router          Router service
+	 * @param {RouteParams}     routeParams     Route params service
+	 * @param {BookmarkService} bookmarkService Bookmark service
+	 * @param {FolderService}   folderService   Folder service
 	 */
 	constructor(
 		router: Router, routeParams: RouteParams,
-		bookmarkService: BookmarkService, folderService: FolderService
+		bookmarkService: BookmarkService, folderService: FolderService, labelService: LabelService
 	) {
 
 		// Initialize services
@@ -88,6 +108,7 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		this.routeParams = routeParams;
 		this.bookmarkService = bookmarkService;
 		this.folderService = folderService;
+		this.labelService = labelService;
 
 		// Setup
 		this.searchOptions = {
@@ -102,17 +123,32 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		// Get current route
+		// Get current route details
 		this.currentPath = ( this.routeParams.get( '*' ) || '' ).toLowerCase();
 
-		// Get folders and bookmarks from their services
+		// Get labels from its service - TODO: Unsubscribe
+		this.labelService.labels
+			.subscribe(
+				( data: ILabel[] ) => {
+
+					// Set labels as object (for easier access)
+					this.labels = this.labelService.convertLabelListToObject( data );
+
+				},
+				( error: any ) => {
+					console.log('!! COMPONENT ERROR'); // TODO: Better error handling
+					console.log(error);
+				}
+			);
+
+		// Get folders and bookmarks from their services - TODO: Maybe split?
 		this.serviceSubscription = Observable.combineLatest(
 			this.folderService.folders,
 			this.bookmarkService.bookmarks
 		).subscribe(
-			( data: any ) => {
+			( data: [ IFolder[], IBookmark[] ] ) => {
 
-				// Check if weÄre currently searching first
+				// First, check if we're currently searching
 				if ( this.currentPath.length === 0 && Object.keys( this.routeParams.params ).length > 0 ) {
 
 					// Set all folders and bookmarks

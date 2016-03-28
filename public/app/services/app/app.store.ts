@@ -3,6 +3,7 @@
  */
 import { IBookmark } from './../bookmark/bookmark.service';
 import { IFolder } from './../folder/folder.service';
+import { ILabel } from './../label/label.service';
 
 /**
  * App store interface
@@ -10,4 +11,5 @@ import { IFolder } from './../folder/folder.service';
 export interface IAppStore {
 	bookmarks: IBookmark[];
 	folders: IFolder[];
+	labels: ILabel[];
 };

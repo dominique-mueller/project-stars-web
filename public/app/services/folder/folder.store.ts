@@ -14,7 +14,7 @@ import { IFolder } from './folder.model';
 export const ADD_FOLDERS: string = 'ADD_FOLDERS';
 
 /**
- * Folde store (reducer)
+ * Folder store (reducer)
  */
 export const folders: Reducer<IFolder[]> = ( state: IFolder[] = [], action: Action ) => {
 

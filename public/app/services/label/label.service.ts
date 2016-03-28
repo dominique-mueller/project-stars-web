@@ -4,22 +4,21 @@
 import { Injectable } from 'angular2/core';
 import { Http, Response } from 'angular2/http';
 import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/share';
+import { Store, Action } from '@ngrx/store';
 
 /**
  * Internal imports
  */
-import { AppService } from '../app/app.service';
-import { Label } from './label.model';
+import { AppService } from './../app/app.service';
+import { IAppStore } from './../app/app.store';
+import { ILabel } from './label.model';
+import { ADD_LABELS } from './label.store';
 
 /**
  * Exports
  */
-export { Label } from './label.model';
+export { ILabel } from './label.model';
 
 /**
  * Label service
@@ -30,19 +29,12 @@ export class LabelService {
 	/**
 	 * Labels
 	 */
-	public labels: Observable<Label[]>;
+	public labels: Observable<ILabel[]>;
 
 	/**
-	 * Lab lobserver
+	 * Is fetching status flag
 	 */
-	private labelObserver: Observer<Label[]>;
-
-	/**
-	 * Label data store
-	 */
-	private labelStore: {
-		labels: Label[]
-	};
+	public isFetching: boolean;
 
 	/**
 	 * Http service
@@ -55,104 +47,76 @@ export class LabelService {
 	private appService: AppService;
 
 	/**
-	 * Details about ongoing requests (prevents multiple parallel requests)
+	 * App store
 	 */
-	private isDoingHttpRequests: {
-		get: boolean
-	};
+	private store: Store<IAppStore>;
 
 	/**
 	 * Constructor
-	 * @param {Http}       http       Http serfice
-	 * @param {AppService} appService App service
+	 * @param {Http}             http       Http service
+	 * @param {AppService}       appService App service
+	 * @param {Store<IAppStore>} store      App store
 	 */
-	constructor( http: Http, appService: AppService ) {
+	constructor( http: Http, appService: AppService, store: Store<IAppStore> ) {
 
 		// Initialize services
 		this.http = http;
 		this.appService = appService;
+		this.store = store;
 
-		// Create label observable
-		this.labels = new Observable( ( observer: Observer<Label[]> ) => {
-			this.labelObserver = observer;
-		} ).share(); // Make it hot
-
-		// Setup label store
-		this.labelStore = {
-			labels: []
-		};
-
-		// Setup current http requests object
-		this.isDoingHttpRequests = {
-			get: false
-		};
+		// Setup
+		this.labels = store.select( 'labels' );
+		this.isFetching = false;
 
 	}
 
 	/**
-	 * Get all labels
-	 * @param {boolean = true} preferCached Per default cached values are prefered, but setting this to false will
-	 * ensure that we're getting fresh data from the server
+	 * Load labels from server
 	 */
-	public loadLabels( preferCached: boolean = true ): void {
+	public loadLabels(): void {
 
-		// Precalc number of labels
-		let numberOfLabels: number = this.labelStore.labels.length;
+		this.isFetching = true;
 
-		// Check 1:
-		// Return cached labels first (no matter what you do, this will happen every time!)
-		if ( numberOfLabels > 0 ) {
-			this.labelObserver.next( this.labelStore.labels );
-			this.labelObserver.complete();
+		this.http
+
+			// Fetch data from server
+			.get( `${ this.appService.API_URL }/labels.mock.json` )
+
+			// Convert data
+			.map( ( response: Response ) => <ILabel[]> response.json().data )
+
+			// Create action
+			.map( ( payload: ILabel[] ) => ( { type: ADD_LABELS, payload } ) )
+
+			// Dispatch action
+			.subscribe(
+				( action: Action ) => {
+					this.isFetching = false;
+					this.store.dispatch( action );
+				}
+			);
+
+			// TODO: Error handling
+
+	}
+
+	/**
+	 * Convert the label list into an easier to access object
+	 * @param  {ILabel[]} labels Label list
+	 * @return {any}             Label object
+	 */
+	public convertLabelListToObject( labels: ILabel[] ): any {
+
+		// Setup result
+		let result: any = {};
+
+		// Convert array into object
+		for ( const label of labels ) {
+			result[ <number> label.id ] = label;
 		}
 
-		// Check 2:
-		// If someone is already requesting that data, the caller will get it via its subscription automatically
-		if ( this.isDoingHttpRequests.get ) {
-			return;
-		}
-
-		// Check 3:
-		// Load fresh data from the server
-		if ( !preferCached || numberOfLabels === 0 ) {
-
-			// Start with http request
-			this.isDoingHttpRequests.get = true;
-
-			// Then we make the HTTP request
-			this.http
-
-				// Get data from API - TODO
-				.get(`${this.appService.API_URL }/label.temp.json` )
-
-				// Convert data
-				.map( ( response: Response ) => <Label[]> response.json().data )
-
-				// Subscription
-				.subscribe(
-					( data: Label[] ) => {
-
-						// Update label store
-						this.labelStore.labels = data;
-
-						// Push to observable stream
-						this.labelObserver.next( this.labelStore.labels );
-						this.labelObserver.complete();
-
-						// Done with http request
-						this.isDoingHttpRequests.get = false;
-
-					},
-					( error: any ) => {
-
-						// TODO: Service specific error handling
-						console.log(error);
-						this.labelObserver.error(error);
-
-					}
-				);
-
-		}
+		// Return our result
+		return result;
 
 	}
 

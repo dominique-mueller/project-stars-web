@@ -85,8 +85,8 @@ export const api = gulp.task( 'setup:api', () => {
 
 		.src( [
 			'public/app/services/bookmark/bookmarks.mock.json',
-			'public/app/services/folder/folders.mock.json'
-			// 'public/app/services/label/label.temp.json'
+			'public/app/services/folder/folders.mock.json',
+			'public/app/services/label/labels.mock.json'
 		] )
 		.pipe( gulp.dest( config.paths.project.dest ) );
 

@@ -4,12 +4,12 @@
 import { Pipe, PipeTransform } from 'angular2/core';
 
 /**
- * Bookmark search pipe
+ * Search pipe for filtering bookmarks and folders
  */
 @Pipe( {
 	name: 'search'
 } )
-export class BookmarkSearchPipe implements PipeTransform {
+export class SearchPipe implements PipeTransform {
 
 	public transform( value: any[], args: any[] ): any {
 

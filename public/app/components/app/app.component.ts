@@ -12,6 +12,7 @@ import { provideStore } from '@ngrx/store';
 import { AppService } from '../../services/app/app.service';
 import { bookmarks } from './../../services/bookmark/bookmark.store';
 import { folders } from './../../services/folder/folder.store';
+import { labels } from './../../services/label/label.store';
 import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 
 /**
@@ -24,7 +25,11 @@ import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 	providers: [
 		HTTP_PROVIDERS,
 		ROUTER_PROVIDERS,
-		provideStore( { bookmarks, folders } ),
+		provideStore( {
+			bookmarks,
+			folders,
+			labels
+		} ),
 		AppService
 	],
 	selector: 'app',

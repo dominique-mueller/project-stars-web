@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 /**
  * Internal imports
  */
-import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
+import { BookmarkService } from './../../services/bookmark/bookmark.service';
 import { FolderService, IFolder } from './../../services/folder/folder.service';
 import { LabelService } from './../../services/label/label.service';
 import { IconComponent } from './../../shared/icon/icon.component';
@@ -65,6 +65,11 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private folderService: FolderService;
 
 	/**
+	 * Label service
+	 */
+	private labelService: LabelService;
+
+	/**
 	 * Folders
 	 */
 	private folders: IFolder[];
@@ -81,11 +86,22 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {Router}          router          Router service
+	 * @param {BookmarkService} bookmarkService Bookmark service
+	 * @param {FolderService}   folderService   Folder service
+	 * @param {LabelService}    labelService    Label service
 	 */
-	constructor( router: Router, bookmarkService: BookmarkService, folderService: FolderService ) {
+	constructor(
+		router: Router,
+		bookmarkService: BookmarkService, folderService: FolderService, labelService: LabelService
+		) {
+
+		// Initialize services
 		this.router = router;
 		this.bookmarkService = bookmarkService;
 		this.folderService = folderService;
+		this.labelService = labelService;
+
 	}
 
 	/**
@@ -116,6 +132,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		// Fetch initial data from server
 		this.folderService.loadFolders();
 		this.bookmarkService.loadBookmarks();
+		this.labelService.loadLabels();
 
 	}
 
@@ -130,7 +147,8 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Navigate to the requested folder
+	 * Navigate to the requested folder (comes from directory)
+	 * @param {number} folderId Id of the folder we want to navigate to
 	 */
 	private goToFolder( folderId: number ): void {
 
@@ -150,8 +168,8 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Update current path for the directory view
-	 * @param {string} path The all new current path
+	 * Update current folder id (comes from list router outlet)
+	 * @param {string} path Path of the folder we want to navigate to
 	 */
 	private updateActiveFolderId( path: string ): void {
 
@@ -162,6 +180,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Search
+	 * @param {any} searchParameters All search options
 	 */
 	private search( searchParameters: any ): void {
 

@@ -1,21 +1,21 @@
 /**
- * Label model
+ * Label model interface
  */
-export class Label {
+export interface ILabel {
 
 	/**
 	 * Label ID
 	 */
-	public id: Number;
+	id: Number;
 
 	/**
 	 * Label name
 	 */
-	public name: String;
+	name: String;
 
 	/**
 	 * Label color (in HEX)
 	 */
-	public color: String;
+	color: String;
 
 }

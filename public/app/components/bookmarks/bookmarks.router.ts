@@ -35,8 +35,6 @@ export class BookmarkRouterOutlet extends RouterOutlet {
 	 */
 	public activate( instruction: ComponentInstruction ): Promise<any> {
 
-		// this.pathChange.emit( instruction.urlPath.split( '/;' )[ 0 ] );
-
 		// Emit pathChange event (to router outlet parent component)
 		this.pathChange.emit( instruction.urlPath );
 

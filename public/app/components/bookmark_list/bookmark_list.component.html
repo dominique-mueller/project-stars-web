@@ -1,7 +1,7 @@
 <ul>
 
 	<li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Folder search results:</li>
-	<li class="folder-item" *ngFor="#folder of folders | search : 'folders' : searchOptions">
+	<li class="folder-item" *ngFor="#folder of ( folders | search : 'folders' : searchOptions )">
 		<a class="folder-link" (click)="goToFolder( folder.name )">
 			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
 			<div class="folder-title">{{ folder.name }}</div>
@@ -9,18 +9,18 @@
 	</li>
 
 	<li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Bookmark search results:</li>
-	<li class="bookmark-item" *ngFor="#bookmark of bookmarks | search : 'bookmarks' : searchOptions">
+	<li class="bookmark-item" *ngFor="#bookmark of ( bookmarks | search : 'bookmarks' : searchOptions )">
 		<a class="bookmark-item-link" [href]="bookmark.url" target="_blank" rel="noreferrer noopener">
 			<img class="bookmark-item-icon" src="https://angular.io/favicon.ico">
 			<div class="bookmark-item-content">
 				<span class="bookmark-item-title">{{ bookmark.title }}</span>
-				<!-- <ul class="bookmark-item-labels">
-					<li class="bookmark-item-label" *ngFor="#label of bookmark.labels" [style.backgroundColor]="labels[ label ].color">
-						{{ labels[ label ].name }}
+				<ul class="bookmark-item-labels">
+					<li class="bookmark-item-label" *ngFor="#labelId of bookmark.labels" [style.backgroundColor]="labels[ labelId ]?.color">
+						{{ labels[ labelId ]?.name }}
 					</li>
-				</ul> -->
+				</ul>
 			</div>
-			<div class="bookmark-item-url"><strong style="color: #666;">{{ bookmark.url }}</strong>sub/site/here</div>
+			<div class="bookmark-item-url" [innerHTML]="bookmark.url | url"></div>
 		</a>
 	</li>
 

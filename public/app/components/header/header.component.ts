@@ -8,10 +8,10 @@ import 'rxjs/add/operator/debounceTime';
 /**
  * Internal imports
  */
-import { AppService } from '../../services/app/app.service';
-import { IconComponent } from '../../shared/icon/icon.component';
+import { AppService } from './../../services/app/app.service';
+import { IconComponent } from './../../shared/icon/icon.component';
 import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
-	from '../../shared/dropdown/dropdown.component';
+	from './../../shared/dropdown/dropdown.component';
 
 /**
  * Header Component
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
 
 		// Subscribe to search form value updates
 		this.searchForm.valueChanges
-			.debounceTime( 250 ) // Debounce in ms
+			.debounceTime( 150 ) // Debounce in ms
 			.subscribe(
 				( data: any ) => {
 					this.submitSearch();

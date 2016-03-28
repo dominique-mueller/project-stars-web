@@ -26,7 +26,7 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	 * Subfolders of the current directory
 	 */
 	@Input()
-	private folders: any[];
+	private folders: IFolder[];
 
 	/**
 	 * Folder id of the parent folder
@@ -54,7 +54,7 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	/**
 	 * Folders for the current subfolder we're in
 	 */
-	private subfolders: any[];
+	private subfolders: IFolder[];
 
 	/**
 	 * Constructor - TODO: Docs
@@ -76,9 +76,9 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	public ngOnChanges( changes: {
 		[ key: string ]: SimpleChange,
 		folders: SimpleChange
-	} ): any {
+	} ): void {
 
-		// Get subfolders of this folder
+		// Get subfolders of this folder (filter)
 		if ( changes.hasOwnProperty( 'folders' ) && changes.folders.currentValue.length > 0 ) {
 			this.subfolders = this.folderService.getFoldersByFolderId( changes.folders.currentValue, this.parentFolderId );
 		}
@@ -86,7 +86,8 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	}
 
 	/**
-	 * Handle the click on a folder element
+	 * Handle click on a folder element
+	 * @param {number} folderId Id of the requested folder
 	 */
 	private goToFolder( folderId: number ): void {
 

@@ -3,7 +3,7 @@
  */
 import { Component, Input, Output, EventEmitter } from 'angular2/core';
 import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
-import { IconComponent } from '../icon/icon.component';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Exports
@@ -44,8 +44,6 @@ export class DropdownComponent {
 		this.select = new EventEmitter();
 		this.isOpen = false;
 	}
-
-	// Emit event when clicking on dropdown list item
 
 	/**
 	 * Choose a dropdown item

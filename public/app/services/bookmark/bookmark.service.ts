@@ -4,6 +4,7 @@
 import { Injectable } from 'angular2/core';
 import { Http, Response } from 'angular2/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
 
 /**
@@ -84,7 +85,7 @@ export class BookmarkService {
 			// Convert data
 			.map( ( response: Response ) => <IBookmark[]> response.json().data )
 
-			// Create action - TODO: Contant
+			// Create action
 			.map( ( payload: IBookmark[] ) => ( { type: ADD_BOOKMARKS, payload } ) )
 
 			// Dispatch action
