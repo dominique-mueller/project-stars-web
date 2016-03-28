@@ -12,6 +12,7 @@ import 'rxjs/add/observable/combineLatest';
  */
 import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
 import { FolderService, IFolder } from './../../services/folder/folder.service';
+import { BookmarkSearchPipe } from './bookmark_search.pipe';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -20,6 +21,9 @@ import { IconComponent } from './../../shared/icon/icon.component';
 @Component( {
 	directives: [
 		IconComponent
+	],
+	pipes: [
+		BookmarkSearchPipe
 	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark_list.component.html'
@@ -66,6 +70,11 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 */
 	private currentPath: string;
 
+	private searchOptions: {
+		isSearching: boolean,
+		value: string
+	};
+
 	/**
 	 * Constructor - TODO: Docs
 	 */
@@ -73,10 +82,19 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		router: Router, routeParams: RouteParams,
 		bookmarkService: BookmarkService, folderService: FolderService
 	) {
+
+		// Initialize services
 		this.router = router;
 		this.routeParams = routeParams;
 		this.bookmarkService = bookmarkService;
 		this.folderService = folderService;
+
+		// Setup
+		this.searchOptions = {
+			isSearching: false,
+			value: ''
+		};
+
 	}
 
 	/**
@@ -94,23 +112,36 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		).subscribe(
 			( data: any ) => {
 
-				// Wait until we have all date (no fetching is going on any longer)
-				if ( !this.folderService.isFetching && !this.bookmarkService.isFetching ) {
+				// Check if weÄre currently searching first
+				if ( this.currentPath.length === 0 && Object.keys( this.routeParams.params ).length > 0 ) {
 
-					// Get the current folder
-					let currentFolder: IFolder = this.folderService.getFolderByPath( data[ 0 ], this.currentPath );
+					// Set all folders and bookmarks
+					this.folders = data[ 0 ];
+					this.bookmarks = data[ 1 ];
 
-					// Error Handling:
-					// Check if we were able to find the path, if not the path doesn't exist
-					if ( typeof currentFolder === 'undefined' ) {
-						this.router.navigateByUrl( 'bookmarks' ); // TODO: Show some notification?
-					} else {
+					// Set search option
+					this.searchOptions.isSearching = true;
+					this.searchOptions.value = this.routeParams.get( 'value' ) || '';
 
-						// Get folders for this path
-						this.folders = this.folderService.getFoldersByFolderId( data[ 0 ], currentFolder.id );
+				} else {
 
-						// Get bookmarks for this path
-						this.bookmarks = this.bookmarkService.getBookmarksByFolderId( data[ 1 ], currentFolder.id );
+					// Wait until we have all date (no fetching is going on any longer)
+					if ( !this.folderService.isFetching && !this.bookmarkService.isFetching ) {
+
+						// Get the current folder
+						let currentFolder: IFolder = this.folderService.getFolderByPath( data[ 0 ], this.currentPath );
+
+						// Error Handling:
+						// Check if we were able to find the path, if not the path doesn't exist
+						if ( typeof currentFolder === 'undefined' ) {
+							this.router.navigateByUrl( 'bookmarks' ); // TODO: Show some notification?
+						} else {
+
+							// Get folders and bookmarks for this path
+							this.folders = this.folderService.getFoldersByFolderId( data[ 0 ], currentFolder.id );
+							this.bookmarks = this.bookmarkService.getBookmarksByFolderId( data[ 1 ], currentFolder.id );
+
+						}
 
 					}
 

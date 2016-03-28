@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
 	 * Search update event
 	 */
 	@Output()
-	private searchUpdate: EventEmitter<{}>;
+	private search: EventEmitter<{}>;
 
 	/**
 	 * Search form model
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
 		this.app = appService.APP_NAME;
 
 		// Initialize event emitter
-		this.searchUpdate = new EventEmitter();
+		this.search = new EventEmitter();
 
 		// Create search form
 		this.searchForm = formBuilder.group( {
@@ -127,7 +127,7 @@ export class HeaderComponent implements OnInit {
 	 * Submit search form, emit update
 	 */
 	private submitSearch(): void {
-		this.searchUpdate.emit( {
+		this.search.emit( {
 			value: this.searchForm.value.search.toLowerCase()
 		} );
 	}

@@ -86,7 +86,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		this.router = router;
 		this.bookmarkService = bookmarkService;
 		this.folderService = folderService;
-		// this.activePath = [ '' ];
 	}
 
 	/**
@@ -166,18 +165,12 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 */
 	private search( searchParameters: any ): void {
 
-		// Get current base path
-		// let basePath: string = '';
-		// if ( this.activePath[ 0 ].length !== 0 ) {
-		// 	basePath = `/${ this.activePath.join('/') }`;
-		// }
-
-		// // Navigate to route, with or without search parameters
-		// if ( searchParameters.value.length === 0 ) {
-		// 	this.router.navigateByUrl( `bookmarks${ basePath }` );
-		// } else {
-		// 	this.router.navigateByUrl( `bookmarks${ basePath }/;value=${searchParameters.value}` );
-		// }
+		// Navigate to root, add search params
+		if ( searchParameters.value.length === 0 ) {
+			this.router.navigateByUrl( 'bookmarks' );
+		} else {
+			this.router.navigateByUrl( `bookmarks/;value=${ searchParameters.value }` );
+		}
 
 	}
 
