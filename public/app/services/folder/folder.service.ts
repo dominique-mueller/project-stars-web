@@ -12,7 +12,7 @@ import { Store, Action } from '@ngrx/store';
 import { AppService } from './../app/app.service';
 import { IAppStore } from './../app/app.store';
 import { IFolder } from './folder.model';
-import { ADD_FOLDERS, SELECT_FOLDER } from './folder.store';
+import { ADD_FOLDERS } from './folder.store';
 
 /**
  * Exports
@@ -110,56 +110,55 @@ export class FolderService {
 		// Setup result
 		let result: IFolder;
 
-		// Some special treatment for the bookmarks root folder
-		if ( path.length === 0 ) {
+		// We are creating and comparing the full path of each folder with our provided path
+		for ( const folder of folders ) {
 
-			// Get the root bookmark folder
-			for ( const folder of folders ) {
-				if ( folder.id === 0 ) {
-					result = folder;
-					break;
-				}
+			// Compare the calculated and provided paths
+			if ( this.getPathByFolderId( folders, folder.id ) === path) {
+				result = folder;
+				break;
 			}
 
-		} else {
+		}
 
-			// We are creating and comparing the full path of each folder with our provided path
-			for ( const folder of folders ) {
+		// Return our result
+		return result;
 
-				// Skip the root folder
-				if ( folder.id === 0 ) {
-					continue;
-				}
+	}
 
-				// Build together the full folder path
-				let fullFolderPath: string[] = [
-					folder.name
-				];
+	/**
+	 * Get the relative path by a provided folder id
+	 * @param  {IFolder[]} folders  List of all folders
+	 * @param  {number}    folderId Provided folder id
+	 * @return {string}             Relative folder path
+	 */
+	public getPathByFolderId( folders: IFolder[], folderId: number ): string {
 
-				// Save the current folder for when it is the right one
-				let currentFolder: IFolder = folder;
+		// Setup result
+		let result: string = '';
 
-				// Handler to the current path
-				let currentPath: number = folder.path;
+		// Ignore the root folder
+		if ( folderId !== 0 ) {
 
-				// Create the full folder path
-				while ( currentPath !== 0 ) { // Repeat as long as we haven't reached the root yet
-					for ( const nextFolder of folders ) {
-						if ( nextFolder.id === currentPath ) {
-							fullFolderPath.unshift( nextFolder.name ); // Put it in front, building up from the back
-							currentPath = nextFolder.path;
-							break;
-						}
+			// Temp pointer to the currently selected path
+			let currentPathPointer: number = folderId;
+
+			// Full folder path array
+			let fullFolderPath: string[] = [];
+
+			// Build the full folder path
+			while (currentPathPointer !== 0) {  // Repeat as long as we haven't reached the root yet
+				for ( const nextFolder of folders ) {
+					if ( nextFolder.id === currentPathPointer ) {
+						fullFolderPath.unshift( nextFolder.name ); // Put it in front, building up from the back
+						currentPathPointer = nextFolder.path;
+						break;
 					}
 				}
-
-				// Compare the paths
-				if ( fullFolderPath.join( '/' ).toLowerCase() === path ) {
-					result = currentFolder;
-					break;
-				}
-
 			}
+
+			// Combine the path elements to build the full path
+			result = fullFolderPath.join( '/' ).toLowerCase();
 
 		}
 

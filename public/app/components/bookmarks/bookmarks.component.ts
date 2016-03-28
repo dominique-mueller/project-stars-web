@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, OnInit } from 'angular2/core';
+import { Component, OnInit, OnDestroy } from 'angular2/core';
 import { RouteConfig, Router } from 'angular2/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -47,7 +47,7 @@ import { BookmarkRouterOutlet } from './bookmarks.router';
 		path: '/**'
 	}
 ] )
-export class BookmarksComponent implements OnInit {
+export class BookmarksComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Router
@@ -65,11 +65,6 @@ export class BookmarksComponent implements OnInit {
 	private folderService: FolderService;
 
 	/**
-	 * Bookmarks
-	 */
-	private bookmarks: IBookmark[];
-
-	/**
 	 * Folders
 	 */
 	private folders: IFolder[];
@@ -77,17 +72,12 @@ export class BookmarksComponent implements OnInit {
 	/**
 	 * Service subscription
 	 */
-	// private serviceSubscription: Subscription;
+	private serviceSubscription: Subscription;
 
 	/**
-	 * Folder structure
+	 * Currently active folder id
 	 */
-	// private folders: Directory[];
-
-	/**
-	 * Currently active path
-	 */
-	// private activePath: string[];
+	private activeFolderId: number;
 
 	/**
 	 * Constructor
@@ -104,50 +94,71 @@ export class BookmarksComponent implements OnInit {
 	 */
 	public ngOnInit(): void {
 
+		// Get folders and bookmarks from their services
+		this.serviceSubscription = this.folderService.folders
+			.subscribe(
+				( data: any ) => {
+
+					// Wait until we have all date (no fetching is going on any longer)
+					if ( !this.folderService.isFetching ) {
+
+						// Set folders
+						this.folders = data;
+
+					}
+
+				},
+				( error: any ) => {
+					console.log('!! COMPONENT ERROR'); // TODO: Better error handling
+					console.log(error);
+				}
+			);
+
 		// Fetch initial data from server
 		this.folderService.loadFolders();
 		this.bookmarkService.loadBookmarks();
 
+	}
 
+	/**
+	 * Call this when the view gets destroyed
+	 */
+	public ngOnDestroy(): void {
 
-
-
-
-		// TODO: Show a loading animation
-
-		// Setup folder structure subscription
-		// this.serviceSubscription = this.bookmarkService.bookmarks
-		// 	.subscribe(
-		// 		( data: Directory[] ) => {
-
-		// 			// Set data (skip bookmark root folder)
-		// 			this.folders = data[ 0 ].folders;
-
-		// 		},
-		// 		( error: any ) => {
-		// 			console.log( 'Component error message' ); // TODO
-		// 		}
-		// 	);
-
-		// Get folders
-		// this.bookmarkService.loadBookmarks();
+		// Unsubscribe from all services (free resources)
+		this.serviceSubscription.unsubscribe();
 
 	}
 
 	/**
 	 * Navigate to the requested folder
-	 * @param {string} path Path of the folder
 	 */
-	private goToFolder( path: string ): void {
-		// this.router.navigateByUrl( `bookmarks/${ path.toLowerCase() }` );
+	private goToFolder( folderId: number ): void {
+
+		// Update active folder id
+		this.activeFolderId = folderId;
+
+		// Calculate path to the selected folder
+		let path: string = this.folderService.getPathByFolderId( this.folders, folderId );
+
+		// Navigate to the folder (special treatment for the bookmarks root folder)
+		if ( path.length === 0 ) {
+			this.router.navigateByUrl( 'bookmarks' );
+		} else {
+			this.router.navigateByUrl( `bookmarks/${ path }` );
+		}
+
 	}
 
 	/**
 	 * Update current path for the directory view
 	 * @param {string} path The all new current path
 	 */
-	private updateCurrentPath( path: string ): void {
-		// this.activePath = path.split( '/' );
+	private updateActiveFolderId( path: string ): void {
+
+		// Update active folder id
+		this.activeFolderId = this.folderService.getFolderByPath( this.folders, path ).id;
+
 	}
 
 	/**

@@ -6,16 +6,18 @@
 
 		<h2 style="margin-top: 3.5rem; margin-bottom: 3rem;">Folders</h2>
 
-		<!-- <a class="directory-link" (click)="goToFolder( '' )"
-			[class.is-active]="activePath[ 0 ] === ''" [class.is-final]="activePath[ 0 ] === ''">
+		<a class="directory-link"
+			[class.is-final]="0 === activeFolderId"
+			(click)="goToFolder( 0 )">
 			<app-icon name="folder_special" size="24" color="#666"></app-icon>
 			<span class="directory-name">Bookmarks</span>
 		</a>
 		<app-bookmark-directory
-			[directories]="folders"
-			[activePath]="activePath"
+			[folders]="folders"
+			[parentFolderId]="0"
+			[activeFolderId]="activeFolderId"
 			(select)="goToFolder( $event )">
-		</app-bookmark-directory> -->
+		</app-bookmark-directory>
 
 	</div>
 
@@ -23,7 +25,7 @@
 
 		<h2 style="margin-top: 3.5rem; margin-bottom: 3rem; margin-left: 2.8rem;">Bookmarks</h2>
 
-		<app-bookmark-router-outlet (pathChange)="updateCurrentPath( $event )">
+		<app-bookmark-router-outlet (pathChange)="updateActiveFolderId( $event )">
 		</app-bookmark-router-outlet>
 
 	</div>

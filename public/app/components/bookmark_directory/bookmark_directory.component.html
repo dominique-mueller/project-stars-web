@@ -1,18 +1,17 @@
 <ul>
-	<li class="directory-item" *ngFor="#directory of directories">
-		<a class="directory-link" (click)="goToFolder( directory.path )"
-			[class.is-active]="activeFolder === directory.path.toLowerCase() && isFinalFolder"
-			[class.is-final]="activeFolder === directory.path.toLowerCase() && isFinalFolder">
-			<app-icon name="folder" size="24" color="#777" *ngIf="activeFolder !== directory.path.toLowerCase()">
+	<li class="directory-item" *ngFor="#subfolder of subfolders">
+		<a class="directory-link" [class.is-final]="subfolder.id === activeFolderId" (click)="goToFolder( subfolder.id )">
+			<app-icon name="folder" size="24" color="#777" *ngIf="subfolder.id !== activeFolderId">
 			</app-icon>
-			<app-icon name="folder_open" size="24" color="#777" *ngIf="activeFolder === directory.path.toLowerCase()">
+			<app-icon name="folder_open" size="24" color="#777" *ngIf="subfolder.id === activeFolderId">
 			</app-icon>
-			<span class="directory-name">{{ directory.path }}</span>
+			<span class="directory-name">{{ subfolder.name }}</span>
 		</a>
 		<app-bookmark-directory
-			[directories]="directory.folders"
-			[activePath]="activeFolder === directory.path.toLowerCase() ? childActivePath : [ '' ]"
-			(select)="pipeThrough( $event, directory.path )">
+			[folders]="folders"
+			[parentFolderId]="subfolder.id"
+			[activeFolderId]="activeFolderId"
+			(select)="goToFolder( $event )">
 		</app-bookmark-directory>
 	</li>
 </ul>

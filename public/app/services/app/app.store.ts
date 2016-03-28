@@ -10,5 +10,4 @@ import { IFolder } from './../folder/folder.service';
 export interface IAppStore {
 	bookmarks: IBookmark[];
 	folders: IFolder[];
-	selectedFolder: number;
 };

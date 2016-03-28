@@ -17,11 +17,8 @@
 		background-color: #DFDFDF;
 	}
 
-	&.is-active {
-		font-weight: $font-weight-bold;
-	}
-
 	&.is-final {
+		font-weight: $font-weight-bold;
 		background-color: #DFDFDF;
 	}
 
