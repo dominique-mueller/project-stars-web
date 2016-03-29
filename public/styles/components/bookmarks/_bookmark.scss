@@ -1,9 +1,6 @@
-// COMPONENTS: BOOKMARK
+// COMPONENTS: BOOKMARKS BOOKMARK
 
-// List item
-
-.bookmark-item,
-.folder-item {
+.bookmark-item {
 	display: flex;
 	width: 100%;
 	transition: background-color $anim-speed-normal $anim-easing;
@@ -12,46 +9,6 @@
 
 	&:hover {
 		background-color: $color-seashell;
-	}
-
-}
-
-// Folders
-
-.folder-link {
-	display: block;
-	width: 100%;
-	height: 6rem;
-	padding: 1.4rem 2.8rem;
-	flex: 1;
-	cursor: pointer;
-}
-
-.folder-icon {
-	float: left;
-	width: 2.4rem;
-	height: 2.4rem;
-	margin-top: .5rem;
-	margin-right: 1.6rem;
-}
-
-.folder-title {
-	float: left;
-	width: calc(100% - 4.8rem);
-	font-weight: $font-weight-bold;
-	line-height: 3.4rem;
-}
-
-// Bookmark
-
-.bookmark-item-link {
-	position: relative;
-	display: block;
-	width: 100%;
-	height: 6rem;
-	flex: 1;
-
-	&:hover {
 
 		.bookmark-item-content {
 			transform: translateY(-.7rem);
@@ -68,6 +25,14 @@
 
 	}
 
+}
+
+.bookmark-item-link {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 6rem;
+	flex: 1;
 }
 
 .bookmark-item-icon {
@@ -98,11 +63,16 @@
 	bottom: 1.3rem;
 	left: 6.8rem;
 	color: #999;
-	font-size: 1.3rem;
+	font-size: 1.2rem;
 	letter-spacing: .01rem;
 	line-height: 1.4rem;
 	opacity: 0;
 	transform: translateY(-.4rem);
 	transition: opacity $anim-speed-fast $anim-easing,
 				transform $anim-speed-fast $anim-easing;
+}
+
+.bookmark-item-button {
+	padding-right: 1.8rem;
+	padding-left: 1.8rem;
 }

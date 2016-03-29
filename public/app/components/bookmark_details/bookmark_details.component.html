@@ -1,0 +1,16 @@
+<div class="bookmark-details-overlay" [class.is-visible]="!!bookmark" (click)="exit()"></div>
+<div class="bookmark-details" [class.is-visible]="!!bookmark">
+	<div class="bookmark-details-header">
+		<h3 class="bookmark-details-title">Bookmark</h3>
+		<!-- <button class="button button-invisible bookmark-details-button" type="button">
+			<app-icon name="edit" size="20" color="#FFF"></app-icon>
+		</button> -->
+		<!-- <button class="button button-invisible bookmark-details-button" type="button">
+			<app-icon name="delete" size="20" color="#FFF"></app-icon>
+		</button> -->
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="exit()">
+			<app-icon name="close" size="20" color="#FFF"></app-icon>
+		</button>
+	</div>
+	{{ bookmark | json }}
+</div>

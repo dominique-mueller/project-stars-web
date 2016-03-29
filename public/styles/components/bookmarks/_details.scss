@@ -1,0 +1,69 @@
+// COMPONENT: BOOKMARKS DETAIL
+
+.bookmark-details-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: $color-white;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility 0s linear $anim-speed-normal;
+
+	&.is-visible {
+		opacity: .75;
+		visibility: visible;
+		transition: opacity $anim-speed-normal $anim-easing,
+					visibility 0s linear;
+	}
+
+}
+
+.bookmark-details {
+	position: fixed;
+	top: 6.4rem;
+	right: 0;
+	height: 100%;
+	width: 40rem;
+	background-color: $color-white;
+	box-shadow: 0 .1rem .5rem rgba($color-black, .15);
+	transform: translateX(100%);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity $anim-speed-normal $anim-easing,
+				transform $anim-speed-normal $anim-easing,
+				visibility 0s linear $anim-speed-normal;
+
+	&.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(0);
+		transition: opacity $anim-speed-normal $anim-easing,
+					transform $anim-speed-normal $anim-easing,
+					visibility 0s linear;
+	}
+
+}
+
+.bookmark-details-header {
+	display: flex;
+	width: 100%;
+	padding-right: 1.5rem;
+	padding-left: 2.5rem;
+	height: 6rem;
+	background-color: $color-tuna;
+	color: $color-white;
+}
+
+.bookmark-details-title {
+	flex: 1;
+	font-size: 1.6rem;
+	line-height: 6rem;
+}
+
+.bookmark-details-button {
+	padding-right: 1rem;
+	padding-left: 1rem;
+}

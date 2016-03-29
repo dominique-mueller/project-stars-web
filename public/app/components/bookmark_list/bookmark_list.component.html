@@ -22,6 +22,12 @@
 			</div>
 			<div class="bookmark-item-url" [innerHTML]="bookmark.url | url"></div>
 		</a>
+		<button class="button button-invisible bookmark-item-button" type="button" (click)="openBookmarkDetails( bookmark )">
+			<app-icon name="info" size="20" color="#777"></app-icon>
+		</button>
 	</li>
 
 </ul>
+
+<app-bookmark-details [bookmark]="selectedBookmark" (close)="closeBookmarkDetails( $event )">
+</app-bookmark-details>

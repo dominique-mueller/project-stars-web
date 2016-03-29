@@ -15,6 +15,7 @@ import { FolderService, IFolder } from './../../services/folder/folder.service';
 import { LabelService, ILabel } from './../../services/label/label.service';
 import { SearchPipe } from './search.pipe';
 import { UrlPipe } from './url.pipe';
+import { BookmarkDetailsComponent } from './../bookmark_details/bookmark_details.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -22,6 +23,7 @@ import { IconComponent } from './../../shared/icon/icon.component';
  */
 @Component( {
 	directives: [
+		BookmarkDetailsComponent,
 		IconComponent
 	],
 	pipes: [
@@ -77,6 +79,11 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 * Labels
 	 */
 	private labels: ILabel[];
+
+	/**
+	 * Currently selected Bookmark
+	 */
+	private selectedBookmark: IBookmark;
 
 	/**
 	 * Current folder path
@@ -219,6 +226,19 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		// Navigate to the created url
 		this.router.navigateByUrl( routeUrl );
 
+	}
+
+	private openBookmarkDetails( bookmark: IBookmark ): void {
+
+		console.log('### SELECTED BOOKMARK');
+		console.log(bookmark);
+
+		this.selectedBookmark = bookmark;
+
+	}
+
+	private closeBookmarkDetails(): void {
+		this.selectedBookmark = undefined;
 	}
 
 }
