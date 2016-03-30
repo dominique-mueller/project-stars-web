@@ -2,10 +2,13 @@
 
 	<li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Folder search results:</li>
 	<li class="folder-item" *ngFor="#folder of ( folders | search : 'folders' : searchOptions )">
-		<a class="folder-link" (click)="goToFolder( folder.name )">
+		<a class="folder-link" (click)="goToFolder( folder.id )">
 			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
 			<div class="folder-title">{{ folder.name }}</div>
 		</a>
+		<button class="button button-invisible bookmark-item-button" type="button" (click)="openDetails( folder.id, 'folder' )">
+			<app-icon name="info" size="20" color="#777"></app-icon>
+		</button>
 	</li>
 
 	<li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Bookmark search results:</li>
@@ -22,12 +25,17 @@
 			</div>
 			<div class="bookmark-item-url" [innerHTML]="bookmark.url | url"></div>
 		</a>
-		<button class="button button-invisible bookmark-item-button" type="button" (click)="openBookmarkDetails( bookmark )">
+		<button class="button button-invisible bookmark-item-button" type="button"
+			(click)="openDetails( bookmark.id, 'bookmark' )">
 			<app-icon name="info" size="20" color="#777"></app-icon>
 		</button>
 	</li>
 
 </ul>
 
-<app-bookmark-details [bookmark]="selectedBookmark" (close)="closeBookmarkDetails( $event )">
+<app-bookmark-details
+	[visible]="detailsAreVisible"
+	[element]="selectedElement"
+	[type]="selectedElementType"
+	(close)="closeDetails()">
 </app-bookmark-details>

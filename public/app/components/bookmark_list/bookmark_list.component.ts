@@ -66,9 +66,19 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	private serviceSubscription: Subscription;
 
 	/**
+	 * All bookmarks
+	 */
+	private allBookmarks: IBookmark[];
+
+	/**
 	 * Bookmarks
 	 */
 	private bookmarks: IBookmark[];
+
+	/**
+	 * All folders
+	 */
+	private allFolders: IFolder[];
 
 	/**
 	 * Folders
@@ -81,9 +91,19 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	private labels: ILabel[];
 
 	/**
-	 * Currently selected Bookmark
+	 * Currently selected element
 	 */
-	private selectedBookmark: IBookmark;
+	private selectedElement: IBookmark | IFolder;
+
+	/**
+	 * Type of the currently selected element
+	 */
+	private selectedElementType: string;
+
+	/**
+	 * Status flag for panel
+	 */
+	private detailsAreVisible: boolean;
 
 	/**
 	 * Current folder path
@@ -122,6 +142,9 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 			isSearching: false,
 			value: ''
 		};
+		this.selectedElement = null;
+		this.selectedElementType = null;
+		this.detailsAreVisible = false;
 
 	}
 
@@ -129,9 +152,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 * Call this when the view gets initialized
 	 */
 	public ngOnInit(): void {
-
-		// Get current route details
-		this.currentPath = ( this.routeParams.get( '*' ) || '' ).toLowerCase();
 
 		// Get labels from its service - TODO: Unsubscribe
 		this.labelService.labels
@@ -155,36 +175,131 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		).subscribe(
 			( data: [ IFolder[], IBookmark[] ] ) => {
 
-				// First, check if we're currently searching
-				if ( this.currentPath.length === 0 && Object.keys( this.routeParams.params ).length > 0 ) {
+				// Wait until we have all data
+				if ( !this.folderService.isFetching && !this.bookmarkService.isFetching ) {
 
-					// Set all folders and bookmarks
-					this.folders = data[ 0 ];
-					this.bookmarks = data[ 1 ];
+					// Set all values
+					this.allFolders = data[ 0 ];
+					this.allBookmarks = data[ 1 ];
 
-					// Set search option
-					this.searchOptions.isSearching = true;
-					this.searchOptions.value = this.routeParams.get( 'value' ) || '';
+					// Get current route details
+					this.currentPath = ( this.routeParams.get( '*' ) || '' ).toLowerCase();
 
-				} else {
+					// Setup temp values
+					let elementId: number;
+					let elementType: string;
+					let currentFolder: IFolder;
 
-					// Wait until we have all date (no fetching is going on any longer)
-					if ( !this.folderService.isFetching && !this.bookmarkService.isFetching ) {
+					// Special treatment for the bookmarks root folder
+					if ( this.currentPath.length === 0 ) {
 
-						// Get the current folder
-						let currentFolder: IFolder = this.folderService.getFolderByPath( data[ 0 ], this.currentPath );
+						// Set current folder
+						currentFolder = this.folderService.getFolderByPath( data[ 0 ], '' );
 
-						// Error Handling:
-						// Check if we were able to find the path, if not the path doesn't exist
-						if ( typeof currentFolder === 'undefined' ) {
-							this.router.navigateByUrl( 'bookmarks' ); // TODO: Show some notification?
-						} else {
+						// Case: Bookmark details
+						if ( this.routeParams.get( 'bookmark' ) !== null ) {
+							elementType = 'bookmark';
+							elementId = parseInt( this.routeParams.get( 'bookmark' ), 10 );
+						// Case: Folder details
+						} else if ( this.routeParams.get( 'folder' ) !== null ) {
+							elementType = 'folder';
+							elementId = parseInt( this.routeParams.get( 'folder' ), 10 );
+						// Case: Search
+						} else if ( this.routeParams.get( 'value' ) !== null ) {
 
-							// Get folders and bookmarks for this path
-							this.folders = this.folderService.getFoldersByFolderId( data[ 0 ], currentFolder.id );
-							this.bookmarks = this.bookmarkService.getBookmarksByFolderId( data[ 1 ], currentFolder.id );
+							// Set all folders and bookmarks
+							this.folders = data[ 0 ];
+							this.bookmarks = data[ 1 ];
+
+							// Set search option
+							this.searchOptions.isSearching = true;
+							this.searchOptions.value = this.routeParams.get( 'value' ); // TODO: Rename + labels
+
+							// That's a wrap ...
+							return;
 
 						}
+
+					// All other folders (subfolders)
+					} else {
+
+						// First try: Get the current folder
+						// We don't know yet whether the last part of the path is a bookmark / folder id or a folder name,
+						// so first we think it's the name of a folder
+						currentFolder = this.folderService.getFolderByPath( data[ 0 ], this.currentPath );
+
+						// Error handling for the first try
+						if ( typeof currentFolder === 'undefined' ) {
+
+							// Just remove the last element which follows after a semicolon and save this element (after
+							// splitting) as the element id and path, then build up the new path
+							let tempCurrentPath: string[] = this.currentPath.split( '/;' );
+							let tempRouteParams: string[] = tempCurrentPath.pop().split( '=' );
+							elementType = tempRouteParams[ 0 ];
+							elementId = parseInt( tempRouteParams[ 1 ], 10 );
+							this.currentPath = tempCurrentPath.join( '/;' );
+
+							// Second try: Get the current folder
+							// So ... first try didn't work, so it might be possible that there is a parameter telling us
+							// which bookmark / folder we want toshow the details for
+							currentFolder = this.folderService.getFolderByPath( data[ 0 ], this.currentPath );
+
+							// Error handling for the second try
+							if ( typeof currentFolder === 'undefined' ) {
+
+								// Now we can be sure that the path does not exist, so we navigate back to the root
+								this.router.navigateByUrl( 'bookmarks' );
+
+								// Shut it down ... just ... shut it down ...
+								return;
+
+							}
+
+						}
+
+					}
+
+					// Get folders and bookmarks for this path
+					this.folders = this.folderService.getFoldersByFolderId( data[0], currentFolder.id );
+					this.bookmarks = this.bookmarkService.getBookmarksByFolderId( data[1], currentFolder.id );
+
+					// Eventually show the details panel
+					if ( typeof elementId !== 'undefined' && typeof elementType !== 'undefined' ) {
+
+						// Check whether we want to show details of a bookmark or a folder
+						switch (elementType) {
+
+							// Bookmark
+							case 'bookmark':
+								for (const bookmark of this.bookmarks) {
+									if (bookmark.id === elementId) {
+										this.selectedElement = bookmark;
+										break;
+									}
+								}
+								break;
+
+							// Folder
+							case 'folder':
+								for (const folder of this.folders) {
+									if (folder.id === elementId) {
+										this.selectedElement = folder;
+										break;
+									}
+								}
+								break;
+
+							default:
+							// TODO - nothing here?
+
+						}
+
+						// Set values
+						this.selectedElementType = elementType;
+						setTimeout( () => {
+							console.log('THIS IS HAPPENINNNNNNN');
+							this.detailsAreVisible = true;
+						} );
 
 					}
 
@@ -213,32 +328,65 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 	 * Navigate to another route
 	 * @param {string} folderName Name of the subfolder
 	 */
-	private goToFolder( folderName: string ): void {
+	private goToFolder( folderId: number ): void {
 
-		// Create new route url, again special treatment for the root bookmarks folder here
-		let routeUrl: string;
-		if ( this.currentPath === '' ) {
-			routeUrl = `bookmarks/${ folderName.toLowerCase() }`;
+		// Build url
+		let url: string = this.folderService.getPathByFolderId( this.allFolders, folderId );
+		if ( url.length === 0 ) {
+			url = 'bookmarks';
 		} else {
-			routeUrl = `bookmarks/${ this.currentPath }/${ folderName.toLowerCase() }`;
+			url = `bookmarks/${ url }`;
 		}
 
-		// Navigate to the created url
-		this.router.navigateByUrl( routeUrl );
+		console.log(url);
+
+		// Navigate
+		this.router.navigateByUrl( url );
 
 	}
 
-	private openBookmarkDetails( bookmark: IBookmark ): void {
+	/**
+	 * Open the details panel
+	 * @param {number} elementId   Id of the element
+	 * @param {string} elementType Type of the element (bookmark / folder)
+	 */
+	private openDetails( elementId: number, elementType: string ): void {
 
-		console.log('### SELECTED BOOKMARK');
-		console.log(bookmark);
+		// Build url
+		let url: string;
+		if ( this.currentPath.length === 0 ) {
+			url = `bookmarks/;${ elementType }=${ elementId }`;
+		} else {
+			url = `bookmarks/${ this.currentPath }/;${ elementType }=${ elementId }`;
+		}
 
-		this.selectedBookmark = bookmark;
+		// Navigate
+		this.router.navigateByUrl( url );
 
 	}
 
-	private closeBookmarkDetails(): void {
-		this.selectedBookmark = undefined;
+	/**
+	 * Close the details panel
+	 */
+	private closeDetails(): void {
+
+		// Build url
+		let url: string;
+		if ( this.currentPath.length === 0 ) {
+			url = 'bookmarks';
+		} else {
+			url = `bookmarks/${ this.currentPath }`;
+		}
+
+		// Navigate - TODO: Need a better solution here
+		this.detailsAreVisible = false;
+		setTimeout(
+			() => {
+				this.router.navigateByUrl( url );
+			},
+			250
+		);
+
 	}
 
 }

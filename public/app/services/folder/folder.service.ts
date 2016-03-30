@@ -114,8 +114,11 @@ export class FolderService {
 		// We are creating and comparing the full path of each folder with our provided path
 		for ( const folder of folders ) {
 
+			// Get path by folder id
+			let createdPath: string = this.getPathByFolderId( folders, folder.id );
+
 			// Compare the calculated and provided paths
-			if ( this.getPathByFolderId( folders, folder.id ) === path) {
+			if ( createdPath === path || `${ createdPath }/` === path ) {
 				result = folder;
 				break;
 			}

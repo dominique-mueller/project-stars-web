@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
  * Internal imports
  */
 import { IBookmark } from './../../services/bookmark/bookmark.service';
+import { IFolder } from './../../services/folder/folder.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -22,16 +23,28 @@ import { IconComponent } from './../../shared/icon/icon.component';
 export class BookmarkDetailsComponent implements OnInit {
 
 	/**
-	 * Current bookmark
+	 * Visibility flag
 	 */
 	@Input()
-	private bookmark: IBookmark;
+	private visible: boolean;
+
+	/**
+	 * Currently selected element
+	 */
+	@Input()
+	private element: IBookmark | IFolder;
+
+	/**
+	 * Type of the currently selected element
+	 */
+	@Input()
+	private type: string;
 
 	/**
 	 * Close event
 	 */
 	@Output()
-	private close: EventEmitter<IBookmark>;
+	private close: EventEmitter<any>;
 
 	constructor() {
 
@@ -44,8 +57,8 @@ export class BookmarkDetailsComponent implements OnInit {
 		// TOOD
 	}
 
-	private exit(): void {
-		this.close.emit( this );
+	private closePanel(): void {
+		this.close.emit( null );
 	}
 
 }

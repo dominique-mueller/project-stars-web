@@ -173,8 +173,8 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 */
 	private updateActiveFolderId( path: string ): void {
 
-		// Update active folder id
-		this.activeFolderId = this.folderService.getFolderByPath( this.folders, path ).id;
+		// Update active folder id - TODO: Pipe through state
+		// this.activeFolderId = this.folderService.getFolderByPath( this.folders, path ).id;
 
 	}
 
