@@ -1,10 +1,54 @@
-// BASE: INPUTS
+// BASE: INPUTS - TODO SPLIT
+
+label {
+	width: 100%;
+	color: #999;
+	font-size: 1.2rem;
+	font-weight: 500;
+}
 
 input {
+	width: 100%;
+	padding: .6rem 0;
+	border: none;
+	border-bottom: .1rem solid #CCC;
+	transition: border-bottom-color $anim-speed-normal $anim-easing;
 
 	&:focus {
-		outline: .1rem solid orange;
-		outline-offset: -.1rem;
+		border-bottom-color: orange;
+		outline: none;
+	}
+
+	&[readonly] {
+		border-bottom: .1rem solid transparent;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+}
+
+textarea {
+	width: 100%;
+	padding: .9rem 0 .6rem;
+	border: none;
+	border-bottom: .1rem solid #CCC;
+	resize: none;
+	transition: border-bottom-color $anim-speed-normal $anim-easing;
+
+	&:focus {
+		border-bottom-color: orange;
+		outline: none;
+	}
+
+	&[readonly] {
+		border-bottom: .1rem solid transparent;
+
+		&:focus {
+			outline: none;
+		}
+
 	}
 
 }

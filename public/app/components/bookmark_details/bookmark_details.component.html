@@ -1,10 +1,10 @@
 <div class="bookmark-details-overlay" [class.is-visible]="visible" (click)="closePanel()"></div>
 <div class="bookmark-details" [class.is-visible]="visible">
 	<div class="bookmark-details-header">
-		<h3 class="bookmark-details-title">{{ type }}</h3>
-		<!-- <button class="button button-invisible bookmark-details-button" type="button">
+		<h3 class="bookmark-details-title">Details</h3>
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="editMode = !editMode">
 			<app-icon name="edit" size="20" color="#FFF"></app-icon>
-		</button> -->
+		</button>
 		<!-- <button class="button button-invisible bookmark-details-button" type="button">
 			<app-icon name="delete" size="20" color="#FFF"></app-icon>
 		</button> -->
@@ -12,10 +12,72 @@
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
 	</div>
-	<div *ngIf="type === 'bookmark'">
-		<p>Bookmark details:</p>
-		{{ element | json }}
+
+	<div class="bookmark-details-content" *ngIf="type === 'bookmark'">
+
+		<form>
+
+			<!-- Editable information -->
+			<ul>
+
+				<li class="bookmark-details-data">
+					<label for="bookmark-title">Title</label>
+					<input id="bookmark-title" type="text" [value]="element.title" placeholder="My Bookmark"
+						[readonly]="!editMode">
+				</li>
+				<li class="bookmark-details-data">
+					<label for="bookmark-url">Url</label>
+					<input id="bookmark-url" type="url" [value]="element.url" placeholder="http://www.example.com/"
+						[readonly]="!editMode">
+				</li>
+				<li class="bookmark-details-data">
+					<label for="bookmark-description">Description</label>
+					<textarea id="bookmark-description" rows="3" placeholder="My description ..."
+						[readonly]="!editMode">{{ element.description }}</textarea>
+				</li>
+
+			</ul>
+
+		</form>
+
+		<hr>
+
+		<!-- Labels -->
+		<form>
+
+			<p>Labels</p>
+			<ul>
+
+				<li class="bookmark-item-label" *ngFor="#labelId of element.labels" [style.backgroundColor]="labels[ labelId ]?.color">
+					{{ labels[ labelId ]?.name }}
+				</li>
+
+			</ul>
+
+		</form>
+
+		<hr>
+
+		<!-- Additional information -->
+		<ul>
+
+			<li class="bookmark-details-data">
+				<label for="bookmark-title">Created on</label>
+				<input id="bookmark-title" type="text" [value]="element.created" readonly>
+			</li>
+			<li class="bookmark-details-data">
+				<label for="bookmark-title">Last updated on</label>
+				<input id="bookmark-title" type="text" [value]="element.updated" readonly>
+			</li>
+			<li class="bookmark-details-data" *ngIf="element.updated">
+				<label for="bookmark-title">Archived on</label>
+				<input id="bookmark-title" type="text" [value]="element.updated" readonly>
+			</li>
+
+		</ul>
+
 	</div>
+
 	<div *ngIf="type === 'folder'">
 		<p>Folder details:</p>
 		{{ element | json }}

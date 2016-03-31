@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
  */
 import { IBookmark } from './../../services/bookmark/bookmark.service';
 import { IFolder } from './../../services/folder/folder.service';
+import { ILabel } from './../../services/label/label.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -41,15 +42,27 @@ export class BookmarkDetailsComponent implements OnInit {
 	private type: string;
 
 	/**
+	 * Labels
+	 */
+	@Input()
+	private labels: ILabel[];
+
+	/**
 	 * Close event
 	 */
 	@Output()
 	private close: EventEmitter<any>;
 
+	/**
+	 * Editing mode
+	 */
+	private editMode: boolean;
+
 	constructor() {
 
 		// Setup
 		this.close = new EventEmitter();
+		this.editMode = false;
 
 	}
 

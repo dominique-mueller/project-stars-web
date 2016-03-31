@@ -1,5 +1,5 @@
 /**
- * Imports
+ * External imports
  */
 import { Component, Input } from 'angular2/core';
 

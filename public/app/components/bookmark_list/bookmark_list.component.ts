@@ -297,7 +297,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 						// Set values
 						this.selectedElementType = elementType;
 						setTimeout( () => {
-							console.log('THIS IS HAPPENINNNNNNN');
 							this.detailsAreVisible = true;
 						} );
 
@@ -337,8 +336,6 @@ export class BookmarkListComponent implements OnInit, OnDestroy {
 		} else {
 			url = `bookmarks/${ url }`;
 		}
-
-		console.log(url);
 
 		// Navigate
 		this.router.navigateByUrl( url );
