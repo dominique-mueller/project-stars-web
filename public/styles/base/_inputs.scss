@@ -21,6 +21,7 @@ input {
 
 	&[readonly] {
 		border-bottom: .1rem solid transparent;
+		cursor: default;
 
 		&:focus {
 			outline: none;
@@ -44,6 +45,7 @@ textarea {
 
 	&[readonly] {
 		border-bottom: .1rem solid transparent;
+		cursor: default;
 
 		&:focus {
 			outline: none;
