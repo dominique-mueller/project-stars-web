@@ -1,37 +1,41 @@
 /**
  * External imports
  */
-import { Component, OnInit, OnDestroy } from 'angular2/core';
-import { RouteConfig, Router } from 'angular2/router';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from 'angular2/core';
+import { ROUTER_DIRECTIVES, RouteConfig, Router } from 'angular2/router';
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
  */
+import { UiService } from './../../services/ui/ui.service';
 import { BookmarkService } from './../../services/bookmark/bookmark.service';
-import { FolderService, IFolder } from './../../services/folder/folder.service';
+import { FolderService } from './../../services/folder/folder.service';
 import { LabelService } from './../../services/label/label.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark_list/bookmark_list.component';
 import { BookmarkDirectoryComponent } from './../bookmark_directory/bookmark_directory.component';
-import { BookmarkRouterOutlet } from './bookmarks.router';
 
 /**
  * Bookmark components
  */
 @Component( {
+	// changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
+		ROUTER_DIRECTIVES,
 		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
-		BookmarkDirectoryComponent,
-		BookmarkRouterOutlet
+		BookmarkDirectoryComponent
 	],
 	providers: [
 		BookmarkService,
 		FolderService,
-		LabelService
+		LabelService,
+		UiService
 	],
 	selector: 'app-bookmarks',
 	templateUrl: './bookmarks.component.html'
@@ -55,6 +59,16 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private router: Router;
 
 	/**
+	 * Change deterctor
+	 */
+	private changeDetectorRef: ChangeDetectorRef;
+
+	/**
+	 * Ui service
+	 */
+	private uiService: UiService;
+
+	/**
 	 * Bookmark service
 	 */
 	private bookmarkService: BookmarkService;
@@ -70,37 +84,43 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private labelService: LabelService;
 
 	/**
-	 * Folders
+	 * Folder map
 	 */
-	private folders: IFolder[];
+	private folders: List<Map<string, any>>;
 
 	/**
-	 * Service subscription
+	 * Currently opened folder (id)
 	 */
-	private serviceSubscription: Subscription;
+	private openedFolder: number;
 
 	/**
-	 * Currently active folder id
+	 * Service subscriptions
 	 */
-	private activeFolderId: number;
+	private serviceSubscriptions: Array<Subscription>;
 
 	/**
 	 * Constructor
 	 * @param {Router}          router          Router service
+	 * @param {UiService}       uiService       UI service
 	 * @param {BookmarkService} bookmarkService Bookmark service
 	 * @param {FolderService}   folderService   Folder service
 	 * @param {LabelService}    labelService    Label service
 	 */
 	constructor(
-		router: Router,
+		router: Router, changeDetectorRef: ChangeDetectorRef, uiService: UiService,
 		bookmarkService: BookmarkService, folderService: FolderService, labelService: LabelService
 		) {
 
 		// Initialize services
 		this.router = router;
+		this.changeDetectorRef = changeDetectorRef;
+		this.uiService = uiService;
 		this.bookmarkService = bookmarkService;
 		this.folderService = folderService;
 		this.labelService = labelService;
+
+		// Setup
+		this.openedFolder = null; // Root folder
 
 	}
 
@@ -109,27 +129,35 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
-		// Get folders and bookmarks from their services
-		this.serviceSubscription = this.folderService.folders
-			.subscribe(
-				( data: any ) => {
+		// Get opened folder
+		const uiServiceSubscription: Subscription = this.uiService.uiState.subscribe(
+			( uiState: Map<string, any> ) => {
 
-					// Wait until we have all date (no fetching is going on any longer)
-					if ( !this.folderService.isFetching ) {
+				// Update opened folder (only when the value actually changed)
+				if ( uiState.get( 'openedFolder' ) !== this.openedFolder ) {
 
-						// Set folders
-						this.folders = data;
+					// Update opened folder
+					this.openedFolder = uiState.get( 'openedFolder' );
+					this.changeDetectorRef.detectChanges(); // FIX
 
-					}
-
-				},
-				( error: any ) => {
-					console.log('!! COMPONENT ERROR'); // TODO: Better error handling
-					console.log(error);
 				}
-			);
+
+			}
+		);
+
+		// Get folders and bookmarks from their services
+		const folderServiceSubscription: Subscription = this.folderService.folders.subscribe(
+			( folders: List<Map<string, any>> ) => this.folders = folders
+		);
+
+		// Save subscriptions
+		this.serviceSubscriptions = [
+			uiServiceSubscription,
+			folderServiceSubscription
+		];
 
 		// Fetch initial data from server
+		// We do this in the bookmarks component in order to prevent multiple requests at the same time
 		this.folderService.loadFolders();
 		this.bookmarkService.loadBookmarks();
 		this.labelService.loadLabels();
@@ -141,8 +169,10 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnDestroy(): void {
 
-		// Unsubscribe from all services (free resources)
-		this.serviceSubscription.unsubscribe();
+		// Unsubscribe from all services (free resources manually)
+		this.serviceSubscriptions.forEach( ( subscription: Subscription ) => {
+			subscription.unsubscribe();
+		} );
 
 	}
 
@@ -150,31 +180,18 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 * Navigate to the requested folder (comes from directory)
 	 * @param {number} folderId Id of the folder we want to navigate to
 	 */
-	private goToFolder( folderId: number ): void {
+	private goToFolder( folder: number ): void {
 
-		// Update active folder id
-		this.activeFolderId = folderId;
+		// Update opened folder
+		this.uiService.setOpenedFolder( folder );
 
-		// Calculate path to the selected folder
-		let path: string = this.folderService.getPathByFolderId( this.folders, folderId );
-
-		// Navigate to the folder (special treatment for the bookmarks root folder)
-		if ( path.length === 0 ) {
-			this.router.navigateByUrl( 'bookmarks' );
+		// Naviate to the folder
+		let url: string = this.folderService.getPathByFolder(this.folders, folder);
+		if (url.length === 0) {
+			this.router.navigateByUrl('bookmarks');
 		} else {
-			this.router.navigateByUrl( `bookmarks/${ path }` );
+			this.router.navigateByUrl(`bookmarks/${url}`);
 		}
-
-	}
-
-	/**
-	 * Update current folder id (comes from list router outlet)
-	 * @param {string} path Path of the folder we want to navigate to
-	 */
-	private updateActiveFolderId( path: string ): void {
-
-		// Update active folder id - TODO: Pipe through state
-		// this.activeFolderId = this.folderService.getFolderByPath( this.folders, path ).id;
 
 	}
 
@@ -182,15 +199,15 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 * Search
 	 * @param {any} searchParameters All search options
 	 */
-	private search( searchParameters: any ): void {
+	// private search( searchParameters: any ): void {
 
 		// Navigate to root, add search params
-		if ( searchParameters.value.length === 0 ) {
-			this.router.navigateByUrl( 'bookmarks' );
-		} else {
-			this.router.navigateByUrl( `bookmarks/;value=${ searchParameters.value }` );
-		}
+		// if ( searchParameters.value.length === 0 ) {
+		// 	this.router.navigateByUrl( 'bookmarks' );
+		// } else {
+		// 	this.router.navigateByUrl( `bookmarks/;value=${ searchParameters.value }` );
+		// }
 
-	}
+	// }
 
 }

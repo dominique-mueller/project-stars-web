@@ -69,7 +69,8 @@ export const vendor = gulp.task( 'setup:vendor', () => {
 			'node_modules/angular2/bundles/angular2.dev.js',
 			'node_modules/angular2/bundles/http.dev.js',
 			'node_modules/angular2/bundles/router.dev.js',
-			'node_modules/@ngrx/store/dist/*.js'
+			'node_modules/@ngrx/store/dist/*.js',
+			'node_modules/immutable/dist/immutable.js'
 		] )
 		.pipe( gulp.dest( config.paths.app.vendor ) );
 

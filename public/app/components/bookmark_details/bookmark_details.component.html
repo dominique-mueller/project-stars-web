@@ -13,7 +13,7 @@
 		</button>
 	</div>
 
-	<div class="bookmark-details-content" *ngIf="type === 'bookmark'">
+	<div class="bookmark-details-content" *ngIf="element?.get( 'type' ) === 'bookmark'">
 
 		<form>
 
@@ -22,18 +22,18 @@
 
 				<li class="bookmark-details-data">
 					<label for="bookmark-title">Title</label>
-					<input id="bookmark-title" type="text" [value]="element.title" placeholder="My Bookmark"
+					<input id="bookmark-title" type="text" [value]="data?.get( 'title' )" placeholder="My Bookmark"
 						[readonly]="!editMode">
 				</li>
 				<li class="bookmark-details-data">
 					<label for="bookmark-url">Url</label>
-					<input id="bookmark-url" type="url" [value]="element.url" placeholder="http://www.example.com/"
+					<input id="bookmark-url" type="url" [value]="data?.get( 'url' )" placeholder="http://www.example.com/"
 						[readonly]="!editMode">
 				</li>
 				<li class="bookmark-details-data">
 					<label for="bookmark-description">Description</label>
 					<textarea id="bookmark-description" rows="3" placeholder="My description ..."
-						[readonly]="!editMode">{{ element.description }}</textarea>
+						[readonly]="!editMode">{{ data?.get( 'description' ) }}</textarea>
 				</li>
 
 			</ul>
@@ -48,8 +48,8 @@
 			<p>Labels</p>
 			<ul>
 
-				<li class="bookmark-item-label" *ngFor="#labelId of element.labels" [style.backgroundColor]="labels[ labelId ]?.color">
-					{{ labels[ labelId ]?.name }}
+				<li class="bookmark-item-label" *ngFor="#labelId of data?.get( 'labels ')" [style.backgroundColor]="labels.get( labelId ).get( 'color' )">
+					{{ labels.get( labelId ).get( 'name' ) }}
 				</li>
 
 			</ul>
@@ -63,22 +63,22 @@
 
 			<li class="bookmark-details-data">
 				<label for="bookmark-title">Created on</label>
-				<input id="bookmark-title" type="text" [value]="element.created" readonly>
+				<input id="bookmark-title" type="text" [value]="data?.get( 'created' )" readonly>
 			</li>
 			<li class="bookmark-details-data">
 				<label for="bookmark-title">Last updated on</label>
-				<input id="bookmark-title" type="text" [value]="element.updated" readonly>
+				<input id="bookmark-title" type="text" [value]="data?.get( 'updated' )" readonly>
 			</li>
-			<li class="bookmark-details-data" *ngIf="element.updated">
+			<li class="bookmark-details-data" *ngIf="data?.get( 'archived' )">
 				<label for="bookmark-title">Archived on</label>
-				<input id="bookmark-title" type="text" [value]="element.updated" readonly>
+				<input id="bookmark-title" type="text" [value]="data?.get( 'archived' )" readonly>
 			</li>
 
 		</ul>
 
 	</div>
 
-	<div *ngIf="type === 'folder'">
+	<div *ngIf="element?.get( 'type' ) === 'folder'">
 		<p>Folder details:</p>
 		{{ element | json }}
 	</div>

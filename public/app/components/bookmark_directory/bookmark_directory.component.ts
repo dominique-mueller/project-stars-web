@@ -1,18 +1,21 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChange } from 'angular2/core';
+import { Component, Input, Output, EventEmitter,
+	OnChanges, SimpleChange, ChangeDetectionStrategy } from 'angular2/core';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
  */
-import { FolderService, IFolder } from './../../services/folder/folder.service';
+import { FolderService } from './../../services/folder/folder.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
  * Bookmark directory component (recursive)
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		BookmarkDirectoryComponent,
 		IconComponent
@@ -23,22 +26,22 @@ import { IconComponent } from './../../shared/icon/icon.component';
 export class BookmarkDirectoryComponent implements OnChanges {
 
 	/**
-	 * Subfolders of the current directory
+	 * All folders (just piped through the whole directory, from top to bottom)
 	 */
 	@Input()
-	private folders: IFolder[];
+	private folders: List<Map<string, any>>;
 
 	/**
-	 * Folder id of the parent folder
+	 * Parent folder
 	 */
 	@Input()
-	private parentFolderId: number;
+	private parentFolder: number;
 
 	/**
-	 * Folder id of the currently active folder
+	 * Currently opened folder
 	 */
 	@Input()
-	private activeFolderId: number;
+	private openedFolder: number;
 
 	/**
 	 * Select event emitter
@@ -52,12 +55,13 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	private folderService: FolderService;
 
 	/**
-	 * Folders for the current subfolder we're in
+	 * Subfolders of this directory layer
 	 */
-	private subfolders: IFolder[];
+	private subfolders: List<Map<string, any>>;
 
 	/**
-	 * Constructor - TODO: Docs
+	 * Constructor
+	 * @param {FolderService} folderService Folder service
 	 */
 	constructor( folderService: FolderService ) {
 
@@ -65,35 +69,35 @@ export class BookmarkDirectoryComponent implements OnChanges {
 		this.folderService = folderService;
 
 		// Setup
-		this.subfolders = [];
+		this.subfolders = List<Map<string, any>>();
 		this.select = new EventEmitter();
 
 	}
 
 	/**
-	 * When the activePath component input changes
+	 * Watch for input value updates
 	 */
 	public ngOnChanges( changes: {
 		[ key: string ]: SimpleChange,
 		folders: SimpleChange
 	} ): void {
 
-		// Get subfolders of this folder (filter)
+		// Get subfolders of this directory layer (of folders did actually change)
 		if ( changes.hasOwnProperty( 'folders' ) && changes.folders.currentValue.length > 0 ) {
-			this.subfolders = this.folderService.getFoldersByFolderId( changes.folders.currentValue, this.parentFolderId );
+			this.subfolders = this.folderService.getSubfolders( changes.folders.currentValue, this.parentFolder );
 		}
 
 	}
 
 	/**
 	 * Handle click on a folder element
-	 * @param {number} folderId Id of the requested folder
+	 * @param {number} folder Requested folder
 	 */
-	private goToFolder( folderId: number ): void {
+	private goToFolder( folder: number ): void {
 
 		// Only emit the event if the selected folder is not the currently active one
-		if ( folderId !== this.activeFolderId ) {
-			this.select.emit( folderId );
+		if ( folder !== this.openedFolder ) {
+			this.select.emit( folder );
 		}
 
 	}

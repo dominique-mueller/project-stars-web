@@ -1,15 +1,14 @@
 /**
- * Internal imports
+ * External imports
  */
-import { IBookmark } from './../bookmark/bookmark.service';
-import { IFolder } from './../folder/folder.service';
-import { ILabel } from './../label/label.service';
+import { List, Map } from 'immutable';
 
 /**
  * App store interface
  */
 export interface IAppStore {
-	bookmarks: IBookmark[];
-	folders: IFolder[];
-	labels: ILabel[];
+	bookmarks: List<Map<string, any>>;
+	folders: List<Map<string, any>>;
+	labels: Map<string, Map<string, any>>;
+	ui: Map<string, any>;
 };

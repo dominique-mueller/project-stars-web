@@ -13,6 +13,7 @@ import { AppService } from '../../services/app/app.service';
 import { bookmarks } from './../../services/bookmark/bookmark.store';
 import { folders } from './../../services/folder/folder.store';
 import { labels } from './../../services/label/label.store';
+import { ui } from './../../services/ui/ui.store';
 import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 
 /**
@@ -28,7 +29,8 @@ import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 		provideStore( {
 			bookmarks,
 			folders,
-			labels
+			labels,
+			ui
 		} ),
 		AppService
 	],

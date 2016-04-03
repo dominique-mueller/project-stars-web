@@ -6,6 +6,7 @@ import { Http, Response } from 'angular2/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
@@ -13,7 +14,7 @@ import { Store, Action } from '@ngrx/store';
 import { AppService } from './../app/app.service';
 import { IAppStore } from './../app/app.store';
 import { IBookmark } from './bookmark.model';
-import { ADD_BOOKMARKS } from './bookmark.store';
+import { LOAD_BOOKMARKS } from './bookmark.store';
 
 /**
  * Exports
@@ -29,7 +30,7 @@ export class BookmarkService {
 	/**
 	 * Bookmarks
 	 */
-	public bookmarks: Observable<IBookmark[]>;
+	public bookmarks: Observable<List<Map<string, any>>>;
 
 	/**
 	 * Is fetching status flag
@@ -65,7 +66,7 @@ export class BookmarkService {
 		this.store = store;
 
 		// Setup
-		this.bookmarks = store.select( 'bookmarks' );
+		this.bookmarks = store.select( 'bookmarks' ); // Returns an observable
 		this.isFetching = false;
 
 	}
@@ -86,7 +87,7 @@ export class BookmarkService {
 			.map( ( response: Response ) => <IBookmark[]> response.json().data )
 
 			// Create action
-			.map( ( payload: IBookmark[] ) => ( { type: ADD_BOOKMARKS, payload } ) )
+			.map( ( payload: IBookmark[] ) => ( { type: LOAD_BOOKMARKS, payload } ) )
 
 			// Dispatch action
 			.subscribe(
@@ -101,25 +102,39 @@ export class BookmarkService {
 	}
 
 	/**
-	 * Get bookmarks of a folder by its provided id
-	 * @param  {IBookmark[]} bookmarks List of all bookmarks
-	 * @param  {number}      folderId  Provided folder id
-	 * @return {IBookmark[]}           List of contained bookmarks
+	 * Find a bookmarks (pure function)
+	 * @param  {List<Map<string, any>>} bookmarks All bookmarks
+	 * @param  {number}                 bookmark  Provided bookmark id
+	 * @return {Map<string, any>}                 Bookmark
 	 */
-	public getBookmarksByFolderId( bookmarks: IBookmark[], folderId: number ): IBookmark[] {
+	public findBookmark( bookmarks: List<Map<string, any>>, bookmark: number ): Map<string, any> {
 
-		// Setup result
-		let result: IBookmark[] = [];
-
-		// Choose all bookmarks, put them sorted into the result array
-		for ( const bookmark of bookmarks ) {
-			if ( bookmark.path === folderId ) {
-				result[ bookmark.position - 1 ] = bookmark;
-			}
-		}
+		// Find the bookmark
+		let result: Map<string, any> = bookmarks.find( ( item: Map<string, any> ) => {
+			return item.get( 'id' ) === bookmark;
+		} );
 
 		// Return our result
-		return result;
+		return typeof result === 'undefined' ? null : result;
+
+	}
+
+	/**
+	 * Get bookmarks that live inside a parent folder (pure function)
+	 * @param  {List<Map<string, any>>} bookmarks All bookmarks
+	 * @param  {number}                 folder    Folder
+	 * @return {List}                             Bookmarks
+	 */
+	public getBookmarksByFolder( bookmarks: List<Map<string, any>>, folder: number ): List<Map<string, any>> {
+
+		// We create a new list and put only the included bookmarks in it (ordered)
+		return List<Map<string, any>>().withMutations( ( list: List<Map<string, any>> ) => {
+			bookmarks.forEach( ( item: Map<string, any> ) => {
+				if ( item.get( 'path' ) === folder ) {
+					list.set( item.get( 'position' ) - 1, item );
+				}
+			} );
+		} );
 
 	}
 

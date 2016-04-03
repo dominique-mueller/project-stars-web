@@ -13,7 +13,7 @@ import { Store, Action } from '@ngrx/store';
 import { AppService } from './../app/app.service';
 import { IAppStore } from './../app/app.store';
 import { ILabel } from './label.model';
-import { ADD_LABELS } from './label.store';
+import { LOAD_LABELS } from './label.store';
 
 /**
  * Exports
@@ -29,7 +29,7 @@ export class LabelService {
 	/**
 	 * Labels
 	 */
-	public labels: Observable<ILabel[]>;
+	public labels: Observable<Map<string, Map<string, any>>>;
 
 	/**
 	 * Is fetching status flag
@@ -65,7 +65,7 @@ export class LabelService {
 		this.store = store;
 
 		// Setup
-		this.labels = store.select( 'labels' );
+		this.labels = store.select( 'labels' ); // Returns an observable
 		this.isFetching = false;
 
 	}
@@ -86,7 +86,7 @@ export class LabelService {
 			.map( ( response: Response ) => <ILabel[]> response.json().data )
 
 			// Create action
-			.map( ( payload: ILabel[] ) => ( { type: ADD_LABELS, payload } ) )
+			.map( ( payload: ILabel[] ) => ( { type: LOAD_LABELS, payload } ) )
 
 			// Dispatch action
 			.subscribe(
@@ -97,26 +97,6 @@ export class LabelService {
 			);
 
 			// TODO: Error handling
-
-	}
-
-	/**
-	 * Convert the label list into an easier to access object
-	 * @param  {ILabel[]} labels Label list
-	 * @return {any}             Label object
-	 */
-	public convertLabelListToObject( labels: ILabel[] ): any {
-
-		// Setup result
-		let result: any = {};
-
-		// Convert array into object
-		for ( const label of labels ) {
-			result[ <number> label.id ] = label;
-		}
-
-		// Return our result
-		return result;
 
 	}
 

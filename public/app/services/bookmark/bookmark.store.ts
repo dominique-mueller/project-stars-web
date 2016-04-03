@@ -2,6 +2,7 @@
  * External imports
  */
 import { Reducer, Action } from '@ngrx/store';
+import { List, fromJS } from 'immutable';
 
 /**
  * Internal imports
@@ -11,20 +12,38 @@ import { IBookmark } from './bookmark.model';
 /**
  * Action constants
  */
-export const ADD_BOOKMARKS: string = 'ADD_BOOKMARKS';
+export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
+export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
+export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
+export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
+
+/**
+ * Initial state of the bookmark data (empty per default)
+ */
+const initialState: List<Map<string, any>> = List<Map<string, any>>();
 
 /**
  * Bookmark store (reducer)
  */
-export const bookmarks: Reducer<IBookmark[]> = ( state: IBookmark[] = [], action: Action ) => {
+export const bookmarks: Reducer<List<Map<string, any>>> =
+	( state: List<Map<string, any>> = initialState, action: Action ) => {
 
 	switch ( action.type ) {
 
-		// Add bookmarks
-		case ADD_BOOKMARKS:
-			return action.payload;
+		// Load bookmarks (overwriting all state to default)
+		case LOAD_BOOKMARKS:
 
-		// Default
+			// Compute new state from initial state (with multiple mutations, better performance)
+			return initialState.withMutations( ( list: List<Map<string, any>> ) => {
+
+				// Set bookmarks as a list (because order is important)
+				action.payload.forEach( ( item: any ) => {
+					list.push( fromJS( item ) );
+				} );
+
+			} );
+
+		// Default fallback
 		default:
 			return state;
 

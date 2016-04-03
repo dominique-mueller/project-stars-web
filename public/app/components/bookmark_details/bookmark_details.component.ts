@@ -2,6 +2,7 @@
  * External imports
  */
 import { Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
@@ -30,22 +31,22 @@ export class BookmarkDetailsComponent implements OnInit {
 	private visible: boolean;
 
 	/**
-	 * Currently selected element
+	 * Information about the currently selected element
 	 */
 	@Input()
-	private element: IBookmark | IFolder;
+	private element: Map<string, any>;
 
 	/**
-	 * Type of the currently selected element
+	 * Data of the currently selected element
 	 */
 	@Input()
-	private type: string;
+	private data: Map<string, any>;
 
 	/**
 	 * Labels
 	 */
 	@Input()
-	private labels: ILabel[];
+	private labels: List<Map<string, any>>;
 
 	/**
 	 * Close event
