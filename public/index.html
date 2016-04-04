@@ -7,37 +7,56 @@
 
 	<title>Project Stars</title>
 
-	<link rel="stylesheet" href="http://localhost:3000/assets/style.min.css">
+	<link rel="stylesheet" href="http://localhost:3000/build/style.min.css">
 
-	<!-- Load Angular 2 libraries -->
-	<script src="http://localhost:3000/vendor/angular2-polyfills.js"></script>
-	<script src="http://localhost:3000/vendor/system.src.js"></script>
-	<script src="http://localhost:3000/vendor/Rx.js"></script>
-	<script src="http://localhost:3000/vendor/angular2.dev.js"></script>
-	<script src="http://localhost:3000/vendor/http.dev.js"></script>
-	<script src="http://localhost:3000/vendor/router.dev.js"></script>
+	<!-- Step 1: Load polyfills required for making this work in IE - order is important! -->
+	<script src="http://localhost:3000/node_modules/es6-shim/es6-shim.min.js"></script>
+	<script src="http://localhost:3000/node_modules/systemjs/dist/system-polyfills.js"></script>
+	<script scr="http://localhost:3000/node_modules/es6/dev/scr/testing/shims_for_IE.js"></script>
 
-	<!-- Configure SystemJS -->
+	<!-- Step 2: Load Angular 2 requirements & polyfills -->
+	<script src="http://localhost:3000/node_modules/angular2/bundles/angular2-polyfills.js"></script>
+	<script src="http://localhost:3000/node_modules/systemjs/dist/system.src.js"></script>
+
+	<!-- Step 2: SystemJS for module loading -->
 	<script>
+
+		// Configure SystemJS
 		System.config( {
 			baseUrl: 'http://localhost:3000',
+			map: {
+				app: '/build',
+				angular2: '/node_modules/angular2',
+				rxjs: '/node_modules/rxjs',
+				'@ngrx/store': '/node_modules/@ngrx/store/dist',
+				immutable: '/node_modules/immutable/dist'
+			},
 			packages: {
-				'/app': {
-					format: 'register',
-					defaultExtension: 'js'
+				'app': {
+					defaultExtension: 'js',
+					main: 'main.js'
 				},
 				'@ngrx/store': {
-					format: 'cjs',
+					defaultExtension: 'js',
 					main: 'index.js'
+				},
+				angular2: {
+					defaultExtension: 'js'
+				},
+				rxjs: {
+					defaultExtension: 'js'
+				},
+				immutable: {
+					defaultExtension: 'js',
+					main: 'immutable.js'
 				}
-			},
-			map: {
-				'@ngrx/store': 'http://localhost:3000/vendor',
-				'immutable': 'http://localhost:3000/vendor/immutable.js'
 			}
 		} );
-		System.import( '/app/main.js' )
+
+		// Run the app
+		System.import( 'app' )
 			  .then( null, console.error.bind( console ) );
+
 	</script>
 
 	<!-- Load web fonts from Adobe TypeKit -->

@@ -26,7 +26,7 @@ import * as typescript 		from './tools/gulp_tasks/typescript';
 gulp.task( 'build:dev', ( done ) => {
 	runSequence(
 		[ 'env:clean' ],
-		[ 'setup:index', 'setup:vendor', 'setup:api', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'setup:api', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -39,7 +39,7 @@ gulp.task( 'build:prod', ( done ) => {
 		[ 'env:npm' ],
 		[ 'sass:lint', 'typescript:lint' ],
 		[ 'env:clean' ],
-		[ 'setup:index', 'setup:vendor', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -63,7 +63,7 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 	// Initialize browsersync
 	browserSync.init( {
 		server: {
-			baseDir: config.paths.project.dest,
+			baseDir: './',
 			middleware: [ historyApiFallback() ]
 		},
 		logPrefix: 'Browsersync',
@@ -81,15 +81,15 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 	} );
 
 	// Watch SASS files
-	gulp.watch( `${config.paths.styles.src}/**/*.scss`, [ 'sass:build' ] );
+	gulp.watch( `${ config.paths.styles.src }/**/*.scss`, [ 'sass:build' ] );
 
 	// Watch typescript files (including its templates)
-	gulp.watch( `${config.paths.app.src}/**/*`, [ 'typescript:build' ] );
+	gulp.watch( `${ config.paths.app.src }/**/*`, [ 'typescript:build' ] );
 
 	// Watch index file and svg icon files
 	gulp.watch( [
-		`${config.paths.project.src}/index.html`,
-		`${config.paths.icons.src}/*.svg`
+		`${ config.paths.project.src }/index.html`,
+		`${ config.paths.icons.src }/*.svg`
 	], [ 'setup:index' ] );
 
 } );

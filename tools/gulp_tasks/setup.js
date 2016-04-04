@@ -48,31 +48,9 @@ export const icons = gulp.task( 'setup:index', () => {
 		} } ) )
 
 		// Save the new index
-		.pipe( gulp.dest( config.paths.project.dest ) )
+		.pipe( gulp.dest( './' ) )
 
 		.pipe( browserSync.stream( { once: true } ) );
-
-} );
-
-/**
- * Gulp task: Setup vendor files
- */
-export const vendor = gulp.task( 'setup:vendor', () => {
-
-	// Copy vendor files
-	return gulp
-
-		.src( [
-			'node_modules/angular2/bundles/angular2-polyfills.js',
-			'node_modules/systemjs/dist/system.src.js',
-			'node_modules/rxjs/bundles/Rx.js',
-			'node_modules/angular2/bundles/angular2.dev.js',
-			'node_modules/angular2/bundles/http.dev.js',
-			'node_modules/angular2/bundles/router.dev.js',
-			'node_modules/@ngrx/store/dist/*.js',
-			'node_modules/immutable/dist/immutable.js'
-		] )
-		.pipe( gulp.dest( config.paths.app.vendor ) );
 
 } );
 
@@ -89,6 +67,6 @@ export const api = gulp.task( 'setup:api', () => {
 			'public/app/services/folder/folders.mock.json',
 			'public/app/services/label/labels.mock.json'
 		] )
-		.pipe( gulp.dest( config.paths.project.dest ) );
+		.pipe( gulp.dest( config.paths.app.apimock ) );
 
 } );

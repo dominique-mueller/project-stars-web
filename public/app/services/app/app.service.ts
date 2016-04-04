@@ -24,7 +24,7 @@ export class AppService {
 	 */
 	constructor() {
 		this.APP_NAME = 'Project Stars';
-		this.API_URL = 'http://localhost:3000';
+		this.API_URL = 'http://localhost:3000/build/apimock';
 	}
 
 }

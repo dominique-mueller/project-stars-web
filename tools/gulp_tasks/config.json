@@ -6,19 +6,20 @@
 		},
 		"app": {
 			"src": "./public/app",
-			"dest": "./build/app",
-			"vendor": "./build/vendor"
+			"dest": "./build",
+			"apimock": "./build/apimock"
 		},
 		"styles": {
 			"src": "./public/styles",
-			"dest": "./build/assets"
+			"dest": "./build"
 		},
 		"icons": {
 			"src": "./public/assets/icons"
 		},
 		"documentation": {
 			"base": "./docs",
-			"frontend": "./docs/frontend"
+			"frontend": "./docs/frontend",
+			"backend": "./docs/backend"
 		},
 		"typings": {
 			"default": "./typings"
