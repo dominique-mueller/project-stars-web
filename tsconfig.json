@@ -9,8 +9,9 @@
 		"sourceMap": false,
 		"target": "es5"
 	},
-	"files": [
-		"typings/browser.d.ts",
-		"public/app/main.ts"
+	"exclude": [
+		"node_modules",
+		"typings/main",
+		"typings/main.d.ts"
 	]
 }

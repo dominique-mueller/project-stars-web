@@ -1,0 +1,17 @@
+// COMPONENTS: EDITABLE INPUT
+
+// TODO: Rename this file or concat with general input
+
+.input-editable {
+	position: relative;
+}
+
+.input-editable-button-list {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.input-editable-button-item {
+	display: inline-block;
+}

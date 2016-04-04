@@ -2,7 +2,7 @@
  * External imports
  */
 import { Reducer, Action } from '@ngrx/store';
-import { List, fromJS } from 'immutable';
+import { List, Map, fromJS } from 'immutable';
 
 /**
  * Internal imports
@@ -41,6 +41,14 @@ export const bookmarks: Reducer<List<Map<string, any>>> =
 					list.push( fromJS( item ) );
 				} );
 
+			} );
+
+		// Update bookmark
+		case UPDATE_BOOKMARK:
+
+			// Update only the changed values
+			return <List<Map<string, any>>> state.map( ( item: Map<string, any> ) => {
+				return ( item.get( 'id' ) === action.payload.id ) ? item.merge( Map<string, any>( action.payload.data ) ) : item;
 			} );
 
 		// Default fallback

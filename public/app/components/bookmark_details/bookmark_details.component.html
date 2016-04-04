@@ -2,9 +2,6 @@
 <div class="bookmark-details" [class.is-visible]="visible">
 	<div class="bookmark-details-header">
 		<h3 class="bookmark-details-title">Details</h3>
-		<button class="button button-invisible bookmark-details-button" type="button" (click)="editMode = !editMode">
-			<app-icon name="edit" size="20" color="#FFF"></app-icon>
-		</button>
 		<!-- <button class="button button-invisible bookmark-details-button" type="button">
 			<app-icon name="delete" size="20" color="#FFF"></app-icon>
 		</button> -->
@@ -17,39 +14,35 @@
 
 		<form>
 
-			<!-- Editable information -->
 			<ul>
 
 				<li class="bookmark-details-data">
 					<label for="bookmark-title">Title</label>
-					<input id="bookmark-title" type="text" [value]="data?.get( 'title' )" placeholder="My Bookmark"
-						[readonly]="!editMode">
+					<app-input-editable [name]="'bookmark-title'" [value]="data?.get( 'title' )" (update)="updateElement( element, 'title', $event )">
+					</app-input-editable>
+				</li>
+
+				<li class="bookmark-details-data">
+					<label for="bookmark-title-old">Title</label>
+					<input id="bookmark-title-old" type="text" [value]="data?.get( 'title' )" placeholder="My Bookmark">
 				</li>
 				<li class="bookmark-details-data">
 					<label for="bookmark-url">Url</label>
-					<input id="bookmark-url" type="url" [value]="data?.get( 'url' )" placeholder="http://www.example.com/"
-						[readonly]="!editMode">
+					<input id="bookmark-url" type="url" [value]="data?.get( 'url' )" placeholder="http://www.example.com/">
 				</li>
 				<li class="bookmark-details-data">
 					<label for="bookmark-description">Description</label>
-					<textarea id="bookmark-description" rows="3" placeholder="My description ..."
-						[readonly]="!editMode">{{ data?.get( 'description' ) }}</textarea>
+					<input id="bookmark-url" type="text" [value]="data?.get( 'description' )" placeholder="My description ...">
 				</li>
 
 			</ul>
 
-		</form>
-
-		<hr>
-
-		<!-- Labels -->
-		<form>
-
-			<p>Labels</p>
+			<p style="margin-top: 3rem;">Labels</p>
 			<ul>
 
-				<li class="bookmark-item-label" *ngFor="#labelId of data?.get( 'labels ')" [style.backgroundColor]="labels.get( labelId ).get( 'color' )">
-					{{ labels.get( labelId ).get( 'name' ) }}
+				<li class="bookmark-item-label" *ngFor="#labelId of data?.get( 'labels' )"
+					[style.backgroundColor]="labels.get( labelId )?.get( 'color' )">
+					{{ labels.get( labelId )?.get( 'name' ) }}
 				</li>
 
 			</ul>
@@ -76,10 +69,16 @@
 
 		</ul>
 
+		<div>
+			<pre><strong>DEBUG</strong></pre>
+			<pre>{{ data | json }}</pre>
+			<pre>{{ labels | json }}</pre>
+		</div>
+
 	</div>
 
 	<div *ngIf="element?.get( 'type' ) === 'folder'">
 		<p>Folder details:</p>
-		{{ element | json }}
+		{{ data | json }}
 	</div>
 </div>

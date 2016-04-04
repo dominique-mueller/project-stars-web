@@ -14,7 +14,7 @@ import { List, Map } from 'immutable';
 import { AppService } from './../app/app.service';
 import { IAppStore } from './../app/app.store';
 import { IBookmark } from './bookmark.model';
-import { LOAD_BOOKMARKS } from './bookmark.store';
+import { LOAD_BOOKMARKS, UPDATE_BOOKMARK } from './bookmark.store';
 
 /**
  * Exports
@@ -98,6 +98,26 @@ export class BookmarkService {
 			);
 
 			// TODO: Error handling
+
+	}
+
+	/**
+	 * Update bookmark
+	 * @param {number} id   Bookmark id
+	 * @param {{}}     data Updated bookmark data
+	 */
+	public updateBookmark( id: number, data: {} ): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				data: data,
+				id: id
+			},
+			type: UPDATE_BOOKMARK
+		} );
 
 	}
 

@@ -7,17 +7,19 @@ import { List, Map } from 'immutable';
 /**
  * Internal imports
  */
-import { IBookmark } from './../../services/bookmark/bookmark.service';
+import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
 import { IFolder } from './../../services/folder/folder.service';
 import { ILabel } from './../../services/label/label.service';
 import { IconComponent } from './../../shared/icon/icon.component';
+import { EditableInputComponent } from './../../shared/editable_input/editable_input.component';
 
 /**
  * Bookmark details component
  */
 @Component( {
 	directives: [
-		IconComponent
+		IconComponent,
+		EditableInputComponent
 	],
 	selector: 'app-bookmark-details',
 	templateUrl: './bookmark_details.component.html'
@@ -54,16 +56,14 @@ export class BookmarkDetailsComponent implements OnInit {
 	@Output()
 	private close: EventEmitter<any>;
 
-	/**
-	 * Editing mode
-	 */
-	private editMode: boolean;
+	private bookmarkService: BookmarkService;
 
-	constructor() {
+	constructor( bookmarkService: BookmarkService ) {
+
+		this.bookmarkService = bookmarkService;
 
 		// Setup
 		this.close = new EventEmitter();
-		this.editMode = false;
 
 	}
 
@@ -73,6 +73,19 @@ export class BookmarkDetailsComponent implements OnInit {
 
 	private closePanel(): void {
 		this.close.emit( null );
+	}
+
+	private updateElement( element: Map<string, any>, key: string, value: string ) {
+
+		console.log('### ELEMENT: ' + element);
+		console.log('### KEY: ' + key);
+		console.log('### VALUE: ' + value);
+
+		let data: any = {};
+		data[key] = value;
+
+		this.bookmarkService.updateBookmark( element.get( 'id' ), data );
+
 	}
 
 }

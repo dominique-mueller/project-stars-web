@@ -2,7 +2,8 @@
 
 	<!-- <li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Folder search results:</li> -->
 	<!-- <li class="folder-item" *ngFor="#folder of ( folders | search : 'folders' : searchOptions )"> -->
-	<li class="folder-item" *ngFor="#folder of folders">
+	<li class="folder-item" *ngFor="#folder of folders"
+		[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">
 		<a class="folder-link" (click)="goToFolder( folder.get( 'id' ) )">
 			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
 			<div class="folder-title">{{ folder.get( 'name' ) }}</div>
@@ -14,7 +15,8 @@
 
 	<!-- <li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Bookmark search results:</li> -->
 	<!-- <li class="bookmark-item" *ngFor="#bookmark of ( bookmarks | search : 'bookmarks' : searchOptions )"> -->
-	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
+	<li class="bookmark-item" *ngFor="#bookmark of bookmarks"
+		[class.is-selected]="selectedElement?.get( 'type' ) === 'bookmark' && selectedElement?.get( 'id' ) === bookmark.get( 'id' )">
 		<a class="bookmark-item-link" [href]="bookmark.get( 'url' )" target="_blank" rel="noreferrer noopener">
 			<img class="bookmark-item-icon" src="https://angular.io/favicon.ico">
 			<div class="bookmark-item-content">
