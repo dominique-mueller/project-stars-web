@@ -1,5 +1,4 @@
 //DEPENDENCIES
-
 var os = require('os');
 var fs = require('fs');
 require('es6-promise').polyfill();
@@ -15,6 +14,8 @@ require('./modules/connectDB.js');
 var mongoose = require('mongoose');			
 //miscellaneous
 var logger = require('./adapters/logger.js');
+
+mongoose.Promise = require('es6-promise').Promise;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

@@ -1,7 +1,7 @@
 // var mongoose = require('mongoose');
 var Label = require('../schemaExport.js').Label;
 var logger = require('../../adapters/logger.js');
-var errorHandler = require('../../helpers/errorHandler.js');
+// var errorHandler = require('../../helpers/errorHandler.js');
 
 module.exports = {
 	create: function(labelData, userId) {
@@ -25,11 +25,11 @@ module.exports = {
 		});
 	},
 
-	update: function(labelData){
+	update: function(labelId, labelData){
 		logger.debug('update label. param labelData: ' + labelData);
 		return new Promise(function(resolve, reject){
-			var labelId = labelData._id; // safe the label id
-			delete labelData._id; //remove the label id from the data set, because it isn't needed
+			// var labelId = labelData._id; // safe the label id
+			// delete labelData._id; //remove the label id from the data set, because it isn't needed
 			Label.findByIdAndUpdate(labelId, labelData, {new:true}, function(err){
 				if(err){
 					logger.debug('failed to update label');

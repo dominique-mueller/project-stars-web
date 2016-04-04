@@ -1,6 +1,12 @@
+//{"firstName":"Tim", "lastName":"Timer","emailAddress":"tim.timer@stars-web.de", "password":"stars-web-1"}
+
 require('es6-promise').polyfill();
 var auth = require('./adapters/authentication.js');
-var User = require('./modules/schemaExport.js').User;
+var User = require('./modules/user/users.model.js').User;
+
+
+
+
 
 
 
@@ -43,7 +49,7 @@ var User = require('./modules/schemaExport.js').User;
 
 // var myClass = new MyClass();
 // myClass.publicFunction();
-// // myClass.thisPrivateFunction();
+// myClass.thisPrivateFunction();
 
 // console.log('myClass pub Attr:' + myClass.publicAttribute);
 // console.log('myClass priv Attr: ' + myClass.privateAttribute);
@@ -72,63 +78,64 @@ var sync = require('synchronize');
 
 var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YWI0NGE1MGU4ODExNTEiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDU4NjQ2Nzg2LCJleHAiOjE0NjY0MjI3ODZ9.JlmMUO9e5_ozs-1O7lXQSdZINfFhRFxygs7K2e8XLLw';
 
-console.log('Token: ' + token);
-var getDecodePromise = function (){
-	return new Promise(function(resolve, reject){
-		jwt.verify(token, secret, function(err, decoded){
-			if(err){
-				reject(err);
-			}
-			else{
-				resolve(decoded);
-			}
-		});
-	});
-}
+// console.log('Token: ' + token);
+// var getDecodePromise = function (){
+// 	return new Promise(function(resolve, reject){
+// 		jwt.verify(token, secret, function(err, decoded){
+// 			if(err){
+// 				reject(err);
+// 			}
+// 			else{
+// 				resolve(decoded);
+// 			}
+// 		});
+// 	});
+// }
 
-var fullfilDecodePromise = function(callback){
-	var decodePromise = getDecodePromise();
-	decodePromise.then(function(decoded){
-		console.log('fullfilDecodePromise: ' + decoded);
-		callback(true);
-		//return true;
-	})
-	.catch(function(err){
-		console.log('fullfilDecodePromise: ' + err);
-		callback(err);
-		//return err;
-	});
-}
-
-
-// //var result = sync.await(fullfilDecodePromise(sync.defer()));
-// //console.log('Awaited result: ' + result);
-
-result = null;
-fullfilDecodePromise(function(resultCallback){
-	console.log('Not awaited result: ' + resultCallback);
-});
+// var fullfilDecodePromise = function(callback){
+// 	var decodePromise = getDecodePromise();
+// 	decodePromise.then(function(decoded){
+// 		console.log('fullfilDecodePromise: ' + decoded);
+// 		callback(true);
+// 		//return true;
+// 	})
+// 	.catch(function(err){
+// 		console.log('fullfilDecodePromise: ' + err);
+// 		callback(err);
+// 		//return err;
+// 	});
+// }
 
 
+// // //var result = sync.await(fullfilDecodePromise(sync.defer()));
+// // //console.log('Awaited result: ' + result);
 
-
-
-
-
-
-
-
-
-// var test = auth.convertRawPassword('right', 'right');
-// test.then(function(result){
-// 	console.log(result);
-// })
-// .catch(function(err){
-// 	console.log(err);
+// result = null;
+// fullfilDecodePromise(function(resultCallback){
+// 	console.log('Not awaited result: ' + resultCallback);
 // });
 
 
 
+
+
+
+
+
+
+
+
+var convertRawPassword = function(password){
+	try{
+		var hash = scrypt.kdfSync(password, scryptParameters);
+		return hash;
+	}
+	catch(e){
+		return new Error('failed to convert the password');
+	}
+}
+
+console.log('Hashed Password: ' + convertRawPassword('mySecurePassword'));
 
 
 

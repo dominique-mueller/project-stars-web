@@ -10,11 +10,13 @@ var secret = require('../config.js').authentication.secret;
 
 function Authentication(token){
 	
-	var classThis;
+	var self; 
+	/*workaround for an ECMA bug in the scope of the 'this' propertie. 
+	The nameing comes from the python programming language and refers to the 'class' and all class attributes and functions. 
+	variable is set in the constructor (end of function)*/
 	this.token = null;
 	this.tokenUserId = null;
 	this.isAdmin = null; 
-	this.tokenVerified = null;
 
 	//#### PRIVATE FUNCTIONS ####
 
@@ -41,15 +43,16 @@ function Authentication(token){
 
 	//#### PUBLIC FUNCTIONS ####
 
-	this.login = function(payload){
+	this.login = function(data){
 		return new Promise(function(resolve, reject){
-			getUser(payload.emailAddress, function(user){
+			getUser(data.emailAddress, function(user){
 				//TODO: check accountState
 					//TODO: reactivate account
 				//TODO: create session in db
 
-				if( scrypt.verifyKdfSync(payload.password, user.password) ){
+				if( scrypt.verifyKdfSync(data.password, user.password) ){
 					resolve(jwt.sign({
+						iss: 'stars-web.de',
 						userId: user._id,
 						admin: user.admin
 					}, secret,{expiresIn: 1440}));
@@ -82,22 +85,35 @@ function Authentication(token){
 		}
 	}
 
-	/*
+	
 
-	function will compare the two input parameters whether they are equal or not. 
-	@param: takes to parameters. both parameters are the password the proceed. 
-	@return: returns a promise. the resolve's param is a hashed password with a salt in form algorithm$salt$hash. 
-			if params are not equal, the promise will reject with the Error message 'passwords are not equal'
+	// // function will compare the two input parameters whether they are equal or not. 
+	// // @param: takes to parameters. both parameters are the password the proceed. 
+	// // @return: returns a promise. the resolve's param is a hashed password with a salt in form algorithm$salt$hash. 
+	// // 		if params are not equal, the promise will reject with the Error message 'passwords are not equal'
+	
+	// this.convertRawPassword = function(pw1, pw2){
+	// 	return new Promise(function(resolve, reject){
+	// 		if(pw1 === pw2){
+	// 			resolve(scrypt.kdfSync(pw1,scryptParameters));	//resolve with the hashed password (as string)
+	// 		}
+	// 		else{
+	// 			reject(new Error('passwords are not euqal')); 
+	// 		}
+	// 	});
+	// }
+
+	/*
+	@return: hashed password (input param) in form: algorithm$salt$hash
 	*/
-	this.convertRawPassword = function(pw1, pw2){
-		return new Promise(function(resolve, reject){
-			if(pw1 === pw2){
-				resolve(scrypt.kdfSync(pw1,scryptParameters));	//resolve with the hashed password (as string)
-			}
-			else{
-				reject(new Error('passwords are not euqal')); 
-			}
-		});
+	this.convertRawPassword = function(password){
+		try{
+			var hash = scrypt.kdfSync(password, scryptParameters);
+			return hash;
+		}
+		catch(e){
+			return new Error('failed to convert the password');
+		}
 	}
 
 	/*
@@ -118,21 +134,15 @@ function Authentication(token){
 	}
 
 	this.setToken = function(token, callback){
-		classThis.token = token;
-		// logger.debug('setToken: second line');
+		self.token = token;
 		decodeToken(token, function(err, result){
-			// logger.debug('setToken: decodeToken callback');
 			if(err){
 				logger.error(err);
-				classThis.tokenVerified = false;
 				callback(err);
 			}
 			else{
-				logger.debug('token decode result ONE: ' + classThis.tokenUserId);
-				classThis.tokenUserId = result.userId;
-				logger.debug('token decode result TWO: ' + classThis.tokenUserId);
-				classThis.isAdmin = result.admin;
-				classThis.tokenVerified = true;
+				self.tokenUserId = result.userId;
+				self.isAdmin = result.admin;
 				callback(null);
 			}
 		});
@@ -140,7 +150,7 @@ function Authentication(token){
 
 
 	//#### CONSTRUCTOR ####
-	classThis = this;
+	self = this;
 	if(token){
 		this.setToken(token, function(err){
 			if(err){
@@ -151,42 +161,8 @@ function Authentication(token){
 	else{
 
 	}
+	
+	return this;
 }
 
 module.exports = Authentication;
-
-
-
-// getUserId: function(token){
-// 	var decodeTokenPromise = decodeToken(token);
-// 	decodeTokenPromise.then(function(decoded){
-// 		return decoded.userId;
-// 	})
-// 	.catch(function(err){
-// 		return err;
-// 	});
-// },
-
-// isAdmin: function(token){
-// 	var decodeTokenPromise = decodeToken(token);
-// 	decodeTokenPromise.then(function(decoded){
-// 		return decoded.admin;
-// 	})
-// 	.catch(function(err){
-// 		return err;
-// 	});
-// },
-
-// verifyToken: function(token){
-// 	var decodeTokenPromise = decodeToken(token);
-// 	decodeTokenPromise.then(function(decoded){
-// 		console.log('Token: ' + token);
-// 		console.log('verifyToken resolve');
-// 		return true;
-// 	})
-// 	.catch(function(err){
-// 		console.log('Token: ' + token);
-// 		console.log('verifyToken reject');
-// 		return err;
-// 	});
-// }

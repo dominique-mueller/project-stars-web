@@ -1,11 +1,12 @@
 var logger = require('./adapters/logger.js');
 var httpStatus = require('./config.js').httpStatus;
-var authenticationReq = require('./adapters/authentication.js');
 var authentication;
-var sync = require('synchronize');
+// var sync = require('synchronize');
 var routerBackend = require('express').Router(), 
-	routerFrontend = require('express').Router()
+	routerFrontend = require('express').Router(),
 	routerHTTPRedirect = require('express').Router();
+var usersController, bookmarksController;
+
 
 // middleware to use for all requests
 routerFrontend.use(function(req, res, next) {
@@ -19,12 +20,11 @@ routerHTTPRedirect.use(function(req, res, next) {
 
 
 routerBackend.use(function(req, res, next){
-	authentication = new authenticationReq();
-// 	logger.debug('REQ.BODY.testObject:: '+req.body.testObject);
-// 	logger.debug('req.headers.authorization.Authorization: ' + req.headers.authorization);
-// 	logger.debug('REQ.PARAM:: '+req.query.testParam);
+	//a new Authentication object has to be created here, because it only is for this request
+	authentication = new require('./adapters/authentication.js')();
 	next();
 });
+
 
 //###### Frontend API ######
 
@@ -37,12 +37,14 @@ routerFrontend.get('',function(req, res){
 
 routerBackend.route('/authenticate/login')
 	.post(function(req, res){
-		var result = authentication.login();
-		result.then(function(){
-
+		var result = authentication.login(JSON.parse(req.body.data));
+		result.then(function(token){
+			res.status(httpStatus.OK).json({data:token});
+			res.end();
 		})
-		.catch(function(){
-
+		.catch(function(err){
+			res.status(httpStatus.INVALID_INPUT).json({error:err});
+			res.end();
 		});
 	});
 routerBackend.route('/authenticate/logout')
@@ -60,16 +62,25 @@ routerBackend.route('/authenticate/accountActivation')
 	.get(function(req, res){
 		//TODO
 	});
-
-routerBackend.route('/users/register')
-	.post(function(req, res){
-		require('./controller/usersController.js')(req, res, authentication).post();
+routerBackend.route('/authenticate/newEMailAddress')
+	.get(function(req, res){
+		//TODO
+		// get request with authentication token
+		// will be handled like an account activation
 	});
 
+routerBackend.use('/users', function(req, res, next){
+	usersController = new require('./controller/usersController.js')(req, res, authentication);
+	next();
+});
+routerBackend.route('/users/register')
+	.post(function(req, res){
+		usersController.post();
+	});
 
+// Backend authorization
 // do for all following backend requests
 routerBackend.use(function(req, res, next) {
-	// logger.debug('authenticatie the token');
 	//if the Authorization is set in the request header and this token is vaild (our token & not expired)
     var message = null;
     if(req.headers.authorization){
@@ -95,69 +106,47 @@ routerBackend.use(function(req, res, next) {
     		}
     	});
     }
-
- //    var message = null;
- //    if(req.headers.authorization){
-	// 	authentication.setToken(req.headers.authorization);
- //    	var result = authentication.tokenVerified;
- //    	if(result === true){
- //    		next(); //continue with route matching
- //    	}
-	//     else{	//send access Forbidden message
-	//     	console.log(result);
-	//     	if(result.prototype.isPrototypeOf(Error) && result.name == 'TokenExpiredError'){
-	//     		message = 'Toked expired. Authentication failed.';
-	//     	}
-	//     }
- //    }
- //    if(!message){ //authentication failed but it is not a TokenExpiredError
- //    	message = 'Token authentication failed.';
- //    }
-	// res.status(httpStatus.UNAUTHORIZED).send(message);
-	// res.end();
+    else{
+    	res.status(httpStatus.UNAUTHORIZED).send('Token authentication failed.');
+    }
 });
 
 
 routerBackend.route('/users')
 	.get(function(req, res){
-		require('./controller/usersController.js')(req, res, authentication).getAll();
+		usersController.getAll();
 	})
 
 	.post(function(req, res){
 		//Only an admin can use this route
 		//use /api/vx/users/register for non admin user 
-		
+		if(authentication.isAdmin){
+			usersController.post();
+		}
+		else{
+			res.status(httpStatus.FORBIDDEN).json({error:'This route is only for the stars-web admins available!'}).end();
+		}
 	});	
 routerBackend.route('/users/:user_id')
 	.get(function(req, res){
-		//Possible value for :user_id is 'tokenUserId', which takes the userId from the authToken
-		// if(req.params._id == 'tokenUserId'){
-		// 	//TODO Code Review
-		// 	require('./modules/user/users.model.js').findOne(
-		// 		require('./helpers/generalHelpers.js').waitForUserIdFromPromise(
-		// 			authentication.getUserId(req.headers.authorization)
-		// 		)
-		// 	);
-		// }
-		// else{
-
-		// }
-		// res.send('User GET id: ' + req.params._id);
-		require('./controller.usersController.js')(req, res, authentication).get();
+		usersController.get();
 	})
 
 	.put(function(req, res){
-		require('./controller.usersController.js')(req, res, authentication).put();
+		usersController.put();
 	})
 
 	.delete(function(req, res){
-		require('./controller.usersController.js')(req, res, authentication).delete();
+		usersController.delete();
 	});
 
-
+routerBackend.use('/bookmarks', function(req, res, next){
+	bookmarksController = new require('./controller/bookmarksController.js')(req, res, authentication);
+	next();
+});
 routerBackend.route('/bookmarks')
 	.get(function(req, res){
-		res.send('Bookmarks test GET');
+		bookmarksController.getAll(false);
 	})
 
 	.post(function(req, res){
@@ -179,6 +168,10 @@ routerBackend.route('/bookmarks/folders')
 	.get(function(req, res){
 
 	});
+// routerBackend.route('bookmarks/user/:user_id')
+// 	.get(function(req, res){
+// 		bookmarksController.getAll(true);
+// 	});
 
 routerBackend.route('/folders')
 	.get(function(req, res){
@@ -264,8 +257,6 @@ routerBackend.route('/labels')
 	})
 
 	.post(function(req, res){
-		// var data = JSON.parse(req.body.data);
-		// logger.debug('REQ.BODY: ' + req.body.data + ' :: data.name: ' + data.name);
 		logger.debug('CREATE LABEL userId: ' + authentication.tokenUserId)
 		var result = require('./modules/label/labels.model.js').create(JSON.parse(req.body.data), authentication.tokenUserId);
 		result.then(function(label) {
@@ -278,7 +269,7 @@ routerBackend.route('/labels')
 	});
 routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findOne(req.query._id);
+		var result = require('./modules/label/labels.model.js').findOne(req.params.label_id);
 		result.then(function(label){
 			res.json({data:label});
 			res.end();
@@ -290,7 +281,7 @@ routerBackend.route('/labels/:label_id')
 	})
 
 	.put(function(req, res){
-		var result = require('./modules/label/labels.model.js').update(JSON.parse(req.body.data));
+		var result = require('./modules/label/labels.model.js').update(req.params.label_id, JSON.parse(req.body.data));
 		result.then(function(){
 			res.status(httpStatus.NO_CONTENT);
 			res.end();
@@ -318,7 +309,7 @@ routerHTTPRedirect.route('/api/').all(httpAPIRequest);
 
 routerHTTPRedirect.route('*').all(function(req, res){
 	logger.debug('http standard redirect route');
-    res.redirect(httpStatus.PERMANENT_REDIRECT, 'https://' + req.headers.authorization['host'] + req.url);
+    res.redirect(httpStatus.PERMANENT_REDIRECT, 'https://' + req.headers['host'] + req.url);
 });
 
 

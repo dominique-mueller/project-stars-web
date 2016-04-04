@@ -2,7 +2,7 @@ var bunyan = require('bunyan');
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
-var logPath = createLogPath();
+// var logPath = createLogPath();
 
 //configure bunyan logger
 var logger = bunyan.createLogger({
@@ -14,13 +14,13 @@ var logger = bunyan.createLogger({
 		},
 		{
 			level: bunyan.INFO,
-			// path: logPath + 'info.json'
-			stream: process.stdout
+			path: './info.log.json'
+			// stream: process.stdout
 		},
 		{
 			level: bunyan.ERROR,
-			// path: logPath + 'error.json'
-			stream: process.stderr
+			path: './error.log.json'
+			// stream: process.stderr
 		}
 	]
 });
@@ -37,11 +37,10 @@ module.exports = logger;
 	mac os is not supportet
 */
 function createLogPath(){
-	var logPath;
+	this.logPath = './logs/';
 	if(os.platform() === 'linux'){
 		//os is linux
-		
-		// createDirPath(logPath);
+		createDirPath(logPath);
 	}
 	else{
 		//os is windows

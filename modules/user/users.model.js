@@ -1,4 +1,5 @@
 var User = require('../schemaExport.js').User;
+var logger = require('../../adapters/logger.js');
 
 
 module.exports = {
@@ -63,7 +64,8 @@ module.exports = {
 	},
 
 	findOne: function(userId){
-		return new Promsie(function(resolve, reject){
+		var promise = new Promsie(function(resolve, reject){
+			logger.debug('IN this Promise');
 			User.findById(userId, function(err, user){
 				if(err){
 					reject(err);
@@ -73,6 +75,7 @@ module.exports = {
 				}
 			});
 		});
+		return promise;
 	},
 
 	findAll: function(){

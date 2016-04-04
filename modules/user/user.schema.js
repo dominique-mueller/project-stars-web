@@ -11,7 +11,7 @@ var user = new mongoose.Schema({
 	registered: {type: Date, default: Date.now},
 	accountActivation: {
 		token: {type: String, required: true},
-		tempPassword: {type: String, required: true},
+		tempPassword: {type: String, required: true}, //used for password reset or when an admin created an account
 		activationState: {type: Boolean, default: false},
 		deletionDate: {type: Date}
 	},

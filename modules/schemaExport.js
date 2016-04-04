@@ -4,11 +4,12 @@ This makes it possible for other modules to use the ODM models
 */
 module.exports = {
 	 "Device": require('./device/device.schema.js'),
-	 "Setting": require('./setting/setting.schema.js'),
 	 "Label": require('./label/label.schema.js'),
+	 "Folder": require('./folder/folder.schema.js'),
 	 "Bookmark": require('./bookmark/bookmark.schema.js'),
 	 "User": require('./user/user.schema.js'),
-	 "Session": require('./session/session.schema.js')
+	 "Session": require('./session/session.schema.js'),
+	 "Setting": require('./setting/setting.schema.js')
 };
 
 

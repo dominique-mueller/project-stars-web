@@ -8,5 +8,9 @@ module.exports = {
 			logger.ERROR("catched error in helpers->waitForUserIdFromPromise");
 			logger.ERROR(err);
 		}
+	},
+
+	pleaseSortTheBookmarksIntoTheirFolders: function(bookmarks, folders){
+		
 	}
 }
