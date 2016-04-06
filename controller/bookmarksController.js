@@ -25,7 +25,7 @@ function BookmarksController(req, res, authentication){
 		});
 	}
 
-	this.getAll = function(userFilter){
+	this.getAll = function(){
 		var bookmarkPromise = Bookmark.findAll(self.authentication.tokenUserId);
 		bookmarkPromise.then(function(bookmarks){
 			self.res.status(httpStatus.OK).json({'data':bookmarks});

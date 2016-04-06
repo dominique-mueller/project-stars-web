@@ -24,6 +24,9 @@ var user = new mongoose.Schema({
 		dropbox:{
 			name: String
 		}
+	},
+	settings:{
+		storage:[]
 	}
 });
 

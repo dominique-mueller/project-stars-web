@@ -1,4 +1,3 @@
-require('es6-promise').polyfill();
 var Bookmark = require('../schemaExport.js').Bookmark;
 var logger = require('../../adapters/logger.js');
 
@@ -37,7 +36,7 @@ module.exports = {
 				);
 			}
 			else{
-				reject(new Error('Failed to upate bookmark. Invalid Input Fields'))
+				reject(new Error('Failed to upate bookmark. Invalid Input Fields'));s
 			}
 		});
 	},

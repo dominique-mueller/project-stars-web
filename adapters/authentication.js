@@ -1,9 +1,8 @@
-/*
-see: https://github.com/scotch-io/node-token-authentication/blob/master/server.js
-*/
+//@see: https://github.com/scotch-io/node-token-authentication/blob/master/server.js
 var jwt = require('jsonwebtoken');
-var scrypt = require('scrypt');
-var scryptParameters = scrypt.paramsSync(0.1);
+// var scrypt = require('scrypt');
+// var scryptParameters = scrypt.paramsSync(0.1);
+var bcrypt = require('bcryptjs');
 var logger = require('./logger');
 var secret = require('../config.js').authentication.secret;
 
@@ -32,11 +31,13 @@ function Authentication(token){
 	}
 
 	function getUser(emailAddress, callback){
-		var result = require('../modules/user/users.model.js').find({'emailAddress':emailAddress});
+		var result = require('../modules/user/users.model.js').findOne({'emailAddress':emailAddress});
 		result.then(function(user){
+			logger.debug('found user');
 			callback(user);
 		})
 		.catch(function(){
+			logger.debug('did not found user');
 			callback(new Error("could not find user by emailAddress"));
 		});
 	}
@@ -49,8 +50,8 @@ function Authentication(token){
 				//TODO: check accountState
 					//TODO: reactivate account
 				//TODO: create session in db
-
-				if( scrypt.verifyKdfSync(data.password, user.password) ){
+				logger.debug('GOT USER::' + user);
+				if( bcrypt.compareSync(data.password, user.password) ){
 					resolve(jwt.sign({
 						iss: 'stars-web.de',
 						userId: user._id,
@@ -92,23 +93,13 @@ function Authentication(token){
 	// // @return: returns a promise. the resolve's param is a hashed password with a salt in form algorithm$salt$hash. 
 	// // 		if params are not equal, the promise will reject with the Error message 'passwords are not equal'
 	
-	// this.convertRawPassword = function(pw1, pw2){
-	// 	return new Promise(function(resolve, reject){
-	// 		if(pw1 === pw2){
-	// 			resolve(scrypt.kdfSync(pw1,scryptParameters));	//resolve with the hashed password (as string)
-	// 		}
-	// 		else{
-	// 			reject(new Error('passwords are not euqal')); 
-	// 		}
-	// 	});
-	// }
-
 	/*
 	@return: hashed password (input param) in form: algorithm$salt$hash
 	*/
 	this.convertRawPassword = function(password){
 		try{
-			var hash = scrypt.kdfSync(password, scryptParameters);
+			var salt = bcrypt.genSaltSync(10);
+			var hash = bcrypt.hashSync(password, salt);
 			return hash;
 		}
 		catch(e){

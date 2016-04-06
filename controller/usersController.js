@@ -43,7 +43,7 @@ function UsersController(req, res, authentication){
 			account activation
 			send mail with activation link
 			*/
-			self.res.status(httpStatus.OK).json({'data':newUser});
+			self.res.status(httpStatus.NO_CONTENT);
 			self.res.end();
 		})
 		.catch(function(err){
@@ -106,7 +106,7 @@ function UsersController(req, res, authentication){
 			getOne(self.authentication.tokenUserId);
 		}
 		else if(authentication.isAdmin){
-			self.res.status(httpStatus.OK).json(getOne(self.req.params.user_id));
+			self.res.status(httpStatus.OK).json(getOne(self.req.params._id));
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});

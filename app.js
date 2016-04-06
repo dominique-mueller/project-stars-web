@@ -1,7 +1,7 @@
 //DEPENDENCIES
 var os = require('os');
 var fs = require('fs');
-require('es6-promise').polyfill();
+require('es6-promise').polyfill(); //over writes the node promises so they work like in the es6 specification
 // web server requirements
 var https = require('https');
 var express = require('express');
@@ -15,8 +15,10 @@ var mongoose = require('mongoose');
 //miscellaneous
 var logger = require('./adapters/logger.js');
 
-mongoose.Promise = require('es6-promise').Promise;
+//over writes the mongoose promises so they work like in the es6 specification
+mongoose.Promise = require('es6-promise').Promise; 
 
+//pass the body-parser to express
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

@@ -37,8 +37,10 @@ routerFrontend.get('',function(req, res){
 
 routerBackend.route('/authenticate/login')
 	.post(function(req, res){
+		logger.debug('LOGIN::');
 		var result = authentication.login(JSON.parse(req.body.data));
 		result.then(function(token){
+			logger.debug('resolve JWT::' + token);
 			res.status(httpStatus.OK).json({data:token});
 			res.end();
 		})
@@ -146,23 +148,23 @@ routerBackend.use('/bookmarks', function(req, res, next){
 });
 routerBackend.route('/bookmarks')
 	.get(function(req, res){
-		bookmarksController.getAll(false);
+		bookmarksController.getAll();
 	})
 
 	.post(function(req, res){
-		res.send('Bookmark test POST');
+		bookmarksController.post();
 	});
 routerBackend.route('/bookmarks/:bookmark_id')
 	.get(function(req, res){
-		res.send('User GET id: ' + req.query._id);
+		bookmarksController.get();
 	})
 
 	.put(function(req, res){
-
+		bookmarksController.put();
 	})
 
 	.delete(function(req, res){
-
+		bookmarksController.delete();
 	});
 routerBackend.route('/bookmarks/folders')
 	.get(function(req, res){

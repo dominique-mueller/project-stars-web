@@ -1,6 +1,15 @@
 var User = require('../schemaExport.js').User;
 var logger = require('../../adapters/logger.js');
 
+var fullFillPromise = function(resolve, reject, err, result){
+	if(err){
+		reject(err);
+	}
+	else{
+		resolve(result);
+	}
+}
+
 
 module.exports = {
 	//create expects that the userData can allreay be used as direct input parameter
@@ -63,17 +72,24 @@ module.exports = {
 		});
 	},
 
-	findOne: function(userId){
-		var promise = new Promsie(function(resolve, reject){
-			logger.debug('IN this Promise');
-			User.findById(userId, function(err, user){
-				if(err){
-					reject(err);
-				} 
-				else{
-					resolve(user);
-				}
-			});
+	findOne: function(identifier){
+		var regex = new RegEx('/^\d+$/');
+		var promise = new Promise(function(resolve, reject){
+			if(regex.test(identifier)){ //check if identifier is an id (only numbers) or an email-address
+				User.findById(identifier, function(err, user){
+					if(err){
+						reject(err);
+					} 
+					else{
+						resolve(user);
+					}
+				});
+			}
+			else{
+				User.findOne({emailAddress:identifier}, function(err, user){
+
+				});
+			}
 		});
 		return promise;
 	},
@@ -91,4 +107,3 @@ module.exports = {
 		});
 	}
 }
-
