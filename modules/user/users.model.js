@@ -1,14 +1,16 @@
 var User = require('../schemaExport.js').User;
 var logger = require('../../adapters/logger.js');
 
-var fullFillPromise = function(resolve, reject, err, result){
+function fullFillPromise(resolve, reject, err, result){
+	logger.debug('fullFillPromise');
 	if(err){
 		reject(err);
 	}
 	else{
+		logger.debug('fullFillPromise REJECTED');
 		resolve(result);
 	}
-}
+};
 
 
 module.exports = {
@@ -31,11 +33,9 @@ module.exports = {
 		return new Promise(function(resolve, reject){
 			User.findByIdAndUpdate(userId, userData, {new:true}, function(err){
 				if(err){
-					logger.debug('failed to update user');
-					reject(err);	
+					reject(err);
 				}
 				else{
-					logger.debug('user updated');
 					resolve();
 				}
 			});
@@ -46,7 +46,7 @@ module.exports = {
 		return new Promise(function(resolve, reject){
 			User.findByIdAndRemove(userId, function(err){
 				if(err){
-					reject(err);	
+					reject(err);
 				}
 				else{
 					resolve();
@@ -73,22 +73,36 @@ module.exports = {
 	},
 
 	findOne: function(identifier){
-		var regex = new RegEx('/^\d+$/');
+		var regex = new RegExp(/^\d+$/);
+		logger.debug('REGEX RESULT::'+regex.test(identifier));
 		var promise = new Promise(function(resolve, reject){
 			if(regex.test(identifier)){ //check if identifier is an id (only numbers) or an email-address
-				User.findById(identifier, function(err, user){
+				logger.debug('find user by id');
+				User.findById(identifier, 
+					function(err, result){
 					if(err){
 						reject(err);
-					} 
-					else{
-						resolve(user);
 					}
-				});
+					else{
+						logger.debug('fullFillPromise REJECTED');
+						resolve(result);
+					}}
+					// fullFillPromise(resolve, reject, err, user)
+				);
 			}
 			else{
-				User.findOne({emailAddress:identifier}, function(err, user){
-
-				});
+				logger.debug('find user by email');
+				User.findOne({emailAddress:identifier}, 
+					function(err,result){
+					if(err){
+						reject(err);
+					}
+					else{
+						logger.debug('fullFillPromise REJECTED');
+						resolve(result);
+					}}
+					// fullFillPromise(resolve, reject, err, user)
+				);
 			}
 		});
 		return promise;

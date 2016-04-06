@@ -31,14 +31,15 @@ function Authentication(token){
 	}
 
 	function getUser(emailAddress, callback){
-		var result = require('../modules/user/users.model.js').findOne({'emailAddress':emailAddress});
+		logger.debug('getUser()');
+		var result = require('../modules/user/users.model.js').findOne(emailAddress);
 		result.then(function(user){
 			logger.debug('found user');
-			callback(user);
+			callback(null, user);
 		})
 		.catch(function(){
 			logger.debug('did not found user');
-			callback(new Error("could not find user by emailAddress"));
+			callback(new Error("could not find user by emailAddress"), null);
 		});
 	}
 
@@ -46,20 +47,25 @@ function Authentication(token){
 
 	this.login = function(data){
 		return new Promise(function(resolve, reject){
-			getUser(data.emailAddress, function(user){
+			getUser(data.emailAddress, function(err, user){
 				//TODO: check accountState
 					//TODO: reactivate account
 				//TODO: create session in db
 				logger.debug('GOT USER::' + user);
-				if( bcrypt.compareSync(data.password, user.password) ){
+				if(err || !(bcrypt.compareSync(data.password, user.password)) ){
+					if(err){
+						reject(err);
+					}
+					else{
+						reject(new Error('Failed to login. Wrong password'));
+					}
+				}
+				else{
 					resolve(jwt.sign({
 						iss: 'stars-web.de',
 						userId: user._id,
 						admin: user.admin
-					}, secret,{expiresIn: 1440}));
-				}
-				else{
-					reject(new Error('Could not create token. Wrong Password'));
+					}, secret,{expiresIn: 1440}));	
 				}
 			});	
 		});

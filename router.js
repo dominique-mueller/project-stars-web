@@ -45,6 +45,7 @@ routerBackend.route('/authenticate/login')
 			res.end();
 		})
 		.catch(function(err){
+			logger.debug('Login error');
 			res.status(httpStatus.INVALID_INPUT).json({error:err});
 			res.end();
 		});
