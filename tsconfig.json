@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"removeComments": true,
+		"sourceMap": false,
+		"target": "ES5"
+	},
+	"files": [
+		"typings/browser.d.ts",
+		"public/app/main.ts"
+	]
+}

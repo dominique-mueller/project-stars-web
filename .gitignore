@@ -1,4 +1,17 @@
-node_modules/
+# Dependencies
+node_modules
+typings
+Gemfile.lock
+
+# Build folders
+build
+
+# Generated error logs
 undefinederror.json
 undefinedinfo.json
+
 stars-web.sublime*
+
+# Editor settings
+*.sublime-workspace
+
