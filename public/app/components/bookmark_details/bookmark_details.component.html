@@ -34,12 +34,15 @@
 
 			<hr>
 
-			<p style="margin-top: 3rem;">Labels</p>
-			<ul>
+			<p style="margin: 3rem 2.5rem 1rem; font-size: 1.2rem; color: #999; font-weight: 500; letter-spacing: .01rem">Labels</p>
+			<ul class="bookmark-details-data">
 
 				<li class="bookmark-item-label" *ngFor="#labelId of data?.get( 'labels' )"
 					[style.backgroundColor]="labels.get( labelId )?.get( 'color' )">
 					{{ labels.get( labelId )?.get( 'name' ) }}
+					<button class="button button-invisible" type="button"> x</button>
+				</li><li class="bookmark-item-label" style="background-color: #DDD; color: #444;">
+					+
 				</li>
 
 			</ul>
@@ -65,15 +68,6 @@
 			</li>
 
 		</ul>
-
-		<!-- TODO: Remove debug -->
-		<hr>
-
-		<div>
-			<pre><strong>DEBUG</strong></pre>
-			<pre>{{ data | json }}</pre>
-			<pre>{{ labels | json }}</pre>
-		</div>
 
 	</div>
 

@@ -2,7 +2,7 @@
 
 .bookmark-item-labels {
 	display: inline-block;
-	margin-left: .7rem;
+	margin-left: 1.1rem;
 	transform-origin: left center;
 	transition: transform $anim-speed-fast $anim-easing;
 }
@@ -10,7 +10,7 @@
 .bookmark-item-label {
 	display: inline-block;
 	margin-top: .2rem;
-	margin-left: .42rem;
+	margin-right: .42rem;
 	padding-right: .8rem;
 	padding-left: .8rem;
 	border-radius: .1rem;
