@@ -16,11 +16,12 @@ import { AppComponent } from './components/app/app.component';
 bootstrap( AppComponent, [
 		provide( APP_BASE_HREF, { useValue: '/' } )
 	] )
-	.then( ( success: any ) => {
+	.then( () => {
 		console.clear(); // TODO: Remove me ?!
-		console.log( 'Angular 2 app has successfully started!' );
+		console.log( 'App successfully started!' );
 	} )
 	.catch( ( error: any ) => {
-		console.log( 'Angular 2 bootstrap error.' );
+		console.log( 'An error occured while starting this app!' );
+		console.log( 'Details:' );
 		console.log( error );
 	} );

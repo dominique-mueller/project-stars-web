@@ -7,6 +7,9 @@ import { Component, Input } from 'angular2/core';
  * Icon Component
  */
 @Component( {
+	host: {
+		class: 'icon'
+	},
 	selector: 'app-icon',
 	templateUrl: './icon.component.html'
 } )

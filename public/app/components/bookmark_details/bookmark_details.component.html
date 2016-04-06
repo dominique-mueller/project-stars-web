@@ -15,27 +15,24 @@
 		<form>
 
 			<ul>
-
 				<li class="bookmark-details-data">
-					<label for="bookmark-title">Title</label>
-					<app-input-editable [name]="'bookmark-title'" [value]="data?.get( 'title' )" (update)="updateElement( element, 'title', $event )">
+					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
+						[value]="data?.get( 'title' )" (update)="updateElement( element, 'title', $event )">
 					</app-input-editable>
 				</li>
-
 				<li class="bookmark-details-data">
-					<label for="bookmark-title-old">Title</label>
-					<input id="bookmark-title-old" type="text" [value]="data?.get( 'title' )" placeholder="My Bookmark">
+					<app-input-editable [name]="'bookmark-url'" [label]="'Url'" [type]="'url'" [placeholder]="'https://www.example.com'"
+						[value]="data?.get( 'url' )" (update)="updateElement( element, 'url', $event )">
+					</app-input-editable>
 				</li>
 				<li class="bookmark-details-data">
-					<label for="bookmark-url">Url</label>
-					<input id="bookmark-url" type="url" [value]="data?.get( 'url' )" placeholder="http://www.example.com/">
+					<app-input-editable [name]="'bookmark-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My bookmark description'"
+						[value]="data?.get( 'description' )" (update)="updateElement( element, 'description', $event )">
+					</app-input-editable>
 				</li>
-				<li class="bookmark-details-data">
-					<label for="bookmark-description">Description</label>
-					<input id="bookmark-url" type="text" [value]="data?.get( 'description' )" placeholder="My description ...">
-				</li>
-
 			</ul>
+
+			<hr>
 
 			<p style="margin-top: 3rem;">Labels</p>
 			<ul>
@@ -54,20 +51,23 @@
 		<!-- Additional information -->
 		<ul>
 
-			<li class="bookmark-details-data">
-				<label for="bookmark-title">Created on</label>
-				<input id="bookmark-title" type="text" [value]="data?.get( 'created' )" readonly>
+			<li class="form-component bookmark-details-data">
+				<input class="form-input" id="bookmark-created" type="text" [value]="data?.get( 'created' )" readonly>
+				<label class="form-label" for="bookmark-created">Created on</label>
 			</li>
-			<li class="bookmark-details-data">
-				<label for="bookmark-title">Last updated on</label>
-				<input id="bookmark-title" type="text" [value]="data?.get( 'updated' )" readonly>
+			<li class="form-component bookmark-details-data">
+				<input class="form-input" id="bookmark-updated" type="text" [value]="data?.get( 'updated' )" readonly>
+				<label class="form-label" for="bookmark-updated">Last updated on</label>
 			</li>
-			<li class="bookmark-details-data" *ngIf="data?.get( 'archived' )">
-				<label for="bookmark-title">Archived on</label>
-				<input id="bookmark-title" type="text" [value]="data?.get( 'archived' )" readonly>
+			<li class="form-component bookmark-details-data" *ngIf="data?.get( 'archived' )">
+				<input class="form-input" id="bookmark-archived" type="text" [value]="data?.get( 'archived' )" readonly>
+				<label class="form-label" for="bookmark-archived">Archived on</label>
 			</li>
 
 		</ul>
+
+		<!-- TODO: Remove debug -->
+		<hr>
 
 		<div>
 			<pre><strong>DEBUG</strong></pre>

@@ -16,7 +16,7 @@ import { IconComponent } from './../icon/icon.component';
 		IconComponent
 	],
 	host: {
-		class: 'input-editable'
+		class: 'form-component input-editable'
 	},
 	selector: 'app-input-editable',
 	templateUrl: './editable_input.component.html'
@@ -28,6 +28,24 @@ export class EditableInputComponent {
 	 */
 	@Input()
 	private name: string;
+
+	/**
+	 * Input placeholder
+	 */
+	@Input()
+	private placeholder: string;
+
+	/**
+	 * Input type
+	 */
+	@Input()
+	private type: string;
+
+	/**
+	 * Label name
+	 */
+	@Input()
+	private label: string;
 
 	/**
 	 * Incoming data
@@ -62,12 +80,60 @@ export class EditableInputComponent {
 
 	}
 
-	// TODO: Save on enter, cancel on Esc, what happens on blur?
-
+	/**
+	 * Start editing the input
+	 * @param {HTMLInputElement} input Input element reference
+	 */
 	private edit( input: HTMLInputElement ): void {
 
-		// Save original value (for resetting later on)
-		this.originalValue = input.value;
+		// Ony switch when necessary
+		if ( !this.isInEditMode ) {
+
+			// Save original value (for resetting later on)
+			this.originalValue = input.value;
+
+			// Enable edit mode
+			this.enableEditMode( input );
+
+		}
+
+	}
+
+	/**
+	 * Cancel input changes
+	 * @param {HTMLInputElement} input Input element reference
+	 */
+	private cancel(input: HTMLInputElement): void {
+
+		// Revert value to original one
+		input.value = this.originalValue;
+
+		// Disable edit mode
+		this.disableEditMode( input );
+
+	}
+
+	/**
+	 * Eventually save input changes
+	 * @param {HTMLInputElement} input Input element reference
+	 */
+	private save( input: HTMLInputElement ): void {
+
+		// Send update (only if something has actually changed)
+		if ( input.value !== this.originalValue ) {
+			this.update.emit( input.value );
+		}
+
+		// Disable edit mode
+		this.disableEditMode( input );
+
+	}
+
+	/**
+	 * Enable edit mode
+	 * @param {HTMLInputElement} input Input element reference
+	 */
+	private enableEditMode(input: HTMLInputElement): void {
 
 		// Enable edit mode
 		this.isInEditMode = true;
@@ -77,25 +143,17 @@ export class EditableInputComponent {
 
 	}
 
-	private cancel(input: HTMLInputElement): void {
-
-		// Revert value to original one
-		input.value = this.originalValue;
-
-		// Disable edit mode
-		this.isInEditMode = false;
-
-	}
-
-	private save( input: HTMLInputElement ): void {
-
-		// Send update (only if something has actually changed)
-		if ( input.value !== this.originalValue ) {
-			this.update.emit( input.value );
-		}
+	/**
+	 * Disable edit mode
+	 * @param {HTMLInputElement} input Input element reference
+	 */
+	private disableEditMode(input: HTMLInputElement): void {
 
 		// Disable edit mode
 		this.isInEditMode = false;
+
+		// Remove focus
+		input.blur();
 
 	}
 

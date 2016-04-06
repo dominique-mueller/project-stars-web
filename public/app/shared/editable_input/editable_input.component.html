@@ -1,21 +1,18 @@
-<input [id]="name" #input type="text" placeholder="PLACEHOLDER" [value]="value" [readonly]="!isInEditMode">
-<ul class="input-editable-button-list">
-	<li class="input-editable-button-item">
-		<button class="button button-invisible" type="button" *ngIf="!isInEditMode" (click)="edit( input )">
+<input class="form-input input-editable-input" [id]="name" [type]="type" [placeholder]="placeholder" [value]="value"
+	(focus)="edit( input )" (blur)="cancel( input )" (keyup.esc)="cancel( input )" (keyup.enter)="save( input )" #input>
+<label class="form-label" [attr.for]="name">{{ label }}</label>
+<ul class="input-editable-actions">
+	<li class="input-editable-action ng-animate" *ngIf="!isInEditMode">
+		<button class="button button-invisible input-editable-button" type="button" (click)="edit( input )">
 			<app-icon name="edit" size="14" color="#888"></app-icon>
 		</button>
-	</li>
-	<li class="input-editable-button-item">
-		<button class="button button-invisible" type="button" *ngIf="isInEditMode" (click)="save( input )">
+	</li><li class="input-editable-action ng-animate" *ngIf="isInEditMode">
+		<button class="button button-invisible input-editable-button" type="button" (click)="save( input )">
 			<app-icon name="done" size="18" color="#888"></app-icon>
 		</button>
-	</li>
-	<li class="input-editable-button-item">
-		<button class="button button-invisible" type="button" *ngIf="isInEditMode" (click)="cancel( input )">
+	</li><li class="input-editable-action ng-animate" *ngIf="isInEditMode">
+		<button class="button button-invisible input-editable-button" type="button" (click)="cancel( input )">
 			<app-icon name="close" size="18" color="#888"></app-icon>
 		</button>
 	</li>
 </ul>
-
-<!-- <pre>DEBUG</pre>
-<pre>{{ value | json }}</pre> -->
