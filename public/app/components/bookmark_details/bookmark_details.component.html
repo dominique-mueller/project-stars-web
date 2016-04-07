@@ -12,6 +12,12 @@
 
 	<div class="bookmark-details-content" *ngIf="element?.get( 'type' ) === 'bookmark'">
 
+		<app-assign-dropdown [items]="unassignedLabels" *ngIf="unassignedLabels.length > 0"
+			(select)="assignLabelToElement( element, data?.get( 'labels' ), $event )">
+		</app-assign-dropdown>
+
+		<hr>
+
 		<form>
 
 			<ul>

@@ -1,0 +1,41 @@
+// COMPONENTS: ASSIGN DROPDOWN
+
+.assign-dropdown {
+	display: block;
+	width: 30rem;
+	background-color: #FFF;
+	border: .1rem solid #333;
+}
+
+.assign-dropdown-title {
+	padding: .7rem 1rem;
+}
+
+.assign-dropdown-list {
+}
+
+.assign-dropdown-item {
+	width: 100%;
+	border-top: .1rem solid #DDD;
+}
+
+.assign-dropdown-button {
+	position: relative;
+	width: 100%;
+	padding: .7rem 1rem .7rem 2.7rem;
+	text-align: left;
+
+	&:hover {
+		background-color: #DDD;
+	}
+
+}
+
+.assign-dropdown-dot {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	width: .9rem;
+	height: .9rem;
+	border-radius: 50%;
+}
