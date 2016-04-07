@@ -10,7 +10,7 @@ import { List, Map } from 'immutable';
 import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable_input/editable_input.component';
-import { AssignDropdown } from './../../shared/assign_dropdown/assign_dropdown.component';
+import { AssignLabelComponent } from './../../shared/assign_label/assign_label.component';
 
 /**
  * Bookmark details component
@@ -19,7 +19,7 @@ import { AssignDropdown } from './../../shared/assign_dropdown/assign_dropdown.c
 	directives: [
 		IconComponent,
 		EditableInputComponent,
-		AssignDropdown
+		AssignLabelComponent
 	],
 	selector: 'app-bookmark-details',
 	templateUrl: './bookmark_details.component.html'
@@ -86,7 +86,7 @@ export class BookmarkDetailsComponent implements OnInit {
 
 			// Filter: Get all unassigned labels
 			this.unassignedLabels = this.labels.filter( ( label: Map<string, any> ) => {
-				return typeof this.data.get( 'labels' ).get( label.get( 'id' ) ) === 'undefined';
+				return this.data.get( 'labels' ).indexOf( label.get( 'id' ) ) === -1;
 			} );
 
 		}
@@ -105,6 +105,8 @@ export class BookmarkDetailsComponent implements OnInit {
 	 */
 	private updateElement( element: Map<string, any>, key: string, value: string ): void {
 
+		// Skip of no update
+
 		// Create data
 		let data: any = {};
 		data[ key ] = value;
@@ -121,6 +123,8 @@ export class BookmarkDetailsComponent implements OnInit {
 	 * @param {number}           newLabel New label id (to be assigned)
 	 */
 	private assignLabelToElement( element: Map<string, any>, labels: List<number>, newLabel: number ): void {
+
+		// Skip if no update
 
 		// Create data
 		let data: any = {};

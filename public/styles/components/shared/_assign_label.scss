@@ -1,0 +1,54 @@
+// COMPONENTS: ASSIGN LABEL
+
+.assign-label {
+	position: relative;
+	z-index: 2;
+}
+
+.assign-label-dropdown {
+	position: absolute;
+	top: 2.5rem; // TODO: Update, depends on label height!
+	left: 0;
+	width: 30rem; // TODO: Variable?
+	background-color: $color-white;
+	box-shadow: 0 .1rem .3rem rgba($color-black, .25);
+}
+
+// .assign-label-title {
+// 	padding: .9rem 1.2rem;
+// 	color: #888;
+// }
+
+.assign-label-item {
+	width: 100%;
+
+	+ .assign-label-item {
+		border-top: .1rem solid $color-seashell;
+	}
+
+}
+
+.assign-label-button {
+	position: relative;
+	width: 100%;
+	padding: .9rem 1.2rem .9rem 3rem;
+	font-size: 1.2rem;
+	text-align: left;
+	transition: background-color $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: $color-seashell;
+	}
+
+}
+
+.assign-label-dot {
+	position: absolute;
+	top: 1.1rem;
+	left: 1.2rem;
+	width: .9rem;
+	height: .9rem;
+	border-radius: 50%;
+}
