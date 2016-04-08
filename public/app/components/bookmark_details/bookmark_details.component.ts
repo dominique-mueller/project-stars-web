@@ -48,7 +48,7 @@ export class BookmarkDetailsComponent implements OnInit {
 	 * Labels
 	 */
 	@Input()
-	private labels: List<Map<string, any>>;
+	private labels: Map<string, Map<string, any>>;
 
 	/**
 	 * Close event
@@ -66,6 +66,7 @@ export class BookmarkDetailsComponent implements OnInit {
 
 		// Setup
 		this.close = new EventEmitter();
+		this.unassignedLabels = Map<string, Map<string, any>>();
 
 	}
 

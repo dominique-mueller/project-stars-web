@@ -17,6 +17,7 @@ import { FolderService, IFolder } from './../../services/folder/folder.service';
 import { LabelService, ILabel } from './../../services/label/label.service';
 import { SearchPipe } from './../../pipes/search.pipe';
 import { UrlPipe } from './../../pipes/url.pipe';
+import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { BookmarkDetailsComponent } from './../bookmark_details/bookmark_details.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
@@ -25,6 +26,7 @@ import { IconComponent } from './../../shared/icon/icon.component';
  */
 @Component( {
 	directives: [
+		BookmarkComponent,
 		BookmarkDetailsComponent,
 		IconComponent
 	],

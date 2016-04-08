@@ -25,17 +25,28 @@ export class IconComponent {
 	 * Color of the icon
 	 */
 	@Input()
-	private color: string = '#000';
+	private color: string;
 
 	/**
 	 * Size of the icon (in px)
 	 */
 	@Input()
-	private size: number = 24;
+	private size: number;
 
 	/**
 	 * Icon name prefix
 	 */
 	private prefix: string = '#icon-';
+
+	/**
+	 * Constructor
+	 */
+	constructor() {
+
+		// Setup
+		this.size = 24;
+		this.color = '#000';
+
+	}
 
 }

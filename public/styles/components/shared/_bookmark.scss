@@ -1,0 +1,63 @@
+// COMPONENTS: BOOKMARK
+
+.bookmark {
+	display: flex;
+	width: 100%;
+	background-color: $color-white;
+
+	&:hover,
+	&.is-selected {
+		background-color: #CCC; // TODO
+
+		.bookmark-title {
+			transform: translateY(0);
+		}
+
+		.bookmark-url {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+	}
+
+}
+
+.bookmark-link {
+	position: relative;
+	flex: 1;
+	height: 6rem;
+}
+
+.bookmark-icon {
+	position: absolute;
+	top: 1.8rem;
+	left: 3rem;
+	width: 2.4rem;
+	height: 2.4rem;
+}
+
+.bookmark-title {
+	position: absolute;
+	top: 1.5rem;
+	left: 6.8rem; // 3 from left + 2.4 from icon + space between icon + text
+	transform: translateY(.8rem);
+	transition: transform $anim-speed-fast $anim-easing;
+	font-weight: $font-weight-bold;
+}
+
+.bookmark-url {
+	position: absolute;
+	top: 3.3rem;
+	left: 6.8rem;
+	font-size: 1.2rem;
+	letter-spacing: .02rem;
+	opacity: 0;
+	transform: translateY(-.4rem);
+	transition: opacity $anim-speed-fast $anim-easing,
+				transform $anim-speed-fast $anim-easing;
+}
+
+.bookmark-button {
+	padding-right: 2rem;
+	padding-left: 2rem;
+}

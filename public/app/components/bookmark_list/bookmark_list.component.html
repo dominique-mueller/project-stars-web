@@ -35,6 +35,16 @@
 		</button>
 	</li>
 
+	<li>
+		NEW
+	</li>
+
+	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
+		<app-bookmark
+			[bookmark]="bookmark">
+		</app-bookmark>
+	</li>
+
 </ul>
 
 <app-bookmark-details

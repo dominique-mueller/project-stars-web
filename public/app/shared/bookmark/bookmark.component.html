@@ -1,0 +1,8 @@
+<a class="bookmark-link" [href]="bookmark.get( 'url' )" target="_blank" rel="noreferrer noopener">
+	<img class="bookmark-icon" src="https://icons.better-idea.org/icon?url={{ bookmark.get( 'url' ) }}&size=24">
+	<div class="bookmark-title">{{ bookmark.get( 'title' ) }}</div>
+	<div class="bookmark-url">{{ bookmark.get( 'url' ) }}</div>
+</a>
+<button class="button button-invisible bookmark-button" type="button">
+	<app-icon name="info" size="20" color="#777"></app-icon>
+</button>

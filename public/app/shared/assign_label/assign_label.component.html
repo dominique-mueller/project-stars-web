@@ -3,8 +3,6 @@
 </button>
 
 <div class="assign-label-dropdown" *ngIf="isOpen">
-	<!-- <p class="assign-label-title">Select label to assign</p> -->
-	<!-- <input class="assign-dropdown-input" type="search" placeholder="Search ..."> -->
 	<ul>
 		<li class="assign-label-item" *ngFor="#label of labels">
 			<button class="button button-invisible assign-label-button" type="button" (click)="selectLabel( label[ 1 ].get( 'id' ) )">
