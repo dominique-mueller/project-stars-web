@@ -8,7 +8,9 @@ import { Component, Input } from 'angular2/core';
  */
 @Component( {
 	host: {
-		class: 'icon'
+		class: 'icon',
+		'[style.width]': 'size',
+		'[style.height]': 'size'
 	},
 	selector: 'app-icon',
 	templateUrl: './icon.component.html'

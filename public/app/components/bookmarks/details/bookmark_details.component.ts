@@ -7,10 +7,10 @@ import { List, Map } from 'immutable';
 /**
  * Internal imports
  */
-import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
-import { IconComponent } from './../../shared/icon/icon.component';
-import { EditableInputComponent } from './../../shared/editable_input/editable_input.component';
-import { AssignLabelComponent } from './../../shared/assign_label/assign_label.component';
+import { BookmarkService, IBookmark } from './../../../services/bookmark/bookmark.service';
+import { IconComponent } from './../../../shared/icon/icon.component';
+import { EditableInputComponent } from './../../../shared/editable_input/editable_input.component';
+import { AssignLabelComponent } from './../../../shared/assign_label/assign_label.component';
 
 /**
  * Bookmark details component

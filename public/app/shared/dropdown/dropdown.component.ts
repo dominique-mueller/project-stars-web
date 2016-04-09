@@ -14,7 +14,12 @@ export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
  * Dropdown Component
  */
 @Component( {
-	directives: [ IconComponent ],
+	directives: [
+		IconComponent
+	],
+	host: {
+		class: 'dropdown'
+	},
 	selector: 'app-dropdown',
 	templateUrl: './dropdown.component.html'
 } )

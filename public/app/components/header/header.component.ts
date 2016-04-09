@@ -63,13 +63,9 @@ export class HeaderComponent implements OnInit {
 		// Initialize services
 		this.appService = appService;
 
-		// Set app name
+		// Setup
 		this.app = appService.APP_NAME;
-
-		// Initialize event emitter
 		this.search = new EventEmitter();
-
-		// Create search form
 		this.searchForm = formBuilder.group( {
 			'search': ''
 		} );

@@ -1,16 +1,14 @@
 <app-header (search)="search( $event )"></app-header>
 
-<main class="main">
+<main class="bookmarks">
 
-	<div class="main-bookmark-directory">
-
-		<h2 style="margin-top: 3.5rem; margin-bottom: 3rem;">Folders</h2>
-
+	<div class="bookmarks-directory">
+		<h2 class="bookmarks-directory-title">Folders</h2>
 		<a class="directory-link"
-			[class.is-final]="openedFolder === 0"
+			[class.is-selected]="openedFolder === 0"
 			(click)="goToFolder( 0 )">
 			<app-icon name="folder_special" size="24" color="#666"></app-icon>
-			<span class="directory-name">Bookmarks</span>
+			<p class="directory-name">Bookmarks</p>
 		</a>
 		<app-bookmark-directory
 			[folders]="folders"
@@ -18,15 +16,11 @@
 			[openedFolder]="openedFolder"
 			(select)="goToFolder( $event )">
 		</app-bookmark-directory>
-
 	</div>
 
-	<div class="main-bookmark-list">
-
-		<h2 style="margin-top: 3.5rem; margin-bottom: 3rem; margin-left: 2.8rem;">Bookmarks</h2>
-
+	<div class="bookmarks-list">
+		<h2 class="bookmarks-list-title">Bookmarks</h2>
 		<router-outlet></router-outlet>
-
 	</div>
 
 </main>

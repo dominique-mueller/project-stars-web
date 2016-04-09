@@ -30,28 +30,23 @@
 // LAYER 05: OBJECTS
 
 // LAYER 06: COMPONENTS
-@import "components/search"; // TODO: Group somehow?
+@import "components/search"; // TODO: Throw into some category
+
+// LAYER 06: COMPONENTS - COMPONENTS
+@import "components/components/buttons";
+@import "components/components/forms";
 
 // LAYER 06: COMPONENTS - SHARED
-@import "components/shared/buttons";
-@import "components/shared/forms";
-
+@import "components/shared/icon";
 @import "components/shared/bookmark";
 @import "components/shared/folder";
 @import "components/shared/label";
-
-@import "components/shared/icons";
 @import "components/shared/dropdown";
 @import "components/shared/editable_input";
 @import "components/shared/assign_label";
 
-// LAYER 06: COMPONENTS - SITE
-@import "components/site/header";
-@import "components/site/main";
-
-// LAYER 06: COMPONENTS - BOOKMARK
-@import "components/bookmarks/directory";
-@import "components/bookmarks/details";
-
-// EXTRA: TEMP (TODO: remove me some day)
-@import "temp";
+// LAYER 06: COMPONENTS - VIEWS
+@import "components/views/header";
+@import "components/views/bookmarks";
+@import "components/views/bookmark_directory";
+@import "components/views/bookmark_details";

@@ -5,3 +5,9 @@ h1 {
 	font-weight: $font-weight-regular;
 	letter-spacing: .05rem;
 }
+
+h2 {
+	@include font-size($font-size-h2);
+	font-weight: $font-weight-bold;
+	letter-spacing: .03rem;
+}

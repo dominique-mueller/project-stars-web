@@ -11,14 +11,14 @@ import { List, Map } from 'immutable';
 /**
  * Internal imports
  */
-import { UiService } from './../../services/ui/ui.service';
-import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
-import { FolderService, IFolder } from './../../services/folder/folder.service';
-import { LabelService, ILabel } from './../../services/label/label.service';
-import { BookmarkDetailsComponent } from './../bookmark_details/bookmark_details.component';
-import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
-import { FolderComponent } from './../../shared/folder/folder.component';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { UiService } from './../../../services/ui/ui.service';
+import { BookmarkService, IBookmark } from './../../../services/bookmark/bookmark.service';
+import { FolderService, IFolder } from './../../../services/folder/folder.service';
+import { LabelService, ILabel } from './../../../services/label/label.service';
+import { BookmarkDetailsComponent } from './../details/bookmark_details.component';
+import { BookmarkComponent } from './../../../shared/bookmark/bookmark.component';
+import { FolderComponent } from './../../../shared/folder/folder.component';
+import { IconComponent } from './../../../shared/icon/icon.component';
 
 /**
  * Bookmark list component

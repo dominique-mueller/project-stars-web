@@ -2,18 +2,29 @@
 
 .search {
 	position: relative;
+
+	&:hover .search-input {
+		background-color: rgba($color-white, .1);
+	}
+
 }
 
 .search-input {
 	width: 100%;
 	padding: 0 6.4rem;
 	border: none;
+	background-color: rgba($color-white, .05);
 	line-height: inherit;
+
+	&:focus {
+		background-color: rgba($color-white, .1);
+	}
+
 }
 
 .search-icon {
 	position: absolute;
-	top: 0;
+	top: 2rem;
 	left: 2.4rem;
 }
 
@@ -21,15 +32,18 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	padding-right: 2.2rem;
-	padding-left: 2.2rem;
 
 	.icon {
-		transition: fill $anim-speed-normal $anim-easing;
+		margin: 2.2rem;
+
+		> svg {
+			transition: fill $anim-speed-normal $anim-easing;
+		}
+
 	}
 
-	&:hover .icon {
-		fill: #888;
+	&:hover .icon > svg {
+		fill: $color-white;
 	}
 
 }

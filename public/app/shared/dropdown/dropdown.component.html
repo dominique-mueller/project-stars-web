@@ -1,10 +1,11 @@
-<button class="dropdown-button button button-invisible" [class.is-active]="isOpen" type="button" (click)="toggle()">
+<button class="button button-invisible dropdown-button" type="button"
+	[class.is-active]="isOpen" (click)="toggle()">
 	<span><ng-content></ng-content></span>
-	<app-icon name="dropdown" color="#555" size="24"></app-icon>
+	<app-icon name="dropdown" color="#EEE" size="24"></app-icon>
 </button>
 <ul class="dropdown-list" [class.is-visible]="isOpen">
-	<li class="dropdown-list-item" *ngFor="#item of items" [class.dropdown-list-divider]="item.type === 'divider'">
-		<a *ngIf="item.type === 'link'" class="dropdown-list-link" (click)="choose(item.value)">
+	<li *ngFor="#item of items" [class.dropdown-divider]="item.type === 'divider'">
+		<a *ngIf="item.type === 'link'" class="dropdown-link" (click)="choose(item.value)">
 			{{ item.label }}
 		</a>
 	</li>

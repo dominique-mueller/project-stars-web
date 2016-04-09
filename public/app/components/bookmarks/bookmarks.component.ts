@@ -16,14 +16,13 @@ import { FolderService } from './../../services/folder/folder.service';
 import { LabelService } from './../../services/label/label.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
-import { BookmarkListComponent } from './../bookmark_list/bookmark_list.component';
-import { BookmarkDirectoryComponent } from './../bookmark_directory/bookmark_directory.component';
+import { BookmarkListComponent } from './../bookmarks/list/bookmark_list.component';
+import { BookmarkDirectoryComponent } from './../bookmarks/directory/bookmark_directory.component';
 
 /**
  * Bookmark components
  */
 @Component( {
-	// changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		ROUTER_DIRECTIVES,
 		IconComponent,

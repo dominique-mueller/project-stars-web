@@ -8,8 +8,8 @@ import { List, Map } from 'immutable';
 /**
  * Internal imports
  */
-import { FolderService } from './../../services/folder/folder.service';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { FolderService } from './../../../services/folder/folder.service';
+import { IconComponent } from './../../../shared/icon/icon.component';
 
 /**
  * Bookmark directory component (recursive)
@@ -20,6 +20,9 @@ import { IconComponent } from './../../shared/icon/icon.component';
 		BookmarkDirectoryComponent,
 		IconComponent
 	],
+	host: {
+		class: 'directory'
+	},
 	selector: 'app-bookmark-directory',
 	templateUrl: 'bookmark_directory.component.html'
 } )

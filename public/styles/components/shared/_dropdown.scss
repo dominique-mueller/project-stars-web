@@ -3,21 +3,36 @@
 .dropdown-button {
 	position: relative;
 	width: 100%;
-	padding: 0 2rem 0 2.4rem;
-	transition: background-color $anim-speed-normal $anim-easing;
-	text-align: left;
+	padding-right: 4.8rem;
+	padding-left: 2.6rem;
+	transition: background-color $anim-speed-normal $anim-easing,
+				color $anim-speed-normal $anim-easing;
 	white-space: nowrap;
 	z-index: 1;
 
 	&:hover,
 	&:active,
 	&.is-active {
-		background-color: $color-seashell;
+		background-color: $color-white;
+		color: $color-black;
+
+		.icon > svg {
+			fill: #333;
+		}
+
 	}
 
 	.icon {
+		position: absolute;
+		top: 2rem;
+		right: 2rem;
 		transform: rotate(0);
-		transition: transform $anim-speed-slow $anim-easing;
+		transition: transform $anim-speed-normal $anim-easing;
+
+		> svg {
+			transition: fill $anim-speed-normal $anim-easing;
+		}
+
 	}
 
 	&.is-active .icon {
@@ -31,11 +46,12 @@
 	min-width: 15rem;
 	padding-top: .7rem;
 	padding-bottom: .7rem;
-	transform: translateY(-1.4rem);
-	transition: opacity $anim-speed-slow $anim-easing,
-				visibility $anim-speed-instant $anim-linear $anim-speed-slow,
-				transform $anim-speed-slow $anim-easing;
+	transform: translateY(-.7rem);
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
+				transform $anim-speed-normal $anim-easing;
 	background-color: $color-white;
+	color: $color-black;
 	line-height: 1;
 	box-shadow: 0 .1rem .3rem rgba($color-black, .1);
 	opacity: 0;
@@ -43,37 +59,28 @@
 
 	&.is-visible {
 		transform: translateY(0);
-		transition: opacity $anim-speed-slow $anim-easing,
+		transition: opacity $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant $anim-linear,
-					transform $anim-speed-slow $anim-easing;
+					transform $anim-speed-normal $anim-easing;
 		opacity: 1;
 		visibility: visible;
 
-		> .dropdown-list-item {
-			transition: opacity $anim-speed-slow $anim-easing;
-			opacity: 1;
-		}
 
 	}
 
 }
 
-.dropdown-list-item {
-	transition: opacity $anim-speed-normal $anim-easing;
-	opacity: 0;
-}
-
-.dropdown-list-divider {
+.dropdown-divider {
 	margin-top: .7rem;
 	margin-bottom: .7rem;
 	border-bottom: .1rem solid $color-seashell;
 }
 
-.dropdown-list-link {
+.dropdown-link {
 	display: block;
 	padding: 1rem 2.4rem;
 	transition: background-color $anim-speed-normal $anim-easing;
-	cursor: pointer;
+	cursor: pointer; // Because a href does not exist
 
 	&:hover,
 	&:active {

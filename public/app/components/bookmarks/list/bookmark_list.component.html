@@ -1,14 +1,14 @@
 <ul>
 
 	<!-- Folders -->
-	<li class="folder-item" *ngFor="#folder of folders">
+	<li class="bookmarks-list-item" *ngFor="#folder of folders">
 		<app-folder [folder]="folder" (clickOnDetails)="openDetailsPanel( 'folder', $event )"
 			[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">>
 		</app-folder>
 	</li>
 
 	<!-- Bookmarks -->
-	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
+	<li class="bookmarks-list-item" *ngFor="#bookmark of bookmarks">
 		<app-bookmark [bookmark]="bookmark" [labels]="labels" (clickOnDetails)="openDetailsPanel( 'bookmark', $event )"
 			[class.is-selected]="selectedElement?.get( 'type' ) === 'bookmark' && selectedElement?.get( 'id' ) === bookmark.get( 'id' )">
 		</app-bookmark>
