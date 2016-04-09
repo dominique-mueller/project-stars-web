@@ -1,0 +1,8 @@
+<a class="folder-link">
+	<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
+	<p class="folder-name">{{ folder.get( 'name' ) }}</p>
+</a>
+<button class="button button-invisible folder-button" type="button"
+	(click)="showDetails( folder.get( 'id' ) )">
+	<app-icon name="info" size="20" color="#777"></app-icon>
+</button>

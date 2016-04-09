@@ -1,24 +1,13 @@
 <ul>
 
-	<li>
-		FOLDERS (OLD)
+	<!-- Folders -->
+	<li class="folder-item" *ngFor="#folder of folders">
+		<app-folder [folder]="folder" (clickOnDetails)="openDetailsPanel( 'folder', $event )"
+			[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">>
+		</app-folder>
 	</li>
 
-	<li class="folder-item" *ngFor="#folder of folders"
-		[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">
-		<a class="folder-link" (click)="goToFolder( folder.get( 'id' ) )">
-			<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
-			<div class="folder-title">{{ folder.get( 'name' ) }}</div>
-		</a>
-		<button class="button button-invisible bookmark-item-button" type="button" (click)="openDetailsPanel( 'folder', folder.get( 'id' ) )">
-			<app-icon name="info" size="20" color="#777"></app-icon>
-		</button>
-	</li>
-
-	<li>
-		BOOKMARKS (NEW)
-	</li>
-
+	<!-- Bookmarks -->
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
 		<app-bookmark [bookmark]="bookmark" [labels]="labels" (clickOnDetails)="openDetailsPanel( 'bookmark', $event )"
 			[class.is-selected]="selectedElement?.get( 'type' ) === 'bookmark' && selectedElement?.get( 'id' ) === bookmark.get( 'id' )">

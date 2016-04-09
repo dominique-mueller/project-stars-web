@@ -15,9 +15,9 @@ import { UiService } from './../../services/ui/ui.service';
 import { BookmarkService, IBookmark } from './../../services/bookmark/bookmark.service';
 import { FolderService, IFolder } from './../../services/folder/folder.service';
 import { LabelService, ILabel } from './../../services/label/label.service';
-import { SearchPipe } from './../../pipes/search.pipe';
-import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { BookmarkDetailsComponent } from './../bookmark_details/bookmark_details.component';
+import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
+import { FolderComponent } from './../../shared/folder/folder.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -26,11 +26,9 @@ import { IconComponent } from './../../shared/icon/icon.component';
 @Component( {
 	directives: [
 		BookmarkComponent,
+		FolderComponent,
 		BookmarkDetailsComponent,
 		IconComponent
-	],
-	pipes: [
-		SearchPipe
 	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark_list.component.html'

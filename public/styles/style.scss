@@ -37,6 +37,7 @@
 @import "components/shared/forms";
 
 @import "components/shared/bookmark";
+@import "components/shared/folder";
 @import "components/shared/label";
 
 @import "components/shared/icons";
@@ -49,9 +50,6 @@
 @import "components/site/main";
 
 // LAYER 06: COMPONENTS - BOOKMARK
-@import "components/bookmarks/bookmark";
-@import "components/bookmarks/folder";
-@import "components/bookmarks/label";
 @import "components/bookmarks/directory";
 @import "components/bookmarks/details";
 

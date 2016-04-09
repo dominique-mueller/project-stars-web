@@ -1,0 +1,44 @@
+// COMPONENTS: FOLDER
+
+.folder {
+	display: flex;
+	width: 100%;
+	transition: background-color $anim-speed-fast $anim-easing;
+	background-color: $color-white;
+
+	&:hover,
+	&.is-selected {
+		background-color: $color-seashell;
+	}
+
+}
+
+.folder-link {
+	position: relative;
+	flex: 1;
+	height: 6rem;
+	cursor: pointer; // Necessary because link does not have an href here
+}
+
+.folder-icon {
+	position: absolute;
+	top: 1.8rem;
+	left: 3rem;
+	width: 2.4rem;
+	height: 2.4rem;
+}
+
+.folder-name {
+	position: absolute;
+	top: 1.8rem;
+	left: 6.8rem; // 3 from left + 2.4 from icon + space between icon + text
+	width: calc(100% - 6.8);
+	height: 2.4rem; // Same as icon height
+	font-weight: $font-weight-bold;
+	line-height: 2.4rem;
+}
+
+.folder-button {
+	padding-right: 2rem;
+	padding-left: 2rem;
+}
