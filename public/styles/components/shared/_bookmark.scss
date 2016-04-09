@@ -3,19 +3,24 @@
 .bookmark {
 	display: flex;
 	width: 100%;
+	transition: background-color $anim-speed-fast $anim-easing;
 	background-color: $color-white;
 
 	&:hover,
 	&.is-selected {
-		background-color: #CCC; // TODO
+		background-color: $color-seashell;
 
-		.bookmark-title {
+		.bookmark-content {
 			transform: translateY(0);
 		}
 
+		.bookmark-labels {
+			transform: scale(.7);
+		}
+
 		.bookmark-url {
-			opacity: 1;
 			transform: translateY(0);
+			opacity: 1;
 		}
 
 	}
@@ -36,25 +41,47 @@
 	height: 2.4rem;
 }
 
-.bookmark-title {
+.bookmark-content {
 	position: absolute;
-	top: 1.5rem;
+	top: 1rem;
 	left: 6.8rem; // 3 from left + 2.4 from icon + space between icon + text
+	width: calc(100% - 6.8rem);
+	height: 2.4rem; // Same as icon height
 	transform: translateY(.8rem);
 	transition: transform $anim-speed-fast $anim-easing;
+}
+
+.bookmark-title {
+	display: inline-block;
 	font-weight: $font-weight-bold;
+	line-height: 2.4rem; // Same as icon height
+}
+
+.bookmark-labels {
+	display: inline-block;
+	margin-top: .1rem; // Icon height - label height
+	margin-left: .8rem; // Extra room to title
+	transform-origin: left center;
+	transition: transform $anim-speed-fast $anim-easing;
+	vertical-align: top;
+}
+
+.bookmark-label {
+	display: inline-block;
+	margin-left: .4rem;
 }
 
 .bookmark-url {
 	position: absolute;
 	top: 3.3rem;
 	left: 6.8rem;
+	transform: translateY(-.3rem);
+	transition: opacity $anim-speed-fast $anim-easing,
+				transform $anim-speed-fast $anim-easing;
+	color: #666; // TODO
 	font-size: 1.2rem;
 	letter-spacing: .02rem;
 	opacity: 0;
-	transform: translateY(-.4rem);
-	transition: opacity $anim-speed-fast $anim-easing,
-				transform $anim-speed-fast $anim-easing;
 }
 
 .bookmark-button {

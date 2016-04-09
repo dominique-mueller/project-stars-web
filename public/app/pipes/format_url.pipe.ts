@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from 'angular2/core';
  * Url pipe for pretty url formatting
  */
 @Pipe( {
-	name: 'url'
+	name: 'formatUrl'
 } )
-export class UrlPipe implements PipeTransform {
+export class FormatUrlPipe implements PipeTransform {
 
 	public transform( value: string, args: any[] ): string {
 
@@ -18,11 +18,11 @@ export class UrlPipe implements PipeTransform {
 		parser.href = value;
 
 		// Make the hostname bold
-		value = value.replace( parser.hostname, `<strong style="color: #777;">${ parser.hostname }</strong>` );
+		value = value.replace( parser.hostname, `<strong>${ parser.hostname }</strong>` );
 
 		// Mark the protocol green when the website uses a secure https connection
 		if ( parser.protocol === 'https:' ) {
-			value = value.replace( 'https://', '<span style="color: green;">https://</span>' );
+			value = value.replace( 'https', '<u style="color: green;">https</u>' ); // TODO: Color
 		}
 
 		// Done

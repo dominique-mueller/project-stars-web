@@ -1,0 +1,17 @@
+// COMPONENTS: LABEL
+
+.label {
+	display: block;
+	height: 2.2rem;
+	border-radius: .1rem;
+	background-color: $color-tuna; // Fallback color
+}
+
+.label-name {
+	padding-right: 1rem;
+	padding-left: 1rem;
+	color: $color-white;
+	font-size: 1.1rem;
+	letter-spacing: .02rem;
+	line-height: 2.2rem;
+}

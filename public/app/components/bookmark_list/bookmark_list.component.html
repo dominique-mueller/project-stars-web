@@ -1,7 +1,9 @@
 <ul>
 
-	<!-- <li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Folder search results:</li> -->
-	<!-- <li class="folder-item" *ngFor="#folder of ( folders | search : 'folders' : searchOptions )"> -->
+	<li>
+		FOLDERS (OLD)
+	</li>
+
 	<li class="folder-item" *ngFor="#folder of folders"
 		[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">
 		<a class="folder-link" (click)="goToFolder( folder.get( 'id' ) )">
@@ -13,35 +15,13 @@
 		</button>
 	</li>
 
-	<!-- <li style="padding: 1rem 2.4rem; color: #999; font-size: 1.2rem;" *ngIf="searchOptions.isSearching">Bookmark search results:</li> -->
-	<!-- <li class="bookmark-item" *ngFor="#bookmark of ( bookmarks | search : 'bookmarks' : searchOptions )"> -->
-	<li class="bookmark-item" *ngFor="#bookmark of bookmarks"
-		[class.is-selected]="selectedElement?.get( 'type' ) === 'bookmark' && selectedElement?.get( 'id' ) === bookmark.get( 'id' )">
-		<a class="bookmark-item-link" [href]="bookmark.get( 'url' )" target="_blank" rel="noreferrer noopener">
-			<img class="bookmark-item-icon" src="https://angular.io/favicon.ico">
-			<div class="bookmark-item-content">
-				<span class="bookmark-item-title">{{ bookmark.get( 'title' ) }}</span>
-				<ul class="bookmark-item-labels">
-					<li class="bookmark-item-label" *ngFor="#labelId of bookmark.get( 'labels' )" [style.backgroundColor]="labels.get( labelId )?.get( 'color' )">
-						{{ labels.get( labelId )?.get( 'name' ) }}
-					</li>
-				</ul>
-			</div>
-			<div class="bookmark-item-url" [innerHTML]="bookmark.get( 'url' ) | url"></div>
-		</a>
-		<button class="button button-invisible bookmark-item-button" type="button"
-			(click)="openDetailsPanel( 'bookmark', bookmark.get( 'id' ) )">
-			<app-icon name="info" size="20" color="#777"></app-icon>
-		</button>
-	</li>
-
 	<li>
-		NEW
+		BOOKMARKS (NEW)
 	</li>
 
 	<li class="bookmark-item" *ngFor="#bookmark of bookmarks">
-		<app-bookmark
-			[bookmark]="bookmark">
+		<app-bookmark [bookmark]="bookmark" [labels]="labels" (clickOnDetails)="openDetailsPanel( 'bookmark', $event )"
+			[class.is-selected]="selectedElement?.get( 'type' ) === 'bookmark' && selectedElement?.get( 'id' ) === bookmark.get( 'id' )">
 		</app-bookmark>
 	</li>
 
