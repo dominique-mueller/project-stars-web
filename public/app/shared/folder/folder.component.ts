@@ -30,6 +30,12 @@ export class FolderComponent {
 	private folder: Map<string, any>;
 
 	/**
+	 * Event emitter for selecting a folder
+	 */
+	@Output()
+	private select: EventEmitter<number>;
+
+	/**
 	 * Event emitter for info button
 	 */
 	@Output()
@@ -41,7 +47,19 @@ export class FolderComponent {
 	constructor() {
 
 		// Setup
+		this.select = new EventEmitter();
 		this.clickOnDetails = new EventEmitter();
+
+	}
+
+	/**
+	 * Select folder
+	 * @param {number} folderId Id of selected folder
+	 */
+	private selectFolder( folderId: number ): void {
+
+		// Emit component event
+		this.select.emit(folderId);
 
 	}
 

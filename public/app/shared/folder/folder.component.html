@@ -1,4 +1,4 @@
-<a class="folder-link">
+<a class="folder-link" (click)="selectFolder( folder.get( 'id' ) )">
 	<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
 	<p class="folder-name">{{ folder.get( 'name' ) }}</p>
 </a>

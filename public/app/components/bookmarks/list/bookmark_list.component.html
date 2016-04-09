@@ -2,7 +2,7 @@
 
 	<!-- Folders -->
 	<li class="bookmarks-list-item" *ngFor="#folder of folders">
-		<app-folder [folder]="folder" (clickOnDetails)="openDetailsPanel( 'folder', $event )"
+		<app-folder [folder]="folder" (select)="goToFolder( $event )" (clickOnDetails)="openDetailsPanel( 'folder', $event )"
 			[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">>
 		</app-folder>
 	</li>
