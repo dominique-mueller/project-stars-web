@@ -8,6 +8,7 @@ import { List, Map } from 'immutable';
  * Internal imports
  */
 import { BookmarkService, IBookmark } from './../../../services/bookmark/bookmark.service';
+import { LabelComponent } from './../../../shared/label/label.component';
 import { IconComponent } from './../../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../../shared/editable_input/editable_input.component';
 import { AssignLabelComponent } from './../../../shared/assign_label/assign_label.component';
@@ -17,6 +18,7 @@ import { AssignLabelComponent } from './../../../shared/assign_label/assign_labe
  */
 @Component( {
 	directives: [
+		LabelComponent,
 		IconComponent,
 		EditableInputComponent,
 		AssignLabelComponent

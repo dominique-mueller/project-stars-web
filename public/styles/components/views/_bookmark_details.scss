@@ -21,7 +21,7 @@
 
 }
 
-.bookmark-details {
+.bookmark-details-panel {
 	position: fixed;
 	top: 6.4rem;
 	right: 0;
@@ -36,7 +36,7 @@
 	visibility: hidden;
 	transition: opacity $anim-speed-normal $anim-easing,
 				transform $anim-speed-normal $anim-easing,
-				visibility 0s linear $anim-speed-normal;
+				visibility $anim-speed-instant linear $anim-speed-normal;
 
 	&.is-visible {
 		opacity: 1;
@@ -44,7 +44,7 @@
 		transform: translateX(0);
 		transition: opacity $anim-speed-normal $anim-easing,
 					transform $anim-speed-normal $anim-easing,
-					visibility 0s linear;
+					visibility $anim-speed-instant linear;
 	}
 
 }

@@ -1,5 +1,6 @@
 <div class="bookmark-details-overlay" [class.is-visible]="visible" (click)="closePanel()"></div>
-<div class="bookmark-details" [class.is-visible]="visible">
+<div class="bookmark-details-panel" [class.is-visible]="visible">
+
 	<div class="bookmark-details-header">
 		<h3 class="bookmark-details-title">Details</h3>
 		<!-- <button class="button button-invisible bookmark-details-button" type="button">
@@ -14,6 +15,7 @@
 
 		<form>
 
+			<!-- Basic information -->
 			<ul>
 				<li class="bookmark-details-data">
 					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
@@ -34,24 +36,25 @@
 
 			<hr>
 
+			<!-- Labels -->
 			<p style="margin: 3rem 2.5rem 1rem; font-size: 1.2rem; color: #999; font-weight: 500; letter-spacing: .01rem">Labels</p>
 			<ul class="bookmark-details-data">
 
-				<li class="bookmark-item-label" *ngFor="#labelId of data?.get( 'labels' )"
-					[style.backgroundColor]="labels.get( labelId )?.get( 'color' )">
-					{{ labels.get( labelId )?.get( 'name' ) }}
-					<button class="button button-invisible" type="button"> x</button>
+				<li style="display: inline-block;" *ngFor="#labelId of data?.get( 'labels' )">
+					<app-label [label]="labels.get( labelId )">
+					</app-label>
+				</li>
+				<li style="display: inline-block;">
+					<!-- TODO: Better disable that button than hide it? -->
+					<app-assign-label class="bookmark-details-data"
+						*ngIf="unassignedLabels.length > 0"
+						[labels]="unassignedLabels"
+						(select)="assignLabelToElement( element, data?.get( 'labels' ), $event )">
+						ADD LABEL
+					</app-assign-label>
 				</li>
 
 			</ul>
-
-			<!-- TODO: Better disable that button than hide it? -->
-			<app-assign-label class="bookmark-details-data"
-				*ngIf="unassignedLabels.length > 0"
-				[labels]="unassignedLabels"
-				(select)="assignLabelToElement( element, data?.get( 'labels' ), $event )">
-				ADD LABEL
-			</app-assign-label>
 
 		</form>
 
@@ -81,4 +84,5 @@
 		<p>Folder details:</p>
 		{{ data | json }}
 	</div>
+
 </div>
