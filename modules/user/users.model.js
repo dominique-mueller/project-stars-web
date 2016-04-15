@@ -1,15 +1,18 @@
 var User = require('../schemaExport.js').User;
 var logger = require('../../adapters/logger.js');
+// var resolve, reject;
 
-function fullFillPromise(resolve, reject, err, result){
-	logger.debug('fullFillPromise');
-	if(err){
-		reject(err);
-	}
-	else{
-		logger.debug('fullFillPromise REJECTED');
-		resolve(result);
-	}
+var fullFillPromise = function(){
+	return function(err, result){
+		logger.debug('fullFillPromise');
+		if(err){
+			reject(err);
+		}
+		else{
+			logger.debug('fullFillPromise RESOLVED::' + result);
+			resolve(result);
+		}
+	};
 };
 
 
@@ -30,6 +33,7 @@ module.exports = {
 	},
 
 	update: function(userId, userData){
+		// logger.debug('UPDATE USER_ID::' + userId + " :: USER_DATA:: " + userData);
 		return new Promise(function(resolve, reject){
 			User.findByIdAndUpdate(userId, userData, {new:true}, function(err){
 				if(err){
@@ -74,9 +78,11 @@ module.exports = {
 
 	findOne: function(identifier){
 		var regex = new RegExp(/^\d+$/);
-		logger.debug('REGEX RESULT::'+regex.test(identifier));
+		logger.debug('REGEX RESULT::'+regex.test(parseInt(identifier)));
 		var promise = new Promise(function(resolve, reject){
-			if(regex.test(identifier)){ //check if identifier is an id (only numbers) or an email-address
+			// resolve = res;
+			// reject = rej;
+			if(regex.test(parseInt(identifier))){ //check if identifier is an id (only numbers) or an email-address
 				logger.debug('find user by id');
 				User.findById(identifier, 
 					function(err, result){
@@ -84,10 +90,10 @@ module.exports = {
 						reject(err);
 					}
 					else{
-						logger.debug('fullFillPromise REJECTED');
+						// logger.debug('fullFillPromise REJECTED');
 						resolve(result);
 					}}
-					// fullFillPromise(resolve, reject, err, user)
+					// new fullFillPromise()
 				);
 			}
 			else{
@@ -98,10 +104,10 @@ module.exports = {
 						reject(err);
 					}
 					else{
-						logger.debug('fullFillPromise REJECTED');
+						// logger.debug('fullFillPromise REJECTED');
 						resolve(result);
 					}}
-					// fullFillPromise(resolve, reject, err, user)
+					// new fullFillPromise()
 				);
 			}
 		});

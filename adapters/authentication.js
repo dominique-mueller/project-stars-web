@@ -65,7 +65,7 @@ function Authentication(token){
 						iss: 'stars-web.de',
 						userId: user._id,
 						admin: user.admin
-					}, secret,{expiresIn: 1440}));	
+					}, secret,{expiresIn: '365d'}));	
 				}
 			});	
 		});
@@ -106,6 +106,7 @@ function Authentication(token){
 		try{
 			var salt = bcrypt.genSaltSync(10);
 			var hash = bcrypt.hashSync(password, salt);
+			logger.debug('CONVERTED PASSWORD:: ' + hash);
 			return hash;
 		}
 		catch(e){

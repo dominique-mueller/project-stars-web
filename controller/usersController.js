@@ -2,7 +2,7 @@ var logger = require('../adapters/logger.js');
 var httpStatus = require('../config.js').httpStatus;
 // var eMail = require('./eMail'); 	//reminder for later development with e-mail adapter
 
-function UsersController(req, res, authentication){
+var UsersController = function(req, res, authentication){
 	
 	var self; //@see: adapters/authentication.js 
 	this.User = require('../modules/user/users.model.js');
@@ -15,7 +15,7 @@ function UsersController(req, res, authentication){
 		var userPromise = self.User.findOne(userId);
 		userPromise.then(function(user){
 		 	logger.debug('userPromise then');
-		 	self.res.status(httpStatus.OK).json(user);
+		 	self.res.status(httpStatus.OK).json({data:user});
 		})
 		.catch(function(err){
 			logger.error(err);
@@ -27,54 +27,118 @@ function UsersController(req, res, authentication){
 
 	}
 
-	function createNewUserAccount(newUserData){
-		mongooseUserObject = {
+	function createUser(newUserData){
+		var mongooseUserObject = {
 			firstName: newUserData.firstName, 
 			lastName: newUserData.lastName,
 			emailAddress: newUserData.emailAddress,
-			password: self.authentication.convertRawPassword(newUserData.password),
 			accountActivation: self.authentication.activationToken()
 		};
-		var userCreatePromise = self.User.create(mongooseUserObject);
-		userCreatePromise.then(function(newUser){
-			tokenPromise = self.authentication.login();
-			//TODO login 
-			/* TODO
-			account activation
-			send mail with activation link
-			*/
-			self.res.status(httpStatus.NO_CONTENT);
-			self.res.end();
-		})
-		.catch(function(err){
-			logger.error(err);
-			//TODO: check for unique error.
-			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-			self.res.end();
-		});
+		var userCreatePromise;
+		
+		return {
+			register: function(){
+				mongooseUserObject['password'] = self.authentication.convertRawPassword(newUserData.password);
+
+				userCreatePromise = = self.User.create(mongooseUserObject);
+				userCreatePromise.then(function(newUser){
+					tokenPromise = self.authentication.login();
+					/* TODO
+					login
+					account activation
+					send mail with activation link
+					*/
+					self.res.status(httpStatus.NO_CONTENT);
+					self.res.end();
+					createRootFolder(newUser._id);
+				})
+				.catch(function(err){
+					logger.error(err);
+					//TODO: check for unique (email address not unique) error.
+					self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+				});
+			},
+
+			asAdmin: function(){
+				mongooseUserObject['password'] = newPassword['hash'];
+				mongooseUserObject['admin'] = newUserData.admin;
+
+				userCreatePromise = self.User.create(mongooseUserObject);
+				userCreatePromise.then(function(newUser){
+					self.res.status(httpStatus.OK).json({'data':{'emailAddress':newUserData.emailAddress,'password':newPassword['password']}});
+					self.res.end();
+					createRootFolder(newUser._id);
+				})
+				.catch(function(err){
+					logger.error(err);
+					self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+				});
+				//TODO send mail with password and activation link to given e-mail address
+			}
+		}
 	}
 
-	function adminCreateNewUserAccount(newUserData){
-		var newPassword = self.authentication.generatePassword();
-		mongooseUserObject = {
-			firstName: newUserData.firstName, 
-			lastName: newUserData.lastName,
-			emailAddress: newUserData.emailAddress,
-			password: newPassword['hash'],
-			admin: newUserData.admin,
-			accountActivation: self.authentication.activationToken()
-		};
-		var userCreatePromise = self.User.create(mongooseUserObject);
-		userCreatePromise.then(function(newUser){
-			self.res.status(httpStatus.OK).json({'data':{'emailAddress':newUserData.emailAddress,'password':newPassword['password']}});
-			self.res.end();
-		})
-		.catch(function(err){
-			logger.error(err);
-			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-		});
-		//TODO send mail with password and activation link to given e-mail address
-	}
+	function createRootFolder(userId){
+		var rootFolder = {
+			name:'.',	//every root folder has this name. 
+						//furthermore this name is reserved and cannot be created a second time per user
+			path:null,	
+			position:0	
+		}
+		require('../folders.module.js').create(rootFolder, userId);
+	};
+
+
+	// function createNewUserAccount(newUserData, callback){
+	// 	mongooseUserObject = {
+	// 		firstName: newUserData.firstName, 
+	// 		lastName: newUserData.lastName,
+	// 		emailAddress: newUserData.emailAddress,
+	// 		password: self.authentication.convertRawPassword(newUserData.password),
+	// 		accountActivation: self.authentication.activationToken()
+	// 	};
+	// 	var userCreatePromise = self.User.create(mongooseUserObject);
+	// 	userCreatePromise.then(function(newUser){
+	// 		tokenPromise = self.authentication.login();
+	// 		/* TODO
+	// 		login
+	// 		account activation
+	// 		send mail with activation link
+	// 		*/
+	// 		self.res.status(httpStatus.NO_CONTENT);
+	// 		self.res.end();
+	// 		callback(newUser._id);
+	// 	})
+	// 	.catch(function(err){
+	// 		logger.error(err);
+	// 		//TODO: check for unique (email address not unique) error.
+	// 		self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+	// 		self.res.end();
+	// 	});
+	// }
+
+	// function adminCreateNewUserAccount(newUserData, callback){
+	// 	var newPassword = self.authentication.generatePassword();
+	// 	mongooseUserObject = {
+	// 		firstName: newUserData.firstName, 
+	// 		lastName: newUserData.lastName,
+	// 		emailAddress: newUserData.emailAddress,
+	// 		password: newPassword['hash'],
+	// 		admin: newUserData.admin,
+	// 		accountActivation: self.authentication.activationToken()
+	// 	};
+	// 	var userCreatePromise = self.User.create(mongooseUserObject);
+	// 	userCreatePromise.then(function(newUser){
+	// 		self.res.status(httpStatus.OK).json({'data':{'emailAddress':newUserData.emailAddress,'password':newPassword['password']}});
+	// 		self.res.end();
+	// 		callback(newUser._id);
+	// 	})
+	// 	.catch(function(err){
+	// 		logger.error(err);
+	// 		self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+	// 	});
+	// 	//TODO send mail with password and activation link to given e-mail address
+	// }
 
 	function getUpdateObjectForUserChangeableDataFields(){
 		var updateData = {};
@@ -93,7 +157,7 @@ function UsersController(req, res, authentication){
 			//TODO use accountActivation token for verification authentication
 		}
 		if(self.data.hasOwnProperty('password')){
-			var password = self.authentication.convertRawPassword(self.data.password);
+		 	updateData['password'] = self.authentication.convertRawPassword(self.data.password);
 		}	
 		return updateData;
 	}
@@ -106,12 +170,12 @@ function UsersController(req, res, authentication){
 			getOne(self.authentication.tokenUserId);
 		}
 		else if(authentication.isAdmin){
-			self.res.status(httpStatus.OK).json(getOne(self.req.params._id));
+			logger.debug('GET one params: ' + self.req.params.user_id);
+			getOne(self.req.params.user_id);
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
 		}
-		self.res.end();
 	};
 
 	this.getAll = function(){
@@ -119,7 +183,6 @@ function UsersController(req, res, authentication){
 		if(self.authentication.isAdmin){
 			allUserPromise = self.User.findAll();
 			allUserPromise.then(function(users){
-				logger.debug(users[0].firstName + "METHOD: " + self.req.method);
 				self.res.status(httpStatus.OK).json(users);
 				self.res.end();
 			})
@@ -130,53 +193,51 @@ function UsersController(req, res, authentication){
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
+			self.res.end();
 		}
-		self.res.end();
 	};
 
 	this.post = function(){
+		var userCreate = new createUser(self.data)
 		if(self.authentication.isAdmin){	
-			adminCreateNewUserAccount(self.data);
+			userCreate.asAdmin();
+			// adminCreateNewUserAccount(self.data, createRootFolder);
 		}
 		else{
-			createNewUserAccount(self.data);
+			userCreate.register();
+			// createNewUserAccount(self.data, createRootFolder);
 		}
 	};
 
 	this.put = function(){
+		var userUpdatePromise;
 		if(self.req.params.user_id == 'tokenUserId'){
-			var userUpdatePromise = User.update(authentication.tokenUserId, getUpdateObjectForUserChangeableDataFields());
-			userUpdatePromise.then(function(){
-				self.res.status(httpStatus.NO_CONTENT);
-				self.res.end();
-			})
-			.catch(function(err){
-				logger.error(err);
-				self.res.status(httpStatus.BAD_REQUEST).json({error:err});
-				self.res.end();
-			});
+			userUpdatePromise = User.update(authentication.tokenUserId, getUpdateObjectForUserChangeableDataFields());
 		}
 		else if(self.authentication.isAdmin){
-			var userUpdatePromise = self.User.update(self.req.params.user_id, JSON.parse(self.data));
-			userUpdatePromise.then(function(){
-				self.res.status(httpStatus.NO_CONTENT).end();
-			})
-			.catch(function(err){
-				logger.error(err);
-				//TODO
-			});
+			userUpdatePromise = self.User.update(self.req.params.user_id, JSON.parse(self.data));
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
 			self.res.end();
+			return;
 		}
+
+		userUpdatePromise.then(function(){
+			self.res.status(httpStatus.NO_CONTENT).end();
+		})
+		.catch(function(err){
+			logger.error(err);
+			self.res.status(httpStatus.BAD_REQUEST).json({error:err});
+			self.res.end();
+		});
 	};
 
 	this.delete = function(){
 		if(self.data._id == 'tokenUserId'){
 			var userPromise = User.findOne(authentication.tokenUserId);
 			userPromise.then(function(user){
-				//TODO 
+				//TODO deactivate instead of delete
 			})
 			.catch(function(err){
 				logger.error(err);
@@ -193,20 +254,13 @@ function UsersController(req, res, authentication){
 
 	//CONSTRUCTOR
 	self = this;
+	this.req = req;
+	this.res = res;
+	this.authentication = authentication;
+	if(req.method != 'GET'){
+		this.data = JSON.parse(req.body.data);
+	}
 
-	// if(req && res && authentication){
-		this.req = req;
-		this.res = res;
-		this.authentication = authentication;
-		if(req.method != 'GET'){
-			this.data = JSON.parse(req.body.data);
-		}
-
-	// }
-	// else{
-	// 	return new Error('The parameters "req", "res" and "authentication" are required. Could not create a new UserController');
-	// 	this.req, this.res = null, null;
-	// }
 	return this;
 }
 

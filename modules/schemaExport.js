@@ -1,5 +1,5 @@
 /*
-LOAD ALL SCHEMAS & MODELS
+LOAD ALL SCHEMAS
 This makes it possible for other modules to use the ODM models
 */
 module.exports = {

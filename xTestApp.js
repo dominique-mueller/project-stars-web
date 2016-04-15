@@ -72,9 +72,10 @@ var secret = require('./config.js').authentication.secret;
 var sync = require('synchronize');
 
 // var token =  jwt.sign({
-// 	userId: new User()._id,
+	//// userId: new User()._id,
+//	userId:'56f12f02c6ab44a50e881151',
 // 	admin: true,
-// }, secret,{expiresIn: '90d'});
+// }, secret,{expiresIn: '365d'});
 
 var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YWI0NGE1MGU4ODExNTEiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDU4NjQ2Nzg2LCJleHAiOjE0NjY0MjI3ODZ9.JlmMUO9e5_ozs-1O7lXQSdZINfFhRFxygs7K2e8XLLw';
 

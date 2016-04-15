@@ -54,10 +54,10 @@ routerBackend.route('/authenticate/logout')
 	.delete(function(req, res){
 		var result = authentication.logout();
 		result.then(function(){
-			
+			res.status(httpStatus.NO_CONTENT).end();
 		})
 		.catch(function(){
-
+			res.status(httpStatus.BAD_REQUEST).end();
 		});
 	});
 
@@ -248,7 +248,6 @@ routerBackend.route('/settings/:setting_id')
 
 routerBackend.route('/labels')
 	.get(function(req, res){
-		logger.debug('/labels request');
 		var result = require('./modules/label/labels.model.js').findAll(authentication.tokenUserId);
 		result.then(function(labels){
 			res.json({data:labels});
@@ -295,7 +294,7 @@ routerBackend.route('/labels/:label_id')
 	})
 
 	.delete(function(req, res){
-		var result = require('./modules/label/labels.model.js').delete(JSON.parse(req.body.data)._id);
+		var result = require('./modules/label/labels.model.js').delete(req.params.label_id);
 		result.then(function(msg){
 			res.end();
 		})
