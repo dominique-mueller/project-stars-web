@@ -72,14 +72,15 @@ var secret = require('./config.js').authentication.secret;
 var sync = require('synchronize');
 
 // var token =  jwt.sign({
-	//// userId: new User()._id,
-//	userId:'56f12f02c6ab44a50e881151',
+	// userId: new User()._id,
+	// userId:'56f12f02c6ab44a50e881151',
 // 	admin: true,
 // }, secret,{expiresIn: '365d'});
 
-var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YWI0NGE1MGU4ODExNTEiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDU4NjQ2Nzg2LCJleHAiOjE0NjY0MjI3ODZ9.JlmMUO9e5_ozs-1O7lXQSdZINfFhRFxygs7K2e8XLLw';
+// var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YWI0NGE1MGU4ODExNTEiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDU4NjQ2Nzg2LCJleHAiOjE0NjY0MjI3ODZ9.JlmMUO9e5_ozs-1O7lXQSdZINfFhRFxygs7K2e8XLLw';
 
 // console.log('Token: ' + token);
+
 // var getDecodePromise = function (){
 // 	return new Promise(function(resolve, reject){
 // 		jwt.verify(token, secret, function(err, decoded){
@@ -126,17 +127,17 @@ var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YW
 
 
 
-var convertRawPassword = function(password){
-	try{
-		var hash = scrypt.kdfSync(password, scryptParameters);
-		return hash;
-	}
-	catch(e){
-		return new Error('failed to convert the password');
-	}
-}
+// var convertRawPassword = function(password){
+// 	try{
+// 		var hash = scrypt.kdfSync(password, scryptParameters);
+// 		return hash;
+// 	}
+// 	catch(e){
+// 		return new Error('failed to convert the password');
+// 	}
+// }
 
-console.log('Hashed Password: ' + convertRawPassword('mySecurePassword'));
+// console.log('Hashed Password: ' + convertRawPassword('mySecurePassword'));
 
 
 

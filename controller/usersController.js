@@ -40,7 +40,7 @@ var UsersController = function(req, res, authentication){
 			register: function(){
 				mongooseUserObject['password'] = self.authentication.convertRawPassword(newUserData.password);
 
-				userCreatePromise = = self.User.create(mongooseUserObject);
+				userCreatePromise = self.User.create(mongooseUserObject);
 				userCreatePromise.then(function(newUser){
 					tokenPromise = self.authentication.login();
 					/* TODO
@@ -82,65 +82,20 @@ var UsersController = function(req, res, authentication){
 		var rootFolder = {
 			name:'.',	//every root folder has this name. 
 						//furthermore this name is reserved and cannot be created a second time per user
-			path:null,	
+			path:undefined,	
 			position:0	
 		}
-		require('../folders.module.js').create(rootFolder, userId);
+		var folderCreatePromise = require('../modules/folder/folders.model.js').create(rootFolder, userId);
+		folderCreatePromise.then(function(){
+			logger.debug('Created Root Folder');
+		})
+		.catch(function(err){
+			logger.error(err);
+		})
 	};
 
-
-	// function createNewUserAccount(newUserData, callback){
-	// 	mongooseUserObject = {
-	// 		firstName: newUserData.firstName, 
-	// 		lastName: newUserData.lastName,
-	// 		emailAddress: newUserData.emailAddress,
-	// 		password: self.authentication.convertRawPassword(newUserData.password),
-	// 		accountActivation: self.authentication.activationToken()
-	// 	};
-	// 	var userCreatePromise = self.User.create(mongooseUserObject);
-	// 	userCreatePromise.then(function(newUser){
-	// 		tokenPromise = self.authentication.login();
-	// 		/* TODO
-	// 		login
-	// 		account activation
-	// 		send mail with activation link
-	// 		*/
-	// 		self.res.status(httpStatus.NO_CONTENT);
-	// 		self.res.end();
-	// 		callback(newUser._id);
-	// 	})
-	// 	.catch(function(err){
-	// 		logger.error(err);
-	// 		//TODO: check for unique (email address not unique) error.
-	// 		self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-	// 		self.res.end();
-	// 	});
-	// }
-
-	// function adminCreateNewUserAccount(newUserData, callback){
-	// 	var newPassword = self.authentication.generatePassword();
-	// 	mongooseUserObject = {
-	// 		firstName: newUserData.firstName, 
-	// 		lastName: newUserData.lastName,
-	// 		emailAddress: newUserData.emailAddress,
-	// 		password: newPassword['hash'],
-	// 		admin: newUserData.admin,
-	// 		accountActivation: self.authentication.activationToken()
-	// 	};
-	// 	var userCreatePromise = self.User.create(mongooseUserObject);
-	// 	userCreatePromise.then(function(newUser){
-	// 		self.res.status(httpStatus.OK).json({'data':{'emailAddress':newUserData.emailAddress,'password':newPassword['password']}});
-	// 		self.res.end();
-	// 		callback(newUser._id);
-	// 	})
-	// 	.catch(function(err){
-	// 		logger.error(err);
-	// 		self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-	// 	});
-	// 	//TODO send mail with password and activation link to given e-mail address
-	// }
-
 	function getUpdateObjectForUserChangeableDataFields(){
+		// TODO: move this function to the users.model
 		var updateData = {};
 		if(self.data.hasOwnProperty('firstName')){
 			updateData['firstName'] = self.data.firstName;
@@ -201,11 +156,9 @@ var UsersController = function(req, res, authentication){
 		var userCreate = new createUser(self.data)
 		if(self.authentication.isAdmin){	
 			userCreate.asAdmin();
-			// adminCreateNewUserAccount(self.data, createRootFolder);
 		}
 		else{
 			userCreate.register();
-			// createNewUserAccount(self.data, createRootFolder);
 		}
 	};
 

@@ -87,11 +87,9 @@ routerBackend.use(function(req, res, next) {
 	//if the Authorization is set in the request header and this token is vaild (our token & not expired)
     var message = null;
     if(req.headers.authorization){
-    	// logger.debug('authorization header is set');
     	authentication.setToken(req.headers.authorization, function(err){
-    		// logger.debug('in the callback function of authentication.setToken');
     		if(err){ //Everything in this if body is error handling and redirecting
-    			logger.debug('setToken threw error');
+    			logger.debug('authentication failed. Error: ' + err);
     			if(err.name == 'TokenExpiredError'){
     				//TODO: Redirect + info message
     				message = 'Toked expired. Authentication failed.';
@@ -104,12 +102,13 @@ routerBackend.use(function(req, res, next) {
 				res.end();
     		}
     		else{ //token is valid - not expired and from this website - 
-    			logger.debug('authentication successful!' + authentication.isAdmin);
+    			logger.debug('authentication successful. Is the req  admin? ' + authentication.isAdmin);
     			next(); //continue with route matching
     		}
     	});
     }
     else{
+    	logger.debug('no Authorization in req header');
     	res.status(httpStatus.UNAUTHORIZED).send('Token authentication failed.');
     }
 });
@@ -176,25 +175,29 @@ routerBackend.route('/bookmarks/folders')
 // 		bookmarksController.getAll(true);
 // 	});
 
+routerBackend.use('/folders', function(req, res, next){
+	foldersController = new require('./controller/foldersController.js')(req, res, authentication);
+	next();
+});
 routerBackend.route('/folders')
 	.get(function(req, res){
-		
+		foldersController.getAll();
 	})
 
 	.post(function(req, res){
-		
+		foldersController.post();
 	});
 routerBackend.route('/folders/:folder_id')
 	.get(function(req, res){
-		
+		foldersController.get();
 	})
 
 	.put(function(req, res){
-
+		foldersController.put();
 	})
 
 	.delete(function(req, res){
-
+		foldersController.delete();
 	});
 routerBackend.route('/folders/bookmarks')
 	.get(function(req, res){
