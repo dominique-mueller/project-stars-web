@@ -65,6 +65,7 @@ function Authentication(token){
 						iss: 'stars-web.de',
 						userId: user._id,
 						admin: user.admin
+						//TODO device._id
 					}, secret,{expiresIn: '365d'}));	
 				}
 			});	

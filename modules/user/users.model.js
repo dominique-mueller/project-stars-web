@@ -1,24 +1,30 @@
 var User = require('../schemaExport.js').User;
 var logger = require('../../adapters/logger.js');
-// var resolve, reject;
 
-var fullFillPromise = function(){
-	return function(err, result){
-		logger.debug('fullFillPromise');
-		if(err){
-			reject(err);
-		}
-		else{
-			logger.debug('fullFillPromise RESOLVED::' + result);
-			resolve(result);
-		}
-	};
-};
+var UsersModel = function(caller, userId){
 
+	var self; //@see:authentication adapter
+	this.userId;
 
-module.exports = {
+	//#### PRIVATE FUNCTIONS ####
+
+		// var fullFillPromise = function(){
+		// 	return function(err, result){
+		// 		logger.debug('fullFillPromise');
+		// 		if(err){
+		// 			reject(err);
+		// 		}
+		// 		else{
+		// 			logger.debug('fullFillPromise RESOLVED::' + result);
+		// 			resolve(result);
+		// 		}
+		// 	};
+		// };
+
+	//#### PUBLIC FUNCTIONS ####
+	
 	//create expects that the userData can allreay be used as direct input parameter
-	create: function(userData){
+	this.create = function(userData){
 		return new Promise(function(resolve, reject){
 			var user = new User(userData);
 			user.save(function(err, user){
@@ -30,9 +36,9 @@ module.exports = {
 				}
 			});
 		});
-	},
+	}
 
-	update: function(userId, userData){
+	this.update = function(userId, userData){
 		// logger.debug('UPDATE USER_ID::' + userId + " :: USER_DATA:: " + userData);
 		return new Promise(function(resolve, reject){
 			User.findByIdAndUpdate(userId, userData, {new:true}, function(err){
@@ -46,7 +52,7 @@ module.exports = {
 		});
 	},
 
-	delete: function(userId){
+	this.delete = function(userId){
 		return new Promise(function(resolve, reject){
 			User.findByIdAndRemove(userId, function(err){
 				if(err){
@@ -57,13 +63,13 @@ module.exports = {
 				}
 			});
 		});
-	},
+	}
 
-	deactivate: function(userId){
+	this.deactivate = function(userId){
 
-	},
+	}
 
-	find: function(filterCriteria){
+	this.find = function(filterCriteria){
 		return new Promise(function(resolve, reject){
 			User.find(filterCriteria, function(err, users){
 				if(err){
@@ -74,9 +80,10 @@ module.exports = {
 				}
 			});
 		});
-	},
+	}
 
-	findOne: function(identifier){
+	this.findOne = function(identifier){
+		//TODO rewrite so there are two inner functions to use
 		var regex = new RegExp(/^\d+$/);
 		logger.debug('REGEX RESULT::'+regex.test(parseInt(identifier)));
 		var promise = new Promise(function(resolve, reject){
@@ -112,9 +119,9 @@ module.exports = {
 			}
 		});
 		return promise;
-	},
+	}
 
-	findAll: function(){
+	this.findAll = function(){
 		return new Promise(function(resolve, reject){
 			User.find({}, function(err, users){
 				if(err){
@@ -126,4 +133,11 @@ module.exports = {
 			});
 		});
 	}
+
+	self = this;
+	this.userId = userId;
+
+	return this;
 }
+
+module.exports = UsersModel;

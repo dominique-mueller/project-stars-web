@@ -6,6 +6,7 @@ var UsersController = function(req, res, authentication){
 	
 	var self; //@see: adapters/authentication.js 
 	this.User = require('../modules/user/users.model.js');
+	this.User = new User(this, authentication.tokenUserId);
 	this.req, this.res, this.authentication, this.data;
 
 	//#### PRIVATE FUNCTIONS ####
@@ -82,10 +83,9 @@ var UsersController = function(req, res, authentication){
 		var rootFolder = {
 			name:'.',	//every root folder has this name. 
 						//furthermore this name is reserved and cannot be created a second time per user
-			path:undefined,	
-			position:0	
+			path:undefined
 		}
-		var folderCreatePromise = require('../modules/folder/folders.model.js').create(rootFolder, userId);
+		var folderCreatePromise = require('../modules/folder/folders.model.js')(this, userId).create(rootFolder);
 		folderCreatePromise.then(function(){
 			logger.debug('Created Root Folder');
 		})
@@ -134,7 +134,6 @@ var UsersController = function(req, res, authentication){
 	};
 
 	this.getAll = function(){
-		//if(authentication.isAdmin(req.headers.authorization)){
 		if(self.authentication.isAdmin){
 			allUserPromise = self.User.findAll();
 			allUserPromise.then(function(users){
@@ -165,7 +164,7 @@ var UsersController = function(req, res, authentication){
 	this.put = function(){
 		var userUpdatePromise;
 		if(self.req.params.user_id == 'tokenUserId'){
-			userUpdatePromise = User.update(authentication.tokenUserId, getUpdateObjectForUserChangeableDataFields());
+			userUpdatePromise = self.User.update(authentication.tokenUserId, getUpdateObjectForUserChangeableDataFields());
 		}
 		else if(self.authentication.isAdmin){
 			userUpdatePromise = self.User.update(self.req.params.user_id, JSON.parse(self.data));
@@ -187,6 +186,7 @@ var UsersController = function(req, res, authentication){
 	};
 
 	this.delete = function(){
+		//TODO Delete the root Folder and everything else
 		if(self.data._id == 'tokenUserId'){
 			var userPromise = User.findOne(authentication.tokenUserId);
 			userPromise.then(function(user){

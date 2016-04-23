@@ -1,0 +1,274 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'mongo-express' ]
+2 info using npm@1.3.10
+3 info using node@v0.10.25
+4 verbose cache add [ 'mongo-express', null ]
+5 verbose cache add name=undefined spec="mongo-express" args=["mongo-express",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'mongo-express',
+6 verbose parsed url   path: 'mongo-express',
+6 verbose parsed url   href: 'mongo-express' }
+7 silly lockFile 93624f72-mongo-express mongo-express
+8 verbose lock mongo-express /home/varicor/.npm/93624f72-mongo-express.lock
+9 silly lockFile 93624f72-mongo-express mongo-express
+10 silly lockFile 93624f72-mongo-express mongo-express
+11 verbose addNamed [ 'mongo-express', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 17f49353-mongo-express mongo-express@
+14 verbose lock mongo-express@ /home/varicor/.npm/17f49353-mongo-express.lock
+15 silly addNameRange { name: 'mongo-express', range: '*', hasData: false }
+16 verbose url raw mongo-express
+17 verbose url resolving [ 'https://registry.npmjs.org/', './mongo-express' ]
+18 verbose url resolved https://registry.npmjs.org/mongo-express
+19 info trying registry request attempt 1 at 19:48:06
+20 verbose etag "FIMY42USONWBQA555RVBJ1ZD"
+21 http GET https://registry.npmjs.org/mongo-express
+22 http 304 https://registry.npmjs.org/mongo-express
+23 silly registry.get cb [ 304,
+23 silly registry.get   { date: 'Sat, 23 Apr 2016 17:48:09 GMT',
+23 silly registry.get     via: '1.1 varnish',
+23 silly registry.get     'cache-control': 'max-age=300',
+23 silly registry.get     etag: '"FIMY42USONWBQA555RVBJ1ZD"',
+23 silly registry.get     age: '19',
+23 silly registry.get     connection: 'keep-alive',
+23 silly registry.get     'x-served-by': 'cache-fra1243-FRA',
+23 silly registry.get     'x-cache': 'HIT',
+23 silly registry.get     'x-cache-hits': '1',
+23 silly registry.get     'x-timer': 'S1461433689.582193,VS0,VE1',
+23 silly registry.get     vary: 'Accept-Encoding' } ]
+24 verbose etag mongo-express from cache
+25 silly addNameRange number 2 { name: 'mongo-express', range: '*', hasData: true }
+26 silly addNameRange versions [ 'mongo-express',
+26 silly addNameRange   [ '0.11.0',
+26 silly addNameRange     '0.11.1',
+26 silly addNameRange     '0.11.2',
+26 silly addNameRange     '0.11.3',
+26 silly addNameRange     '0.12.0',
+26 silly addNameRange     '0.13.0',
+26 silly addNameRange     '0.14.1',
+26 silly addNameRange     '0.15.0',
+26 silly addNameRange     '0.16.1',
+26 silly addNameRange     '0.17.0',
+26 silly addNameRange     '0.17.1',
+26 silly addNameRange     '0.17.2',
+26 silly addNameRange     '0.17.3',
+26 silly addNameRange     '0.17.4',
+26 silly addNameRange     '0.17.5',
+26 silly addNameRange     '0.18.0',
+26 silly addNameRange     '0.19.0',
+26 silly addNameRange     '0.20.0',
+26 silly addNameRange     '0.21.0',
+26 silly addNameRange     '0.22.0',
+26 silly addNameRange     '0.23.0',
+26 silly addNameRange     '0.23.1',
+26 silly addNameRange     '0.23.2',
+26 silly addNameRange     '0.23.3',
+26 silly addNameRange     '0.23.4',
+26 silly addNameRange     '0.23.5',
+26 silly addNameRange     '0.23.6',
+26 silly addNameRange     '0.23.7',
+26 silly addNameRange     '0.24.0',
+26 silly addNameRange     '0.25.0',
+26 silly addNameRange     '0.26.0',
+26 silly addNameRange     '0.27.1',
+26 silly addNameRange     '0.27.2',
+26 silly addNameRange     '0.27.3',
+26 silly addNameRange     '0.27.5',
+26 silly addNameRange     '0.27.6',
+26 silly addNameRange     '0.27.7',
+26 silly addNameRange     '0.27.8',
+26 silly addNameRange     '0.28.0',
+26 silly addNameRange     '0.28.1',
+26 silly addNameRange     '0.28.2',
+26 silly addNameRange     '0.28.3',
+26 silly addNameRange     '0.28.4',
+26 silly addNameRange     '0.28.5',
+26 silly addNameRange     '0.28.6',
+26 silly addNameRange     '0.28.7',
+26 silly addNameRange     '0.28.8',
+26 silly addNameRange     '0.29.0',
+26 silly addNameRange     '0.29.1',
+26 silly addNameRange     '0.29.2',
+26 silly addNameRange     '0.29.3',
+26 silly addNameRange     '0.29.4',
+26 silly addNameRange     '0.29.5',
+26 silly addNameRange     '0.29.7',
+26 silly addNameRange     '0.29.8',
+26 silly addNameRange     '0.29.9',
+26 silly addNameRange     '0.29.10',
+26 silly addNameRange     '0.29.11',
+26 silly addNameRange     '0.29.12',
+26 silly addNameRange     '0.29.13',
+26 silly addNameRange     '0.29.14',
+26 silly addNameRange     '0.29.15',
+26 silly addNameRange     '0.29.16',
+26 silly addNameRange     '0.29.17',
+26 silly addNameRange     '0.29.18',
+26 silly addNameRange     '0.29.19',
+26 silly addNameRange     '0.29.20',
+26 silly addNameRange     '0.30.0',
+26 silly addNameRange     '0.30.1',
+26 silly addNameRange     '0.30.2',
+26 silly addNameRange     '0.30.3',
+26 silly addNameRange     '0.30.4',
+26 silly addNameRange     '0.30.6',
+26 silly addNameRange     '0.30.7',
+26 silly addNameRange     '0.30.8',
+26 silly addNameRange     '0.30.9',
+26 silly addNameRange     '0.30.10',
+26 silly addNameRange     '0.30.11',
+26 silly addNameRange     '0.30.12',
+26 silly addNameRange     '0.30.13',
+26 silly addNameRange     '0.30.14',
+26 silly addNameRange     '0.30.15',
+26 silly addNameRange     '0.30.16',
+26 silly addNameRange     '0.30.17',
+26 silly addNameRange     '0.30.18',
+26 silly addNameRange     '0.30.19',
+26 silly addNameRange     '0.30.20',
+26 silly addNameRange     '0.30.21',
+26 silly addNameRange     '0.30.22',
+26 silly addNameRange     '0.30.23',
+26 silly addNameRange     '0.30.24',
+26 silly addNameRange     '0.30.25',
+26 silly addNameRange     '0.30.26',
+26 silly addNameRange     '0.30.27',
+26 silly addNameRange     '0.30.28',
+26 silly addNameRange     '0.30.29',
+26 silly addNameRange     '0.30.31',
+26 silly addNameRange     '0.30.32',
+26 silly addNameRange     '0.30.33',
+26 silly addNameRange     '0.30.34',
+26 silly addNameRange     '0.30.35',
+26 silly addNameRange     '0.30.36',
+26 silly addNameRange     '0.30.37',
+26 silly addNameRange     '0.30.38',
+26 silly addNameRange     '0.30.39',
+26 silly addNameRange     '0.30.40',
+26 silly addNameRange     '0.30.42',
+26 silly addNameRange     '0.30.43',
+26 silly addNameRange     '0.30.44',
+26 silly addNameRange     '0.30.45',
+26 silly addNameRange     '0.30.46',
+26 silly addNameRange     '0.30.47',
+26 silly addNameRange     '0.30.48',
+26 silly addNameRange     '0.30.49',
+26 silly addNameRange     '0.30.50',
+26 silly addNameRange     '0.30.51' ] ]
+27 verbose addNamed [ 'mongo-express', '0.30.51' ]
+28 verbose addNamed [ '0.30.51', '0.30.51' ]
+29 silly lockFile 1d44aefd-mongo-express-0-30-51 mongo-express@0.30.51
+30 verbose lock mongo-express@0.30.51 /home/varicor/.npm/1d44aefd-mongo-express-0-30-51.lock
+31 silly lockFile 1d44aefd-mongo-express-0-30-51 mongo-express@0.30.51
+32 silly lockFile 1d44aefd-mongo-express-0-30-51 mongo-express@0.30.51
+33 silly lockFile 17f49353-mongo-express mongo-express@
+34 silly lockFile 17f49353-mongo-express mongo-express@
+35 silly resolved [ { version: '0.30.51',
+35 silly resolved     author: { name: 'https://github.com/mongo-express' },
+35 silly resolved     name: 'mongo-express',
+35 silly resolved     description: 'Web-based admin interface for MongoDB',
+35 silly resolved     keywords:
+35 silly resolved      [ 'admin',
+35 silly resolved        'administration',
+35 silly resolved        'collection',
+35 silly resolved        'database',
+35 silly resolved        'GUI',
+35 silly resolved        'interface',
+35 silly resolved        'manage',
+35 silly resolved        'manage-mongo',
+35 silly resolved        'mongo',
+35 silly resolved        'mongodb',
+35 silly resolved        'phpmyadmin',
+35 silly resolved        'UI',
+35 silly resolved        'web-based' ],
+35 silly resolved     bin: { 'mongo-express': './app.js' },
+35 silly resolved     repository:
+35 silly resolved      { type: 'git',
+35 silly resolved        url: 'git://github.com/mongo-express/mongo-express.git' },
+35 silly resolved     dependencies:
+35 silly resolved      { async: '^2.0.0-rc.3',
+35 silly resolved        'basic-auth-connect': '^1.0.0',
+35 silly resolved        'body-parser': '^1.14.2',
+35 silly resolved        busboy: '^0.2.13',
+35 silly resolved        'cli-color': '^1.1.0',
+35 silly resolved        commander: '^2.9.0',
+35 silly resolved        consolidate: '^0.14.0',
+35 silly resolved        'cookie-parser': '1.4.1',
+35 silly resolved        errorhandler: '1.4.3',
+35 silly resolved        express: '4.13.4',
+35 silly resolved        'express-session': '1.13.0',
+35 silly resolved        'gridfs-stream': '^1.1.1',
+35 silly resolved        'method-override': '2.3.5',
+35 silly resolved        mongodb: '^2.1.16',
+35 silly resolved        morgan: '1.7.0',
+35 silly resolved        'serve-favicon': '2.3.0',
+35 silly resolved        snyk: '^1.14.1',
+35 silly resolved        swig: '1.4.2',
+35 silly resolved        underscore: '~1.8.0',
+35 silly resolved        'update-notifier': '^0.6.3' },
+35 silly resolved     devDependencies: { chai: '3.5.0', mocha: '2.4.5', 'pre-commit': '^1.1.2' },
+35 silly resolved     engines: { node: '>=4.0.0', npm: '>=3.0.0' },
+35 silly resolved     license: 'MIT',
+35 silly resolved     scripts:
+35 silly resolved      { jshint: 'jshint -c .jshintrc --exclude-path .jshintignore .',
+35 silly resolved        jscs: 'jscs .',
+35 silly resolved        start: 'node app',
+35 silly resolved        test: 'snyk test && ./node_modules/mocha/bin/mocha' },
+35 silly resolved     'pre-commit': [ 'jshint', 'jscs', 'test' ],
+35 silly resolved     main: './middleware',
+35 silly resolved     readme: 'mongo-express\n===\n\n[![npm version](https://badge.fury.io/js/mongo-express.svg)](https://www.npmjs.com/package/mongo-express) [![npm](https://img.shields.io/npm/dm/mongo-express.svg)](https://www.npmjs.com/package/mongo-express) [![GitHub stars](https://img.shields.io/github/stars/mongo-express/mongo-express.svg)](https://github.com/mongo-express/mongo-express/stargazers) [![Known Vulnerabilities](https://snyk.io/test/npm/name/badge.svg)](https://snyk.io/test/npm/mongo-express)\n\n\nWeb-based MongoDB admin interface written with Node.js, Express and Bootstrap3\n\n\nFeatures\n--------\n\n* Connect to multiple databases\n* View/add/delete databases\n* View/add/rename/delete collections\n* View/add/update/delete documents\n* Preview audio/video/image assets inline in collection view\n* Nested and/or large objects are collapsible for easy overview\n* Async on-demand loading of big document properties (>100KB default) to keep collection view fast\n* GridFS support - add/get/delete incredibly large files\n* Use BSON data types in documents\n* Mobile / Responsive - Bootstrap 3 works passably on small screens when you\'re in a bind\n* Connect and authenticate to individual databases\n* Authenticate as admin to view all databases\n* Database blacklist/whitelist\n\n\nScreenshots\n-----------\n\nHome Page | Database View | Collection View | Editing A Document\n--- | --- | --- | ---\n<img src="http://i.imgur.com/XiYhblA.png" title="Home Page showing databases"> | <img src="http://i.imgur.com/XWcIgY1.png" title="Viewing collections & buckets in a database" /> | <img src="https://imgur.com/UmGSr3x.png" title="Viewing documents in a collection" /> | <img src="https://imgur.com/lL38abn.png" title="Editing a document" />\n\nThese screenshots are from version 0.30.40\nView album for more screenshots: (server status, database views etc..)\n[https://imgur.com/a/9vHsF](https://imgur.com/a/9vHsF)\n\n\nUsage (npm / CLI)\n-----------------\n\n**To install:**\n\n    npm install -g mongo-express\n\nOr if you want to install a non-global copy:\n\n    npm install mongo-express\n\nBy default `config.default.js` is used where the basic access authentication is `admin`:`pass`.\n*mongo-express* requires Node.js v4.x.x or higher.\n\n**To configure:**\n\nCopy `YOUR_PATH/node_modules/mongo-express/config.default.js` into a new file called `YOUR_PATH/node_modules/mongo-express/config.js`.\n\n*Note:* YOUR_PATH will depend on your current OS user and system configuration. You can see it in the output text shown after executing npm install.\n\nFill in your MongoDB connection details and any other options you want to change in `config.js`.\n\n**To run:**\n\n    cd YOUR_PATH/node_modules/mongo-express/ && node app.js\n\nIf you installed it globally, you can immediately start mongo-express like this:\n\n    mongo-express -u user -p password -d database\n\nOr if you want to use it as an administrator:\n\n    mongo-express -u superuser -p password\n\nFor help on configuration options:\n\n    mongo-express -h\n\nUsage (Express 4 middleware)\n----------------------------\n\n**To mount as Express 4 middleware (see `node_modules/mongo-express/app.js`):**\n\n    var mongo_express = require(\'mongo-express/lib/middleware\')\n    var mongo_express_config = require(\'./mongo_express_config\')\n\n    app.use(\'/mongo_express\', mongo_express(mongo_express_config))\n\nUsage (Docker)\n--------------\n\nMake sure you have a running [MongoDB container](https://hub.docker.com/_/mongo/) and specify it\'s name in the `--link` argument.\n\n**Use the docker hub image:**\n\n```console\n$ docker run -it --rm -p 8081:8081 --link YOUR_MONGODB_CONTAINER:mongo mongo-express\n```\n\n**Build from source:**\n\nBuild an image from the project directory, then run the image.\n\n```console\n$ docker build -t mongo-express .\n$ docker run -it --rm -p 8081:8081 --link YOUR_MONGODB_CONTAINER:mongo mongo-express\n```\n\nYou can use the following [environment variables](https://docs.docker.com/reference/run/#env-environment-variables) to modify the container\'s configuration:\n\n    Name                              | Default         | Description\n    ----------------------------------|-----------------|------------\n    `ME_CONFIG_MONGODB_SERVER`        |`mongo` or `localhost`| MongoDB host name or IP address. The default is `localhost` in the config file and `mongo` in the docker image.\n    `ME_CONFIG_MONGODB_PORT`          | `27017`         | MongoDB port.\n    `ME_CONFIG_MONGODB_ENABLE_ADMIN`  | `false`         | Enable administrator access. Send strings: `"true"` or `"false"`.\n    `ME_CONFIG_MONGODB_ADMINUSERNAME` | ` `             | Administrator username.\n    `ME_CONFIG_MONGODB_ADMINPASSWORD` | ` `             | Administrator password.\n    `ME_CONFIG_MONGODB_AUTH_DATABASE` | `db`            | Database name (only needed if `ENABLE_ADMIN` is `"false"`).\n    `ME_CONFIG_MONGODB_AUTH_USERNAME` | `admin`         | Database username (only needed if `ENABLE_ADMIN` is `"false"`).\n    `ME_CONFIG_MONGODB_AUTH_PASSWORD` | `pass`          | Database password (only needed if `ENABLE_ADMIN` is `"false"`).\n    `ME_CONFIG_SITE_BASEURL`          | `/`             | Set the express baseUrl to ease mounting at a subdirectory. Remember to include a leading and trailing slash.\n    `ME_CONFIG_SITE_COOKIESECRET`     | `cookiesecret`  | String used by [cookie-parser middleware](https://www.npmjs.com/package/cookie-parser) to sign cookies.\n    `ME_CONFIG_SITE_SESSIONSECRET`    | `sessionsecret` | String used to sign the session ID cookie by [express-session middleware](https://www.npmjs.com/package/express-session).\n    `ME_CONFIG_BASICAUTH_USERNAME`    | `admin`         | mongo-express web login name. Sending an empty string will disable basic authentication.\n    `ME_CONFIG_BASICAUTH_PASSWORD`    | `pass`          | mongo-express web login password.\n    `ME_CONFIG_REQUEST_SIZE`          | `100kb`         | Used to configure maximum mongo update payload size. CRUD operations above this size will fail due to restrictions in [body-parser](https://www.npmjs.com/package/body-parser).\n    `ME_CONFIG_OPTIONS_EDITORTHEME`   | `rubyblue`      | Web editor color theme, [more here](http://codemirror.net/demo/theme.html).\n    `ME_CONFIG_SITE_SSL_ENABLED`      | `false`         | Enable SSL.\n    `ME_CONFIG_SITE_SSL_CRT_PATH`     | ` `             | SSL certificate file.\n    `ME_CONFIG_SITE_SSL_KEY_PATH`     | ` `             | SSL key file.\n\n**Example:**\n\n    docker run -it --rm \\\n        --name mongo-express \\\n        --link web_db_1:mongo \\\n        -p 8081:8081 \\\n        -e ME_CONFIG_OPTIONS_EDITORTHEME="ambiance" \\\n        -e ME_CONFIG_BASICAUTH_USERNAME="" \\\n        mongo-express\n\nThis example links to a container name typical of `docker-compose`, changes the editor\'s color theme, and disables basic authentication.\n\n**To use:**\n\nThe default port exposed from the container is 8081, so visit `http://localhost:8081` or whatever URL/port you entered into your config (if running standalone) or whatever `config.site.baseUrl` (if mounting as a middleware).\n\nUsage (Bluemix)\n---------------\n\n**Deploy to Bluemix**\n\nDoing manually:\n\n* Git clone this repository\n* Create a new or use already created [MongoDB experimental service](https://www.ng.bluemix.net/docs/#services/MongoDB/index.html#MongoDB)\n* Change the file `manifest.yml` to fit your Bluemix app and service environment\n\n\nDoing automatically:\n\n* Click the button below to fork into IBM DevOps Services and deploy your own copy of this application on Bluemix\n\n[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/mongo-express/mongo-express.git)\n\n\nThen, take the following action to customize to your environment:\n\n* Create your `config.js` file based on `config.default.js`\n  * Check if it is necessary to change the `dbLabel` according to the MongoDB service created\n  * Change the `basicAuth` properties, not to keep the default values\n\n\nSearch\n------\n* *Simple* search takes the user provided fields (`key` & `value`) and prepares a MongoDB find() object, with projection set to `{}` so returns all columns.\n* *Advanced* search passes the `find` and `projection` fields/objects straight into MongoDB `db.collection.find(query, projection)`. The `find` object is where your query happens, while the `projection` object determines which columns are returned.\n\nSee [MongoDB db.collection.find()](https://docs.mongodb.org/manual/reference/method/db.collection.find/) documentation for examples and exact usage.\n\nPlanned features\n----------------\n\nPull Requests are always welcome! <3\n\n* Support for replica set connections\n* Site authentication\n* Mongo Shell console (work in progress)\n\nLimitations\n-----------\n\n* Documents must have `document._id` property to be edited\n* Binary BSON data type not tested\n\nNot tested\n----------\n\n* Binary/BinData\n\nJSON documents are parsed through a javascript virtual machine, so **the web\ninterface can be used for executing malicious javascript on a server**.\n\n**mongo-express should only be used privately for development purposes**.\n\n\n\nBSON Data Types\n---------------\n\nThe following BSON data types are supported in the mongo-express document editor/viewer.\n\n**Native Javascript Types**\n\nStrings, numbers, lists, booleans, null, etc.\n\nAll numbers in Javascript are 64-bit floating points.\n\n**ObjectID/ObjectId**\n\n    ObjectID()\n\nCreates a new Object ID type.\n\n    ObjectID(id)\n\nUse Object ID with the given 24-digit hexadecimal string.\n\n**ISODate**\n\n    ISODate()\n\nCreates a new ISODate object with current time.\n\n`new Date()` can also be used (note the `new` keyword there).\n\n    ISODate(timestamp)\n\nUses ISODate object with the given timestamp.\n\n**DBRef/Dbref**\n\n    DBRef(collection, objectID)\n\n    DBRef(collection, objectID, database)\n\nObject ID is the ID string, not the ObjectID type.\n\nThe database value is optional.\n\n**Timestamp**\n\n    Timestamp()\n\nCreates a new Timestamp object with a value of 0.\n\n    Timestamp(time, ordinal)\n\nExample: `Timestamp(ISODate(), 0)`.\n\nSee [http://www.mongodb.org/display/DOCS/Timestamp+data+type](http://www.mongodb.org/display/DOCS/Timestamp+data+type) for more info about the Timestamp data type.\n\n**Code**\n\n    Code(code)\n\nCode can be a native Javascript function, or it can be a string.\n\nSpecifying a scope/context is not supported.\n\n**MinKey**\n\n    MinKey()\n\n**MaxKey**\n\n    MaxKey()\n\n**Symbol**\n\n    Symbol(string)\n\nExample Document\n----------------\n\nHere is an example of a document which can be read/edited in mongo-express (media truncated for legibility):\n\n    {\n      "_id": ObjectID(), // or ObjectId()\n      "dates": {\n        "date": ISODate("2012-05-14T16:20:09.314Z"),\n        "new_date": ISODate(),\n        "alternative": new Date()\n      },\n      "photo": "data:image/jpeg;base64,/9j/4...",\n      "video": "data:video/webm;base64,GkXfo...",\n      "audio": "data:audio/ogg;base64,T2dnUw...",\n      "bool": true,\n      "string": "hello world!",\n      "list of numbers": [\n        123,\n        111e+87,\n        4.4,\n        -12345.765\n      ],\n      "reference": DBRef("collection", "4fb1299686a989240b000001"),\n      "ts": Timestamp(ISODate(), 1),\n      "minkey": MinKey(),\n      "maxkey": MaxKey(),\n      "func": Code(function() { alert(\'Hello World!\') }),\n      "symbol": Symbol("test")\n    }\n\n---\n\nLicense\n-------\nMIT License\n\nCopyright (c) 2012 Chun-hao Hu\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+35 silly resolved     readmeFilename: 'README.md',
+35 silly resolved     bugs: { url: 'https://github.com/mongo-express/mongo-express/issues' },
+35 silly resolved     _id: 'mongo-express@0.30.51',
+35 silly resolved     _from: 'mongo-express@' } ]
+36 info install mongo-express@0.30.51 into /usr/local/lib
+37 info installOne mongo-express@0.30.51
+38 warn engine mongo-express@0.30.51: wanted: {"node":">=4.0.0","npm":">=3.0.0"} (current: {"node":"v0.10.25","npm":"1.3.10"})
+39 info /usr/local/lib/node_modules/mongo-express unbuild
+40 verbose tar unpack /home/varicor/.npm/mongo-express/0.30.51/package.tgz
+41 silly lockFile 3a646cf2-l-lib-node-modules-mongo-express tar:///usr/local/lib/node_modules/mongo-express
+42 verbose lock tar:///usr/local/lib/node_modules/mongo-express /home/varicor/.npm/3a646cf2-l-lib-node-modules-mongo-express.lock
+43 silly lockFile 2789ecdd-ongo-express-0-30-51-package-tgz tar:///home/varicor/.npm/mongo-express/0.30.51/package.tgz
+44 verbose lock tar:///home/varicor/.npm/mongo-express/0.30.51/package.tgz /home/varicor/.npm/2789ecdd-ongo-express-0-30-51-package-tgz.lock
+45 silly gunzTarPerm modes [ '755', '644' ]
+46 error Error: EACCES, mkdir '/usr/local/lib/node_modules/mongo-express'
+46 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/mongo-express']
+46 error   errno: 3,
+46 error   code: 'EACCES',
+46 error   path: '/usr/local/lib/node_modules/mongo-express',
+46 error   fstream_type: 'Directory',
+46 error   fstream_path: '/usr/local/lib/node_modules/mongo-express',
+46 error   fstream_class: 'DirWriter',
+46 error   fstream_stack:
+46 error    [ '/usr/lib/nodejs/fstream/lib/dir-writer.js:36:23',
+46 error      '/usr/lib/nodejs/mkdirp/index.js:37:53',
+46 error      'Object.oncomplete (fs.js:107:15)' ] }
+47 error Please try running this command again as root/Administrator.
+48 error System Linux 3.19.0-54-generic
+49 error command "/usr/bin/nodejs" "/usr/bin/npm" "install" "-g" "mongo-express"
+50 error cwd /home/varicor/Studienarbeit/workspace
+51 error node -v v0.10.25
+52 error npm -v 1.3.10
+53 error path /usr/local/lib/node_modules/mongo-express
+54 error fstream_path /usr/local/lib/node_modules/mongo-express
+55 error fstream_type Directory
+56 error fstream_class DirWriter
+57 error code EACCES
+58 error errno 3
+59 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/mongo-express'
+60 error fstream_stack /usr/lib/nodejs/fstream/lib/dir-writer.js:36:23
+60 error fstream_stack /usr/lib/nodejs/mkdirp/index.js:37:53
+60 error fstream_stack Object.oncomplete (fs.js:107:15)
+61 verbose exit [ 3, true ]

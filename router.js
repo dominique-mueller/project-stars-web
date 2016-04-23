@@ -21,7 +21,7 @@ routerHTTPRedirect.use(function(req, res, next) {
 
 routerBackend.use(function(req, res, next){
 	//a new Authentication object has to be created here, because it only is for this request
-	authentication = new require('./adapters/authentication.js')();
+	authentication = require('./adapters/authentication.js')();
 	next();
 });
 
@@ -73,7 +73,7 @@ routerBackend.route('/authenticate/newEMailAddress')
 	});
 
 routerBackend.use('/users', function(req, res, next){
-	usersController = new require('./controller/usersController.js')(req, res, authentication);
+	usersController = require('./controller/usersController.js')(req, res, authentication);
 	next();
 });
 routerBackend.route('/users/register')
@@ -143,7 +143,7 @@ routerBackend.route('/users/:user_id')
 	});
 
 routerBackend.use('/bookmarks', function(req, res, next){
-	bookmarksController = new require('./controller/bookmarksController.js')(req, res, authentication);
+	bookmarksController = require('./controller/bookmarksController.js')(req, res, authentication);
 	next();
 });
 routerBackend.route('/bookmarks')
@@ -176,7 +176,7 @@ routerBackend.route('/bookmarks/folders')
 // 	});
 
 routerBackend.use('/folders', function(req, res, next){
-	foldersController = new require('./controller/foldersController.js')(req, res, authentication);
+	foldersController = require('./controller/foldersController.js')(req, res, authentication);
 	next();
 });
 routerBackend.route('/folders')

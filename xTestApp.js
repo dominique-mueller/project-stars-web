@@ -8,6 +8,11 @@ var User = require('./modules/user/users.model.js').User;
 
 
 
+//##### ADMIN MONGO BUG WITH OBJECT IDs
+// {"$oid":"<id>"}
+//#####
+
+
 
 
 // function MyClass(){
