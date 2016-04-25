@@ -6,7 +6,6 @@ var UsersController = function(req, res, authentication){
 	
 	var self; //@see: adapters/authentication.js 
 	this.User = require('../modules/user/users.model.js');
-	this.User = new User(this, authentication.tokenUserId);
 	this.req, this.res, this.authentication, this.data;
 
 	//#### PRIVATE FUNCTIONS ####
@@ -212,6 +211,12 @@ var UsersController = function(req, res, authentication){
 	this.authentication = authentication;
 	if(req.method != 'GET'){
 		this.data = JSON.parse(req.body.data);
+	}
+	if(req.method == 'POST'){
+		this.User = new User(this, null);
+	}
+	else{
+		this.User = new User(this, authentication.tokenUserId)
 	}
 
 	return this;

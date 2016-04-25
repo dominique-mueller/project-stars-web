@@ -32,7 +32,7 @@ function Authentication(token){
 
 	function getUser(emailAddress, callback){
 		logger.debug('getUser()');
-		var result = require('../modules/user/users.model.js').findOne(emailAddress);
+		var result = require('../modules/user/users.model.js')(self, null).findOne(emailAddress);
 		result.then(function(user){
 			logger.debug('found user');
 			callback(null, user);
@@ -62,7 +62,7 @@ function Authentication(token){
 				}
 				else{
 					resolve(jwt.sign({
-						iss: 'stars-web.de',
+						// iss: 'stars-web.de',
 						userId: user._id,
 						admin: user.admin
 						//TODO device._id

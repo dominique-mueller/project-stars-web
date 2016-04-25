@@ -11,59 +11,6 @@ var BookmarksController = function(req, res, authentication){
 
 	//#### PRIVATE FUNCTIONS ####
 
-	// function bringBookmarksInNewOrder(bookmark){
-	// 	var allInFolderPromise = Bookmark.findAllInFolder(bookmark.path, self.authentication.tokenUserId);
-	// 	if(self.data.position < bookmark.position){
-	// 		allInFolderPromise.then(moveBookmarkUp);
-	// 	}
-	// 	else if(self.data.position > bookmark.position){
-	// 		allInFolderPromise.then(moveBookmarkDown);
-	// 	}
-	// 	else{
-	// 		self.res.status(httpStatus.INVALID_INPUT).end();
-	// 	}
-	// 	allInFolderPromise.then(function(allInFolderArray){
-	// 		for(var i = self.data.position; i < allInFolderArray.length; i++){
-	// 			if(allInFolderArray[i].position < self.data.position){
-
-	// 			}
-	// 			else if(allInFolderArray[i].position > self.data.position){}
-	// 		}
-	// 	});
-		
-
-	// 	function moveBookmarkUp(allInFolderArray){
-	// 		var i;
-	// 		for(i = self.data.position; i < bookmark.position; i++){
-	// 			allInFolderArray[i].position = allInFolderArray[i].position + 1;
-	// 		}
-	// 		i++;
-	// 		allInFolderArray[i].position = self.data.position;
-	// 		saveNewBookmarkOrder(allInFolderArray, [self.data.position, i]);
-	// 	}
-
-	// 	function moveBookmarkDown(allInFolderArray){
-	// 		for(i = bookmark.position + 1; i <= self.data.position; i++){
-	// 			allInFolderArray[i].position = allInFolderArray[i].position - 1;
-	// 		}
-	// 		i++;
-	// 		allInFolderArray[bookmark.position].position = self.data.position
-	// 		saveNewBookmarkOrder(allInFolderArray, [bookmark.position, i]);
-	// 	}
-
-		/*@param indexBorders: Array with two fields. 
-			Field one gives the lower index, where the altered bookmarks in the allInFolderArray start
-			Field two gives the upper index, where the altered bookmarks in the allInFolderArray end 
-		*/
-	// 	function saveNewBookmarkOrder(allInFolderArray, indexBorders){
-
-	// 	}
-
-	// 	function getPositionForNewBookmark(folderId){
-	// 		var folderPromise = require('../modules/folder/folders.model.js').findOne(folderId);
-	// 	}
-	// }
-
 
 	//#### PUBLIC FUNCTIONS ####
 
@@ -111,23 +58,13 @@ var BookmarksController = function(req, res, authentication){
 
 	this.put = function(){
 		logger.debug('Bookmark Put');
-		var bookmarkPromise;
-		if(self.data.hasOwnProperty('position')){
-			bookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
-			bookmarkPromise.then(bringBookmarksInNewOrder);
-			// bring them in new order
-			// save all of them
-		}
-		else{
-			bookmarkPromise = Bookmark.update(self.req.params.bookmark_id, self.data);
-			bookmarkPromise.then(function(){
-				self.res.status(httpStatus.NO_CONTENT);
-				self.res.end();
-			})
-			.catch(function(err){
-				self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-			});
-		}
+		var bookmarkUpdatePromise = Bookmark.update(self.req.params.bookmark_id, self.data);
+		bookmarkUpdatePromise.then(function(){
+			self.res.status(httpStatus.NO_CONTENT).end();
+		})
+		.catch(function(err){
+			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+		});
 	}
 
 	this.delete = function(){

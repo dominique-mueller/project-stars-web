@@ -94,10 +94,10 @@ var UsersModel = function(caller, userId){
 				User.findById(identifier, 
 					function(err, result){
 					if(err){
+						logger.debug('fullFillPromise REJECTED');
 						reject(err);
 					}
 					else{
-						// logger.debug('fullFillPromise REJECTED');
 						resolve(result);
 					}}
 					// new fullFillPromise()
@@ -108,10 +108,10 @@ var UsersModel = function(caller, userId){
 				User.findOne({emailAddress:identifier}, 
 					function(err,result){
 					if(err){
+						logger.debug('fullFillPromise REJECTED');
 						reject(err);
 					}
 					else{
-						// logger.debug('fullFillPromise REJECTED');
 						resolve(result);
 					}}
 					// new fullFillPromise()

@@ -17,7 +17,7 @@ var FoldersController = function(req, res, authentication){
 	
 	this.shiftBookmarksPosition = function(path, startPosition, shift){
 		logger.debug('Controler shiftBookmarksPosition');
-		return require('../modules/bookmark/bookmarks.model.js').shiftBookmarksPosition(path, startPosition, shift);	
+		return require('../modules/bookmark/bookmarks.model.js')(self, self.authentication.tokenUserId).shiftBookmarksPosition(path, startPosition, shift);	
 		// return new Promise(function(resolve, reject){
 		// 	if(true){
 		// 		resolve(true);
@@ -29,7 +29,7 @@ var FoldersController = function(req, res, authentication){
 	}
 
 	this.get = function(){
-		var folderPromise = Folder.findOne(self.req.params.folder_id, self.authentication.tokenUserId);
+		var folderPromise = Folder.findOne(self.req.params.folder_id);
 		folderPromise.then(function(folder){
 			res.status(httpStatus.OK).json({data:folder});
 		})
@@ -39,7 +39,7 @@ var FoldersController = function(req, res, authentication){
 	};
 
 	this.getAll = function(){
-		var folderPromise = Folder.findAll(self.authentication.tokenUserId);
+		var folderPromise = Folder.findAll(null);
 		folderPromise.then(function(folders){
 			self.res.status(httpStatus.OK).json({data:folders});
 		})
@@ -50,9 +50,9 @@ var FoldersController = function(req, res, authentication){
 	};
 
 	this.post = function(){
-		var folderCreatePromise = Folder.create(self.data, self.authentication.tokenUserId);
-		folderCreatePromise.then(function(){
-			self.res.status(httpStatus.NO_CONTENT).end();
+		var folderCreatePromise = Folder.create(self.data);
+		folderCreatePromise.then(function(folder){
+			self.res.status(httpStatus.OK).json({data:folder});
 		})
 		.catch(function(err){
 			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
@@ -97,7 +97,7 @@ var FoldersController = function(req, res, authentication){
 	// 	logger.error('could not parse req.body.data to json');
 	// }
 
-	logger.debug('FoldersController Konstruktor');
+	// logger.debug('FoldersController Konstruktor');
 	return this;
 }
 
