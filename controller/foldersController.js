@@ -16,7 +16,7 @@ var FoldersController = function(req, res, authentication){
 	//#### PUBLIC FUNCTIONS ####
 	
 	this.shiftBookmarksPosition = function(path, startPosition, shift){
-		logger.debug('Controler shiftBookmarksPosition');
+		// logger.debug('Controler shiftBookmarksPosition');
 		return require('../modules/bookmark/bookmarks.model.js')(self, self.authentication.tokenUserId).shiftBookmarksPosition(path, startPosition, shift);	
 		// return new Promise(function(resolve, reject){
 		// 	if(true){

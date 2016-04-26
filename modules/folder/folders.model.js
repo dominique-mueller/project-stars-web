@@ -29,7 +29,7 @@ var FoldersModel = function(caller, userId){
 				resolve(folder);
 			})
 			.catch(function(err){
-				logger.error("FUKING ERROR: " + err);
+				logger.error("FUCKING ERROR: " + err);
 				reject(err);
 			});
 		});
@@ -64,13 +64,20 @@ var FoldersModel = function(caller, userId){
 			}
 
 			var deleteFolderPromise = self.delete(folderId);
-			var alterPathPromise = self.changeNumberOfContainedElements(folder.path, +1);
-			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, +1);
-			var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, +1);
-			var saveFolderPromise = saveAndReturnPromise(folder);
-			Promise.all([deleteFolderPromise, alterPathPromise, shiftBookmarksPromise, shiftFoldersPromise, saveAndReturnPromise])
-			.then(function(){
-				callback(null);
+			deleteFolderPromise.then(function(){
+				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
+				var alterPathPromise = self.changeNumberOfContainedElements(folder.path, +1);
+				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
+				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
+				// var saveFolderPromise = saveAndReturnPromise(folder);
+				var createFolderPromise = new Promise(function(resolve, reject){
+					Folder.create(folder);
+				});
+				Promise.all([alterPathPromise, shiftBookmarksPromise, shiftFoldersPromise, saveAndReturnPromise])
+				.then(function(){
+					callback(null);
+				})
+				.catch(callback);
 			})
 			.catch(callback);
 		})
@@ -104,13 +111,10 @@ var FoldersModel = function(caller, userId){
 	//This function will change the position of all other element in the folder 
 	//and decrement the numberOfContainedElements from path folder
 	function updateAffectedElements(folder){
-		logger.debug('updateAffectedElements');
 		return new Promise(function(resolve, reject){
-			// logger.debug('wohooo::' + folder.name);
 			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
 			var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
 			var alterPathPromise = self.changeNumberOfContainedElements(folder.path, -1);
-			logger.debug('Folder.path:: ' + folder.path);
 			Promise.all([shiftFoldersPromise, shiftBookmarksPromise, alterPathPromise]).then(function(resolveArray){
 				logger.debug('all updateAffectedElements resolve');
 				resolve();
@@ -164,12 +168,15 @@ var FoldersModel = function(caller, userId){
 				// logger.debug('shiftFolders');
 				folderArray = sortFolders(folderArray);
 				// logger.debug('shift folders sorted: ' + folderArray);
-				var savePromiseArray = new Array(folderArray.length);
+				logger.debug('FolderArray.length: ' + folderArray.length);
+				logger.debug('startPosition: ' + startPosition);
+				var savePromiseArray = new Array();
 				for(var i = 0; i < folderArray.length; i++){
-					if(folderArray[i].position < startPosition){
+					logger.debug('FolderName: ' + folderArray[i].name);
+					if(folderArray[i].position > startPosition){
+						logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
 						folderArray[i].position = folderArray[i].position + shift;
-						logger.debug('new folder ('+ folderArray[i].name +') position: ' + folder[i].position);
-						savePromiseArray[i] = saveAndReturnPromise(folderArray[i]);
+						savePromiseArray.push(saveAndReturnPromise(folderArray[i]));
 					}
 				}
 				Promise.all(savePromiseArray).then(function(){
