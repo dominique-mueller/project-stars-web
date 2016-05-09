@@ -1,20 +1,20 @@
 /**
  * External imports
  */
-import { Component, OnInit } from 'angular2/core';
-import { HTTP_PROVIDERS } from 'angular2/http';
-import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig } from 'angular2/router';
+import { Component, OnInit } from '@angular/core';
+import { HTTP_PROVIDERS } from '@angular/http';
+import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes, Route } from '@angular/router';
 import { provideStore } from '@ngrx/store';
 
 /**
  * Internal imports
  */
-import { AppService } from '../../services/app/app.service';
-import { bookmarks } from './../../services/bookmark/bookmark.store';
-import { folders } from './../../services/folder/folder.store';
-import { labels } from './../../services/label/label.store';
-import { ui } from './../../services/ui/ui.store';
-import { BookmarksComponent } from '../bookmarks/bookmarks.component';
+import { AppService } from './../../services/app';
+import { bookmarks } from './../../services/bookmark';
+import { folders } from './../../services/folder';
+import { labels } from './../../services/label';
+import { ui } from './../../services/ui';
+import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 
 /**
  * App Component
@@ -37,12 +37,12 @@ import { BookmarksComponent } from '../bookmarks/bookmarks.component';
 	selector: 'app',
 	templateUrl: './app.component.html'
 } )
-@RouteConfig( [
-	{
+@Routes( [
+	new Route( {
 		component: BookmarksComponent,
-		name: 'Bookmarks',
-		path: '/bookmarks/...'
-	}
+		path: '/bookmarks'
+	} )
+	// TODO: Settings Route, Login Route, ...
 ] )
 export class AppComponent {
 

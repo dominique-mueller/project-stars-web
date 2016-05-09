@@ -1,7 +1,12 @@
 /**
+ * External imports
+ */
+import { Map } from 'immutable';
+
+/**
  * Bookmark model interface
  */
-export interface IBookmark {
+export interface Bookmark extends Map<string, any> {
 
 	/**
 	 * Bookmark ID

@@ -1,14 +1,14 @@
 /**
  * External imports
  */
-import { Component, Output, EventEmitter, OnInit } from 'angular2/core';
-import { Control, ControlGroup, FormBuilder } from 'angular2/common';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Control, ControlGroup, FormBuilder } from '@angular/common';
 import 'rxjs/add/operator/debounceTime';
 
 /**
  * Internal imports
  */
-import { AppService } from './../../services/app/app.service';
+import { AppService } from './../../services/app';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	from './../../shared/dropdown/dropdown.component';

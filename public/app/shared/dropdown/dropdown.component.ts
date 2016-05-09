@@ -1,7 +1,7 @@
 /**
  * Imports
  */
-import { Component, Input, Output, EventEmitter } from 'angular2/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 import { IconComponent } from './../icon/icon.component';
 

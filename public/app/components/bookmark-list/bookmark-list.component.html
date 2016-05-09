@@ -1,0 +1,19 @@
+<ul>
+
+	<!-- Folders -->
+	<li class="bookmarks-list-item" *ngFor="let folder of folders">
+		<app-folder [folder]="folder" (select)="navigateToFolder( $event )" (clickOnDetails)="onClickOnDetails( 'folder', $event )"
+			[class.is-selected]="selectedElement?.get( 'type' ) === 'folder' && selectedElement?.get( 'id' ) === folder.get( 'id' )">>
+		</app-folder>
+	</li>
+
+	<!-- Bookmarks -->
+	<li class="bookmarks-list-item" *ngFor="let bookmark of bookmarks">
+		<app-bookmark [bookmark]="bookmark" [labels]="labels" (clickOnDetails)="onClickOnDetails( 'bookmark', $event )"
+			[class.is-selected]="selectedElement?.get( 'type' ) === 'bookmark' && selectedElement?.get( 'id' ) === bookmark.get( 'id' )">
+		</app-bookmark>
+	</li>
+
+</ul>
+
+<router-outlet></router-outlet>

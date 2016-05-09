@@ -3,7 +3,7 @@
 	<div class="bookmark-content">
 		<p class="bookmark-title">{{ bookmark.get( 'title' ) }}</p>
 		<ul class="bookmark-labels">
-			<li class="bookmark-label" *ngFor="#labelId of bookmark.get( 'labels' )">
+			<li class="bookmark-label" *ngFor="let labelId of bookmark.get( 'labels' )">
 				<app-label [label]="labels.get( labelId )">
 				</app-label>
 			</li>

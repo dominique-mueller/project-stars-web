@@ -7,7 +7,7 @@ import { Map } from 'immutable';
 /**
  * Action constants
  */
-export const SET_CURRENT_FOLDER: string = 'SET_CURRENT_FOLDER';
+export const SET_OPENED_FOLDER_ID: string = 'SET_OPENED_FOLDER_ID';
 export const SET_SELECTED_ELEMENT: string = 'SET_SELECTED_ELEMENT';
 export const UNSET_SELECTED_ELEMENT: string = 'UNSET_SELECTED_ELEMENT';
 
@@ -15,7 +15,7 @@ export const UNSET_SELECTED_ELEMENT: string = 'UNSET_SELECTED_ELEMENT';
  * Initial state
  */
 const initialState: Map<string, any> = Map( {
-	openedFolder: null,
+	openedFolderId: null,
 	search: null,
 	selectedElement: null
 } );
@@ -23,14 +23,13 @@ const initialState: Map<string, any> = Map( {
 /**
  * UI state (reducer)
  */
-export const ui: Reducer<Map<string, any>> =
-	( state: Map<string, any> = initialState, action: Action ) => {
+export const ui: Reducer<Map<string, any>> = ( state: Map<string, any> = initialState, action: Action ) => {
 
 	switch ( action.type ) {
 
 		// Set current folder (update)
-		case SET_CURRENT_FOLDER:
-			return state.set( 'openedFolder', action.payload );
+		case SET_OPENED_FOLDER_ID:
+			return state.set( 'openedFolderId', action.payload );
 
 		// Set selected element (update)
 		case SET_SELECTED_ELEMENT:

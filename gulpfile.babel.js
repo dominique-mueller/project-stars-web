@@ -26,7 +26,7 @@ import * as typescript 		from './tools/gulp_tasks/typescript';
 gulp.task( 'build:dev', ( done ) => {
 	runSequence(
 		[ 'env:clean' ],
-		[ 'setup:index', 'setup:api', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'setup:systemjs', 'setup:api', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -39,7 +39,7 @@ gulp.task( 'build:prod', ( done ) => {
 		[ 'env:npm' ],
 		[ 'sass:lint', 'typescript:lint' ],
 		[ 'env:clean' ],
-		[ 'setup:index', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'setup:systemjs', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -85,11 +85,5 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 
 	// Watch typescript files (including its templates)
 	gulp.watch( `${ config.paths.app.src }/**/*`, [ 'typescript:build' ] );
-
-	// Watch index file and svg icon files
-	gulp.watch( [
-		`${ config.paths.project.src }/index.html`,
-		`${ config.paths.icons.src }/*.svg`
-	], [ 'setup:index' ] );
 
 } );

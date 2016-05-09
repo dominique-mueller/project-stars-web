@@ -1,0 +1,78 @@
+<div class="bookmark-details-overlay is-visible" (click)="closeDetails()"></div>
+<div class="bookmark-details-panel is-visible">
+
+	<div class="bookmark-details-header">
+		<h3 class="bookmark-details-title">Details</h3>
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="closeDetails()">
+			<app-icon name="close" size="20" color="#FFF"></app-icon>
+		</button>
+	</div>
+
+	<!-- <pre>DEBUG</pre> -->
+	<!-- <pre>{{ bookmark | json }}</pre> -->
+
+	<div class="bookmark-details-content">
+
+		<form>
+
+			<ul>
+				<li class="bookmark-details-data">
+					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
+						[value]="bookmark?.get( 'title' )">
+					</app-input-editable>
+				</li>
+				<li class="bookmark-details-data">
+					<app-input-editable [name]="'bookmark-url'" [label]="'Url'" [type]="'url'" [placeholder]="'https://www.example.com'"
+						[value]="bookmark?.get( 'url' )">
+					</app-input-editable>
+				</li>
+				<li class="bookmark-details-data">
+					<app-input-editable [name]="'bookmark-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My bookmark description'"
+						[value]="bookmark?.get( 'description' )">
+					</app-input-editable>
+				</li>
+			</ul>
+
+			<hr>
+
+			<p style="margin: 3rem 2.5rem 1rem; font-size: 1.2rem; color: #999; font-weight: 500; letter-spacing: .01rem">Labels</p>
+			<ul class="bookmark-details-data">
+
+				<li style="display: inline-block;" *ngFor="let labelId of bookmark?.get( 'labels' )">
+					<app-label [label]="allLabels?.get( labelId )">
+					</app-label>
+				</li>
+				<li style="display: inline-block;">
+					<app-assign-label class="bookmark-details-data"
+						*ngIf="unassignedLabels.size > 0"
+						[labels]="unassignedLabels">
+						ADD LABEL
+					</app-assign-label>
+				</li>
+
+			</ul>
+
+		</form>
+
+		<hr>
+
+		<ul>
+
+			<li class="form-component bookmark-details-data">
+				<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
+				<label class="form-label" for="bookmark-created">Created on</label>
+			</li>
+			<li class="form-component bookmark-details-data">
+				<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
+				<label class="form-label" for="bookmark-updated">Last updated on</label>
+			</li>
+			<li class="form-component bookmark-details-data" *ngIf="bookmark?.get( 'archived' )">
+				<input class="form-input" id="bookmark-archived" type="text" [value]="bookmark?.get( 'archived' )" readonly>
+				<label class="form-label" for="bookmark-archived">Archived on</label>
+			</li>
+
+		</ul>
+
+	</div>
+
+</div>

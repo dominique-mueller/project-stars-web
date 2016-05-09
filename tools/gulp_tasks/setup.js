@@ -48,9 +48,20 @@ export const icons = gulp.task( 'setup:index', () => {
 		} } ) )
 
 		// Save the new index
-		.pipe( gulp.dest( './' ) )
+		.pipe( gulp.dest( config.paths.root ) )
 
 		.pipe( browserSync.stream( { once: true } ) );
+
+} );
+
+/**
+ * Gulp task: Copy systemjs module configuration file
+ */
+export const systemjs = gulp.task( 'setup:systemjs', () => {
+
+	return gulp
+		.src( `${ config.paths.project.src }/systemjs.config.js` )
+		.pipe( gulp.dest( config.paths.app.dest ) );
 
 } );
 

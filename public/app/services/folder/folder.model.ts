@@ -1,7 +1,12 @@
 /**
+ * External imports
+ */
+import { Map } from 'immutable';
+
+/**
  * Folder model interface
  */
-export interface IFolder {
+export interface Folder extends Map<string, any> {
 
 	/**
 	 * Folder ID

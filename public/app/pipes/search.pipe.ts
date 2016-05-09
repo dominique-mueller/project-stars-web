@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Pipe, PipeTransform } from 'angular2/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 /**
  * Search pipe for filtering bookmarks and folders

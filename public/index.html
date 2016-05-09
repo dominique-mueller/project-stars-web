@@ -9,54 +9,20 @@
 
 	<link rel="stylesheet" href="http://localhost:3000/build/style.min.css">
 
-	<!-- Step 1: Load polyfills required for making this work in IE - order is important! -->
+	<!-- Step 1: Load polyfills for older browsers -->
 	<script src="http://localhost:3000/node_modules/es6-shim/es6-shim.min.js"></script>
-	<script src="http://localhost:3000/node_modules/systemjs/dist/system-polyfills.js"></script>
-	<script scr="http://localhost:3000/node_modules/es6/dev/scr/testing/shims_for_IE.js"></script>
 
-	<!-- Step 2: Load Angular 2 requirements & polyfills -->
-	<script src="http://localhost:3000/node_modules/angular2/bundles/angular2-polyfills.js"></script>
+	<!-- Step 2: Load libraries -->
+	<script src="http://localhost:3000/node_modules/zone.js/dist/zone.js"></script>
+	<script src="http://localhost:3000/node_modules/reflect-metadata/Reflect.js"></script>
 	<script src="http://localhost:3000/node_modules/systemjs/dist/system.src.js"></script>
 
-	<!-- Step 2: SystemJS for module loading -->
+	<!-- Step 3: Configure and run systemjs to load modules -->
+	<script src="http://localhost:3000/build/systemjs.config.js"></script>
 	<script>
-
-		// Configure SystemJS
-		System.config( {
-			baseUrl: 'http://localhost:3000',
-			map: {
-				app: '/build',
-				angular2: '/node_modules/angular2',
-				rxjs: '/node_modules/rxjs',
-				'@ngrx/store': '/node_modules/@ngrx/store/dist',
-				immutable: '/node_modules/immutable/dist'
-			},
-			packages: {
-				'app': {
-					defaultExtension: 'js',
-					main: 'main.js'
-				},
-				'@ngrx/store': {
-					defaultExtension: 'js',
-					main: 'index.js'
-				},
-				angular2: {
-					defaultExtension: 'js'
-				},
-				rxjs: {
-					defaultExtension: 'js'
-				},
-				immutable: {
-					defaultExtension: 'js',
-					main: 'immutable.js'
-				}
-			}
+		System.import( 'app' ).catch( function( error ) {
+			console.error( error );
 		} );
-
-		// Run the app
-		System.import( 'app' )
-			  .then( null, console.error.bind( console ) );
-
 	</script>
 
 	<!-- Load web fonts from Adobe TypeKit -->

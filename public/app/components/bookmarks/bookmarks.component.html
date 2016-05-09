@@ -5,16 +5,16 @@
 	<div class="bookmarks-directory">
 		<h2 class="bookmarks-directory-title">Folders</h2>
 		<a class="directory-link"
-			[class.is-selected]="openedFolder === 0"
-			(click)="goToFolder( 0 )">
+			[class.is-selected]="openedFolderId === 0"
+			(click)="onSelectFolder( 0 )">
 			<app-icon name="folder_special" size="24" color="#666"></app-icon>
 			<p class="directory-name">Bookmarks</p>
 		</a>
 		<app-bookmark-directory
 			[folders]="folders"
-			[parentFolder]="0"
-			[openedFolder]="openedFolder"
-			(select)="goToFolder( $event )">
+			[parentFolderId]="0"
+			[openedFolderId]="openedFolderId"
+			(selectFolder)="onSelectFolder( $event )">
 		</app-bookmark-directory>
 	</div>
 

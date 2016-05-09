@@ -1,5 +1,6 @@
 {
 	"paths": {
+		"root": "./",
 		"project": {
 			"src": "./public",
 			"dest": "./build"

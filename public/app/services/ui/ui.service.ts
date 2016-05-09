@@ -1,15 +1,16 @@
 /**
  * External imports
  */
-import { Injectable } from 'angular2/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
+import { Map } from 'immutable';
 
 /**
  * Internal imports
  */
-import { IAppStore } from './../app/app.store';
-import { SET_CURRENT_FOLDER, SET_SELECTED_ELEMENT, UNSET_SELECTED_ELEMENT } from './ui.store';
+import { AppStore } from './../app';
+import { SET_OPENED_FOLDER_ID, SET_SELECTED_ELEMENT, UNSET_SELECTED_ELEMENT } from './ui.store';
 
 /**
  * Navigation service
@@ -17,18 +18,20 @@ import { SET_CURRENT_FOLDER, SET_SELECTED_ELEMENT, UNSET_SELECTED_ELEMENT } from
 @Injectable()
 export class UiService {
 
-	public uiState: Observable<any>;
+	/**
+	 * UI state
+	 */
+	public uiState: Observable<Map<string, any>>;
 
 	/**
 	 * App store
 	 */
-	private store: Store<IAppStore>;
+	private store: Store<AppStore>;
 
 	/**
 	 * Constructor
-	 * @param {Store<IAppStore>} store App store
 	 */
-	constructor( store: Store<IAppStore> ) {
+	constructor( store: Store<AppStore> ) {
 
 		// Initialize services
 		this.store = store;
@@ -39,13 +42,13 @@ export class UiService {
 	}
 
 	/**
-	 * Set opened folder
-	 * @param {number} folder Folder
+	 * Set opened folder ID
+	 * @param {number} folderId Folder
 	 */
-	public setOpenedFolder( folder: number ): void {
+	public setOpenedFolderId( folderId: number ): void {
 		this.store.dispatch( {
-			payload: folder,
-			type: SET_CURRENT_FOLDER
+			payload: folderId,
+			type: SET_OPENED_FOLDER_ID
 		} );
 	}
 

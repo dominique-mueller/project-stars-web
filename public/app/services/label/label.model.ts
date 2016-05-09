@@ -1,7 +1,12 @@
 /**
+ * External imports
+ */
+import { Map } from 'immutable';
+
+/**
  * Label model interface
  */
-export interface ILabel {
+export interface Label extends Map<string, any> {
 
 	/**
 	 * Label ID
