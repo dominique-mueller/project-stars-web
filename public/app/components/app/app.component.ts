@@ -13,7 +13,7 @@ import { AppService } from './../../services/app';
 import { bookmarks } from './../../services/bookmark';
 import { folders } from './../../services/folder';
 import { labels } from './../../services/label';
-import { ui } from './../../services/ui';
+import { ui, UiService } from './../../services/ui';
 import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 
 /**
@@ -32,7 +32,8 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 			labels,
 			ui
 		} ),
-		AppService
+		AppService,
+		UiService
 	],
 	selector: 'app',
 	templateUrl: './app.component.html'

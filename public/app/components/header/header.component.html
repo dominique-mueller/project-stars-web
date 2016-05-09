@@ -7,9 +7,9 @@
 
 	<form class="header-search search" [ngFormModel]="searchForm" (ngSubmit)="submitSearch()">
 		<input class="search-input" type="search" placeholder="Search and filter ..." [ngFormControl]="searchForm.find( 'search' )">
-		<app-icon class="search-icon" name="search" color="#CCC" size="24px"></app-icon>
+		<app-icon class="search-icon" name="search" color="#FAFAFA" size="24px"></app-icon>
 		<button class="button button-invisible search-button-clear" type="button" (click)="reset()">
-			<app-icon name="close" color="#CCC" size="20px"></app-icon>
+			<app-icon name="close" color="#FAFAFA" size="20px"></app-icon>
 		</button>
 	</form>
 

@@ -103,13 +103,32 @@ export class EditableInputComponent {
 	 * Cancel input changes
 	 * @param {HTMLInputElement} input Input element reference
 	 */
-	private cancel(input: HTMLInputElement): void {
+	private cancel( input: HTMLInputElement ): void {
+
+		// Disable edit mode
+		this.disableEditMode(input);
 
 		// Revert value to original one
 		input.value = this.originalValue;
 
-		// Disable edit mode
-		this.disableEditMode( input );
+	}
+
+	/**
+	 * Cancel input changes, but with a short delay
+	 * @param {HTMLInputElement} input Input element reference
+	 */
+	private cancelDelayed( input: HTMLInputElement ): void {
+
+		// So, it happens that the blur event fires before we can either choose to save or cancel.
+		// To fix this, we wait a tini tiny bit, and check if we're still in edit mode before continuing.
+		setTimeout(
+			() => {
+				if ( this.isInEditMode ) {
+					this.cancel( input );
+				}
+			},
+			250 // Kinda random, should hopefully work ...
+		);
 
 	}
 
@@ -119,13 +138,13 @@ export class EditableInputComponent {
 	 */
 	private save( input: HTMLInputElement ): void {
 
+		// Disable edit mode
+		this.disableEditMode(input);
+
 		// Send update (only if something has actually changed)
 		if ( input.value !== this.originalValue ) {
 			this.update.emit( input.value );
 		}
-
-		// Disable edit mode
-		this.disableEditMode( input );
 
 	}
 

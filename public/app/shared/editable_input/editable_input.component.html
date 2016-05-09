@@ -1,5 +1,5 @@
 <input class="form-input input-editable-input" [id]="name" [type]="type" [placeholder]="placeholder" [value]="value"
-	(focus)="edit( input )" (blur)="cancel( input )" (keyup.esc)="cancel( input )" (keyup.enter)="save( input )" #input>
+	(focus)="edit( input )" (blur)="cancelDelayed( input )" (keyup.esc)="cancel( input )" (keyup.enter)="save( input )" #input>
 <label class="form-label" [attr.for]="name">{{ label }}</label>
 <ul class="input-editable-actions">
 	<li class="input-editable-action ng-animate" *ngIf="!isInEditMode">

@@ -16,8 +16,10 @@ export const UNSET_SELECTED_ELEMENT: string = 'UNSET_SELECTED_ELEMENT';
  */
 const initialState: Map<string, any> = Map( {
 	openedFolderId: null,
-	search: null,
-	selectedElement: null
+	selectedElement: Map( {
+		id: null,
+		type: null
+	} )
 } );
 
 /**
@@ -33,11 +35,17 @@ export const ui: Reducer<Map<string, any>> = ( state: Map<string, any> = initial
 
 		// Set selected element (update)
 		case SET_SELECTED_ELEMENT:
-			return state.set( 'selectedElement', Map<string, any>( action.payload ) );
+			return state.withMutations( ( newState: Map<string, any> ) => {
+				newState.setIn( [ 'selectedElement', 'id' ], action.payload[ 'id' ] )
+						.setIn( [ 'selectedElement', 'type' ], action.payload[ 'type' ] );
+			} );
 
 		// Unset selected element (reset)
 		case UNSET_SELECTED_ELEMENT:
-			return state.set( 'selectedElement', null );
+			return state.withMutations( ( newState: Map<string, any> ) => {
+				newState.setIn( [ 'selectedElement', 'id' ], null )
+						.setIn( [ 'selectedElement', 'type' ], null );
+			} );
 
 		// Default fallback
 		default:

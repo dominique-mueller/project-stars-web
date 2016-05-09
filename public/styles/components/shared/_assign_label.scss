@@ -5,29 +5,77 @@
 	z-index: 2;
 }
 
-.assign-label-dropdown {
-	position: absolute;
-	top: 2.5rem; // TODO: Update, depends on label height!
-	left: 0;
-	width: 30rem; // TODO: Variable?
-	background-color: $color-white;
-	box-shadow: 0 .1rem .3rem rgba($color-black, .25);
+.assign-label-button {
+	position: relative;
+	z-index: 3;
 }
 
-.assign-label-item {
-	width: 100%;
+.assign-label-dropdown {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 26rem;
+	transform: translateY(-.7rem) scale(.93);
+	transform-origin: 0 0;
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
+				transform $anim-speed-normal $anim-easing;
+	background-color: $color-white;
+	box-shadow: 0 .1rem .3rem rgba($color-black, .25);
+	opacity: 0;
+	visibility: hidden;
 
-	+ .assign-label-item {
-		border-top: .1rem solid $color-seashell;
+	&.is-visible {
+		transform: translateY(0) scale(1);
+		transition: opacity $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant $anim-linear,
+					transform $anim-speed-normal $anim-easing;
+		opacity: 1;
+		visibility: visible;
 	}
 
 }
 
-.assign-label-button {
+// Header
+
+.assign-label-header {
+	display: flex;
+	width: 100%;
+	height: 4.1rem;
+	padding: .1rem;
+	padding-left: 1.2rem;
+}
+
+.assign-label-title {
+	flex: 1;
+	font-size: 1.3rem;
+	font-weight: $font-weight-bold;
+	letter-spacing: .01rem;
+	line-height: 4rem;
+}
+
+.assign-label-close {
+	padding-right: 1rem;
+	padding-left: 1rem;
+}
+
+// List
+
+.assign-label-list {
+	max-height: 13.6rem; // 4 items = 4x 34px
+	overflow-y: auto; // Make the list scrollable
+}
+
+.assign-label-item {
+	width: 100%;
+	border-top: .1rem solid $color-seashell;
+}
+
+.assign-label-link {
 	position: relative;
 	width: 100%;
-	padding: .9rem 1.2rem .9rem 3rem;
-	font-size: 1.2rem;
+	padding: 1rem 1.2rem 1rem 3.2rem;
+	font-size: 1.3rem;
 	text-align: left;
 	transition: background-color $anim-speed-normal $anim-easing;
 
@@ -41,7 +89,7 @@
 
 .assign-label-dot {
 	position: absolute;
-	top: 1.1rem;
+	top: 1.2rem;
 	left: 1.2rem;
 	width: .9rem;
 	height: .9rem;

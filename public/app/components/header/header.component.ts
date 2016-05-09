@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
 	 * Search update event
 	 */
 	@Output()
-	private search: EventEmitter<{}>;
+	private search: EventEmitter<any>;
 
 	/**
 	 * Search form model
@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
 			'search': ''
 		} );
 
-		// Set dropdown values
+		// Set dropdown values - TODO: Maybe extract to somewhere?
 		this.dropdownItems = [
 			new DropdownLink( 'settings', 'Settings' ),
 			new DropdownLink( 'apps', 'Apps' ),
@@ -90,16 +90,16 @@ export class HeaderComponent implements OnInit {
 	public ngOnInit(): void {
 
 		// Subscribe to search form value updates
-		this.searchForm.valueChanges
-			.debounceTime( 150 ) // Debounce in ms
-			.subscribe(
-				( data: any ) => {
-					this.submitSearch();
-				},
-				( error: any ) => {
-					console.log( 'Angular 2 form error.' ); // TODO
-				}
-			);
+		// this.searchForm.valueChanges
+		// 	.debounceTime( 150 ) // Debounce in ms
+		// 	.subscribe(
+		// 		( data: any ) => {
+		// 			this.submitSearch();
+		// 		},
+		// 		( error: any ) => {
+		// 			console.log( 'Angular 2 form error.' ); // TODO
+		// 		}
+		// 	);
 
 	}
 
@@ -115,17 +115,16 @@ export class HeaderComponent implements OnInit {
 	 * Reset search form (currently search input only)
 	 */
 	private reset(): void {
-		let searchInput: any = <Control> this.searchForm.find( 'search' ); // Cast from AbstractControl
-		searchInput.updateValue('');
+		( <Control> this.searchForm.find( 'search' ) ).updateValue( '' ); // Cast from AbstractControl
 	}
 
 	/**
 	 * Submit search form, emit update
 	 */
-	private submitSearch(): void {
-		this.search.emit( {
-			value: this.searchForm.value.search.toLowerCase()
-		} );
-	}
+	// private submitSearch(): void {
+	// 	this.search.emit( {
+	// 		value: this.searchForm.value.search.toLowerCase()
+	// 	} );
+	// }
 
 }

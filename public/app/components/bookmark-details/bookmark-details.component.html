@@ -1,34 +1,31 @@
-<div class="bookmark-details-overlay is-visible" (click)="closeDetails()"></div>
-<div class="bookmark-details-panel is-visible">
+<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="closeDetails()"></div>
+<div class="bookmark-details-panel" [class.is-visible]="isVisible">
 
-	<div class="bookmark-details-header">
-		<h3 class="bookmark-details-title">Details</h3>
+	<header class="bookmark-details-header">
+		<h3 class="bookmark-details-title">Bookmark Details</h3>
 		<button class="button button-invisible bookmark-details-button" type="button" (click)="closeDetails()">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
-	</div>
-
-	<!-- <pre>DEBUG</pre> -->
-	<!-- <pre>{{ bookmark | json }}</pre> -->
+	</header>
 
 	<div class="bookmark-details-content">
 
 		<form>
 
 			<ul>
-				<li class="bookmark-details-data">
+				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
-						[value]="bookmark?.get( 'title' )">
+						[value]="bookmark?.get( 'title' )" (update)="updateBookmark( 'title', $event )">
 					</app-input-editable>
 				</li>
-				<li class="bookmark-details-data">
+				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-url'" [label]="'Url'" [type]="'url'" [placeholder]="'https://www.example.com'"
-						[value]="bookmark?.get( 'url' )">
+						[value]="bookmark?.get( 'url' )" (update)="updateBookmark( 'url', $event )">
 					</app-input-editable>
 				</li>
-				<li class="bookmark-details-data">
+				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My bookmark description'"
-						[value]="bookmark?.get( 'description' )">
+						[value]="bookmark?.get( 'description' )" (update)="updateBookmark( 'description', $event )">
 					</app-input-editable>
 				</li>
 			</ul>
@@ -36,20 +33,18 @@
 			<hr>
 
 			<p style="margin: 3rem 2.5rem 1rem; font-size: 1.2rem; color: #999; font-weight: 500; letter-spacing: .01rem">Labels</p>
-			<ul class="bookmark-details-data">
-
-				<li style="display: inline-block;" *ngFor="let labelId of bookmark?.get( 'labels' )">
+			<ul class="bookmark-details-section">
+				<li class="bookmark-details-label" *ngFor="let labelId of bookmark?.get( 'labels' )">
 					<app-label [label]="allLabels?.get( labelId )">
 					</app-label>
 				</li>
-				<li style="display: inline-block;">
-					<app-assign-label class="bookmark-details-data"
+				<li class="bookmark-details-label-assign">
+					<app-assign-label
 						*ngIf="unassignedLabels.size > 0"
-						[labels]="unassignedLabels">
-						ADD LABEL
+						[labels]="unassignedLabels"
+						(select)="assignLabelToBookmark( $event )">
 					</app-assign-label>
 				</li>
-
 			</ul>
 
 		</form>
@@ -57,20 +52,18 @@
 		<hr>
 
 		<ul>
-
-			<li class="form-component bookmark-details-data">
+			<li class="form-component bookmark-details-section">
 				<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
 				<label class="form-label" for="bookmark-created">Created on</label>
 			</li>
-			<li class="form-component bookmark-details-data">
+			<li class="form-component bookmark-details-section">
 				<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
 				<label class="form-label" for="bookmark-updated">Last updated on</label>
 			</li>
-			<li class="form-component bookmark-details-data" *ngIf="bookmark?.get( 'archived' )">
+			<li class="form-component bookmark-details-section" *ngIf="bookmark?.get( 'archived' )">
 				<input class="form-input" id="bookmark-archived" type="text" [value]="bookmark?.get( 'archived' )" readonly>
 				<label class="form-label" for="bookmark-archived">Archived on</label>
 			</li>
-
 		</ul>
 
 	</div>

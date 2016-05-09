@@ -1,12 +1,22 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+
+/**
+ * Internal imports
+ */
+import { Label } from './../../services/label';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Assign label dropdown
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	directives: [
+		IconComponent
+	],
 	host: {
 		class: 'assign-label'
 	},
@@ -19,13 +29,7 @@ export class AssignLabelComponent {
 	 * List of labels to choose from
 	 */
 	@Input()
-	private labels: Map<string, Map<string, any>>;
-
-	/**
-	 * Enable search flag
-	 */
-	@Input()
-	private enableSearch: boolean;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Select event
@@ -35,7 +39,6 @@ export class AssignLabelComponent {
 
 	/**
 	 * Dropdown status flag
-	 * @type {boolean}
 	 */
 	private isOpen: boolean;
 
@@ -46,23 +49,33 @@ export class AssignLabelComponent {
 
 		// Setup
 		this.select = new EventEmitter();
-		this.enableSearch = true;
 		this.isOpen = false;
 
 	}
 
 	/**
+	 * Toggle dropdown menu
+	 * TODO: Animations
+	 */
+	private toggleDropdown(): void {
+		this.isOpen = !this.isOpen;
+	}
+
+	/**
+	 * Close dropdown menu
+	 * TODO: Animations
+	 */
+	private closeDropdown(): void {
+		this.isOpen = false;
+	}
+
+	/**
 	 * Select a label
-	 * @param {number} labelId If of the selected label
+	 * @param {number} labelId Selected label ID
 	 */
 	private selectLabel( labelId: number ): void {
-
-		// Emit select event
 		this.select.emit( labelId );
-
-		// Close dropdown
-		this.isOpen = false;
-
+		this.closeDropdown();
 	}
 
 }

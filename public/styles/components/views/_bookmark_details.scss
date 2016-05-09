@@ -31,29 +31,29 @@
 	width: 50rem; // TODO: flexible
 	background-color: $color-white;
 	box-shadow: 0 .1rem .5rem rgba($color-black, .15);
-	transform: translateX(100%);
-	opacity: 0;
+	transform: translateX(100%) translateZ(0); // Hackihack
 	visibility: hidden;
-	transition: opacity $anim-speed-normal $anim-easing,
-				transform $anim-speed-normal $anim-easing,
+	transition: transform $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant linear $anim-speed-normal;
+	will-change: transform; // Does it work? Who knows ...
 
 	&.is-visible {
-		opacity: 1;
 		visibility: visible;
-		transform: translateX(0);
-		transition: opacity $anim-speed-normal $anim-easing,
-					transform $anim-speed-normal $anim-easing,
+		transform: translateX(0) translateZ(0);
+		transition: transform $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant linear;
 	}
 
 }
+
+// Header
 
 .bookmark-details-header {
 	display: flex;
 	width: 100%;
 	padding-right: 1.5rem;
 	padding-left: 2.5rem;
+	padding-top: .2rem;
 	height: 6rem;
 	background-color: $color-tuna;
 	color: $color-white;
@@ -62,7 +62,8 @@
 .bookmark-details-title {
 	flex: 1;
 	font-size: 1.6rem;
-	line-height: 6rem;
+	letter-spacing: .01rem;
+	line-height: 5.8rem;
 }
 
 .bookmark-details-button {
@@ -76,12 +77,23 @@
 	padding-top: 3rem;
 }
 
-.bookmark-details-data {
+.bookmark-details-section {
 	margin-right: 2.5rem;
 	margin-left: 2.5rem;
 
-	+ .bookmark-details-data {
+	+ .bookmark-details-section {
 		margin-top: 3.2rem;
 	}
 
+}
+
+// Content: Labels
+
+.bookmark-details-label {
+	display: inline-block;
+	margin-right: .4rem;
+}
+
+.bookmark-details-label-assign {
+	margin-top: .4rem;
 }

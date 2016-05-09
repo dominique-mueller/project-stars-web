@@ -115,6 +115,14 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private openedFolderId: number;
 
 	/**
+	 * Currently selected element
+	 */
+	private selectedElement: {
+		id: number,
+		type: string
+	};
+
+	/**
 	 * Constructor
 	 */
 	constructor(
@@ -140,6 +148,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		// Setup
 		this.openedFolderId = null; // Explicitely not set yet
 		this.serviceSubscriptions = [];
+		this.selectedElement = {
+			id: null,
+			type: null
+		};
 
 	}
 
@@ -156,8 +168,8 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get folder ID from the route URL
 		// Pre-filter: If the ID is not a number, we navigate back to the root folder
-		if ( /^\d+$/.test( curr.parameters[ `id` ] ) ) {
-			this.openedFolderId = parseInt( curr.parameters[ `id` ], 10 );
+		if ( /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
+			this.openedFolderId = parseInt( curr.parameters[ 'id' ], 10 );
 		} else {
 			this.navigateToFolder( 0 );
 		}
@@ -172,17 +184,40 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 		console.log('BOOKMARK LIST: ON INIT'); // TODO: Remove me
 
-		// TODO: Check if currently opened folder id even exists, maybe with a folder service call?
-
 		// Update UI state
 		// This should notify other components, like the bookmark directory one
 		this.uiService.setOpenedFolderId( this.openedFolderId );
 
+		// Get informed when the selected element changes so that we can highlight the selected one in the list
+		// For example, this could come from the bookmark details component
+		const uiServiceSubscription: Subscription = this.uiService.uiState.subscribe(
+			( uiState: Map<string, any> ) => {
+
+				// Update selected element (only when the value actually changed)
+				if ( uiState.getIn( [ 'selectedElement', 'id' ] ) !== this.selectedElement.id
+					|| uiState.getIn( [ 'selectedElement', 'type' ] ) !== this.selectedElement.type ) {
+					this.selectedElement.id = uiState.getIn( [ 'selectedElement', 'id' ] );
+					this.selectedElement.type = uiState.getIn( [ 'selectedElement', 'type' ] );
+					this.changeDetector.markForCheck(); // Trigger change detection
+				}
+
+			}
+		);
+
 		// Get folders from its service
 		const folderServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
-				this.changeDetector.markForCheck(); // Trigger change detection
+				if ( folders.size > 0 ) {
+
+					// Check if the currently opened folder ID even exists, else navigate back to root
+					if ( this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId ) !== null ) {
+						this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
+						this.changeDetector.markForCheck(); // Trigger change detection
+					} else {
+						this.navigateToFolder( 0 );
+					}
+
+				}
 			}
 		);
 
@@ -206,7 +241,8 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.serviceSubscriptions = [
 			bookmarkServiceSubscription,
 			folderServiceSubscription,
-			labelServiceSubscription
+			labelServiceSubscription,
+			uiServiceSubscription
 		];
 
 	}

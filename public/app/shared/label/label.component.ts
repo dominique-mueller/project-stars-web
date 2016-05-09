@@ -34,7 +34,7 @@ export class LabelComponent {
 	 * Remove label from bookmark
 	 */
 	@Output()
-	private remove: EventEmitter<number>;
+	private clickOnRemove: EventEmitter<number>;
 
 	/**
 	 * Constructor
@@ -42,7 +42,7 @@ export class LabelComponent {
 	constructor() {
 
 		// Setup
-		this.remove = new EventEmitter();
+		this.clickOnRemove = new EventEmitter();
 
 	}
 

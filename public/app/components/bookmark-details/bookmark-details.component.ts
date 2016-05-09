@@ -9,6 +9,7 @@ import { List, Map } from 'immutable';
 /**
  * Internal imports
  */
+import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
 import { LabelComponent } from './../../shared/label/label.component';
@@ -51,6 +52,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private changeDetector: ChangeDetectorRef;
 
 	/**
+	 * Ui service
+	 */
+	private uiService: UiService;
+
+	/**
 	 * Bookmark data service
 	 */
 	private bookmarkDataService: BookmarkDataService;
@@ -75,19 +81,30 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private serviceSubscriptions: Array<Subscription>;
 
-
-
-
+	/**
+	 * Bookmark ID
+	 */
 	private bookmarkId: number;
 
+	/**
+	 * Bookmark
+	 */
 	private bookmark: Bookmark;
 
+	/**
+	 * Map of all labels
+	 */
 	private allLabels: any;
 
+	/**
+	 * Map of currently unassigned labels
+	 */
 	private unassignedLabels: any;
 
-
-
+	/**
+	 * Visibility status flag (for animation purposes)
+	 */
+	private isVisible: boolean;
 
 	/**
 	 * Constructor
@@ -95,6 +112,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	constructor(
 		router: Router,
 		changeDetector: ChangeDetectorRef,
+		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
 		bookmarkLogicService: BookmarkLogicService,
 		labelDataService: LabelDataService,
@@ -103,6 +121,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		// Initialize services
 		this.router = router;
 		this.changeDetector = changeDetector;
+		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.bookmarkLogicService = bookmarkLogicService;
 		this.labelDataService = labelDataService;
@@ -114,6 +133,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.allLabels = Map<string, Map<string, any>>();
 		this.unassignedLabels = Map<string, Map<string, any>>();
 		this.serviceSubscriptions = [];
+		this.isVisible = false;
 
 	}
 
@@ -121,7 +141,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * Call this when the router gets activated
 	 * This function only handles stuff that has to do with routing
 	 */
-	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
+	public routerOnActivate(
+		curr: RouteSegment,
+		prev?: RouteSegment,
+		currTree?: RouteTree,
+		prevTree?: RouteTree ): void {
 
 		console.log('BOOKMARK DETAILS: ROUTER ACTIVATE'); // TODO: Remove me
 
@@ -130,8 +154,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get element ID from the route URL
 		// Pre-filter: If the ID is not a number, we navigate back
-		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters.id ) ) {
-			this.bookmarkId = parseInt( curr.parameters.id, 10 );
+		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
+			this.bookmarkId = parseInt( curr.parameters[ 'id' ], 10 );
 		} else {
 			this.closeDetails();
 		}
@@ -154,16 +178,22 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 				if ( bookmarks.size > 0 ) {
 
 					// Try to find the correct bookmark
-					this.bookmark = this.bookmarkLogicService.getBookmarkByBookmarkId(bookmarks, this.bookmarkId);
+					this.bookmark = this.bookmarkLogicService.getBookmarkByBookmarkId( bookmarks, this.bookmarkId );
 
 					// Navigate back if the bookmark doesn't exist
 					if ( this.bookmark === null ) {
 						this.closeDetails();
 					} else {
+
+						// Update UI state
+						// This should notify other components, like the bookmark list one
+						this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
+
 						if ( this.allLabels.size > 0 ) {
 							this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark(this.allLabels, this.bookmark);
 						}
 						this.changeDetector.markForCheck(); // Trigger change detection
+
 					}
 
 				}
@@ -189,6 +219,15 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 			labelServiceSubscription
 		];
 
+		// Animate in
+		setTimeout(
+			() => {
+				this.isVisible = true;
+				this.changeDetector.markForCheck(); // Trigger change detection
+			},
+			25 // Some extra time before animation starts
+		);
+
 	}
 
 	/**
@@ -207,47 +246,56 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 	// TODO: Refactor name?
 	private closeDetails(): void {
-		this.router.navigate( [ '../..' ], this.currentUrlSegment );
+
+		// Update UI state
+		// This should notify other components, like the bookmark list one
+		this.uiService.unsetSelectedElement();
+
+		// Animate out
+		this.isVisible = false;
+
+		// Navigate when animation is done
+		setTimeout(
+			() => {
+				this.router.navigate( [ '../..' ], this.currentUrlSegment ); // TODO: Mysteriously sometimes work, sometimes not
+			},
+			275 // Needs 250, plus some (maybe unnecessary) extra time
+		);
+
 	}
 
+	/**
+	 * Update bookmark attribute
+	 * TODO: Extract logic into data service?
+	 * @param {string} attribute Attribute / key
+	 * @param {string} newValue  New / updated value
+	 */
+	private updateBookmark( attribute: string, newValue: string ): void {
 
+		// Setup data
+		let data: any = {};
+		data[ attribute ] = newValue;
+
+		// Update bookmark
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, data );
+
+	}
 
 	/**
-	 * Update element
-	 * @param {Map<string, any>} element Information about the element
-	 * @param {string}           key     Key
-	 * @param {string}           value   Updated value
+	 * Assign a new label to the current bookmark
+	 * TODO: Extract logic into data service?
+	 * @param {number} labelId Label ID
 	 */
-	// private updateElement( element: Map<string, any>, key: string, value: string ): void {
+	private assignLabelToBookmark( labelId: number ): void {
 
-	// 	// Skip of no update
+		// Setup data
+		let data: any = {
+			labels: this.bookmark.get( 'labels' ).push( labelId )
+		};
 
-	// 	// Create data
-	// 	let data: any = {};
-	// 	data[ key ] = value;
+		// Update bookmark
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, data );
 
-	// 	// Update bookmark
-	// 	this.bookmarkService.updateBookmark( element.get( 'id' ), data );
-
-	// }
-
-	/**
-	 * Assign new label to element
-	 * @param {Map<string, any>} element  Information about the element
-	 * @param {List<number>}     labels   List of currently assigned label ids
-	 * @param {number}           newLabel New label id (to be assigned)
-	 */
-	// private assignLabelToElement( element: Map<string, any>, labels: List<number>, newLabel: number ): void {
-
-	// 	// Skip if no update
-
-	// 	// Create data
-	// 	let data: any = {};
-	// 	data.labels = labels.push( newLabel );
-
-	// 	// Update bookmark
-	// 	this.bookmarkService.updateBookmark( element.get( 'id' ), data );
-
-	// }
+	}
 
 }

@@ -54,14 +54,14 @@ export class UiService {
 
 	/**
 	 * Set the selected element
-	 * @param {string} type Element type (folder / bookmark)
-	 * @param {number} id   Element id
+	 * @param {string} elementType Element type
+	 * @param {number} elementId   ELement ID
 	 */
-	public setSelectedElement( type: string, id: number ): void {
+	public setSelectedElement( elementType: string, elementId: number ): void {
 		this.store.dispatch( {
 			payload: {
-				id: id,
-				type: type
+				id: elementId,
+				type: elementType
 			},
 			type: SET_SELECTED_ELEMENT
 		} );

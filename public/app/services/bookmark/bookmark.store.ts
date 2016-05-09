@@ -13,8 +13,8 @@ import { Bookmark } from './bookmark.model';
  * Action constants
  */
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
+export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
 // export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
-// export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
 // export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
 
 /**
@@ -43,12 +43,14 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 			} );
 
 		// Update bookmark
-		// case UPDATE_BOOKMARK:
+		case UPDATE_BOOKMARK:
 
-		// 	// Update only the changed values
-		// 	return <List<Map<string, any>>> state.map( ( item: Map<string, any> ) => {
-		// 		return ( item.get( 'id' ) === action.payload.id ) ? item.merge( Map<string, any>( action.payload.data ) ) : item;
-		// 	} );
+			// Update only the changed values
+			return <List<Bookmark>> state.map( ( bookmark: Bookmark ) => {
+				return ( bookmark.get( 'id' ) === action.payload.id )
+					? bookmark.merge( Map<string, any>( action.payload.data ) )
+					: bookmark;
+			} );
 
 		// Default fallback
 		default:

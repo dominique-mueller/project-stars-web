@@ -200,7 +200,14 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {number} folderId ID of the folder we want to navigate to
 	 */
 	private onSelectFolder(folderId: number): void {
-		this.router.navigate( [ 'view', folderId ], this.currentUrlSegment ); // Relative navigation
+
+		// Update UI state
+		// This should notify other components, like the bookmark list one
+		this.uiService.unsetSelectedElement();
+
+		// Navigate to folder (relative)
+		this.router.navigate( [ 'view', folderId ], this.currentUrlSegment );
+
 	}
 
 }

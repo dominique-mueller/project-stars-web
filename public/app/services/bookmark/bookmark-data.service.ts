@@ -13,7 +13,7 @@ import { List } from 'immutable';
  */
 import { AppStore, AppService } from './../app';
 import { Bookmark } from './bookmark.model';
-import { LOAD_BOOKMARKS } from './bookmark.store';
+import { LOAD_BOOKMARKS, UPDATE_BOOKMARK } from './bookmark.store';
 
 /**
  * Bookmark data service
@@ -92,22 +92,22 @@ export class BookmarkDataService {
 
 	/**
 	 * Update bookmark
-	 * @param {number} id   Bookmark id
-	 * @param {{}}     data Updated bookmark data
+	 * @param {number} bookmarkId Bookmark ID
+	 * @param {any]    data       Data
 	 */
-	// public updateBookmark( id: number, data: {} ): void {
+	public updateBookmark( bookmarkId: number, data: any ): void {
 
-	// 	// TODO: API CALL
+		// TODO: API CALL
 
-	// 	// Dispatch action
-	// 	this.store.dispatch( {
-	// 		payload: {
-	// 			data: data,
-	// 			id: id
-	// 		},
-	// 		type: UPDATE_BOOKMARK
-	// 	} );
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				data: data,
+				id: bookmarkId
+			},
+			type: UPDATE_BOOKMARK
+		} );
 
-	// }
+	}
 
 }
