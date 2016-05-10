@@ -87,11 +87,21 @@
 
 }
 
-// Content: Labels
+// Special content: Labels
 
 .bookmark-details-label {
 	display: inline-block;
 	margin-right: .4rem;
+}
+
+.bookmark-details-label-title {
+	color: #999;
+	font-size: 1.2rem;
+	font-weight: 500;
+	line-height: 1.4rem;
+	margin-bottom: 1rem;
+	margin-left: 2.5rem;
+	letter-spacing: .01rem; // Because of the small text
 }
 
 .bookmark-details-label-assign {

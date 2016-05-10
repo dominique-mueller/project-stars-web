@@ -8,10 +8,10 @@
 		</button>
 	</header>
 
-	<div class="bookmark-details-content">
+	<form class="bookmark-details-content">
 
-		<form>
-
+		<!-- (important) bookmark information -->
+		<fieldset class="form-fieldset">
 			<ul>
 				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
@@ -29,13 +29,16 @@
 					</app-input-editable>
 				</li>
 			</ul>
+		</fieldset>
 
-			<hr>
+		<hr>
 
-			<p style="margin: 3rem 2.5rem 1rem; font-size: 1.2rem; color: #999; font-weight: 500; letter-spacing: .01rem">Labels</p>
+		<!-- Assigned labels -->
+		<fieldset class="form-fieldset">
+			<p class="bookmark-details-label-title">Labels</p>
 			<ul class="bookmark-details-section">
 				<li class="bookmark-details-label" *ngFor="let labelId of bookmark?.get( 'labels' )">
-					<app-label [label]="allLabels?.get( labelId )">
+					<app-label [label]="allLabels?.get( labelId )" [isRemovable]="true" (clickOnRemove)="unassignLabelFromBookmark( labelId )">
 					</app-label>
 				</li>
 				<li class="bookmark-details-label-assign">
@@ -46,26 +49,28 @@
 					</app-assign-label>
 				</li>
 			</ul>
-
-		</form>
+		</fieldset>
 
 		<hr>
 
-		<ul>
-			<li class="form-component bookmark-details-section">
-				<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
-				<label class="form-label" for="bookmark-created">Created on</label>
-			</li>
-			<li class="form-component bookmark-details-section">
-				<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
-				<label class="form-label" for="bookmark-updated">Last updated on</label>
-			</li>
-			<li class="form-component bookmark-details-section" *ngIf="bookmark?.get( 'archived' )">
-				<input class="form-input" id="bookmark-archived" type="text" [value]="bookmark?.get( 'archived' )" readonly>
-				<label class="form-label" for="bookmark-archived">Archived on</label>
-			</li>
-		</ul>
+		<!-- Additional information (mostly timestamps) -->
+		<fieldset class="form-fieldset">
+			<ul>
+				<li class="form-component bookmark-details-section">
+					<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
+					<label class="form-label" for="bookmark-created">Created on</label>
+				</li>
+				<li class="form-component bookmark-details-section">
+					<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
+					<label class="form-label" for="bookmark-updated">Last updated on</label>
+				</li>
+				<li class="form-component bookmark-details-section" *ngIf="bookmark?.get( 'archived' )">
+					<input class="form-input" id="bookmark-archived" type="text" [value]="bookmark?.get( 'archived' )" readonly>
+					<label class="form-label" for="bookmark-archived">Archived on</label>
+				</li>
+			</ul>
+		</fieldset>
 
-	</div>
+	</form>
 
 </div>

@@ -1,17 +1,19 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * Internal imports
  */
+import { Label } from './../../services/label';
 import { IconComponent } from './../icon/icon.component';
 
 /**
  * Label component
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent
 	],
@@ -28,7 +30,13 @@ export class LabelComponent {
 	 * Label data
 	 */
 	@Input()
-	private label: Map<string, any>;
+	private label: Label;
+
+	/**
+	 * Allow the label to be removable
+	 */
+	@Input()
+	private isRemovable: boolean;
 
 	/**
 	 * Remove label from bookmark
@@ -42,8 +50,16 @@ export class LabelComponent {
 	constructor() {
 
 		// Setup
+		this.isRemovable = false;
 		this.clickOnRemove = new EventEmitter();
 
+	}
+
+	/**
+	 * Remove (unassign) label
+	 */
+	private removeLabel(): void {
+		this.clickOnRemove.emit( this.label.get( 'id' ) );
 	}
 
 }

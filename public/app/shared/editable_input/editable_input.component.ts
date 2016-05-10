@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 /**
  * Internal imports
@@ -12,6 +12,7 @@ import { IconComponent } from './../icon/icon.component';
  * Editable input component
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent
 	],
@@ -60,6 +61,11 @@ export class EditableInputComponent {
 	private update: EventEmitter<string>;
 
 	/**
+	 * Change detector
+	 */
+	private changeDetector: ChangeDetectorRef;
+
+	/**
 	 * Status flag for the edit mode
 	 */
 	private isInEditMode: boolean;
@@ -72,7 +78,10 @@ export class EditableInputComponent {
 	/**
 	 * Constructor
 	 */
-	constructor() {
+	constructor( changeDetector: ChangeDetectorRef ) {
+
+		// Initialize services
+		this.changeDetector = changeDetector;
 
 		// Setup
 		this.update = new EventEmitter();
@@ -89,10 +98,8 @@ export class EditableInputComponent {
 		// Ony switch when necessary
 		if ( !this.isInEditMode ) {
 
-			// Save original value (for resetting later on)
+			// Save original value (for resetting later on) and enable edit mode
 			this.originalValue = input.value;
-
-			// Enable edit mode
 			this.enableEditMode( input );
 
 		}
@@ -105,10 +112,8 @@ export class EditableInputComponent {
 	 */
 	private cancel( input: HTMLInputElement ): void {
 
-		// Disable edit mode
-		this.disableEditMode(input);
-
-		// Revert value to original one
+		// Disable edit mode and revert to original value
+		this.disableEditMode( input );
 		input.value = this.originalValue;
 
 	}
@@ -125,6 +130,7 @@ export class EditableInputComponent {
 			() => {
 				if ( this.isInEditMode ) {
 					this.cancel( input );
+					this.changeDetector.markForCheck();
 				}
 			},
 			250 // Kinda random, should hopefully work ...
@@ -139,7 +145,7 @@ export class EditableInputComponent {
 	private save( input: HTMLInputElement ): void {
 
 		// Disable edit mode
-		this.disableEditMode(input);
+		this.disableEditMode( input );
 
 		// Send update (only if something has actually changed)
 		if ( input.value !== this.originalValue ) {
@@ -152,28 +158,18 @@ export class EditableInputComponent {
 	 * Enable edit mode
 	 * @param {HTMLInputElement} input Input element reference
 	 */
-	private enableEditMode(input: HTMLInputElement): void {
-
-		// Enable edit mode
+	private enableEditMode( input: HTMLInputElement ): void {
 		this.isInEditMode = true;
-
-		// Set focus
 		input.focus();
-
 	}
 
 	/**
 	 * Disable edit mode
 	 * @param {HTMLInputElement} input Input element reference
 	 */
-	private disableEditMode(input: HTMLInputElement): void {
-
-		// Disable edit mode
+	private disableEditMode( input: HTMLInputElement ): void {
 		this.isInEditMode = false;
-
-		// Remove focus
 		input.blur();
-
 	}
 
 }

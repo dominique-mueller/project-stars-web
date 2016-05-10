@@ -1,12 +1,13 @@
 /**
  * External imports
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * Icon Component
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
 		class: 'icon',
 		'[style.width]': 'size',

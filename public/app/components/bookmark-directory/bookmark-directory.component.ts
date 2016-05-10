@@ -12,7 +12,7 @@ import { Folder, FolderLogicService } from './../../services/folder';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
- * Bookmark directory component (recursive)
+ * Bookmark directory component (dumb, recursive)
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,

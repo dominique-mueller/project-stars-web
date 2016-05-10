@@ -19,7 +19,7 @@ import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { FolderComponent } from './../../shared/folder/folder.component';
 
 /**
- * Bookmark list component
+ * Bookmark list component (smart)
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -18,7 +18,7 @@ import { EditableInputComponent } from './../../shared/editable_input/editable_i
 import { AssignLabelComponent } from './../../shared/assign_label/assign_label.component';
 
 /**
- * Bookmark details component
+ * Bookmark details component (smart)
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -266,36 +266,27 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Update bookmark attribute
-	 * TODO: Extract logic into data service?
 	 * @param {string} attribute Attribute / key
 	 * @param {string} newValue  New / updated value
 	 */
 	private updateBookmark( attribute: string, newValue: string ): void {
-
-		// Setup data
-		let data: any = {};
-		data[ attribute ] = newValue;
-
-		// Update bookmark
-		this.bookmarkDataService.updateBookmark( this.bookmarkId, data );
-
+		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, attribute, newValue );
 	}
 
 	/**
 	 * Assign a new label to the current bookmark
-	 * TODO: Extract logic into data service?
 	 * @param {number} labelId Label ID
 	 */
 	private assignLabelToBookmark( labelId: number ): void {
+		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
+	}
 
-		// Setup data
-		let data: any = {
-			labels: this.bookmark.get( 'labels' ).push( labelId )
-		};
-
-		// Update bookmark
-		this.bookmarkDataService.updateBookmark( this.bookmarkId, data );
-
+	/**
+	 * Unassign a label from the current bookmark
+	 * @param {number} labelId Label ID
+	 */
+	private unassignLabelFromBookmark( labelId: number ): void {
+		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
 	}
 
 }

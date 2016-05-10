@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * Internal imports
@@ -12,6 +12,7 @@ import { IconComponent } from './../icon/icon.component';
  * Folde component
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent
 	],

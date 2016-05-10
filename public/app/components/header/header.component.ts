@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Control, ControlGroup, FormBuilder } from '@angular/common';
 import 'rxjs/add/operator/debounceTime';
 
@@ -14,9 +14,10 @@ import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	from './../../shared/dropdown/dropdown.component';
 
 /**
- * Header Component
+ * Header Component (dumb)
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent,
 		DropdownComponent

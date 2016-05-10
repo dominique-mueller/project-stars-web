@@ -91,11 +91,49 @@ export class BookmarkDataService {
 	}
 
 	/**
+	 * Update one value of a bookmark
+	 * @param {number} bookmarkId Bookmark ID
+	 * @param {string} attribute  Attribute
+	 * @param {string} newValue   New / updated value
+	 */
+	public updateBookmarkValue( bookmarkId: number, attribute: string, newValue: string ): void {
+		let data: any = {};
+		data[ attribute ] = newValue;
+		this.updateBookmark( bookmarkId, data );
+	}
+
+	/**
+	 * Assign one new label to a bookmark
+	 * @param {number}       bookmarkId    Bookmark ID
+	 * @param {List<number>} currentLabels List of currently assigned labels
+	 * @param {number}       labelId       ID of the new label
+	 */
+	public assignLabelToBookmark( bookmarkId: number, currentLabels: List<number>, labelId: number ): void {
+		let data: any = {
+			labels: currentLabels.push( labelId )
+		};
+		this.updateBookmark( bookmarkId, data );
+	}
+
+	/**
+	 * Unassign one label from a bookmark
+	 * @param {number}       bookmarkId    Bookmark ID
+	 * @param {List<number>} currentLabels List of currently assigned labels
+	 * @param {number}       labelId       ID fo the label to be unassigned / removed
+	 */
+	public unassignLabelFromBookmark( bookmarkId: number, currentLabels: List<number>, labelId: number ): void {
+		let data: any = {
+			labels: currentLabels.filter( ( currentLabelId: number ) => currentLabelId !== labelId )
+		};
+		this.updateBookmark( bookmarkId, data );
+	}
+
+	/**
 	 * Update bookmark
 	 * @param {number} bookmarkId Bookmark ID
 	 * @param {any]    data       Data
 	 */
-	public updateBookmark( bookmarkId: number, data: any ): void {
+	private updateBookmark( bookmarkId: number, data: any ): void {
 
 		// TODO: API CALL
 

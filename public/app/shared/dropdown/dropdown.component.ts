@@ -1,7 +1,7 @@
 /**
  * Imports
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 import { IconComponent } from './../icon/icon.component';
 
@@ -14,6 +14,7 @@ export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
  * Dropdown Component
  */
 @Component( {
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent
 	],

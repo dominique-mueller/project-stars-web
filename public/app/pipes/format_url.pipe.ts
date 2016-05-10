@@ -4,13 +4,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
- * Url pipe for pretty url formatting
+ * Pipe for pretty URL formatting (hostname, https)
  */
 @Pipe( {
 	name: 'formatUrl'
 } )
 export class FormatUrlPipe implements PipeTransform {
 
+	/**
+	 * Transform
+	 * @param  {string} value Value
+	 * @param  {any[]}  args  List of arguments
+	 * @return {string}       New value
+	 */
 	public transform( value: string, args: any[] ): string {
 
 		// Create parser
@@ -22,7 +28,7 @@ export class FormatUrlPipe implements PipeTransform {
 
 		// Mark the protocol green when the website uses a secure https connection
 		if ( parser.protocol === 'https:' ) {
-			value = value.replace( 'https', '<u style="color: green;">https</u>' ); // TODO: Color
+			value = value.replace( 'https', '<em style="color: green;">https</em>' ); // TODO: Color
 		}
 
 		// Done

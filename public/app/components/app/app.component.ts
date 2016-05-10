@@ -17,7 +17,7 @@ import { ui, UiService } from './../../services/ui';
 import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 
 /**
- * App Component
+ * App Component (smart)
  */
 @Component( {
 	directives: [

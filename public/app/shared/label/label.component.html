@@ -1,4 +1,4 @@
-<p class="label-name">{{ label?.get( 'name' ) }}</p>
-<!-- <button class="button button-invisible" type="button">
-	x
-</button> -->
+<span class="label-name">{{ label?.get( 'name' ) }}</span>
+<button class="button button-invisible label-button" type="button" *ngIf="isRemovable" (click)="removeLabel()">
+	<app-icon name="close" size="12" color="#FFF"></app-icon>
+</button>

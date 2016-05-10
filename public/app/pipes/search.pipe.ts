@@ -4,7 +4,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
- * Search pipe for filtering bookmarks and folders
+ * Search pipe for filtering bookmarks and folders: TODO: Refactor
  */
 @Pipe( {
 	name: 'search'

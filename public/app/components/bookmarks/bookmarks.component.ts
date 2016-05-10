@@ -20,7 +20,7 @@ import { BookmarkListComponent } from './../bookmark-list/bookmark-list.componen
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
 
 /**
- * Bookmark components
+ * Bookmark components (smart)
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
