@@ -161,8 +161,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
-		console.log('BOOKMARK LIST: ROUTER ACTIVATE'); // TODO: Remove me
-
 		// Save current URL segment, needed for relative navigation later on
 		this.currentUrlSegment = curr;
 
@@ -181,8 +179,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * We do NOT land here if we have been thrown out in the 'routerOnActive' function above
 	 */
 	public ngOnInit(): void {
-
-		console.log('BOOKMARK LIST: ON INIT'); // TODO: Remove me
 
 		// Update UI state
 		// This should notify other components, like the bookmark directory one
@@ -251,8 +247,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * Call this when the view gets destroyed
 	 */
 	public ngOnDestroy(): void {
-
-		console.log('BOOKMARK LIST: ON DESTROY'); // TODO: Remove me
 
 		// Unsubscribe from all services (free resources manually)
 		this.serviceSubscriptions.forEach( ( subscription: Subscription ) => {

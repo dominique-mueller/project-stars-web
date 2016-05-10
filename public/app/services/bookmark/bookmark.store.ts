@@ -14,8 +14,8 @@ import { Bookmark } from './bookmark.model';
  */
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
 export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
+export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
 // export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
-// export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
 
 /**
  * Initial state of the bookmark data (empty per default)
@@ -46,11 +46,43 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 		case UPDATE_BOOKMARK:
 
 			// Update only the changed values
-			return <List<Bookmark>> state.map( ( bookmark: Bookmark ) => {
-				return ( bookmark.get( 'id' ) === action.payload.id )
-					? bookmark.merge( Map<string, any>( action.payload.data ) )
-					: bookmark;
-			} );
+			return <List<Bookmark>> state
+				.map( ( bookmark: Bookmark ) => {
+					if ( bookmark.get( 'id' ) === action.payload.id ) {
+						return bookmark.merge(Map<string, any>(action.payload.data))
+					} else {
+						return bookmark;
+					}
+				} );
+
+		// Delete bookmark, update position for all the other bookmarks
+		case DELETE_BOOKMARK:
+
+			// Save temporary values of the deleted bookmark
+			let removedPosition: number;
+			let folderPathId: number;
+
+			return <List<Bookmark>> state
+
+				// Filter the deleted bookmark out of the list, save its position
+				.filterNot( ( bookmark: Bookmark ) => {
+					if ( bookmark.get( 'id' ) === action.payload.id ) {
+						removedPosition = bookmark.get( 'position' );
+						folderPathId = bookmark.get( 'path' );
+						return true;
+					} else {
+						return false;
+					}
+				} )
+
+				// Update positions of bookmarks living in the same folder (if necessary)
+				.map( ( bookmark: Bookmark ) => {
+					if ( bookmark.get( 'path' ) === folderPathId && bookmark.get( 'position' ) > removedPosition ) {
+						return bookmark.set( 'position', bookmark.get( 'position' ) - 1 );
+					} else {
+						return bookmark;
+					}
+				} );
 
 		// Default fallback
 		default:

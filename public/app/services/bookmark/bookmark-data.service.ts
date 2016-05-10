@@ -13,7 +13,7 @@ import { List } from 'immutable';
  */
 import { AppStore, AppService } from './../app';
 import { Bookmark } from './bookmark.model';
-import { LOAD_BOOKMARKS, UPDATE_BOOKMARK } from './bookmark.store';
+import { LOAD_BOOKMARKS, UPDATE_BOOKMARK, DELETE_BOOKMARK } from './bookmark.store';
 
 /**
  * Bookmark data service
@@ -126,6 +126,24 @@ export class BookmarkDataService {
 			labels: currentLabels.filter( ( currentLabelId: number ) => currentLabelId !== labelId )
 		};
 		this.updateBookmark( bookmarkId, data );
+	}
+
+	/**
+	 * Delete one bookmark
+	 * @param {number} bookmarkId Bookmark ID
+	 */
+	public deleteBookmark(bookmarkId: number): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch({
+			payload: {
+				id: bookmarkId
+			},
+			type: DELETE_BOOKMARK
+		});
+
 	}
 
 	/**

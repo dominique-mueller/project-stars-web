@@ -147,8 +147,6 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		currTree?: RouteTree,
 		prevTree?: RouteTree ): void {
 
-		console.log('BOOKMARK DETAILS: ROUTER ACTIVATE'); // TODO: Remove me
-
 		// Save current URL segment, needed for relative navigation later on
 		this.currentUrlSegment = curr;
 
@@ -157,10 +155,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
 			this.bookmarkId = parseInt( curr.parameters[ 'id' ], 10 );
 		} else {
-			this.closeDetails();
+			this.close();
 		}
-
-		console.log('> Bookmark ID: ' + this.bookmarkId); // TODO: Remove me
 
 	}
 
@@ -169,8 +165,6 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * We do NOT land here if we have been thrown out in the 'routerOnActive' function above
 	 */
 	public ngOnInit(): void {
-
-		console.log('BOOKMARK LIST: ON INIT'); // TODO: Remove me
 
 		// Get bookmarks from its service, then find the right one
 		const bookmarkServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
@@ -182,7 +176,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 					// Navigate back if the bookmark doesn't exist
 					if ( this.bookmark === null ) {
-						this.closeDetails();
+						this.close();
 					} else {
 
 						// Update UI state
@@ -190,7 +184,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 						this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
 
 						if ( this.allLabels.size > 0 ) {
-							this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark(this.allLabels, this.bookmark);
+							this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
 						}
 						this.changeDetector.markForCheck(); // Trigger change detection
 
@@ -206,7 +200,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 				if ( labels.size > 0 ) {
 					this.allLabels = labels;
 					if ( this.bookmark !== null ) {
-						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark(this.allLabels, this.bookmark);
+						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
 					}
 					this.changeDetector.markForCheck(); // Trigger change detection
 				}
@@ -235,8 +229,6 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	public ngOnDestroy(): void {
 
-		console.log('BOOKMARK DETAILS: ON DESTROY'); // TODO: Remove me
-
 		// Unsubscribe from all services (free resources manually)
 		this.serviceSubscriptions.forEach( ( subscription: Subscription ) => {
 			subscription.unsubscribe();
@@ -244,17 +236,17 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 	}
 
-	// TODO: Refactor name?
-	private closeDetails(): void {
+	/**
+	 * Close this details panel
+	 */
+	private close(): void {
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one
 		this.uiService.unsetSelectedElement();
 
-		// Animate out
+		// Animate out, navigate when animation is done
 		this.isVisible = false;
-
-		// Navigate when animation is done
 		setTimeout(
 			() => {
 				this.router.navigate( [ '../..' ], this.currentUrlSegment ); // TODO: Mysteriously sometimes work, sometimes not
@@ -265,11 +257,19 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	}
 
 	/**
+	 * Delete this bookmark, close the panel
+	 */
+	private delete(): void {
+		this.bookmarkDataService.deleteBookmark( this.bookmarkId );
+		// this.close();
+	}
+
+	/**
 	 * Update bookmark attribute
 	 * @param {string} attribute Attribute / key
 	 * @param {string} newValue  New / updated value
 	 */
-	private updateBookmark( attribute: string, newValue: string ): void {
+	private update( attribute: string, newValue: string ): void {
 		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, attribute, newValue );
 	}
 
@@ -277,7 +277,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * Assign a new label to the current bookmark
 	 * @param {number} labelId Label ID
 	 */
-	private assignLabelToBookmark( labelId: number ): void {
+	private assignLabel( labelId: number ): void {
 		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
 	}
 
@@ -285,7 +285,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * Unassign a label from the current bookmark
 	 * @param {number} labelId Label ID
 	 */
-	private unassignLabelFromBookmark( labelId: number ): void {
+	private unassignLabel( labelId: number ): void {
 		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
 	}
 

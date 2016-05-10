@@ -7,6 +7,8 @@ import { Map } from 'immutable';
 /**
  * Internal imports
  */
+import { Bookmark } from './../../services/bookmark';
+import { Label } from './../../services/label';
 import { FormatUrlPipe } from './../../pipes/format_url.pipe';
 import { LabelComponent } from './../label/label.component';
 import { IconComponent } from './../icon/icon.component';
@@ -35,13 +37,13 @@ export class BookmarkComponent {
 	 * Bookmark
 	 */
 	@Input()
-	private bookmark: Map<string, any>;
+	private bookmark: Bookmark;
 
 	/**
 	 * All labels
 	 */
 	@Input()
-	private labels: Map<string, Map<string, any>>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Event emitter for info button

@@ -1,9 +1,12 @@
-<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="closeDetails()"></div>
+<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="close()"></div>
 <div class="bookmark-details-panel" [class.is-visible]="isVisible">
 
 	<header class="bookmark-details-header">
 		<h3 class="bookmark-details-title">Bookmark Details</h3>
-		<button class="button button-invisible bookmark-details-button" type="button" (click)="closeDetails()">
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="delete()">
+			<app-icon name="delete" size="16" color="#FFF"></app-icon>
+		</button>
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="close()">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
 	</header>
@@ -15,17 +18,17 @@
 			<ul>
 				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
-						[value]="bookmark?.get( 'title' )" (update)="updateBookmark( 'title', $event )">
+						[value]="bookmark?.get( 'title' )" (update)="update( 'title', $event )">
 					</app-input-editable>
 				</li>
 				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-url'" [label]="'Url'" [type]="'url'" [placeholder]="'https://www.example.com'"
-						[value]="bookmark?.get( 'url' )" (update)="updateBookmark( 'url', $event )">
+						[value]="bookmark?.get( 'url' )" (update)="update( 'url', $event )">
 					</app-input-editable>
 				</li>
 				<li class="bookmark-details-section">
 					<app-input-editable [name]="'bookmark-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My bookmark description'"
-						[value]="bookmark?.get( 'description' )" (update)="updateBookmark( 'description', $event )">
+						[value]="bookmark?.get( 'description' )" (update)="update( 'description', $event )">
 					</app-input-editable>
 				</li>
 			</ul>
@@ -38,14 +41,14 @@
 			<p class="bookmark-details-label-title">Labels</p>
 			<ul class="bookmark-details-section">
 				<li class="bookmark-details-label" *ngFor="let labelId of bookmark?.get( 'labels' )">
-					<app-label [label]="allLabels?.get( labelId )" [isRemovable]="true" (clickOnRemove)="unassignLabelFromBookmark( labelId )">
+					<app-label [label]="allLabels?.get( labelId )" [isRemovable]="true" (clickOnRemove)="unassignLabel( labelId )">
 					</app-label>
 				</li>
 				<li class="bookmark-details-label-assign">
 					<app-assign-label
 						*ngIf="unassignedLabels.size > 0"
 						[labels]="unassignedLabels"
-						(select)="assignLabelToBookmark( $event )">
+						(select)="assignLabel( $event )">
 					</app-assign-label>
 				</li>
 			</ul>

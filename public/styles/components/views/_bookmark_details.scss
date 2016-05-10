@@ -62,7 +62,8 @@
 .bookmark-details-title {
 	flex: 1;
 	font-size: 1.6rem;
-	letter-spacing: .01rem;
+	font-weight: normal;
+	letter-spacing: .02rem;
 	line-height: 5.8rem;
 }
 
@@ -75,6 +76,7 @@
 
 .bookmark-details-content {
 	padding-top: 3rem;
+	padding-bottom: 1.6rem;
 }
 
 .bookmark-details-section {
