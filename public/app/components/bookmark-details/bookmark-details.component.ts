@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ROUTER_DIRECTIVES, Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
+import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
 
@@ -19,6 +19,7 @@ import { AssignLabelComponent } from './../../shared/assign_label/assign_label.c
 
 /**
  * Bookmark details component (smart)
+ * Sidenote: Very similar to the FolderDetailsComponent
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +32,6 @@ import { AssignLabelComponent } from './../../shared/assign_label/assign_label.c
 	providers: [
 		LabelLogicService
 	],
-	selector: 'app-bookmark-details',
 	templateUrl: './bookmark-details.component.html'
 } )
 export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
@@ -42,7 +42,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private router: Router;
 
 	/**
-	 * Current url segment
+	 * Current URL segment
 	 */
 	private currentUrlSegment: RouteSegment;
 
@@ -52,7 +52,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private changeDetector: ChangeDetectorRef;
 
 	/**
-	 * Ui service
+	 * UI service
 	 */
 	private uiService: UiService;
 
@@ -82,12 +82,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private serviceSubscriptions: Array<Subscription>;
 
 	/**
-	 * Bookmark ID
+	 * Current bookmark ID
 	 */
 	private bookmarkId: number;
 
 	/**
-	 * Bookmark
+	 * Current bookmark
 	 */
 	private bookmark: Bookmark;
 
@@ -130,8 +130,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		// Setup
 		this.bookmarkId = null;
 		this.bookmark = null;
-		this.allLabels = Map<string, Map<string, any>>();
-		this.unassignedLabels = Map<string, Map<string, any>>();
+		this.allLabels = Map<string, Label>();
+		this.unassignedLabels = Map<string, Label>();
 		this.serviceSubscriptions = [];
 		this.isVisible = false;
 
@@ -141,16 +141,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * Call this when the router gets activated
 	 * This function only handles stuff that has to do with routing
 	 */
-	public routerOnActivate(
-		curr: RouteSegment,
-		prev?: RouteSegment,
-		currTree?: RouteTree,
-		prevTree?: RouteTree ): void {
+	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
 		// Save current URL segment, needed for relative navigation later on
 		this.currentUrlSegment = curr;
 
-		// Get element ID from the route URL
+		// Get bookmark ID from the route URL
 		// Pre-filter: If the ID is not a number, we navigate back
 		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
 			this.bookmarkId = parseInt( curr.parameters[ 'id' ], 10 );
@@ -167,7 +163,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	public ngOnInit(): void {
 
 		// Get bookmarks from its service, then find the right one
-		const bookmarkServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
+		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
 				if ( bookmarks.size > 0 ) {
 
@@ -183,6 +179,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 						// This should notify other components, like the bookmark list one
 						this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
 
+						// Calculate unassigned labels
 						if ( this.allLabels.size > 0 ) {
 							this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
 						}
@@ -195,10 +192,13 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		);
 
 		// Get labels from its service
-		const labelServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
+		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: any ) => {
 				if ( labels.size > 0 ) {
+
 					this.allLabels = labels;
+
+					// Calculate unassigned labels
 					if ( this.bookmark !== null ) {
 						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
 					}
@@ -209,8 +209,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Save subscriptions
 		this.serviceSubscriptions = [
-			bookmarkServiceSubscription,
-			labelServiceSubscription
+			bookmarkDataServiceSubscription,
+			labelDataServiceSubscription
 		];
 
 		// Animate in
@@ -261,7 +261,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private delete(): void {
 		this.bookmarkDataService.deleteBookmark( this.bookmarkId );
-		// this.close();
+		this.close();
 	}
 
 	/**

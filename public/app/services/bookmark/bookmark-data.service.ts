@@ -13,7 +13,7 @@ import { List } from 'immutable';
  */
 import { AppStore, AppService } from './../app';
 import { Bookmark } from './bookmark.model';
-import { LOAD_BOOKMARKS, UPDATE_BOOKMARK, DELETE_BOOKMARK } from './bookmark.store';
+import { LOAD_BOOKMARKS, UPDATE_BOOKMARK, DELETE_BOOKMARK, DELETE_FOLDER_BOOKMARKS } from './bookmark.store';
 
 /**
  * Bookmark data service
@@ -132,17 +132,34 @@ export class BookmarkDataService {
 	 * Delete one bookmark
 	 * @param {number} bookmarkId Bookmark ID
 	 */
-	public deleteBookmark(bookmarkId: number): void {
+	public deleteBookmark( bookmarkId: number ): void {
 
 		// TODO: API CALL
 
 		// Dispatch action
-		this.store.dispatch({
+		this.store.dispatch( {
 			payload: {
 				id: bookmarkId
 			},
 			type: DELETE_BOOKMARK
-		});
+		} );
+
+	}
+
+	/**
+	 * Delete all bookmarks within provided folder IDs
+	 * Sidenote: Used in combination with deleting a folder, no API call here
+	 * @param {Array<number>} folderids List of folder IDs
+	 */
+	public deleteAllBookmarksInFolders( folderIds: Array<number> ): void {
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				folderIds: folderIds
+			},
+			type: DELETE_FOLDER_BOOKMARKS
+		} );
 
 	}
 

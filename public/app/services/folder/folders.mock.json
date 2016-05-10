@@ -3,29 +3,34 @@
 		{
 			"id": 0,
 			"name": "Bookmarks",
+			"description": "All of my bookmarks",
 			"position": 1
 		},
 		{
 			"id": 1,
 			"name": "Searching",
+			"description": "Search engines and sites",
 			"path": 0,
 			"position": 2
 		},
 		{
 			"id": 2,
 			"name": "Favourites",
+			"description": "Best sites I know",
 			"path": 0,
 			"position": 1
 		},
 		{
 			"id": 3,
 			"name": "News",
+			"description": "Politics, Tech",
 			"path": 2,
 			"position": 2
 		},
 		{
 			"id": 4,
 			"name": "Social",
+			"description": "Social Media Websites",
 			"path": 2,
 			"position": 1
 		}

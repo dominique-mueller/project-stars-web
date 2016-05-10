@@ -15,6 +15,7 @@ import { Bookmark } from './bookmark.model';
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
 export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
 export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
+export const DELETE_FOLDER_BOOKMARKS: string = 'DELETE_FOLDER_BOOKMARKS';
 // export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
 
 /**
@@ -49,7 +50,7 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 			return <List<Bookmark>> state
 				.map( ( bookmark: Bookmark ) => {
 					if ( bookmark.get( 'id' ) === action.payload.id ) {
-						return bookmark.merge(Map<string, any>(action.payload.data))
+						return bookmark.merge( Map<string, any>( action.payload.data ) );
 					} else {
 						return bookmark;
 					}
@@ -82,6 +83,16 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 					} else {
 						return bookmark;
 					}
+				} );
+
+		// Delete all bookmarks of folders
+		case DELETE_FOLDER_BOOKMARKS:
+
+			return <List<Bookmark>> state
+
+				// Filter all bookmarks living inside the folders
+				.filterNot( ( bookmark: Bookmark ) => {
+					return action.payload.folderIds.indexOf( bookmark.get( 'path' ) ) > -1;
 				} );
 
 		// Default fallback

@@ -67,10 +67,6 @@
 					<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
 					<label class="form-label" for="bookmark-updated">Last updated on</label>
 				</li>
-				<li class="form-component bookmark-details-section" *ngIf="bookmark?.get( 'archived' )">
-					<input class="form-input" id="bookmark-archived" type="text" [value]="bookmark?.get( 'archived' )" readonly>
-					<label class="form-label" for="bookmark-archived">Archived on</label>
-				</li>
 			</ul>
 		</fieldset>
 

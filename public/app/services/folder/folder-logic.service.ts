@@ -51,4 +51,40 @@ export class FolderLogicService {
 
 	}
 
+	/**
+	 * Get all folders recursively living inside the provided folder (pure function)
+	 * @param  {List<Folder>}  folders  List of all folders
+	 * @param  {number}        folderId Folder ID
+	 * @return {Array<number>}          List of folder IDs
+	 */
+	public getRecursiveSubfolderIds( folders: List<Folder>, folderId: number ): Array<number> {
+
+		// Setup
+		let addedToList: boolean = true;
+		let result: Array<number> = [ folderId ];
+
+		// Continue with the next round if we just added a folder to the list
+		while ( addedToList ) {
+
+			// Reset
+			addedToList = false;
+
+			// If we find direct children, add them to the result list and filter them out
+			folders = <List<Folder>> folders.filter( ( folder: Folder ) => {
+				if ( result.indexOf( folder.get( 'path' ) ) > -1 ) {
+					addedToList = true;
+					result.push( folder.get( 'id' ) );
+					return false;
+				} else {
+					return true;
+				}
+			} );
+
+		}
+
+		// Done
+		return result;
+
+	}
+
 }

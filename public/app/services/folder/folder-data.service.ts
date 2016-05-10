@@ -11,9 +11,10 @@ import { List } from 'immutable';
 /**
  * Internal imports
  */
+import { BookmarkDataService } from './../bookmark';
 import { AppStore, AppService } from './../app';
 import { Folder } from './folder.model';
-import { LOAD_FOLDERS } from './folder.store';
+import { LOAD_FOLDERS, UPDATE_FOLDER, DELETE_FOLDER } from './folder.store';
 
 /**
  * Folder data service
@@ -43,6 +44,11 @@ export class FolderDataService {
 	private appService: AppService;
 
 	/**
+	 * Bookmark data service
+	 */
+	private bookmarkDataService: BookmarkDataService;
+
+	/**
 	 * App store
 	 */
 	private store: Store<AppStore>;
@@ -50,11 +56,12 @@ export class FolderDataService {
 	/**
 	 * Constructor
 	 */
-	constructor( http: Http, appService: AppService, store: Store<AppStore> ) {
+	constructor( http: Http, appService: AppService, bookmarkDataService: BookmarkDataService, store: Store<AppStore> ) {
 
 		// Initialize services
 		this.http = http;
 		this.appService = appService;
+		this.bookmarkDataService = bookmarkDataService;
 		this.store = store;
 
 		// Setup
@@ -90,4 +97,58 @@ export class FolderDataService {
 
 	}
 
+	/**
+	 * Update one value of a folder
+	 * @param {number} folderId  Folder ID
+	 * @param {string} attribute Attribute
+	 * @param {string} newValue  New / updated value
+	 */
+	public updateFolderValue( folderId: number, attribute: string, newValue: string ): void {
+		let data: any = {};
+		data[ attribute ] = newValue;
+		this.updateFolder( folderId, data );
+	}
+
+	/**
+	 * Delete one folder, and all the (recursive) subfolders and contained bookmarks
+	 * @param {number}        folderId  Folder ID
+	 * @param {Array<number>} folderIds List of subfolders
+	 */
+	public deleteFolder( folderId: number, folderIds: Array<number> ): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				id: folderId,
+				subfolderIds: folderIds
+			},
+			type: DELETE_FOLDER
+		} );
+
+		// Also delete all the bookmarks contained in these folders
+		this.bookmarkDataService.deleteAllBookmarksInFolders( folderIds );
+
+	}
+
+	/**
+	 * Update folder
+	 * @param {number} folderId Folder ID
+	 * @param {any}    data     Data
+	 */
+	private updateFolder( folderId: number, data: any ): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				data: data,
+				id: folderId
+			},
+			type: UPDATE_FOLDER
+		} );
+
+	}
 }

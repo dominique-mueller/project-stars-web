@@ -131,8 +131,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	public routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree): void {
 
-		console.log('BOOKMARKS COMPONENT: ROUTER ACTIVATE'); // TODO: Remove me
-
 		// Save current URL segment, needed for relative navigation later on
 		this.currentUrlSegment = curr;
 
@@ -142,8 +140,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Call this when the view gets initialized
 	 */
 	public ngOnInit(): void {
-
-		console.log('BOOKMARKS COMPONENT: ON INIT'); // TODO: Remove me
 
 		// Get informed when the opened folder changes so that we can update the directory view
 		// For example, this could come from the bookmark list component
@@ -160,7 +156,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		);
 
 		// Get folders from their services
-		const folderServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
+		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
 				if ( folders.size > 0 ) {
 					this.folders = folders;
@@ -178,7 +174,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		// Save subscriptions
 		this.serviceSubscriptions = [
 			uiServiceSubscription,
-			folderServiceSubscription
+			folderDataServiceSubscription
 		];
 
 	}

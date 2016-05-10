@@ -15,6 +15,7 @@ import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../ser
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
 import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details.component';
+import { FolderDetailsComponent } from './../folder-details/folder-details.component';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { FolderComponent } from './../../shared/folder/folder.component';
 
@@ -26,8 +27,7 @@ import { FolderComponent } from './../../shared/folder/folder.component';
 	directives: [
 		ROUTER_DIRECTIVES,
 		BookmarkComponent,
-		FolderComponent,
-		BookmarkDetailsComponent
+		FolderComponent
 	],
 	providers: [
 		BookmarkLogicService
@@ -39,8 +39,11 @@ import { FolderComponent } from './../../shared/folder/folder.component';
 	new Route( {
 		component: BookmarkDetailsComponent,
 		path: '/bookmark/:id'
+	} ),
+	new Route( {
+		component: FolderDetailsComponent,
+		path: '/folder/:id'
 	} )
-	// TODO: Path for folder details + component
 ] )
 export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
@@ -201,7 +204,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		);
 
 		// Get folders from its service
-		const folderServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
+		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
 				if ( folders.size > 0 ) {
 
@@ -218,7 +221,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		);
 
 		// Get bookmarks from its service
-		const bookmarkServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
+		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
 				this.bookmarks = this.bookmarkLogicService.getBookmarksByFolderId( bookmarks, this.openedFolderId );
 				this.changeDetector.markForCheck(); // Trigger change detection
@@ -226,7 +229,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		);
 
 		// Get labels from its service
-		const labelServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
+		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: Map<string, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
@@ -235,9 +238,9 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Save subscriptions
 		this.serviceSubscriptions = [
-			bookmarkServiceSubscription,
-			folderServiceSubscription,
-			labelServiceSubscription,
+			bookmarkDataServiceSubscription,
+			folderDataServiceSubscription,
+			labelDataServiceSubscription,
 			uiServiceSubscription
 		];
 
@@ -264,9 +267,13 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.router.navigateByUrl( `/bookmarks/view/${ folderId }` );
 	}
 
-
-	private onClickOnDetails( type: string, elementId: number ): void {
-		this.router.navigate( [ type, elementId ], this.currentUrlSegment );
+	/**
+	 * Open up details panel
+	 * @param {string} elemntType Element Type
+	 * @param {number} elementId  Element ID
+	 */
+	private onClickOnDetails( elementType: string, elementId: number ): void {
+		this.router.navigate( [ elementType, elementId ], this.currentUrlSegment );
 	}
 
 }
