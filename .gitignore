@@ -9,6 +9,8 @@ build
 # Generated error logs
 undefinederror.json
 undefinedinfo.json
+info.log.json
+error.log.json
 
 stars-web.sublime*
 
