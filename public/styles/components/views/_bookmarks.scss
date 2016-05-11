@@ -1,44 +1,113 @@
 // COMPONENTS: BOOKMARKS
 
 .bookmarks {
-	position: relative;
+	position: fixed;
+	top: 6.4rem;
+	left: 0;
 	z-index: 0;
-	display: flex;
-	height: 100%;
-	padding-top: 6.4rem;
+	width: 100%;
+	height: calc(100% - 6.4rem);
+	// padding-top: 6.4rem;
 }
 
-// Bookmaks directory
+.bookmarks-header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 7.2rem;
+	background-color: #FAFAFA;
+	border-bottom: .1rem solid #E0E0E0;
+}
 
-.bookmarks-directory {
-	position: relative;
-	z-index: 1;
-	width: 30rem;
-	height: 100%;
-	padding-left: 2.8rem;
+.bookmarks-sidebar {
+	position: absolute;
+	top: 7.2rem;
+	left: 0;
+	width: 29.9rem;
+	height: calc(100% - 7.2rem);
+	background-color: #EFEFEF;
+	overflow-y: auto;
+}
+
+.bookmarks-main {
+	position: absolute;
+	top: 7.2rem;
+	left: 29.9rem;
+	width: calc(100% - 29.9rem);
+	height: calc(100% - 7.2rem);
 	background-color: $color-white;
+	border-left: .1rem solid #E0E0E0;
+	overflow-y: auto;
 }
 
-.bookmarks-directory-title {
-	margin-top: 3.8rem;
-	margin-bottom: 2.2rem;
-}
+// Header
 
-// Bookmarks list
-
-.bookmarks-list {
-	position: relative;
-	width: calc(100% - 30rem);
+.bookmarks-header-sidebar {
+	display: inline-block;
+	width: 29.9rem;
 	height: 100%;
-	border-left: .1rem solid $color-seashell;
+	vertical-align: top;
+	background-color: #EFEFEF;
 }
 
-.bookmarks-list-title {
-	margin-top: 3.8rem;
-	margin-bottom: 2.2rem;
-	margin-left: 3rem;
+.bookmarks-header-button {
+	position: relative;
+	display: inline-block;
+	width: 50%;
+	padding-top: 2.1rem;
+	padding-bottom: .2rem;
+	line-height: 4.8rem;
+	overflow: hidden;
+
+	&::after {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: .2rem;
+		background-color: #0F9D58;
+		content: '';
+		transform: translateY(.2rem);
+		transition: transform $anim-speed-fast $anim-easing;
+	}
+
+	&:hover {
+
+		&::after {
+			transform: translateY(0);
+		}
+
+	}
+
+	&.is-active {
+		font-weight: $font-weight-bold;
+
+		&::after {
+			transform: translateY(0);
+		}
+
+	}
 }
 
-.bookmarks-list-item + .bookmarks-list-item {
-	border-top: .1rem solid $color-seashell;
+.bookmarks-header-main {
+	display: inline-block;
+	width: calc(100% - 29.9rem);
+	height: 100%;
+	padding-top: 1.9rem;
+	padding-bottom: .4rem;
+	padding-left: 3.1rem;
+	font-size: 1.8rem;
+	font-weight: $font-weight-bold;
+	line-height: 4.8rem;
+	border-left: .1rem solid #E0E0E0;
+	vertical-align: top;
+}
+
+// Sidebar
+
+.bookmarks-sidebar-directory {
+	padding-top: 1.8rem;
+	padding-bottom: 1.8rem;
+	padding-left: 2.5rem;
 }

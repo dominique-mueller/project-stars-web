@@ -5,35 +5,47 @@
 	z-index: 2;
 }
 
-.assign-label-button {
-	position: relative;
-	z-index: 3;
-}
-
 .assign-label-dropdown {
 	position: absolute;
-	top: 0;
+	top: -2.2rem;
 	left: 0;
 	width: 26rem;
-	transform: translateY(-.7rem) scale(.93);
+	transform: scale(.8);
 	transform-origin: 0 0;
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
 				transform $anim-speed-normal $anim-easing;
 	background-color: $color-white;
-	box-shadow: 0 .1rem .3rem rgba($color-black, .25);
+	box-shadow: 0 .1rem .3rem rgba($color-black, .3);
 	opacity: 0;
 	visibility: hidden;
+	overflow: hidden;
 
 	&.is-visible {
-		transform: translateY(0) scale(1);
+		transform: scale(1);
 		transition: opacity $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant $anim-linear,
 					transform $anim-speed-normal $anim-easing;
 		opacity: 1;
 		visibility: visible;
+
+		> .assign-label-content {
+			transform: translateY(0);
+			transition: opacity $anim-speed-normal $anim-easing $anim-speed-fast,
+						transform $anim-speed-normal $anim-easing $anim-speed-fast;
+			opacity: 1;
+		}
+
 	}
 
+}
+
+.assign-label-content {
+	transform-origin: 0 0;
+	transform: translateY(-.8rem);
+	transition: opacity $anim-speed-normal $anim-easing,
+				transform $anim-speed-normal $anim-easing;
+	opacity: 0;
 }
 
 // Header
@@ -71,7 +83,7 @@
 	border-top: .1rem solid $color-seashell;
 }
 
-.assign-label-link {
+.assign-label-button {
 	position: relative;
 	width: 100%;
 	padding: 1rem 1.2rem 1rem 3.2rem;

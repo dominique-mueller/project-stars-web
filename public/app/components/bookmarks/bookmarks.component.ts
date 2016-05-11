@@ -80,6 +80,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	private folderDataService: FolderDataService;
 
 	/**
+	 * Folder logic service
+	 */
+	private folderLogicService: FolderLogicService;
+
+	/**
 	 * Label data service
 	 */
 	private labelDataService: LabelDataService;
@@ -100,6 +105,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	private openedFolderId: number;
 
 	/**
+	 * Name of the currently opened folder
+	 */
+	private openedFolderName: string;
+
+	/**
 	 * Constructor
 	 */
 	constructor(
@@ -108,6 +118,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
 		folderDataService: FolderDataService,
+		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService
 		) {
 
@@ -117,9 +128,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.folderDataService = folderDataService;
+		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
 
 		// Setup
+		this.folders = List<Folder>();
 		this.openedFolderId = null; // Explicitely not set yet
 		this.serviceSubscriptions = [];
 
@@ -129,7 +142,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Call this when the router gets activated
 	 * This function only handles stuff that has to do with routing
 	 */
-	public routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree): void {
+	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
 		// Save current URL segment, needed for relative navigation later on
 		this.currentUrlSegment = curr;
@@ -149,6 +162,10 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
+					if ( this.folders.size > 0 ) {
+						this.openedFolderName =
+							this.folderLogicService.getFolderByFolderId( this.folders, this.openedFolderId ).get( 'name' );
+					}
 					this.changeDetector.detectChanges(); // Detect changes
 				}
 
@@ -160,6 +177,8 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 			( folders: List<Folder> ) => {
 				if ( folders.size > 0 ) {
 					this.folders = folders;
+					this.openedFolderName =
+						this.folderLogicService.getFolderByFolderId( this.folders, this.openedFolderId ).get( 'name' );
 					this.changeDetector.markForCheck(); // Mark for change detection
 				}
 			}

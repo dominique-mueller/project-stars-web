@@ -31,14 +31,14 @@
 .folder-name {
 	position: absolute;
 	top: 1.8rem;
-	left: 6.8rem; // 3 from left + 2.4 from icon + space between icon + text
-	width: calc(100% - 6.8);
+	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
+	width: calc(100% - 7rem);
 	height: 2.4rem; // Same as icon height
 	font-weight: $font-weight-bold;
 	line-height: 2.4rem;
 }
 
 .folder-button {
-	padding-right: 2rem;
-	padding-left: 2rem;
+	padding-right: 2.4rem;
+	padding-left: 2.4rem;
 }

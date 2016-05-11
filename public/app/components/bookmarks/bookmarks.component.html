@@ -2,25 +2,37 @@
 
 <main class="bookmarks">
 
-	<div class="bookmarks-directory">
-		<h2 class="bookmarks-directory-title">Folders</h2>
-		<a class="directory-link"
-			[class.is-selected]="openedFolderId === 0"
-			(click)="onSelectFolder( 0 )">
-			<app-icon name="folder_special" size="24" color="#666"></app-icon>
-			<p class="directory-name">Bookmarks</p>
-		</a>
-		<app-bookmark-directory
-			[folders]="folders"
-			[parentFolderId]="0"
-			[openedFolderId]="openedFolderId"
-			(selectFolder)="onSelectFolder( $event )">
-		</app-bookmark-directory>
-	</div>
+	<header class="bookmarks-header">
+		<div class="bookmarks-header-sidebar">
+			<button class="button button-invisible bookmarks-header-button is-active" type="button">
+				Folders
+			</button><button class="button button-invisible bookmarks-header-button" type="button">
+				Labels
+			</button>
+		</div><div class="bookmarks-header-main">
+			{{ openedFolderName }}
+		</div>
+	</header>
 
-	<div class="bookmarks-list">
-		<h2 class="bookmarks-list-title">Bookmarks</h2>
+	<section class="bookmarks-sidebar">
+		<div class="bookmarks-sidebar-directory">
+			<a class="directory-link"
+				[class.is-selected]="openedFolderId === 0"
+				(click)="onSelectFolder( 0 )">
+				<app-icon name="folder_special" size="24" color="#666"></app-icon>
+				<p class="directory-name">Bookmarks</p>
+			</a>
+			<app-bookmark-directory
+				[folders]="folders"
+				[parentFolderId]="0"
+				[openedFolderId]="openedFolderId"
+				(selectFolder)="onSelectFolder( $event )">
+			</app-bookmark-directory>
+		</div>
+	</section>
+
+	<section class="bookmarks-main">
 		<router-outlet></router-outlet>
-	</div>
+	</section>
 
 </main>

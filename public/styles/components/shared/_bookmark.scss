@@ -44,8 +44,8 @@
 .bookmark-content {
 	position: absolute;
 	top: 1rem;
-	left: 6.8rem; // 3 from left + 2.4 from icon + space between icon + text
-	width: calc(100% - 6.8rem);
+	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
+	width: calc(100% - 7rem);
 	height: 2.4rem; // Same as icon height
 	transform: translateY(.8rem);
 	transition: transform $anim-speed-fast $anim-easing;
@@ -85,6 +85,6 @@
 }
 
 .bookmark-button {
-	padding-right: 2rem;
-	padding-left: 2rem;
+	padding-right: 2.4rem;
+	padding-left: 2.4rem;
 }

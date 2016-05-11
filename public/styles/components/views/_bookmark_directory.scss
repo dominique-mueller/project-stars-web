@@ -5,7 +5,7 @@
 }
 
 .directory-level {
-	padding-left: 2.1rem; // New indention for every new folder level
+	padding-left: 2.2rem; // New indention for every new folder level
 }
 
 .directory-link {
@@ -15,20 +15,20 @@
 	padding-bottom: .9rem;
 	padding-left: 100%; // ... and this will make the trick that the link is 100% wide
 	transition: background-color $anim-speed-normal $anim-easing;
-	line-height: 2.4rem; // Same as icon height
+	line-height: 2.5rem; // Same as icon height
 	cursor: pointer; // Because there is no href
 
 	&:hover {
-		background-color: #DFDFDF;
+		background-color: #DADADA;
 	}
 
 	&.is-selected {
 		font-weight: $font-weight-bold;
-		background-color: #DFDFDF;
+		background-color: #DADADA;
 	}
 
 }
 
 .directory-name {
-	margin-left: 3rem; // Icon width + extra space
+	margin-left: 3.2rem; // Icon width + extra space
 }
