@@ -10,6 +10,8 @@ var FoldersModel = function(caller, userId){
 	var self; //@see: adapters/authentication.js 
 	this.userId;
 
+	//#### PRIVATE FUNCTIONS ####
+
 	function createRootFolder(folder){
 		return new Promise(function(resolve, reject){
 			//TODO: FIX BUG change this check so no user can send a path with 'undefined'
@@ -66,14 +68,15 @@ var FoldersModel = function(caller, userId){
 			var deleteFolderPromise = self.delete(folderId);
 			deleteFolderPromise.then(function(){
 				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
-				var alterPathPromise = self.changeNumberOfContainedElements(folder.path, +1);
+				var changeNumberOfContainedElementsPromsie = self.changeNumberOfContainedElements(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
 				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
-				// var saveFolderPromise = saveAndReturnPromise(folder);
+				//Something did not went ecwell, but it could have been also the work of another bug so maybe we should try it again
+				// var saveFolderPromise = saveFolderAndReturnPromise(folder);
 				var createFolderPromise = new Promise(function(resolve, reject){
 					Folder.create(folder);
 				});
-				Promise.all([alterPathPromise, shiftBookmarksPromise, shiftFoldersPromise, saveAndReturnPromise])
+				Promise.all([changeNumberOfContainedElementsPromsie, shiftBookmarksPromise, shiftFoldersPromise, saveFolderAndReturnPromise])
 				.then(function(){
 					callback(null);
 				})
@@ -84,7 +87,7 @@ var FoldersModel = function(caller, userId){
 		.catch(callback);	
 	}
 
-	function saveAndReturnPromise(element){
+	function saveFolderAndReturnPromise(element){
 		return new Promise(function(resolve, reject){
 			element.save(function(err){
 				if(err){
@@ -97,12 +100,7 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 
-	function sortFolders(folders){
-		// var sortedFolders = new Array(folders.length);
-		// for(var i = 0; i < folders.length; i++){
-		// 	sortedFolders[folders[i].position - 1] = folders[i];
-		// }
-		// return sortedFolders;
+	function sortFoldersAfterPositionASC(folders){
 		return folders.sort(function(a, b){
 			return a.position - b.position;
 		});
@@ -114,8 +112,8 @@ var FoldersModel = function(caller, userId){
 		return new Promise(function(resolve, reject){
 			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
 			var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
-			var alterPathPromise = self.changeNumberOfContainedElements(folder.path, -1);
-			Promise.all([shiftFoldersPromise, shiftBookmarksPromise, alterPathPromise]).then(function(resolveArray){
+			var changeNumberOfContainedElementsPromsie = self.changeNumberOfContainedElements(folder.path, -1);
+			Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie]).then(function(resolveArray){
 				logger.debug('all updateAffectedElements resolve');
 				resolve();
 			})
@@ -127,7 +125,16 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 
+
 	//#### Public Functions #####
+
+ 	this.checkIfPathRegardsToOwner = function(path){
+		return new Promise(function(resolve, reject){
+			//TODO !!!!
+			logger.debug('checkIfPathRegardsToOwner');
+			resolve(true);
+		});
+	}
 
 	/*
 	@param path: the folder id of the 'parent' folder, called path
@@ -166,7 +173,7 @@ var FoldersModel = function(caller, userId){
 			var allFolderPromise = self.findAll(path);
 			allFolderPromise.then(function(folderArray){
 				// logger.debug('shiftFolders');
-				folderArray = sortFolders(folderArray);
+				folderArray = sortFoldersAfterPositionASC(folderArray);
 				// logger.debug('shift folders sorted: ' + folderArray);
 				logger.debug('FolderArray.length: ' + folderArray.length);
 				logger.debug('startPosition: ' + startPosition);
@@ -176,7 +183,7 @@ var FoldersModel = function(caller, userId){
 					if(folderArray[i].position > startPosition){
 						logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
 						folderArray[i].position = folderArray[i].position + shift;
-						savePromiseArray.push(saveAndReturnPromise(folderArray[i]));
+						savePromiseArray.push(saveFolderAndReturnPromise(folderArray[i]));
 					}
 				}
 				Promise.all(savePromiseArray).then(function(){

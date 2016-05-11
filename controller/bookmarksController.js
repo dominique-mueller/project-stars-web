@@ -15,12 +15,16 @@ var BookmarksController = function(req, res, authentication){
 	//#### PUBLIC FUNCTIONS ####
 
 	this.shiftFoldersPosition = function(path, startPosition, shift){
-		logger.debug('Controler shiftFolderssPosition');
-		return require('../modules/folder/folderss.model.js').shiftFoldersPosition(path, startPosition, shift);	
+		logger.debug('Controler shiftFoldersPosition');
+		return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).shiftFoldersPosition(path, startPosition, shift);	
 	}
 
 	this.changeNumberOfContainedElements = function(path, changeBy){
-		return require('../modules/folder/folderss.model.js').changeNumberOfContainedElements(path, changeBy);
+		return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).changeNumberOfContainedElements(path, changeBy);
+	}
+
+	this.checkIfPathRegardsToOwner = function(path){
+		return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).checkIfPathRegardsToOwner(path);
 	}
 
 	this.get = function(){

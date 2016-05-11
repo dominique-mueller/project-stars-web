@@ -23,16 +23,10 @@ var BookmarksModel = function(caller, userId){
 	}
 
 	function sortBookmarks(bookmarks){
-		// var sortedBookmarks = new Array(folders.length);
-		// for(var i = 0; i < bookmarks.length; i++){
-		// 	sortedBookmarks[bookmarks[i].position - 1] = bookmarks[i];
-		// }
-		// return sortedBookmarks;
 		return bookmarks.sort(function(a, b){
 			return a.position - b.position;
 		});
 	}
-
 
 	//#### Public Functions ####
 
@@ -62,76 +56,49 @@ var BookmarksModel = function(caller, userId){
 
 
 	this.create = function(bookmarkData){
-		bookmarkData['owner'] = self.userId;
 		return new Promise(function(resolve, reject){
-			var bookmark = new Bookmark(bookmarkData);
-			bookmark.save(function(err, bookmark){
-				if(err){
-					reject(err);
-				}
-				else{
-					resolve(bookmark);
-				}
+			bookmarkData['owner'] = self.userId;
+			var checkIfPathRegardsToOwnerPromise = caller.checkIfPathRegardsToOwner(bookmarkData.path);
+			var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmarkData.path, 1);
+			Promise.all([changeNumberOfContainedElementsPromise, checkIfPathRegardsToOwnerPromise]).then(function(results){
+				logger.debug('Model create Bookmark: ' + bookmarkData);
+				logger.debug('ALL RESULTS: ' + results[0]);
+				bookmarkData['position'] = results[0];
+				var bookmark = new Bookmark(bookmarkData);
+				bookmark.save(function(err, bookmark){
+					if(err){
+						logger.debug('Reject Bookmark creation');
+						reject(err);
+					}
+					else{
+						logger.debug('Resolve bookmark creation');
+						resolve(bookmark);
+					}
+				});
 			})
+			.catch(reject);
 		});
 	};
 
 	this.update = function(bookmarkId, bookmarkData){
-		
-		// return new Promise(function(resolve, reject){
-		// 	if(folderData.hasOwnProperty('name')){
-		// 		Folder.findByIdAndUpdate(folderId, {"name":folderData.name}, {new:true}, function(err){
-		// 			if(err){
-		// 				reject(err);
-		// 			}
-		// 			else{
-		// 				resolve();
-		// 			}
-		// 		});
-		// 	}
-		// 	else{
-		// 		moveFolder(folderId, folderData, function(err){
-		// 			if(err){
-		// 				reject();
-		// 			}
-		// 			else{
-		// 				resolve();
-		// 			}
-		// 		});
-		// 	}
-		// });
-
-
-
-
-
-		// return new Promise(function(resolve, reject){
-		// 	if(!(bookmarkData.hasOwnProperty('owner') || bookmarkData.hasOwnProperty('created'))){
-		// 		User.findOneAndUpdate(
-		// 			{_id:bookmarkId, owner:self.userId},
-		// 			bookmarkData, 
-		// 			{new:true},
-		// 			function(err, updatedBookmark){
-		// 				logger.debug('userId::'+userId+'::bookmarkId::'+bookmarkId);
-		// 				logger.debug('Bookmark Id: 570d57c170713861341992d5');
-		// 				logger.debug('Owner Id: 56f12f02c6ab44a50e881151');
-		// 				if(err){
-		// 					reject(err);
-		// 				}
-		// 				else{
-		// 					resolve();
-		// 				}
-		// 			}
-		// 		);
-		// 	}
-		// 	else{
-		// 		reject(new Error('Failed to upate bookmark. Invalid Input Fields'));
-		// 	}
-		// });
-		
-
 		return new Promise(function(resolve, reject){
-			resolve();
+			var bookmarkPromise = self.findOne(bookmarkId);
+			bookmarkPromise.then(function(bookmark){
+				bookmark.updated = 
+				if(bookmarkData.hasOwnProperty('path') || bookmarkData.hasOwnProperty('position')){
+					var moveBookmarkPromise = moveBookmark();
+				}
+				else{
+					//titl, url, description, favicon, updated
+					//labels (check if exist)
+					var updateIndependentPropertiesPromise = updateIndependentProperties();
+					
+				}
+				
+			})
+			.catch(reject);
+
+			// reject(new Error('Failed to upate bookmark. Invalid Input Fields'));
 		});
 	};
 
@@ -141,14 +108,17 @@ var BookmarksModel = function(caller, userId){
 			bookmarkPromise.then(function(bookmark){
 				var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position, -1);
 				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1);
-				var alterPathPromise = changeNumberOfContainedElements(bookmark.path, -1);
-				Promise.all([shiftFoldersPromisey, shiftBookmarksPromise, alterPathPromise]).then(function(resolveArray){
-					Folder.findByIdAndRemove(bookmarkId, function(err){
+				var changeNumberOfContainedElementsPromsie = changeNumberOfContainedElements(bookmark.path, -1);
+				Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie])
+				.then(function(results){
+					logger.debug('In the all Promise');
+					Bookmark.findByIdAndRemove(bookmarkId, function(err){
 						if(err){
 							logger.debug('Promise all error');
 							reject(err);
 						}
 						else{
+							logger.debug('deletion was successful');
 							resolve();
 						}
 					});
@@ -200,19 +170,6 @@ var BookmarksModel = function(caller, userId){
 		});
 	};
 
-	// this.findAll = function(){
-	// 	return new Promise(function(resolve, reject){
-	// 		Bookmark.find({owner:self.userId}, function(err, bookmarks){
-	// 			if(err){
-	// 				reject(err);
-	// 			}
-	// 			else{
-	// 				// logger.debug("these labels were found: " + JSON.stringify(bookmarks));
-	// 				resolve(bookmarks);
-	// 			}
-	// 		});
-	// 	});
-	// }
 	this.findAll = function(path){
 		return new Promise(function(resolve, reject){
 			// Folder.find({owner:self.userId},{sort:[['position', 'desc']]}, function(err, folders){

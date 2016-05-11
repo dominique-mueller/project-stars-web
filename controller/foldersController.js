@@ -6,6 +6,8 @@ var FoldersController = function(req, res, authentication){
 
 	var self; //@see: adapters/authentication.js 
 	this.Folder = require('../modules/folder/folders.model.js');
+	//TODO remove the first parameter from the Folder.model. 
+	//All Promises will be passed as an array to the called function so there won't be a need of a bidirectional communication anymore
 	this.Folder = new Folder(this, authentication.tokenUserId);
 	this.req, this.res, this.authentication, this.data;
 
@@ -15,17 +17,9 @@ var FoldersController = function(req, res, authentication){
 
 	//#### PUBLIC FUNCTIONS ####
 	
+	//TODO see this.Folder initialization 
 	this.shiftBookmarksPosition = function(path, startPosition, shift){
-		// logger.debug('Controler shiftBookmarksPosition');
 		return require('../modules/bookmark/bookmarks.model.js')(self, self.authentication.tokenUserId).shiftBookmarksPosition(path, startPosition, shift);	
-		// return new Promise(function(resolve, reject){
-		// 	if(true){
-		// 		resolve(true);
-		// 	}
-		// 	else{
-		// 		reject(false);
-		// 	}
-		// });
 	}
 
 	this.get = function(){
