@@ -13,7 +13,7 @@ import { Map } from 'immutable';
  */
 import { AppStore, AppService } from './../app';
 import { Label } from './label.model';
-import { LOAD_LABELS } from './label.store';
+import { LOAD_LABELS, UPDATE_LABEL, DELETE_LABEL } from './label.store';
 
 /**
  * Label data service
@@ -25,7 +25,7 @@ export class LabelDataService {
 	/**
 	 * Observable map of labels
 	 */
-	public labels: Observable<Map<string, Label>>;
+	public labels: Observable<Map<number, Label>>;
 
 	/**
 	 * Status flag representing the current fetching status
@@ -87,6 +87,44 @@ export class LabelDataService {
 			);
 
 			// TODO: Error handling
+
+	}
+
+	/**
+	 * Delete one label
+	 * @param {number} labelId Label ID
+	 */
+	public deleteLabel( labelId: number ): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				id: labelId
+			},
+			type: DELETE_LABEL
+		} );
+
+	}
+
+	/**
+	 * Update label
+	 * @param {number} labelId Label ID
+	 * @param {any}    data    Data
+	 */
+	public updateLabel( labelId: number, data: any ): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				data: data,
+				id: labelId
+			},
+			type: UPDATE_LABEL
+		} );
 
 	}
 

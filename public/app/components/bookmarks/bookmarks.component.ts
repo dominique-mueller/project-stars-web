@@ -18,6 +18,7 @@ import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
+import { LabelListComponent } from './../label-list/label-list.component';
 
 /**
  * Bookmark components (smart)
@@ -29,7 +30,8 @@ import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-dir
 		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
-		BookmarkDirectoryComponent
+		BookmarkDirectoryComponent,
+		LabelListComponent
 	],
 	providers: [
 		BookmarkDataService,
@@ -110,6 +112,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	private openedFolderName: string;
 
 	/**
+	 * Number of the currently opened tab
+	 */
+	private openedTab: number;
+
+	/**
 	 * Constructor
 	 */
 	constructor(
@@ -132,9 +139,10 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.labelDataService = labelDataService;
 
 		// Setup
+		this.serviceSubscriptions = [];
 		this.folders = List<Folder>();
 		this.openedFolderId = null; // Explicitely not set yet
-		this.serviceSubscriptions = [];
+		this.openedTab = 0;
 
 	}
 
@@ -214,7 +222,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Navigate to a folder (event comes from the directory)
 	 * @param {number} folderId ID of the folder we want to navigate to
 	 */
-	private onSelectFolder(folderId: number): void {
+	private onSelectFolder( folderId: number ): void {
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one
@@ -223,6 +231,14 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		// Navigate to folder (relative)
 		this.router.navigate( [ 'view', folderId ], this.currentUrlSegment );
 
+	}
+
+	/**
+	 * Open / switch tab
+	 * @param {number} tabNumber Number of the tab we want to open / show
+	 */
+	private openTab( tabNumber: number ): void {
+		this.openedTab = tabNumber;
 	}
 
 }

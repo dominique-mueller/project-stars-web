@@ -3,10 +3,14 @@
 <main class="bookmarks">
 
 	<header class="bookmarks-header">
-		<div class="bookmarks-header-sidebar">
-			<button class="button button-invisible bookmarks-header-button is-active" type="button">
+		<div class="bookmarks-header-sidebar"
+			[class.is-active-first]="openedTab === 0"
+			[class.is-active-second]="openedTab === 1">
+			<button class="button button-invisible bookmarks-header-button is-first" type="button"
+				[class.is-active]="openedTab === 0" (click)="openTab( 0 )">
 				Folders
-			</button><button class="button button-invisible bookmarks-header-button" type="button">
+			</button><button class="button button-invisible bookmarks-header-button is-second" type="button"
+				[class.is-active]="openedTab === 1" (click)="openTab( 1 )">
 				Labels
 			</button>
 		</div><div class="bookmarks-header-main">
@@ -15,7 +19,8 @@
 	</header>
 
 	<section class="bookmarks-sidebar">
-		<div class="bookmarks-sidebar-directory">
+
+		<div class="bookmarks-sidebar-content bookmarks-sidebar-directory" [class.is-active]="openedTab === 0">
 			<a class="directory-link"
 				[class.is-selected]="openedFolderId === 0"
 				(click)="onSelectFolder( 0 )">
@@ -29,6 +34,10 @@
 				(selectFolder)="onSelectFolder( $event )">
 			</app-bookmark-directory>
 		</div>
+
+		<app-label-list class="bookmarks-sidebar-content bookmarks-sidebar-labels" [class.is-active]="openedTab === 1" >
+		</app-label-list>
+
 	</section>
 
 	<section class="bookmarks-main">
