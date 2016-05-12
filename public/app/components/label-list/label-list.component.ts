@@ -53,6 +53,11 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private editedLabelId: number;
 
 	/**
+	 * Preview color for the currently edited label
+	 */
+	private editedLabelPreviewColor: string;
+
+	/**
 	 * Constructor
 	 */
 	constructor( changeDetector: ChangeDetectorRef, labelDataService: LabelDataService ) {
@@ -108,6 +113,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	 */
 	private edit( labelId: number ): void {
 		this.editedLabelId = labelId;
+		this.editedLabelPreviewColor = this.labels.get( labelId ).get( 'color' );
 	}
 
 	/**
@@ -128,17 +134,29 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	/**
 	 * Update a label
 	 * @param {number} labelId Label ID
-	 * @param {string} name    Potentially changed name
+	 * @param {string} name    New name
+	 * @param {string} color   New color
 	 */
-	private update( labelId: number, name: string ): void {
+	private update( labelId: number, name: string, color: string ): void {
 
 		// Only update if values have actually changed
 		let data: any = {};
+		let hasChanged: boolean = false;
 		if ( this.labels.get( labelId ).get( 'name' ) !== name ) {
 			data[ 'name' ] = name;
+			hasChanged = true;
+		}
+		if ( this.labels.get( labelId ).get( 'color' ) !== color ) {
+			data[ 'color' ] = color;
+			hasChanged = true;
+		}
+
+		// Update label (if necessary)
+		if ( hasChanged ) {
 			this.labelDataService.updateLabel( labelId, data );
 		}
 
+		// Disable edit mode
 		this.editedLabelId = null;
 
 	}

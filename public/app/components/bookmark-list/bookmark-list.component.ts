@@ -110,7 +110,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Labels
 	 */
-	private labels: Map<string, Label>;
+	private labels: Map<number, Label>;
 
 	/**
 	 * ID of the currently opened folder
@@ -230,7 +230,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<string, Label> ) => {
+			( labels: Map<number, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}

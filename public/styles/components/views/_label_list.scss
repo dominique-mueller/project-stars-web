@@ -34,6 +34,30 @@
 	position: absolute;
 	top: 1.3rem;
 	left: 2.3rem;
+	visibility: hidden;
+
+	&.is-visible {
+		visibility: visible;
+	}
+
+}
+
+.label-list-color {
+	position: absolute;
+	top: 0;
+	left: 1.6rem;
+	height: 4.3rem;
+	width: 3.4rem;
+	padding-left: .8rem;
+	padding-right: .8rem;
+	opacity: 0; // Hide it but make it clickable and show stuff behind it
+	cursor: crosshair;
+	visibility: hidden;
+
+	&.is-visible {
+		visibility: visible;
+	}
+
 }
 
 .label-list-input {

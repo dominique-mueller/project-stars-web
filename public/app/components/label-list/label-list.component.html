@@ -1,11 +1,23 @@
 <ul>
 	<li class="label-list-item" [class.is-edited]="editedLabelId === label[ 1 ].get( 'id' )" *ngFor="let label of labels">
 
-		<app-icon class="label-list-icon" name="label" size="18" [color]="label[ 1 ].get( 'color' )"></app-icon>
+		<!-- Label icon -->
+		<app-icon class="label-list-icon" name="label" size="18" [color]="label[ 1 ].get( 'color' )"
+			[class.is-visible]="editedLabelId !== label[ 1 ].get( 'id' )">
+		</app-icon>
 
+		<!-- Color picker icon -->
+		<app-icon class="label-list-icon" name="color_lens" size="18" [color]="editedLabelPreviewColor"
+			[class.is-visible]="editedLabelId === label[ 1 ].get( 'id' )">
+		</app-icon>
+		<input class="label-list-color" type="color" [value]="editedLabelPreviewColor" (input)="editedLabelPreviewColor = colorInput.value"
+			[class.is-visible]="editedLabelId === label[ 1 ].get( 'id' )" #colorInput>
+
+		<!-- Label name input -->
 		<input class="form-input label-list-input" type="text" placeholder="my label" [value]="label[ 1 ].get( 'name' )"
-			[readonly]="editedLabelId !== label[ 1 ].get( 'id' )" #name>
+			[readonly]="editedLabelId !== label[ 1 ].get( 'id' )" #nameInput>
 
+		<!-- Actions: Non-edit mode & edit mode -->
 		<ul class="label-list-actions"
 			*ngIf="editedLabelId === null && editedLabelId !== label[ 1 ].get( 'id' )">
 			<li class="label-list-action">
@@ -24,7 +36,7 @@
 			*ngIf="editedLabelId === label[ 1 ].get( 'id' )">
 			<li class="label-list-action">
 				<button class="button button-invisible label-list-button" type="button"
-					(click)="update( label[ 1 ].get( 'id' ), name.value )">
+					(click)="update( label[ 1 ].get( 'id' ), nameInput.value, colorInput.value )">
 					<app-icon name="done" size="16" color="#888"></app-icon>
 				</button>
 			</li><li class="label-list-action">
