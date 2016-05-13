@@ -9,6 +9,7 @@ import { Map } from 'immutable';
  * Internal imports
  */
 import { Label, LabelDataService } from './../../services/label';
+import { LabelAdvancedComponent } from './../../shared/label-advanced/label-advanced.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -17,6 +18,7 @@ import { IconComponent } from './../../shared/icon/icon.component';
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
+		LabelAdvancedComponent,
 		IconComponent
 	],
 	host: {
@@ -48,16 +50,6 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private labels: Map<number, Label>;
 
 	/**
-	 * ID of the label that is currently edited
-	 */
-	private editedLabelId: number;
-
-	/**
-	 * Preview color for the currently edited label
-	 */
-	private editedLabelPreviewColor: string;
-
-	/**
 	 * Constructor
 	 */
 	constructor( changeDetector: ChangeDetectorRef, labelDataService: LabelDataService ) {
@@ -69,7 +61,6 @@ export class LabelListComponent implements OnInit, OnDestroy {
 		// Setup
 		this.serviceSubscriptions = [];
 		this.labels = Map<number, Label>();
-		this.editedLabelId = null; // None edited by default
 
 	}
 
@@ -108,57 +99,29 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Enable edit mode for a label
-	 * @param {number} labelId Label ID
+	 * Tracking function for the label list
+	 * @param {number} index Current index
+	 * @param {Label}  label Label
 	 */
-	private edit( labelId: number ): void {
-		this.editedLabelId = labelId;
-		this.editedLabelPreviewColor = this.labels.get( labelId ).get( 'color' );
+	private trackByLabels( index: number, label: Label ): void {
+		return label.get( 'id' );
 	}
 
 	/**
-	 * Disable edit mode (for a label)
+	 * Update a label
+	 * @param {number} labelId Label ID
+	 * @param {any}    data    Data object
 	 */
-	private cancel(): void {
-		this.editedLabelId = null;
+	private onLabelUpdate( labelId: number, data: any ): void {
+		this.labelDataService.updateLabel( labelId, data) ;
 	}
 
 	/**
 	 * Delete a label
 	 * @param {number} labelId Label ID
 	 */
-	private delete( labelId: number ): void {
+	private onLabelDelete( labelId: number ): void {
 		this.labelDataService.deleteLabel( labelId );
-	}
-
-	/**
-	 * Update a label
-	 * @param {number} labelId Label ID
-	 * @param {string} name    New name
-	 * @param {string} color   New color
-	 */
-	private update( labelId: number, name: string, color: string ): void {
-
-		// Only update if values have actually changed
-		let data: any = {};
-		let hasChanged: boolean = false;
-		if ( this.labels.get( labelId ).get( 'name' ) !== name ) {
-			data[ 'name' ] = name;
-			hasChanged = true;
-		}
-		if ( this.labels.get( labelId ).get( 'color' ) !== color ) {
-			data[ 'color' ] = color;
-			hasChanged = true;
-		}
-
-		// Update label (if necessary)
-		if ( hasChanged ) {
-			this.labelDataService.updateLabel( labelId, data );
-		}
-
-		// Disable edit mode
-		this.editedLabelId = null;
-
 	}
 
 }

@@ -1,0 +1,158 @@
+// COMPONENTS: COLOR PICKER
+
+.color-picker {
+	position: relative;
+	z-index: 2;
+}
+
+// Dropdown
+
+.color-picker-dropdown {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 18rem; // 3.2 per color x 5 + 2x padding
+	z-index: 3;
+	transform: scale(.8);
+	transform-origin: 0 0;
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
+				transform $anim-speed-normal $anim-easing;
+	background-color: $color-white;
+	box-shadow: 0 .1rem .3rem rgba($color-black, .3);
+	opacity: 0;
+	visibility: hidden;
+	overflow: hidden;
+
+	&.is-visible {
+		transform: scale(1);
+		transition: opacity $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant $anim-linear,
+					transform $anim-speed-normal $anim-easing;
+		opacity: 1;
+		visibility: visible;
+
+		> .color-picker-content {
+			transform: translateY(0);
+			transition: opacity $anim-speed-normal $anim-easing $anim-speed-fast,
+						transform $anim-speed-normal $anim-easing $anim-speed-fast;
+			opacity: 1;
+		}
+	}
+
+}
+
+.color-picker-content {
+	transform-origin: 0 0;
+	transform: translateY(-.8rem);
+	transition: opacity $anim-speed-normal $anim-easing,
+				transform $anim-speed-normal $anim-easing;
+	opacity: 0;
+}
+
+// Header
+
+.color-picker-header {
+	display: flex;
+	width: 100%;
+	height: 4.1rem;
+	padding-top: .1rem;
+	padding-left: 1.2rem;
+	border-bottom: .1rem solid $color-seashell;
+}
+
+.color-picker-title {
+	flex: 1;
+	font-size: 1.3rem;
+	font-weight: $font-weight-bold;
+	letter-spacing: .01rem;
+	line-height: 4rem;
+}
+
+.color-picker-close {
+	padding-right: 1rem;
+	padding-left: 1rem;
+	opacity: .4;
+	transition: opacity $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:focus {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.8);
+	}
+
+}
+
+// List
+
+.color-picker-list {
+	padding: 1rem 1rem .7rem;
+}
+
+.color-picker-item {
+	position: relative;
+	display: inline-block;
+	width: 3.2rem;
+	height: 3.2rem;
+	margin-top: -.1rem;
+}
+
+.color-picker-button {
+	position: relative;
+	width: 3.2rem;
+	height: 3.2rem;
+	padding-right: .6rem;
+	padding-left: .6rem;
+	border-radius: 50%;
+	transform: scale(.825);
+	transition: opacity $anim-speed-fast $anim-easing,
+				transform $anim-speed-fast $anim-easing;
+
+	&:hover,
+	&:focus {
+		transform: scale(1);
+	}
+
+	&:active {
+		transform: scale(.92);
+		opacity: .75;
+		transition: none;
+	}
+
+}
+
+// Custom color picker
+
+.color-picker-add {
+	background-color: #E0E0E0;
+	opacity: .5;
+	padding-top: .6rem;
+	padding-bottom: .6rem;
+}
+
+.color-picker-input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 3.2rem;
+	height: 3.2rem;
+	border-radius: 50%; // Same hitbox
+	opacity: 0; // Do not show the actual input field at all
+	cursor: pointer;
+
+	&:hover + .color-picker-add {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	&:active + .color-picker-add {
+		transform: scale(.92);
+		opacity: .75;
+		transition: none;
+	}
+
+}

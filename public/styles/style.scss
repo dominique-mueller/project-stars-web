@@ -39,8 +39,10 @@
 // LAYER 06: COMPONENTS - SHARED
 @import "components/shared/icon";
 @import "components/shared/bookmark";
+@import "components/shared/color-picker";
 @import "components/shared/folder";
 @import "components/shared/label";
+@import "components/shared/label-advanced";
 @import "components/shared/dropdown";
 @import "components/shared/editable_input";
 @import "components/shared/assign_label";
@@ -49,6 +51,5 @@
 @import "components/views/header";
 @import "components/views/bookmarks";
 @import "components/views/bookmark_list";
-@import "components/views/label_list";
 @import "components/views/bookmark_directory";
 @import "components/views/bookmark_details";

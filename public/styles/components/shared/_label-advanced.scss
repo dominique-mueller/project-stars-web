@@ -1,0 +1,94 @@
+// COMPONENTS: LABEL ADVANCED
+
+.label-advanced {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 4.3rem;
+	transition: background-color $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:focus {
+		background-color: #DADADA;
+
+		.label-advanced-action {
+			opacity: 1;
+		}
+
+	}
+
+	&.is-edited {
+		background-color: $color-white;
+
+		.label-advanced-action {
+			opacity: 1;
+		}
+
+	}
+
+}
+
+// Icons
+
+.label-advanced-icon {
+	position: absolute;
+	top: 1.3rem;
+	left: 2.3rem;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity $anim-speed-fast $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+
+	&.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity $anim-speed-fast $anim-easing $anim-speed-fast,
+					visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+	}
+
+}
+
+// Input
+
+.label-advanced-input {
+	position: absolute;
+	top: .3rem;
+	left: 5rem;
+	width: calc(100% - 12.8rem); // 5 start + 1.8 end + 2x 3 buttons
+}
+
+// Actions
+
+.label-advanced-actions {
+	position: absolute;
+	top: 0;
+	right: 1.8rem;
+	height: 4.3rem;
+	line-height: 4.3rem;
+	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity $anim-speed-fast $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+
+	&.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity $anim-speed-fast $anim-easing $anim-speed-fast,
+					visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+	}
+
+}
+
+.label-advanced-action {
+	display: inline-block;
+	height: 100%;
+	opacity: .5;
+	transition: opacity $anim-speed-normal $anim-easing;
+}
+
+.label-advanced-button {
+	height: 4.3rem;
+	padding-left: .7rem;
+	padding-right: .7rem;
+}

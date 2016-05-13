@@ -1,0 +1,42 @@
+<!-- Colorized label icon -->
+<app-icon class="label-advanced-icon" name="label" size="18" [color]="label.get( 'color' )"
+	[class.is-visible]="!isInEditMode">
+</app-icon>
+
+<!-- Color picker -->
+<app-color-picker
+	class="label-advanced-icon" [class.is-visible]="isInEditMode" *ngIf="editable"
+	[colorPresets]="labelColorPresets" [selectedColor]="labelColorPreview" [allowCustomColor]="true"
+	(update)="onColorUpdate( $event )">
+	<app-icon name="color_lens" size="18" [color]="labelColorPreview"></app-icon>
+</app-color-picker>
+
+<!-- Label name -->
+<input class="form-input label-advanced-input" type="text" placeholder="my label"
+	[readonly]="!isInEditMode" [value]="label.get( 'name' )" #nameInput>
+
+<!-- Actions: Not in edit mode -->
+<ul class="label-advanced-actions" [class.is-visible]="!isInEditMode" *ngIf="editable">
+	<li class="label-advanced-action">
+		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnEdit( nameInput )">
+			<app-icon name="edit" size="16" color="#888"></app-icon>
+		</button>
+	</li><li class="label-advanced-action">
+		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnDelete()">
+			<app-icon name="delete" size="16" color="#888"></app-icon>
+		</button>
+	</li>
+</ul>
+
+<!-- Actions: In edit mode -->
+<ul class="label-advanced-actions" [class.is-visible]="isInEditMode" *ngIf="editable">
+	<li class="label-advanced-action">
+		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnSave( nameInput.value )">
+			<app-icon name="done" size="16" color="#888"></app-icon>
+		</button>
+	</li><li class="label-advanced-action">
+		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnCancel( nameInput )">
+			<app-icon name="close" size="16" color="#888"></app-icon>
+		</button>
+	</li>
+</ul>

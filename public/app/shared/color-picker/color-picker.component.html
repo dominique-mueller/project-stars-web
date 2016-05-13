@@ -1,0 +1,33 @@
+<button class="button button-invisible" type="button" (click)="toggleDropdown()">
+	<ng-content></ng-content>
+</button>
+
+<div class="color-picker-dropdown" [class.is-visible]="isOpen">
+	<div class="color-picker-content">
+		<header class="color-picker-header">
+			<p class="color-picker-title">Pick a color</p>
+			<button class="button button-invisible color-picker-close" type="button" (click)="closeDropdown()">
+				<app-icon name="close" size="16" color="#333"></app-icon>
+			</button>
+		</header>
+		<ul class="color-picker-list">
+
+			<!-- Current color (optional) & color presets & pick custom color -->
+			<li class="color-picker-item" *ngIf="colorPresets.indexOf( selectedColor ) === -1">
+				<button class="button button-invisible color-picker-button" type="button"
+					[style.backgroundColor]="selectedColor" (click)="onSelectColor( selectedColor )">
+					<app-icon name="done" size="20" color="#FFF"></app-icon>
+				</button>
+			</li><li class="color-picker-item" *ngFor="let colorPreset of colorPresets">
+				<button class="button button-invisible color-picker-button" type="button"
+					[style.backgroundColor]="colorPreset" (click)="onSelectColor( colorPreset )">
+					<app-icon name="done" size="20" color="#FFF" *ngIf="selectedColor === colorPreset"></app-icon>
+				</button>
+			</li><li class="color-picker-item" *ngIf="allowCustomColor">
+				<input class="color-picker-input" type="color" [value]="selectedColor" (change)="onSelectColor( colorInput.value )" #colorInput>
+				<app-icon class="color-picker-button color-picker-add" name="add" size="20" color="#444"></app-icon>
+			</li>
+
+		</ul>
+	</div>
+</div>
