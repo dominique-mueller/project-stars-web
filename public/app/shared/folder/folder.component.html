@@ -1,8 +1,9 @@
-<a class="folder-link" (click)="selectFolder( folder.get( 'id' ) )">
-	<app-icon class="folder-icon" name="folder" size="24" color="#777"></app-icon>
+<a class="folder-link" (click)="onClickOnFolder( folder.get( 'id' ) )">
+	<app-icon class="folder-icon" name="folder" size="24" color="#606060"></app-icon>
 	<p class="folder-name">{{ folder.get( 'name' ) }}</p>
 </a>
+
 <button class="button button-invisible folder-button" type="button"
-	(click)="showDetails( folder.get( 'id' ) )">
-	<app-icon name="info" size="20" color="#777"></app-icon>
+	(click)="onClickOnDetails( folder.get( 'id' ) )">
+	<app-icon name="info" size="20" color="#606060"></app-icon>
 </button>

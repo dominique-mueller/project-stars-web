@@ -12,19 +12,19 @@ import { List, Map } from 'immutable';
 import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
-import { LabelComponent } from './../../shared/label/label.component';
+import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.component';
 import { IconComponent } from './../../shared/icon/icon.component';
-import { EditableInputComponent } from './../../shared/editable_input/editable_input.component';
-import { AssignLabelComponent } from './../../shared/assign_label/assign_label.component';
+import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
+import { AssignLabelComponent } from './../../shared/assign-label/assign-label.component';
 
 /**
- * Bookmark details component (smart)
+ * View component (smart): Bookmark details
  * Sidenote: Very similar to the FolderDetailsComponent
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		LabelComponent,
+		LabelSimpleComponent,
 		IconComponent,
 		EditableInputComponent,
 		AssignLabelComponent
@@ -77,7 +77,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private labelLogicService: LabelLogicService;
 
 	/**
-	 * Service subscriptions
+	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
 
@@ -94,12 +94,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Map of all labels
 	 */
-	private allLabels: any;
+	private allLabels: Map<number, Label>;
 
 	/**
-	 * Map of currently unassigned labels
+	 * Map of all currently unassigned labels
 	 */
-	private unassignedLabels: any;
+	private unassignedLabels: Map<number, Label>;
 
 	/**
 	 * Visibility status flag (for animation purposes)
@@ -118,7 +118,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		labelDataService: LabelDataService,
 		labelLogicService: LabelLogicService ) {
 
-		// Initialize services
+		// Initialize
 		this.router = router;
 		this.changeDetector = changeDetector;
 		this.uiService = uiService;
@@ -128,11 +128,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.labelLogicService = labelLogicService;
 
 		// Setup
+		this.serviceSubscriptions = [];
 		this.bookmarkId = null;
 		this.bookmark = null;
-		this.allLabels = Map<string, Label>();
-		this.unassignedLabels = Map<string, Label>();
-		this.serviceSubscriptions = [];
+		this.allLabels = Map<number, Label>();
+		this.unassignedLabels = Map<number, Label>();
 		this.isVisible = false;
 
 	}
@@ -151,7 +151,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
 			this.bookmarkId = parseInt( curr.parameters[ 'id' ], 10 );
 		} else {
-			this.close();
+			this.onClose();
 		}
 
 	}
@@ -172,7 +172,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 					// Navigate back if the bookmark doesn't exist
 					if ( this.bookmark === null ) {
-						this.close();
+						this.onClose();
 					} else {
 
 						// Update UI state
@@ -239,7 +239,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Close this details panel
 	 */
-	private close(): void {
+	private onClose(): void {
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one
@@ -259,9 +259,9 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Delete this bookmark, close the panel
 	 */
-	private delete(): void {
+	private onDelete(): void {
 		this.bookmarkDataService.deleteBookmark( this.bookmarkId );
-		this.close();
+		this.onClose();
 	}
 
 	/**
@@ -269,7 +269,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} attribute Attribute / key
 	 * @param {string} newValue  New / updated value
 	 */
-	private update( attribute: string, newValue: string ): void {
+	private onUpdate( attribute: string, newValue: string ): void {
 		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, attribute, newValue );
 	}
 

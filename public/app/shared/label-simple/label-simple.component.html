@@ -1,0 +1,4 @@
+<span class="label-simple-name">{{ label?.get( 'name' ) }}</span>
+<button class="button button-invisible label-simple-button" type="button" *ngIf="isRemovable" (click)="clickOnRemove()">
+	<app-icon name="close" size="12" color="#FFF"></app-icon>
+</button>

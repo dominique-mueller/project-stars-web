@@ -1,4 +1,4 @@
-// COMPONENTS: FORMS
+// ATOMIC COMPONENT: FORMS
 
 .form-component {
 	display: block;
@@ -16,7 +16,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	color: #999;
+	color: $color-gray;
 	font-size: 1.2rem;
 	font-weight: 500;
 	line-height: 1.4rem;
@@ -45,7 +45,7 @@
 			height: .2rem;
 			transform: translateX(-100%);
 			transition: transform $anim-speed-normal $anim-easing;
-			background-color: $color-orange;
+			background-color: $color-scorpion;
 			content: "";
 		}
 

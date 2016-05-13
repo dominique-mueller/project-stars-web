@@ -6,10 +6,11 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 /**
  * Internal imports
  */
+import { Folder } from './../../services/folder';
 import { IconComponent } from './../icon/icon.component';
 
 /**
- * Folde component
+ * Shared component: Folder
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,19 +26,19 @@ import { IconComponent } from './../icon/icon.component';
 export class FolderComponent {
 
 	/**
-	 * Folder
+	 * Input: Folder
 	 */
 	@Input()
-	private folder: Map<string, any>;
+	private folder: Folder;
 
 	/**
-	 * Event emitter for selecting a folder
+	 * Output: Select event, emitting folder ID
 	 */
 	@Output()
 	private select: EventEmitter<number>;
 
 	/**
-	 * Event emitter for info button
+	 * Output: Click on details event
 	 */
 	@Output()
 	private clickOnDetails: EventEmitter<number>;
@@ -48,31 +49,26 @@ export class FolderComponent {
 	constructor() {
 
 		// Setup
+		this.folder = null;
 		this.select = new EventEmitter();
 		this.clickOnDetails = new EventEmitter();
 
 	}
 
 	/**
-	 * Select folder
+	 * Click on folder
 	 * @param {number} folderId Id of selected folder
 	 */
-	private selectFolder( folderId: number ): void {
-
-		// Emit component event
-		this.select.emit(folderId);
-
+	private onClickOnFolder( folderId: number ): void {
+		this.select.emit( folderId );
 	}
 
 	/**
-	 * Show folder details
+	 * Show folder details panel
 	 * @param {number} folderId Id of selected folder
 	 */
-	private showDetails( folderId: number ): void {
-
-		// Emit component event
+	private onClickOnDetails( folderId: number ): void {
 		this.clickOnDetails.emit( folderId );
-
 	}
 
 }

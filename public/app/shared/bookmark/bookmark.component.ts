@@ -10,16 +10,16 @@ import { Map } from 'immutable';
 import { Bookmark } from './../../services/bookmark';
 import { Label } from './../../services/label';
 import { FormatUrlPipe } from './../../pipes/format_url.pipe';
-import { LabelComponent } from './../label/label.component';
+import { LabelSimpleComponent } from './../label-simple/label-simple.component';
 import { IconComponent } from './../icon/icon.component';
 
 /**
- * Bookmark component
+ * Share component: Bookmark
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		LabelComponent,
+		LabelSimpleComponent,
 		IconComponent
 	],
 	host: {
@@ -34,19 +34,19 @@ import { IconComponent } from './../icon/icon.component';
 export class BookmarkComponent {
 
 	/**
-	 * Bookmark
+	 * Input: Bookmark
 	 */
 	@Input()
 	private bookmark: Bookmark;
 
 	/**
-	 * All labels
+	 * Input: Map of all labels
 	 */
 	@Input()
-	private labels: Map<string, Label>;
+	private labels: Map<number, Label>;
 
 	/**
-	 * Event emitter for info button
+	 * Output: Click on details event, emits the bookmark ID
 	 */
 	@Output()
 	private clickOnDetails: EventEmitter<number>;
@@ -57,19 +57,18 @@ export class BookmarkComponent {
 	constructor() {
 
 		// Setup
+		this.bookmark = null;
+		this.labels = null;
 		this.clickOnDetails = new EventEmitter();
 
 	}
 
 	/**
-	 * Show bookmark details
-	 * @param {number} bookmarkId Id of selected bookmark
+	 * Show bookmark details panel
+	 * @param {number} bookmarkId Id of the selected bookmark
 	 */
-	private showDetails( bookmarkId: number ): void {
-
-		// Emit component event
+	private onClickOnDetails( bookmarkId: number ): void {
 		this.clickOnDetails.emit( bookmarkId );
-
 	}
 
 }

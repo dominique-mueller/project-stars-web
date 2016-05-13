@@ -1,4 +1,4 @@
-// COMPONENTS: DIRECTORY
+// VIEW COMPONENT: BOOKMARK DIRECTORY
 
 .directory {
 	display: block; // Take the space you need - in a visible way for us
@@ -19,12 +19,12 @@
 	cursor: pointer; // Because there is no href
 
 	&:hover {
-		background-color: #DADADA;
+		background-color: $color-alto;
 	}
 
 	&.is-selected {
-		font-weight: $font-weight-bold;
-		background-color: #DADADA;
+		font-weight: bold;
+		background-color: $color-alto;
 	}
 
 }

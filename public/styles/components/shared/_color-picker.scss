@@ -1,4 +1,4 @@
-// COMPONENTS: COLOR PICKER
+// SHARED COMPONENT: COLOR PICKER
 
 .color-picker {
 	position: relative;
@@ -58,13 +58,13 @@
 	height: 4.1rem;
 	padding-top: .1rem;
 	padding-left: 1.2rem;
-	border-bottom: .1rem solid $color-seashell;
+	border-bottom: .1rem solid $color-gallery;
 }
 
 .color-picker-title {
 	flex: 1;
 	font-size: 1.3rem;
-	font-weight: $font-weight-bold;
+	font-weight: bold;
 	letter-spacing: .01rem;
 	line-height: 4rem;
 }
@@ -127,7 +127,7 @@
 // Custom color picker
 
 .color-picker-add {
-	background-color: #E0E0E0;
+	background-color: $color-alto;
 	opacity: .5;
 	padding-top: .6rem;
 	padding-bottom: .6rem;
@@ -144,15 +144,20 @@
 	opacity: 0; // Do not show the actual input field at all
 	cursor: pointer;
 
-	&:hover + .color-picker-add {
-		transform: scale(1);
-		opacity: 1;
+	&:hover,
+	&:focus {
+		+ .color-picker-add {
+			transform: scale(1);
+			opacity: 1;
+		}
 	}
 
-	&:active + .color-picker-add {
-		transform: scale(.92);
-		opacity: .75;
-		transition: none;
+	&:active {
+		+ .color-picker-add {
+			transform: scale(.92);
+			opacity: .75;
+			transition: none;
+		}
 	}
 
 }

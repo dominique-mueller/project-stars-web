@@ -4,14 +4,12 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
- * Icon Component
+ * Shared componet: Icon
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
-		class: 'icon',
-		'[style.width]': 'size',
-		'[style.height]': 'size'
+		class: 'icon'
 	},
 	selector: 'app-icon',
 	templateUrl: './icon.component.html'
@@ -19,27 +17,27 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 export class IconComponent {
 
 	/**
-	 * Name of the icon
+	 * Input: Icon name
 	 */
 	@Input()
 	private name: string;
 
 	/**
-	 * Color of the icon
+	 * Input: Icon color (usually in HEX)
 	 */
 	@Input()
 	private color: string;
 
 	/**
-	 * Size of the icon (in px)
+	 * Input: Icon size (usually in px)
 	 */
 	@Input()
 	private size: number;
 
 	/**
-	 * Icon name prefix
+	 * Internal: Icon name prefix
 	 */
-	private prefix: string = '#icon-';
+	private prefix: string;
 
 	/**
 	 * Constructor
@@ -47,8 +45,10 @@ export class IconComponent {
 	constructor() {
 
 		// Setup
-		this.size = 24;
+		this.name = '';
 		this.color = '#000';
+		this.size = 24;
+		this.prefix = '#icon-';
 
 	}
 

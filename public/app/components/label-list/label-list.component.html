@@ -1,5 +1,5 @@
 <ul>
-	<li *ngFor="let label of labels.toList()" *ngForTrackBy="trackByLabels">
+	<li *ngFor="let label of labels.toList()">
 		<app-label-advanced
 			[label]="label" [editable]="true"
 			(update)="onLabelUpdate( label.get( 'id' ), $event )" (delete)="onLabelDelete( label.get( 'id' ) )">

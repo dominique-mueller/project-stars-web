@@ -1,12 +1,12 @@
-<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="close()"></div>
+<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
 <div class="bookmark-details-panel" [class.is-visible]="isVisible">
 
 	<header class="bookmark-details-header">
 		<h3 class="bookmark-details-title">Folder Details</h3>
-		<button class="button button-invisible bookmark-details-button" type="button" (click)="delete()">
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="onDelete()">
 			<app-icon name="delete" size="16" color="#FFF"></app-icon>
 		</button>
-		<button class="button button-invisible bookmark-details-button" type="button" (click)="close()">
+		<button class="button button-invisible bookmark-details-button" type="button" (click)="onClose()">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
 	</header>
@@ -18,12 +18,12 @@
 			<ul>
 				<li class="bookmark-details-section">
 					<app-input-editable [name]="'folder-name'" [label]="'Name'" [type]="'text'" [placeholder]="'My folder'"
-						[value]="folder?.get( 'name' )" (update)="update( 'name', $event )">
+						[value]="folder?.get( 'name' )" (update)="onUpdate( 'name', $event )">
 					</app-input-editable>
 				</li>
 				<li class="bookmark-details-section">
 					<app-input-editable [name]="'folder-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My folder description'"
-						[value]="folder?.get( 'description' )" (update)="update( 'description', $event )">
+						[value]="folder?.get( 'description' )" (update)="onUpdate( 'description', $event )">
 					</app-input-editable>
 				</li>
 			</ul>

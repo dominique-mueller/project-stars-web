@@ -2,15 +2,14 @@
 
 <main class="bookmarks">
 
+	<!-- Bookmarks header -->
 	<header class="bookmarks-header">
-		<div class="bookmarks-header-sidebar"
-			[class.is-active-first]="openedTab === 0"
-			[class.is-active-second]="openedTab === 1">
+		<div class="bookmarks-header-sidebar" [class.is-active-first]="openedTab === 0" [class.is-active-second]="openedTab === 1">
 			<button class="button button-invisible bookmarks-header-button is-first" type="button"
-				[class.is-active]="openedTab === 0" (click)="openTab( 0 )">
+				[class.is-active]="openedTab === 0" (click)="onClickOnTab( 0 )">
 				Folders
 			</button><button class="button button-invisible bookmarks-header-button is-second" type="button"
-				[class.is-active]="openedTab === 1" (click)="openTab( 1 )">
+				[class.is-active]="openedTab === 1" (click)="onClickOnTab( 1 )">
 				Labels
 			</button>
 		</div><div class="bookmarks-header-main">
@@ -18,13 +17,13 @@
 		</div>
 	</header>
 
+	<!-- Bookmarks content: Sidebar with folders / labels -->
 	<section class="bookmarks-sidebar">
-
 		<div class="bookmarks-sidebar-content bookmarks-sidebar-directory" [class.is-active]="openedTab === 0">
 			<a class="directory-link"
 				[class.is-selected]="openedFolderId === 0"
 				(click)="onSelectFolder( 0 )">
-				<app-icon name="folder_special" size="24" color="#666"></app-icon>
+				<app-icon name="folder_special" size="24" color="#606060"></app-icon>
 				<p class="directory-name">Bookmarks</p>
 			</a>
 			<app-bookmark-directory
@@ -34,12 +33,11 @@
 				(selectFolder)="onSelectFolder( $event )">
 			</app-bookmark-directory>
 		</div>
-
 		<app-label-list class="bookmarks-sidebar-content bookmarks-sidebar-labels" [class.is-active]="openedTab === 1" >
 		</app-label-list>
-
 	</section>
 
+	<!-- Bookmarks content: Main content with list of bookmarks & folders -->
 	<section class="bookmarks-main">
 		<router-outlet></router-outlet>
 	</section>

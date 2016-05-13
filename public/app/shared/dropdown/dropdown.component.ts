@@ -1,7 +1,11 @@
 /**
- * Imports
+ * External imports
  */
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+
+/**
+ * Internal imports
+ */
 import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 import { IconComponent } from './../icon/icon.component';
 
@@ -11,7 +15,7 @@ import { IconComponent } from './../icon/icon.component';
 export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 
 /**
- * Dropdown Component
+ * Shared component: Dropdown
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,13 +37,13 @@ export class DropdownComponent {
 	private items: DropdownItem[];
 
 	/**
-	 * Output: Select event
+	 * Output: Select event, emits item value
 	 */
 	@Output()
 	private select: EventEmitter<any>;
 
 	/**
-	 * Status of the dropdown menu
+	 * Intenral: Dropdown visibility status
 	 */
 	private isOpen: boolean;
 
@@ -47,24 +51,35 @@ export class DropdownComponent {
 	 * Constructor
 	 */
 	constructor() {
+
+		// Setup
+		this.items = [];
 		this.select = new EventEmitter();
 		this.isOpen = false;
+
 	}
 
 	/**
-	 * Choose a dropdown item
-	 * @param {string} value Dropdown item value
+	 * Select a dropdown item
+	 * @param {string} value Value of the selected dropdown item
 	 */
-	private choose( value: string ): void {
-		this.isOpen = false;
+	private onSelect( value: string ): void {
 		this.select.emit( value );
+		this.closeDropdown();
 	}
 
 	/**
-	 * Toggle dropdown visibility
+	 * Toggle dropdown menu
 	 */
-	private toggle(): void {
+	private toggleDropdown(): void {
 		this.isOpen = !this.isOpen;
+	}
+
+	/**
+	 * Close dropdown menu
+	 */
+	private closeDropdown(): void {
+		this.isOpen = false;
 	}
 
 }

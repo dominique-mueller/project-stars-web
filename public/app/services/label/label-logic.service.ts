@@ -2,7 +2,7 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
-import { Iterable } from 'immutable';
+import { Map, Iterable } from 'immutable';
 
 /**
  * Internal imports
@@ -23,11 +23,11 @@ export class LabelLogicService {
 	 * @param  {Bookmark}                bookmark Bookmark
 	 * @return {Iterable<string, Label>}          Map of all unassigned labels
 	 */
-	public getUnassignedLabelsByBookmark( labels: Iterable<string, Label>, bookmark: Bookmark ): Iterable<string, Label> {
+	public getUnassignedLabelsByBookmark( labels: Map<number, Label>, bookmark: Bookmark ): Map<number, Label> {
 
 		// Filter: Get all unassigned labels
-		return labels.filter( ( label: Label ) => {
-			return bookmark.get( 'labels' ).indexOf( label.get('id') ) === -1;
+		return <Map<number, Label>> labels.filter( ( label: Label ) => {
+			return bookmark.get( 'labels' ).indexOf( label.get( 'id' ) ) === -1;
 		} );
 
 	}

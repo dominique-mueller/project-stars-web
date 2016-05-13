@@ -5,13 +5,9 @@
 
 // LAYER 01: SETTINGS
 @import "settings/colors";
-@import "settings/typography";
-@import "settings/breakpoints";
 @import "settings/animations";
 
-// LAYER 02: TOOLS
-@import "tools/breakpoints";
-@import "tools/typography";
+// LAYER 02: TOOLS (emmpty for now)
 
 // LAYER 03: GENERIC
 @import "../../node_modules/normalize.css/normalize"; // Default normalize.css library
@@ -20,36 +16,36 @@
 @import "generic/svg";
 
 // LAYER 04: BASE
-@import "base/site";
+@import "base/forms";
 @import "base/headings";
 @import "base/hyperlinks";
-@import "base/inputs";
 @import "base/line";
 @import "base/selection";
+@import "base/site";
 
-// LAYER 05: OBJECTS
+// LAYER 05: OBJECTS (empty for now)
 
 // LAYER 06: COMPONENTS
 @import "components/search"; // TODO: Throw into some category
 
-// LAYER 06: COMPONENTS - COMPONENTS
-@import "components/components/buttons";
-@import "components/components/forms";
+// LAYER 06: ATOMIC COMPONENTS
+@import "components/atoms/buttons";
+@import "components/atoms/forms";
 
-// LAYER 06: COMPONENTS - SHARED
-@import "components/shared/icon";
+// LAYER 06: SHARED COMPONENTS
+@import "components/shared/assign-label";
 @import "components/shared/bookmark";
 @import "components/shared/color-picker";
-@import "components/shared/folder";
-@import "components/shared/label";
-@import "components/shared/label-advanced";
 @import "components/shared/dropdown";
-@import "components/shared/editable_input";
-@import "components/shared/assign_label";
+@import "components/shared/editable-input";
+@import "components/shared/folder";
+@import "components/shared/icon";
+@import "components/shared/label-advanced";
+@import "components/shared/label-simple";
 
-// LAYER 06: COMPONENTS - VIEWS
-@import "components/views/header";
-@import "components/views/bookmarks";
-@import "components/views/bookmark_list";
-@import "components/views/bookmark_directory";
-@import "components/views/bookmark_details";
+// LAYER 06: COMPONENTS (VIEWS)
+@import "components/components/bookmark-details";
+@import "components/components/bookmark-directory";
+@import "components/components/bookmark-list";
+@import "components/components/bookmarks";
+@import "components/components/header";

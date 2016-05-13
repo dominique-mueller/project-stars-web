@@ -30,7 +30,7 @@ export class DropdownLink extends DropdownItem {
 	 * @param {string} value Dropdown item value
 	 * @param {string} label Dropdown item label
 	 */
-	constructor(value: String, label: String) {
+	constructor( value: String, label: String ) {
 
 		// Call super class
 		super();

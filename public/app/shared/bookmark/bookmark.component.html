@@ -4,14 +4,15 @@
 		<p class="bookmark-title">{{ bookmark.get( 'title' ) }}</p>
 		<ul class="bookmark-labels">
 			<li class="bookmark-label" *ngFor="let labelId of bookmark.get( 'labels' )">
-				<app-label [label]="labels.get( labelId )" [isRemovable]="false">
-				</app-label>
+				<app-label-simple [label]="labels.get( labelId )" [isRemovable]="false">
+				</app-label-simple>
 			</li>
 		</ul>
 	</div>
 	<p class="bookmark-url" [innerHTML]="bookmark.get( 'url' ) | formatUrl"></p>
 </a>
+
 <button class="button button-invisible bookmark-button" type="button"
-	(click)="showDetails( bookmark.get( 'id' ) )">
-	<app-icon name="info" size="20" color="#777"></app-icon>
+	(click)="onClickOnDetails( bookmark.get( 'id' ) )">
+	<app-icon name="info" size="20" color="#606060"></app-icon>
 </button>

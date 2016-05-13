@@ -10,7 +10,7 @@ import { List } from 'immutable';
 import { IconComponent } from './../icon/icon.component';
 
 /**
- * Color picker component
+ * Shared component: Color picker
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,31 +26,31 @@ import { IconComponent } from './../icon/icon.component';
 export class ColorPickerComponent {
 
 	/**
-	 * Color presets
+	 * Input: List of color presets
 	 */
 	@Input()
 	private colorPresets: List<string>;
 
 	/**
-	 * Currently selected color
+	 * Input: Currently selected color (HEX value)
 	 */
 	@Input()
 	private selectedColor: string;
 
 	/**
-	 * Allow or disallow custom color picker
+	 * Input: Flag for allowing to choose a custom color
 	 */
 	@Input()
 	private allowCustomColor: boolean;
 
 	/**
-	 * Update event emitter
+	 * Output: Update event, emits color (HEX value)
 	 */
 	@Output()
 	private update: EventEmitter<string>;
 
 	/**
-	 * Dropdown status flag
+	 * Internal: Dropdown visibility flag
 	 */
 	private isOpen: boolean;
 
@@ -60,7 +60,7 @@ export class ColorPickerComponent {
 	constructor() {
 
 		// Setup
-		this.colorPresets = List([]);
+		this.colorPresets = List( [] );
 		this.selectedColor = null;
 		this.allowCustomColor = true;
 		this.update = new EventEmitter();
@@ -70,9 +70,9 @@ export class ColorPickerComponent {
 
 	/**
 	 * Call this when selecting a color
-	 * @param {string} color Color name (as a HEX value)
+	 * @param {string} color Color (HEX value)
 	 */
-	private onSelectColor(color: string): void {
+	private onSelectColor( color: string ): void {
 
 		// Emit event only if the color actually changed
 		if ( this.selectedColor !== color ) {

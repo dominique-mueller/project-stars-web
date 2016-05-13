@@ -1,17 +1,17 @@
-// COMPONENTS: ASSIGN LABEL
+// SHARED COMPONENT: ASSIGN LABEL
 
 .assign-label {
 	position: relative;
-	z-index: 2;
+	z-index: 2; // To overlap upcoming content
 }
 
 // Dropdown
 
 .assign-label-dropdown {
 	position: absolute;
-	top: -2.2rem;
+	top: -2.2rem; // Button height
 	left: 0;
-	width: 26rem;
+	width: 26rem; // Fixed (for now)
 	transform: scale(.8);
 	transform-origin: 0 0;
 	transition: opacity $anim-speed-normal $anim-easing,
@@ -31,7 +31,7 @@
 		opacity: 1;
 		visibility: visible;
 
-		> .assign-label-content {
+		.assign-label-content {
 			transform: translateY(0);
 			transition: opacity $anim-speed-normal $anim-easing $anim-speed-fast,
 						transform $anim-speed-normal $anim-easing $anim-speed-fast;
@@ -58,12 +58,13 @@
 	height: 4.1rem;
 	padding-top: .1rem;
 	padding-left: 1.2rem;
+	border-bottom: .1rem solid $color-gallery;
 }
 
 .assign-label-title {
 	flex: 1;
 	font-size: 1.3rem;
-	font-weight: $font-weight-bold;
+	font-weight: bold;
 	letter-spacing: .01rem;
 	line-height: 4rem;
 }
@@ -71,18 +72,34 @@
 .assign-label-close {
 	padding-right: 1rem;
 	padding-left: 1rem;
+	opacity: .4;
+	transition: opacity $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:focus {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.8);
+	}
+
 }
 
 // List
 
 .assign-label-list {
-	max-height: 13.6rem; // 4 items = 4x 34px
-	overflow-y: auto; // Make the list scrollable
+	max-height: 13.5rem; // 4 items = 4x 3.4rem - 1x border
+	overflow-y: auto; // Make the list scrollable (if necessary)
 }
 
 .assign-label-item {
 	width: 100%;
-	border-top: .1rem solid $color-seashell;
+
+	+ .assign-label-item {
+		border-top: .1rem solid $color-gallery;
+	}
+
 }
 
 .assign-label-button {
@@ -96,16 +113,17 @@
 	&:hover,
 	&:focus,
 	&:active {
-		background-color: $color-seashell;
+		background-color: $color-gallery;
+	}
+
+	&:active {
+		opacity: .66;
 	}
 
 }
 
-.assign-label-dot {
+.assign-label-icon {
 	position: absolute;
-	top: 1.2rem;
-	left: 1.2rem;
-	width: .9rem;
-	height: .9rem;
-	border-radius: 50%;
+	top: 1rem;
+	left: 1.1rem;
 }

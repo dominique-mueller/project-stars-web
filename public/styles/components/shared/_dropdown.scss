@@ -1,4 +1,4 @@
-// COMPONENTS: DROPDOWN
+// SHARED COMPONENT: DROPDOWN
 
 .dropdown-button {
 	position: relative;
@@ -17,7 +17,7 @@
 		color: $color-black;
 
 		.icon > svg {
-			fill: #333;
+			fill: $color-tundora;
 		}
 
 	}
@@ -73,7 +73,7 @@
 .dropdown-divider {
 	margin-top: .7rem;
 	margin-bottom: .7rem;
-	border-bottom: .1rem solid $color-seashell;
+	border-bottom: .1rem solid $color-gallery;
 }
 
 .dropdown-link {
@@ -84,7 +84,7 @@
 
 	&:hover,
 	&:active {
-		background-color: $color-seashell;
+		background-color: $color-gallery;
 	}
 
 }

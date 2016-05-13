@@ -2,8 +2,8 @@
  * External imports
  */
 import { Component, OnInit } from '@angular/core';
-import { HTTP_PROVIDERS } from '@angular/http';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes, Route } from '@angular/router';
+import { HTTP_PROVIDERS } from '@angular/http';
 import { provideStore } from '@ngrx/store';
 
 /**
@@ -17,7 +17,7 @@ import { ui, UiService } from './../../services/ui';
 import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 
 /**
- * App Component (smart)
+ * View component (smart): App
  */
 @Component( {
 	directives: [

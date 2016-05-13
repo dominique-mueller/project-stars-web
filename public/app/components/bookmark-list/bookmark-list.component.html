@@ -3,17 +3,18 @@
 	<!-- Folders -->
 	<li class="bookmarks-list-item" *ngFor="let folder of folders">
 		<app-folder [folder]="folder" (select)="navigateToFolder( $event )" (clickOnDetails)="onClickOnDetails( 'folder', $event )"
-			[class.is-selected]="selectedElement?.type === 'folder' && selectedElement.id === folder.get( 'id' )">>
+			[class.is-selected]="selectedElement.type === 'folder' && selectedElement.id === folder.get( 'id' )">>
 		</app-folder>
 	</li>
 
 	<!-- Bookmarks -->
 	<li class="bookmarks-list-item" *ngFor="let bookmark of bookmarks">
 		<app-bookmark [bookmark]="bookmark" [labels]="labels" (clickOnDetails)="onClickOnDetails( 'bookmark', $event )"
-			[class.is-selected]="selectedElement?.type === 'bookmark' && selectedElement?.id === bookmark.get( 'id' )">
+			[class.is-selected]="selectedElement.type === 'bookmark' && selectedElement.id === bookmark.get( 'id' )">
 		</app-bookmark>
 	</li>
 
 </ul>
 
+<!-- Details panel route -->
 <router-outlet></router-outlet>

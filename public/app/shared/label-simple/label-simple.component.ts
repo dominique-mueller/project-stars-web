@@ -10,7 +10,7 @@ import { Label } from './../../services/label';
 import { IconComponent } from './../icon/icon.component';
 
 /**
- * Label component
+ * Shared component: Label simple
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,31 +18,31 @@ import { IconComponent } from './../icon/icon.component';
 		IconComponent
 	],
 	host: {
-		class: 'label',
+		class: 'label-simple',
 		'[style.backgroundColor]': 'label?.get( \'color\' )'
 	},
-	selector: 'app-label',
-	templateUrl: './label.component.html'
+	selector: 'app-label-simple',
+	templateUrl: './label-simple.component.html'
 } )
-export class LabelComponent {
+export class LabelSimpleComponent {
 
 	/**
-	 * Label data
+	 * Input: Label
 	 */
 	@Input()
 	private label: Label;
 
 	/**
-	 * Allow the label to be removable
+	 * Input: Flag for allowing to remove the label
 	 */
 	@Input()
 	private isRemovable: boolean;
 
 	/**
-	 * Remove label from bookmark
+	 * Output: Remove event, emits label ID
 	 */
 	@Output()
-	private clickOnRemove: EventEmitter<number>;
+	private remove: EventEmitter<number>;
 
 	/**
 	 * Constructor
@@ -50,16 +50,17 @@ export class LabelComponent {
 	constructor() {
 
 		// Setup
+		this.label = null;
 		this.isRemovable = false;
-		this.clickOnRemove = new EventEmitter();
+		this.remove = new EventEmitter();
 
 	}
 
 	/**
-	 * Remove (unassign) label
+	 * Remove / unassign label
 	 */
-	private removeLabel(): void {
-		this.clickOnRemove.emit( this.label.get( 'id' ) );
+	private clickOnRemove(): void {
+		this.remove.emit( this.label.get( 'id' ) );
 	}
 
 }

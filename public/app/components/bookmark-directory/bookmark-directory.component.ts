@@ -3,7 +3,7 @@
  */
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChange,
 	ChangeDetectionStrategy } from '@angular/core';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 
 /**
  * Internal imports
@@ -12,7 +12,7 @@ import { Folder, FolderLogicService } from './../../services/folder';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
- * Bookmark directory component (dumb, recursive)
+ * View component (dumb, recursive): Bookmark directory
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,36 +29,36 @@ import { IconComponent } from './../../shared/icon/icon.component';
 export class BookmarkDirectoryComponent implements OnChanges {
 
 	/**
-	 * All folders (just piped through the whole directory, from top to bottom)
+	 * Input: List of all folders (just piped through the whole directory hierarchy, from top to bottom)
 	 */
 	@Input()
 	private folders: List<Folder>;
 
 	/**
-	 * ID of the parent folder
+	 * Input: ID of the parent folder
 	 */
 	@Input()
 	private parentFolderId: number;
 
 	/**
-	 * ID of the currently opened folder
+	 * Input: ID of the currently opened folder
 	 */
 	@Input()
 	private openedFolderId: number;
 
 	/**
-	 * Select folder event emitter
+	 * Output: Select event, emits folder ID
 	 */
 	@Output()
 	private selectFolder: EventEmitter<number>;
 
 	/**
-	 * Folder logic service
+	 * Internal: Folder logic service
 	 */
 	private folderLogicService: FolderLogicService;
 
 	/**
-	 * Subfolders of this (the current) directory layer
+	 * Internal: List of subfolders living inside this (the current) directory layer
 	 */
 	private subfolders: List<Folder>;
 
@@ -67,10 +67,13 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	 */
 	constructor( folderLogicService: FolderLogicService ) {
 
-		// Initialize services
+		// Initialize
 		this.folderLogicService = folderLogicService;
 
 		// Setup
+		this.folders = List<Folder>();
+		this.parentFolderId = null;
+		this.openedFolderId = null;
 		this.selectFolder = new EventEmitter();
 		this.subfolders = List<Folder>();
 

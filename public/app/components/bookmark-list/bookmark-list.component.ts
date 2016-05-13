@@ -20,7 +20,7 @@ import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { FolderComponent } from './../../shared/folder/folder.component';
 
 /**
- * Bookmark list component (smart)
+ * View component (smart): Bookmark list
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,12 +48,12 @@ import { FolderComponent } from './../../shared/folder/folder.component';
 export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
-	 * Router service
+	 * Router
 	 */
 	private router: Router;
 
 	/**
-	 * Current url segment
+	 * Current URL segment
 	 */
 	private currentUrlSegment: RouteSegment;
 
@@ -63,7 +63,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private changeDetector: ChangeDetectorRef;
 
 	/**
-	 * Ui service
+	 * UI service
 	 */
 	private uiService: UiService;
 
@@ -93,22 +93,22 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private labelDataService: LabelDataService;
 
 	/**
-	 * Service subscriptions
+	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
 
 	/**
-	 * Bookmarks
+	 * List of bookmarks
 	 */
 	private bookmarks: List<Bookmark>;
 
 	/**
-	 * Folders
+	 * List of folders
 	 */
 	private folders: List<Folder>;
 
 	/**
-	 * Labels
+	 * Map of labels
 	 */
 	private labels: Map<number, Label>;
 
@@ -118,7 +118,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private openedFolderId: number;
 
 	/**
-	 * Currently selected element
+	 * Currently selected element details
 	 */
 	private selectedElement: {
 		id: number,
@@ -138,7 +138,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService ) {
 
-		// Initialize services
+		// Initialize
 		this.router = router;
 		this.changeDetector = changeDetector;
 		this.uiService = uiService;
@@ -149,7 +149,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.labelDataService = labelDataService;
 
 		// Setup
-		this.openedFolderId = null; // Explicitely not set yet
+		this.openedFolderId = null;
+		this.bookmarks = List<Bookmark>();
+		this.folders = List<Folder>();
+		this.labels = Map<number, Label>();
 		this.serviceSubscriptions = [];
 		this.selectedElement = {
 			id: null,

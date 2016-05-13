@@ -13,6 +13,7 @@ import { AppComponent } from './components/app/app.component';
 
 /**
  * Bootstrap the application for the browser
+ * TODO: Find a better way of error handling here
  */
 bootstrap( AppComponent, [
 		Title,
@@ -22,10 +23,16 @@ bootstrap( AppComponent, [
 		}
 	] )
 	.then( () => {
-		window.console.clear(); // TODO: Remove me ?!
+		window.console.clear();
 		window.console.info( 'App successfully started!' );
 	} )
 	.catch( ( error: any ) => {
-		window.console.warn('An error occured while starting this app!');
-		window.console.log(error);
+		window.console.warn( 'ERROR: An error occured while starting this app.' );
+		window.console.log( error );
+		alert(
+			`ERROR:
+
+An error occured while starting this app.
+More details can be found in the browser developer console (press F12).`
+		);
 	} );

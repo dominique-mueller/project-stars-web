@@ -1,4 +1,4 @@
-// COMPONENTS: FOLDER
+// SHARED COMPONENT: FOLDER
 
 .folder {
 	display: flex;
@@ -7,11 +7,18 @@
 	background-color: $color-white;
 
 	&:hover,
+	&:focus,
 	&.is-selected {
-		background-color: $color-seashell;
+		background-color: $color-gallery;
+	}
+
+	&:active {
+		opacity: .66;
 	}
 
 }
+
+// Content
 
 .folder-link {
 	position: relative;
@@ -33,9 +40,8 @@
 	top: 1.8rem;
 	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
 	width: calc(100% - 7rem);
-	height: 2.4rem; // Same as icon height
-	font-weight: $font-weight-bold;
-	line-height: 2.4rem;
+	font-weight: bold;
+	line-height: 2.4rem; // Same as icon height
 }
 
 .folder-button {

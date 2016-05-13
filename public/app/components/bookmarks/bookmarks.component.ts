@@ -21,7 +21,7 @@ import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-dir
 import { LabelListComponent } from './../label-list/label-list.component';
 
 /**
- * Bookmark components (smart)
+ * View component (smart): Bookmarks
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,12 +57,12 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	private router: Router;
 
 	/**
-	 * Current url segment
+	 * Current URL segment
 	 */
 	private currentUrlSegment: RouteSegment;
 
 	/**
-	 * Change Detector
+	 * Change detector
 	 */
 	private changeDetector: ChangeDetectorRef;
 
@@ -97,7 +97,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	private serviceSubscriptions: Array<Subscription>;
 
 	/**
-	 * List of all folders
+	 * Folder list
 	 */
 	private folders: List<Folder>;
 
@@ -129,7 +129,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		labelDataService: LabelDataService
 		) {
 
-		// Initialize services
+		// Initialize
 		this.router = router;
 		this.changeDetector = changeDetector;
 		this.uiService = uiService;
@@ -141,7 +141,8 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		// Setup
 		this.serviceSubscriptions = [];
 		this.folders = List<Folder>();
-		this.openedFolderId = null; // Explicitely not set yet
+		this.openedFolderId = null;
+		this.openedFolderName = '';
 		this.openedTab = 0;
 
 	}
@@ -234,11 +235,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	}
 
 	/**
-	 * Open / switch tab
-	 * @param {number} tabNumber Number of the tab we want to open / show
+	 * Open / switch to tab
+	 * @param {number} tabId Number of the tab we want to show
 	 */
-	private openTab( tabNumber: number ): void {
-		this.openedTab = tabNumber;
+	private onClickOnTab( tabId: number ): void {
+		this.openedTab = tabId;
 	}
 
 }

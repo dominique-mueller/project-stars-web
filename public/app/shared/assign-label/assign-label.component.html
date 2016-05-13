@@ -1,6 +1,5 @@
 <button class="button button-invisible label label-name" type="button" (click)="toggleDropdown()">
 	ADD LABEL
-	<!-- TODO: Switch text depending on open flag, or update the button in some kind of way -->
 </button>
 
 <div class="assign-label-dropdown" [class.is-visible]="isOpen">
@@ -11,11 +10,11 @@
 				<app-icon name="close" size="16" color="#333"></app-icon>
 			</button>
 		</header>
-		<!-- TODO: Search / Filter -->
 		<ul class="assign-label-list">
-			<li class="assign-label-item" *ngFor="let label of labels">
-				<button class="button button-invisible assign-label-button" type="button" (click)="selectLabel( label[ 1 ].get( 'id' ) )">
-					<div class="assign-label-dot" [style.backgroundColor]="label[ 1 ].get( 'color' )"></div> {{ label[ 1 ].get( 'name' ) }}
+			<li class="assign-label-item" *ngFor="let label of labels.toList()">
+				<button class="button button-invisible assign-label-button" type="button" (click)="onSelectLabel( label.get( 'id' ) )">
+					<app-icon class="assign-label-icon" name="label" size="14" [color]="label.get( 'color' )"></app-icon>
+					{{ label.get( 'name' ) }}
 				</button>
 			</li>
 		</ul>

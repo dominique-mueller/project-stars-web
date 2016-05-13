@@ -10,7 +10,7 @@ import { Label } from './../../services/label';
 import { IconComponent } from './../icon/icon.component';
 
 /**
- * Assign label dropdown
+ * Shared component: Assign label
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,24 +21,24 @@ import { IconComponent } from './../icon/icon.component';
 		class: 'assign-label'
 	},
 	selector: 'app-assign-label',
-	templateUrl: 'assign_label.component.html'
+	templateUrl: 'assign-label.component.html'
 } )
 export class AssignLabelComponent {
 
 	/**
-	 * List of labels to choose from
+	 * Input: List of labels
 	 */
 	@Input()
-	private labels: Map<string, Label>;
+	private labels: Map<number, Label>;
 
 	/**
-	 * Select event
+	 * Output: Select event, emits label ID
 	 */
 	@Output()
 	private select: EventEmitter<number>;
 
 	/**
-	 * Dropdown status flag
+	 * Internal: Dropdown visibility status
 	 */
 	private isOpen: boolean;
 
@@ -48,6 +48,7 @@ export class AssignLabelComponent {
 	constructor() {
 
 		// Setup
+		this.labels = null;
 		this.select = new EventEmitter();
 		this.isOpen = false;
 
@@ -55,7 +56,6 @@ export class AssignLabelComponent {
 
 	/**
 	 * Toggle dropdown menu
-	 * TODO: Animations
 	 */
 	private toggleDropdown(): void {
 		this.isOpen = !this.isOpen;
@@ -63,7 +63,6 @@ export class AssignLabelComponent {
 
 	/**
 	 * Close dropdown menu
-	 * TODO: Animations
 	 */
 	private closeDropdown(): void {
 		this.isOpen = false;
@@ -71,9 +70,9 @@ export class AssignLabelComponent {
 
 	/**
 	 * Select a label
-	 * @param {number} labelId Selected label ID
+	 * @param {number} labelId ID of the selected label
 	 */
-	private selectLabel( labelId: number ): void {
+	private onSelectLabel( labelId: number ): void {
 		this.select.emit( labelId );
 		this.closeDropdown();
 	}

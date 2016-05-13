@@ -13,7 +13,7 @@ import { LabelAdvancedComponent } from './../../shared/label-advanced/label-adva
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
- * Label list component (smart)
+ * View component (smart): Label list
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,12 +40,12 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private labelDataService: LabelDataService;
 
 	/**
-	 * Service subscriptions
+	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
 
 	/**
-	 * List of all labels
+	 * Map of labels
 	 */
 	private labels: Map<number, Label>;
 
@@ -54,7 +54,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	 */
 	constructor( changeDetector: ChangeDetectorRef, labelDataService: LabelDataService ) {
 
-		// Initialize services
+		// Initialize
 		this.changeDetector = changeDetector;
 		this.labelDataService = labelDataService;
 
@@ -96,15 +96,6 @@ export class LabelListComponent implements OnInit, OnDestroy {
 			subscription.unsubscribe();
 		} );
 
-	}
-
-	/**
-	 * Tracking function for the label list
-	 * @param {number} index Current index
-	 * @param {Label}  label Label
-	 */
-	private trackByLabels( index: number, label: Label ): void {
-		return label.get( 'id' );
 	}
 
 	/**

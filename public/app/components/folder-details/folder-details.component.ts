@@ -12,10 +12,10 @@ import { List } from 'immutable';
 import { UiService } from './../../services/ui';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { IconComponent } from './../../shared/icon/icon.component';
-import { EditableInputComponent } from './../../shared/editable_input/editable_input.component';
+import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
 
 /**
- * Folder details component (smart)
+ * View component (smart): Folder details
  * Sidenote: Very similar to the BookmarkDetailsComponent
  */
 @Component( {
@@ -59,7 +59,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private folderLogicService: FolderLogicService;
 
 	/**
-	 * Service subscriptions
+	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
 
@@ -101,9 +101,10 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.folderLogicService = folderLogicService;
 
 		// Setup
+		this.serviceSubscriptions = [];
 		this.folderId = null;
 		this.folder = null;
-		this.serviceSubscriptions = [];
+		this.allFolders = List<Folder>();
 		this.isVisible = false;
 
 	}
@@ -122,7 +123,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
 			this.folderId = parseInt( curr.parameters[ 'id' ], 10 );
 		} else {
-			this.close();
+			this.onClose();
 		}
 
 	}
@@ -146,7 +147,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 					// Navigate back if the folder doesn't exist
 					if ( this.folder === null ) {
-						this.close();
+						this.onClose();
 					} else {
 
 						// Update UI state
@@ -191,7 +192,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Close the details panel
 	 */
-	private close(): void {
+	private onClose(): void {
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one
@@ -211,7 +212,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Delete folder
 	 */
-	private delete(): void {
+	private onDelete(): void {
 
 		// Get all subfolders of the folder we want to delete
 		let foldersToDelete: Array<number> =
@@ -227,7 +228,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} attribute Attribute / key
 	 * @param {string} newValue  New / updated value
 	 */
-	private update( attribute: string, newValue: string ): void {
+	private onUpdate( attribute: string, newValue: string ): void {
 		this.folderDataService.updateFolderValue( this.folderId, attribute, newValue );
 	}
 

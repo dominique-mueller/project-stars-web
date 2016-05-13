@@ -1,4 +1,4 @@
-// COMPONENTS: BOOKMARK
+// SHARED COMPONENT: BOOKMARK
 
 .bookmark {
 	display: flex;
@@ -7,8 +7,9 @@
 	background-color: $color-white;
 
 	&:hover,
+	&:focus,
 	&.is-selected {
-		background-color: $color-seashell;
+		background-color: $color-gallery;
 
 		.bookmark-content {
 			transform: translateY(0);
@@ -25,7 +26,13 @@
 
 	}
 
+	&:active {
+		opacity: .66;
+	}
+
 }
+
+// Content
 
 .bookmark-link {
 	position: relative;
@@ -53,7 +60,7 @@
 
 .bookmark-title {
 	display: inline-block;
-	font-weight: $font-weight-bold;
+	font-weight: bold;
 	line-height: 2.4rem; // Same as icon height
 }
 
@@ -78,7 +85,7 @@
 	transform: translateY(-.4rem);
 	transition: opacity $anim-speed-fast $anim-easing,
 				transform $anim-speed-fast $anim-easing;
-	color: #666; // TODO
+	color: $color-scorpion;
 	font-size: 1.2rem;
 	letter-spacing: .02rem;
 	opacity: 0;

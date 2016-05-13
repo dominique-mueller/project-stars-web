@@ -1,13 +1,13 @@
-// COMPONENTS: LABEL
+// SHARED COMPONENT: LABEL SIMPLE
 
-.label {
+.label-simple {
 	display: block;
 	height: 2.2rem;
 	border-radius: .1rem;
-	background-color: $color-tuna; // Fallback color
+	background-color: $color-scorpion; // Fallback color
 }
 
-.label-name {
+.label-simple-name {
 	padding-right: 1rem;
 	padding-left: 1rem;
 	color: $color-white;
@@ -17,7 +17,7 @@
 	vertical-align: top;
 }
 
-.label-button {
+.label-simple-button {
 	height: 2.2rem;
 	width: 2.2rem;
 	padding: .5rem; // 2.2rem - 12px icon size / 2

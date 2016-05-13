@@ -1,4 +1,4 @@
-// COMPONENT: BOOKMARKS DETAIL
+// VIEW COMPONENT: BOOKMARK & FOLDER DETAILS
 
 .bookmark-details-overlay {
 	position: fixed;
@@ -10,13 +10,13 @@
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity $anim-speed-normal $anim-easing,
-				visibility 0s linear $anim-speed-normal;
+				visibility $anim-speed-instant linear $anim-speed-normal;
 
 	&.is-visible {
 		opacity: .75;
 		visibility: visible;
 		transition: opacity $anim-speed-normal $anim-easing,
-					visibility 0s linear;
+					visibility $anim-speed-instant linear;
 	}
 
 }
@@ -55,7 +55,7 @@
 	padding-left: 2.5rem;
 	padding-top: .2rem;
 	height: 6rem;
-	background-color: $color-tuna;
+	background-color: $color-tundora;
 	color: $color-white;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .bookmark-details-label-title {
-	color: #999;
+	color: $color-gray;
 	font-size: 1.2rem;
 	font-weight: 500;
 	line-height: 1.4rem;
