@@ -56,6 +56,7 @@ var FoldersModel = function(caller, userId){
 	}
 
 	function moveFolder(folderId, folderData, callback){
+		//TODO: move this function to an adapter
 		var folderPromise = self.findOne(folderId);
 		folderPromise.then(function(folder){
 			if(folderData.hasOwnProperty('path')){
@@ -68,15 +69,15 @@ var FoldersModel = function(caller, userId){
 			var deleteFolderPromise = self.delete(folderId);
 			deleteFolderPromise.then(function(){
 				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
-				var changeNumberOfContainedElementsPromsie = self.changeNumberOfContainedElements(folder.path, +1);
+				var changeNumberOfContainedElementsPromise = self.changeNumberOfContainedElements(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
 				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
-				//Something did not went ecwell, but it could have been also the work of another bug so maybe we should try it again
+				//Something did not went well, but it could have been also the work of another bug so maybe we should try it again
 				// var saveFolderPromise = saveFolderAndReturnPromise(folder);
 				var createFolderPromise = new Promise(function(resolve, reject){
 					Folder.create(folder);
 				});
-				Promise.all([changeNumberOfContainedElementsPromsie, shiftBookmarksPromise, shiftFoldersPromise, saveFolderAndReturnPromise])
+				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(){
 					callback(null);
 				})
@@ -88,6 +89,7 @@ var FoldersModel = function(caller, userId){
 	}
 
 	function saveFolderAndReturnPromise(element){
+		//TODO: move this function to an adapter
 		return new Promise(function(resolve, reject){
 			element.save(function(err){
 				if(err){
@@ -101,6 +103,7 @@ var FoldersModel = function(caller, userId){
 	}
 
 	function sortFoldersAfterPositionASC(folders){
+		//TODO: move this function to an adapter
 		return folders.sort(function(a, b){
 			return a.position - b.position;
 		});
@@ -109,6 +112,7 @@ var FoldersModel = function(caller, userId){
 	//This function will change the position of all other element in the folder 
 	//and decrement the numberOfContainedElements from path folder
 	function updateAffectedElements(folder){
+		//TODO: move this function to an adapter
 		return new Promise(function(resolve, reject){
 			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
 			var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
@@ -261,6 +265,7 @@ var FoldersModel = function(caller, userId){
 		else{
 			moveFolder(folderId, folderData, function(err){
 				if(err){
+					logger.error(err);
 					reject();
 				}
 				else{
@@ -282,6 +287,7 @@ var FoldersModel = function(caller, userId){
 					updateAffectedElementsPromise.then(function(){
 						logger.debug('updateAffectedElementsPromise fullfiled');
 						Folder.findByIdAndRemove(folderId, function(err){
+						//TODO Rekrusives löschen der Unterordner
 							if(err){
 								reject(err);
 							}

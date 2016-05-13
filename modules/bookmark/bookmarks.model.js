@@ -28,6 +28,91 @@ var BookmarksModel = function(caller, userId){
 		});
 	}
 
+	function moveBookmark(bookmarkId, bookmarkData, callback){
+		var bookmarkPromise = self.findOne(bookmarkId);
+		var bookmarkPromise.then(function(bookmark){
+			if(bookmarkData.hasOwnProperty('path')){
+				bookmark.path = bookmarkData.path;
+			}
+			if(bookmark.hasOwnProperty('position')){
+				bookmark.position = bookmarkData.position;
+			}
+
+			var deleteBookmarkPromise = self.delete(bookmarkId);
+			deleteBookmarkPromise.then(function(){
+				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmark.path, 1);
+				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, 1);
+				var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position, 1);
+				var createBookmarkPromise = new Promise(function(resolve, reject){
+					Bookmark.create(bookmark);
+				});
+				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createBookmarkPromise])
+				.then(function(){
+					callback();
+				})
+				.catch(callback);
+			}) 
+			.catch(callback);
+		})
+		.catch(callback);
+	}
+
+	function updateBookmarkLabels(bookmarkId, bookmarkData){
+		return new Promise(function(resolve, reject){
+			if(bookmarkData.hasOwnProperty('labels')){
+				var labels = bookmarkData.labels;
+				Bookmark.findById(bookmarkId, function(bookmark, err){
+					for(var i = 0; i < labels.length; i++){
+						var elementIndex = bookmark.labels.indexOf(labels[i]);
+						if(elementIndex < 0){ //element is not in bookmark.labels -> add it
+							bookmark.label.push(labels[i]);
+						}
+						else{ //element is in bookmark.labels -> remove it
+							bookmark.label.splice(elementIndex, 1);
+						}
+					}
+					bookmark.save(function(err){
+						if(err){
+							reject(err);
+						}
+						else{
+							resolve();
+						}
+					});
+				});
+			}	
+			else{
+				resolve();
+			}
+		});		
+	}
+
+	function updateBookmarkEditables(bookmarkId, bookmarkData){
+		return new Promise(function(resolve, reject){
+			var data = new Object();
+			if(bookmarkData.hasOwnProperty('title')){
+				data['title'] = bookmarkData.title;
+			}
+			if(bookmarkData.hasOwnProperty('url')){
+				data['url'] = bookmarkData.url;
+			}
+			if(bookmarkData.hasOwnProperty('description')){
+				data['description'] = bookmarkData.description;
+			}
+			if(bookmarkData.hasOwnProperty('favicon')){
+				data['favicon'] = bookmarkData.favicon;
+			}
+			Bookmark.findByIdAndUpdate(bookmarkId, bookmarkDate, {new:true} function(err){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve();
+				}
+			});
+		});
+	}
+
 	//#### Public Functions ####
 
 	this.shiftBookmarksPosition = function(path, startPosition, shift){
@@ -84,17 +169,26 @@ var BookmarksModel = function(caller, userId){
 		return new Promise(function(resolve, reject){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
-				bookmark.updated = 
+				bookmark.updated = new Date().now();
 				if(bookmarkData.hasOwnProperty('path') || bookmarkData.hasOwnProperty('position')){
 					var moveBookmarkPromise = moveBookmark();
+					moveBookmark(bookmarkId, bookmakrData, function(err){
+						if(err){
+							reject();
+						}
+						else{
+							resolve();
+						}
+					});					
 				}
 				else{
-					//titl, url, description, favicon, updated
-					//labels (check if exist)
-					var updateIndependentPropertiesPromise = updateIndependentProperties();
-					
+					var labelsUpdatePormise = updateBookmarkLabels(bookmarkId, bookmarkData);				
+					var editablesUpdatePromise = updateBookmarkEditables(bookmarkId, bookmarkData);
+					Promise.all([labelsUpdatePormise, editablesUpdatePromise]).then(function(){
+
+					})
+					.catch()
 				}
-				
 			})
 			.catch(reject);
 
@@ -108,8 +202,8 @@ var BookmarksModel = function(caller, userId){
 			bookmarkPromise.then(function(bookmark){
 				var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position, -1);
 				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1);
-				var changeNumberOfContainedElementsPromsie = changeNumberOfContainedElements(bookmark.path, -1);
-				Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie])
+				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmark.path, -1);
+				Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromise])
 				.then(function(results){
 					logger.debug('In the all Promise');
 					Bookmark.findByIdAndRemove(bookmarkId, function(err){

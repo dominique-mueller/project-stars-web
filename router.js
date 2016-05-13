@@ -29,7 +29,9 @@ routerBackend.use(function(req, res, next){
 //###### Frontend API ######
 
 routerFrontend.get('',function(req, res){
-	res.sendFile('public/assets/index.html', {root:__dirname});
+	console.log('RICHTIGE STELLE FÜR INDEX.HTML')
+	res.sendFile('public/index.html', {root:__dirname});
+	res.end();
 });
 
 
@@ -299,7 +301,7 @@ routerBackend.route('/labels/:label_id')
 	.delete(function(req, res){
 		var result = require('./modules/label/labels.model.js').delete(req.params.label_id);
 		result.then(function(msg){
-			res.end();
+			res.status(httpStatus.NO_CONTENT).end();
 		})
 		.catch(function(reason){
 			res.status(httpStatus.INVALID_INPUT).send('{"error":"Failed to delete Label"}');

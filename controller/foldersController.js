@@ -65,6 +65,11 @@ var FoldersController = function(req, res, authentication){
 
 	this.delete = function(){
 		var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
+		//TODO: delete all sub elements
+			//find all with path id from this folder
+			//iter over search result
+				//if bookmark -> delete
+				//if folder -> recall this function with subfolder id and delete folder
 		deleteFolderPromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
