@@ -67,9 +67,30 @@
 	line-height: 5.8rem;
 }
 
-.bookmark-details-button {
-	padding-right: 1rem;
-	padding-left: 1rem;
+.bookmark-details-delete,
+.bookmark-details-open,
+.bookmark-details-close {
+	opacity: 1;
+	transition: opacity $anim-speed-fast $anim-easing;
+
+	&:hover,
+	&:focus {
+		opacity: .8;
+	}
+
+	&:active {
+		transform: scale(.75);
+	}
+
+}
+
+.bookmark-details-delete,
+.bookmark-details-open {
+	padding: 2.2rem 1.4rem;
+}
+
+.bookmark-details-close {
+	padding: 2rem 1.1rem;
 }
 
 // Content
