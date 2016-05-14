@@ -33,6 +33,9 @@ import { LabelListComponent } from './../label-list/label-list.component';
 		BookmarkDirectoryComponent,
 		LabelListComponent
 	],
+	host: {
+		class: 'bookmarks'
+	},
 	providers: [
 		BookmarkDataService,
 		FolderDataService,
@@ -80,11 +83,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Folder data service
 	 */
 	private folderDataService: FolderDataService;
-
-	/**
-	 * Folder logic service
-	 */
-	private folderLogicService: FolderLogicService;
 
 	/**
 	 * Label data service
@@ -135,7 +133,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.folderDataService = folderDataService;
-		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
 
 		// Setup
@@ -171,10 +168,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
-					if ( this.folders.size > 0 ) {
-						this.openedFolderName =
-							this.folderLogicService.getFolderByFolderId( this.folders, this.openedFolderId ).get( 'name' );
-					}
 					this.changeDetector.detectChanges(); // Detect changes
 				}
 
@@ -186,8 +179,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 			( folders: List<Folder> ) => {
 				if ( folders.size > 0 ) {
 					this.folders = folders;
-					this.openedFolderName =
-						this.folderLogicService.getFolderByFolderId( this.folders, this.openedFolderId ).get( 'name' );
 					this.changeDetector.markForCheck(); // Mark for change detection
 				}
 			}

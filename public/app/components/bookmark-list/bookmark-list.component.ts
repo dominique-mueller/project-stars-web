@@ -18,6 +18,7 @@ import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details
 import { FolderDetailsComponent } from './../folder-details/folder-details.component';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { FolderComponent } from './../../shared/folder/folder.component';
+import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
  * View component (smart): Bookmark list
@@ -27,8 +28,12 @@ import { FolderComponent } from './../../shared/folder/folder.component';
 	directives: [
 		ROUTER_DIRECTIVES,
 		BookmarkComponent,
-		FolderComponent
+		FolderComponent,
+		IconComponent
 	],
+	host: {
+		class: 'bookmark-list'
+	},
 	providers: [
 		BookmarkLogicService
 	],
@@ -118,6 +123,12 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private openedFolderId: number;
 
 	/**
+	 * Name of the currently opened folder
+	 * TODO: Maybe show breadscrumbs instead?
+	 */
+	private openedFolderName: string;
+
+	/**
 	 * Currently selected element details
 	 */
 	private selectedElement: {
@@ -149,10 +160,11 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.labelDataService = labelDataService;
 
 		// Setup
-		this.openedFolderId = null;
 		this.bookmarks = List<Bookmark>();
 		this.folders = List<Folder>();
 		this.labels = Map<number, Label>();
+		this.openedFolderId = null;
+		this.openedFolderName = '';
 		this.serviceSubscriptions = [];
 		this.selectedElement = {
 			id: null,
@@ -212,8 +224,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 				if ( folders.size > 0 ) {
 
 					// Check if the currently opened folder ID even exists, else navigate back to root
-					if ( this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId ) !== null ) {
+					let openedFolder: Folder = this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId );
+					if ( openedFolder !== null ) {
 						this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
+						this.openedFolderName = openedFolder.get( 'name' );
 						this.changeDetector.markForCheck(); // Trigger change detection
 					} else {
 						this.navigateToFolder( 0 );

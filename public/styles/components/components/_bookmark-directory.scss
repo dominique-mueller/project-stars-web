@@ -4,11 +4,13 @@
 	display: block; // Take the space you need - in a visible way for us
 }
 
-.directory-level {
+// Content
+
+.directory__folder {
 	padding-left: 2.2rem; // New indention for every new folder level
 }
 
-.directory-link {
+.directory__folder-link {
 	display: block;
 	margin-left: -100%; // This ...
 	padding-top: .9rem;
@@ -29,6 +31,6 @@
 
 }
 
-.directory-name {
+.directory__folder-name {
 	margin-left: 3.2rem; // Icon width + extra space
 }

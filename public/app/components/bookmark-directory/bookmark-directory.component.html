@@ -1,9 +1,9 @@
 <ul *ngIf="subfolders.size > 0">
-	<li class="directory-level" *ngFor="let subfolder of subfolders">
-		<a class="directory-link" [class.is-selected]="subfolder.get( 'id' ) === openedFolderId" (click)="onSelectFolder( subfolder.get( 'id' ) )">
+	<li class="directory__folder" *ngFor="let subfolder of subfolders">
+		<a class="directory__folder-link" [class.is-selected]="subfolder.get( 'id' ) === openedFolderId" (click)="onSelectFolder( subfolder.get( 'id' ) )">
 			<app-icon name="folder" size="24" color="#606060" *ngIf="subfolder.get( 'id' ) !== openedFolderId"></app-icon>
 			<app-icon name="folder_open" size="24" color="#606060" *ngIf="subfolder.get( 'id' ) === openedFolderId"></app-icon>
-			<p class="directory-name">{{ subfolder.get( 'name' ) }}</p>
+			<p class="directory__folder-name">{{ subfolder.get( 'name' ) }}</p>
 		</a>
 		<app-bookmark-directory
 			[folders]="folders"

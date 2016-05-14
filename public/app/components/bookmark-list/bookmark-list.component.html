@@ -1,14 +1,33 @@
-<ul>
+<!-- Bookmark list: Header -->
+<header class="bookmark-list__header">
 
-	<!-- Folders -->
-	<li class="bookmarks-list-item" *ngFor="let folder of folders">
+	<!-- Current folder name - TODO: Maybe the whole path? -->
+	<h2 class="bookmark-list__header-title">{{ openedFolderName }}</h2>
+
+	<!-- Actions: TODO - Click handler -->
+	<button class="button button-invisible bookmark-list__header-action" type="button">
+		<app-icon name="add" size="20" color="#444"></app-icon>
+		Folder
+	</button>
+	<button class="button button-invisible bookmark-list__header-action" type="button">
+		<app-icon name="add" size="20" color="#444"></app-icon>
+		Bookmark
+	</button>
+
+</header>
+
+<!-- Bookmark list: Content -->
+<ul class="bookmark-list__list">
+
+	<!-- Folders first -->
+	<li class="bookmark-list__item" *ngFor="let folder of folders">
 		<app-folder [folder]="folder" (select)="navigateToFolder( $event )" (clickOnDetails)="onClickOnDetails( 'folder', $event )"
-			[class.is-selected]="selectedElement.type === 'folder' && selectedElement.id === folder.get( 'id' )">>
+			[class.is-selected]="selectedElement.type === 'folder' && selectedElement.id === folder.get( 'id' )">
 		</app-folder>
 	</li>
 
-	<!-- Bookmarks -->
-	<li class="bookmarks-list-item" *ngFor="let bookmark of bookmarks">
+	<!-- Then bookmarks -->
+	<li class="bookmark-list__item" *ngFor="let bookmark of bookmarks">
 		<app-bookmark [bookmark]="bookmark" [labels]="labels" (clickOnDetails)="onClickOnDetails( 'bookmark', $event )"
 			[class.is-selected]="selectedElement.type === 'bookmark' && selectedElement.id === bookmark.get( 'id' )">
 		</app-bookmark>

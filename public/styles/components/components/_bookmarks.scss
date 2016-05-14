@@ -1,55 +1,38 @@
 // VIEW COMPONENT: BOOKMARKS
 
-.bookmarks {
-	position: fixed;
+.bookmarks__main {
+	position: absolute;
 	top: 6.4rem;
 	left: 0;
+	display: flex;
 	width: 100%;
 	height: calc(100% - 6.4rem);
 }
 
-// Basic layout containers
+// Layout containers
 
-.bookmarks-header {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 7.2rem;
-	border-bottom: .1rem solid $color-alto;
-}
-
-.bookmarks-sidebar {
-	position: absolute;
-	top: 7.2rem;
-	left: 0;
-	width: 35rem;
-	height: calc(100% - 7.2rem);
+.bookmarks__sidebar {
+	position: relative; // For animations
+	width: 35rem; // Fixed width
+	height: 100%;
 	background-color: $color-gallery;
+	border-right: .1rem solid $color-alto;
 	overflow: hidden; // Don't allow scrolling produced by animations
 }
 
-.bookmarks-main {
-	position: absolute;
-	top: 7.2rem;
-	right: 0;
-	width: calc(100% - 35rem);
-	height: calc(100% - 7.2rem);
+.bookmarks__content {
+	flex: 1;
+	height: 100%;
 	background-color: $color-white;
-	border-left: .1rem solid $color-alto;
-	overflow-y: auto;
 }
 
-// Header
+// Sidebar: Header with tabs
 
-.bookmarks-header-sidebar {
-	position: relative;
-	display: inline-block;
-	width: 35rem;
-	height: 100%;
-	vertical-align: top;
-	background-color: $color-gallery;
-	overflow: hidden;
+.bookmarks__sidebar-header {
+	position: relative; // Because of ::after
+	width: 100%;
+	height: 7.2rem; // Fixed height
+	border-bottom: .1rem solid $color-alto;
 
 	&::after {
 		position: absolute;
@@ -72,19 +55,19 @@
 
 }
 
-.bookmarks-header-button {
-	position: relative;
+.bookmarks__sidebar-header-tab {
+	position: relative; // Because of ::after
 	display: inline-block;
-	width: 50%;
+	width: 50%; // 2 equally spread tabs
 	padding-top: 2.1rem;
 	padding-bottom: .2rem;
 	line-height: 4.8rem;
-	overflow: hidden;
+	overflow: hidden; // Hide overlapping ::after element
 
 	&::after {
 		position: absolute;
-		bottom: 0;
 		left: 0;
+		bottom: 0;
 		width: 100%;
 		height: .2rem;
 		background-color: $color-primary;
@@ -112,31 +95,17 @@
 	&.is-active {
 		font-weight: bold;
 	}
+
 }
 
-.bookmarks-header-main {
-	display: inline-block;
-	width: calc(100% - 35rem);
-	height: 100%;
-	padding-top: 1.9rem;
-	padding-bottom: .4rem;
-	padding-left: 3.1rem;
-	font-size: 1.8rem;
-	font-weight: bold;
-	line-height: 4.8rem;
-	border-left: .1rem solid $color-alto;
-	background-color: #FAFAFA; // TODO: Change?
-	vertical-align: top;
-}
+// Sidebar: Content
 
-// Sidebar
-
-.bookmarks-sidebar-content {
-	position: absolute;
-	top: 0;
+.bookmarks__sidebar-content {
+	position: absolute; // To allow animation
+	top: 7.2rem;
 	left: 0;
-	width: 100%;
-	height: 100%;
+	width: 35rem;
+	height: calc(100% - 7.2rem); // Show scrollbar if necessary
 	padding-top: 1.8rem;
 	padding-bottom: 1.8rem;
 	transition: opacity $anim-speed-normal $anim-easing,
@@ -157,12 +126,12 @@
 
 }
 
-.bookmarks-sidebar-directory {
-	padding-left: 2.5rem;
+.bookmarks__sidebar-content-directory {
+	padding-left: 2.5rem; // Root directory indention
 	transform: translateX(-100%);
 }
 
-.bookmarks-sidebar-labels {
+.bookmarks__sidebar-content-labels {
 	display: block;
 	transform: translateX(100%);
 }
