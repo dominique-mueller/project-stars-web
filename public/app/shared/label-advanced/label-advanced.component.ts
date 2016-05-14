@@ -48,6 +48,12 @@ export class LabelAdvancedComponent {
 	private editable: boolean;
 
 	/**
+	 * Make the label creatable
+	 */
+	@Input()
+	private creatable: boolean;
+
+	/**
 	 * Change edit mode event, emitting status as boolean value
 	 */
 	@Output()
@@ -91,6 +97,7 @@ export class LabelAdvancedComponent {
 		// Setup
 		this.label = null;
 		this.editable = false;
+		this.creatable = false;
 		this.changeEditMode = new EventEmitter();
 		this.update = new EventEmitter();
 		this.delete = new EventEmitter();
@@ -138,25 +145,39 @@ export class LabelAdvancedComponent {
 
 	/**
 	 * Click on save
-	 * @param {string} name Name coming from the input field
+	 * @param {HTMLInputElement} nameInput Label name input field
 	 */
-	private clickOnSave( name: string ): void {
+	private clickOnSave( nameInput: HTMLInputElement ): void {
 
-		// Check for changed data
 		let data: any = {};
-		let hasChanged: boolean = false;
-		if ( this.label.get( 'name' ) !== name ) {
-			data[ 'name' ] = name;
-			hasChanged = true;
-		}
-		if ( this.label.get( 'color' ) !== this.labelColorPreview ) {
-			data[ 'color' ] = this.labelColorPreview;
-			hasChanged = true;
-		}
+		if ( this.creatable ) {
 
-		// Emit update event only if something has actually changed
-		if ( hasChanged ) {
+			// Set all data
+			data[ 'name' ] = nameInput.value;
+			data[ 'color' ] = this.labelColorPreview;
 			this.update.emit( data );
+
+			// Reset input field
+			nameInput.value = '';
+
+		} else {
+
+			// Check for changed data
+			let hasChanged: boolean = false;
+			if ( this.label.get( 'name' ) !== nameInput.value ) {
+				data[ 'name' ] = nameInput.value;
+				hasChanged = true;
+			}
+			if ( this.label.get( 'color' ) !== this.labelColorPreview ) {
+				data[ 'color' ] = this.labelColorPreview;
+				hasChanged = true;
+			}
+
+			// Emit update event only if something has actually changed
+			if ( hasChanged ) {
+				this.update.emit( data );
+			}
+
 		}
 		this.isInEditMode = false;
 		this.changeEditMode.emit( false );

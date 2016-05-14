@@ -3,3 +3,9 @@
 .label-list__list {
 	overflow-y: hidden; // Some weird bug makes the list too long
 }
+
+.label-list__divider {
+	margin-top: 1.8rem;
+	margin-bottom: 1.8rem;
+	border-bottom-color: $color-alto;
+}

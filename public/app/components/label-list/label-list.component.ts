@@ -50,6 +50,11 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private labels: Map<number, Label>;
 
 	/**
+	 * Label template for a new label
+	 */
+	private labelTemplate: Label;
+
+	/**
 	 * ID of the currently edited label
 	 */
 	private editedLabelId: number;
@@ -66,6 +71,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 		// Setup
 		this.serviceSubscriptions = [];
 		this.labels = Map<number, Label>();
+		this.labelTemplate = <Label> Map<string, any>();
 		this.editedLabelId = null;
 
 	}
@@ -84,6 +90,9 @@ export class LabelListComponent implements OnInit, OnDestroy {
 				}
 			}
 		);
+
+		// Set label template
+		this.labelTemplate = this.labelDataService.getLabelTemplate();
 
 		// Save subscriptions
 		this.serviceSubscriptions = [
@@ -124,6 +133,14 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	 */
 	private onLabelUpdate( labelId: number, data: any ): void {
 		this.labelDataService.updateLabel( labelId, data) ;
+	}
+
+	/**
+	 * Create a label
+	 * @param {any} data Data object
+	 */
+	private onLabelCreate( data: any ): void {
+		this.labelDataService.addLabel( data );
 	}
 
 	/**

@@ -12,8 +12,9 @@ import { Map } from 'immutable';
  * Internal imports
  */
 import { AppStore, AppService } from './../app';
+import { BookmarkDataService } from './../bookmark';
 import { Label } from './label.model';
-import { LOAD_LABELS, UPDATE_LABEL, DELETE_LABEL } from './label.store';
+import { LOAD_LABELS, ADD_LABEL, UPDATE_LABEL, DELETE_LABEL } from './label.store';
 
 /**
  * Label data service
@@ -43,6 +44,11 @@ export class LabelDataService {
 	private appService: AppService;
 
 	/**
+	 * Bookmark data service
+	 */
+	private bookmarkDataService: BookmarkDataService;
+
+	/**
 	 * App store
 	 */
 	private store: Store<AppStore>;
@@ -50,11 +56,12 @@ export class LabelDataService {
 	/**
 	 * Constructor
 	 */
-	constructor( http: Http, appService: AppService, store: Store<AppStore> ) {
+	constructor( http: Http, appService: AppService, bookmarkDataService: BookmarkDataService, store: Store<AppStore> ) {
 
 		// Initialize services
 		this.http = http;
 		this.appService = appService;
+		this.bookmarkDataService = bookmarkDataService;
 		this.store = store;
 
 		// Setup
@@ -91,19 +98,22 @@ export class LabelDataService {
 	}
 
 	/**
-	 * Delete one label
-	 * @param {number} labelId Label ID
+	 * Add a new label
+	 * @param {any} data Data
 	 */
-	public deleteLabel( labelId: number ): void {
+	public addLabel( data: any ): void {
 
 		// TODO: API CALL
+		let apiCallResultId: number = 20;
+		data[ 'id' ] = apiCallResultId;
 
 		// Dispatch action
 		this.store.dispatch( {
 			payload: {
-				id: labelId
+				data: data,
+				id: apiCallResultId
 			},
-			type: DELETE_LABEL
+			type: ADD_LABEL
 		} );
 
 	}
@@ -126,6 +136,39 @@ export class LabelDataService {
 			type: UPDATE_LABEL
 		} );
 
+	}
+
+	/**
+	 * Delete one label
+	 * @param {number} labelId Label ID
+	 */
+	public deleteLabel( labelId: number ): void {
+
+		// TODO: API CALL
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				id: labelId
+			},
+			type: DELETE_LABEL
+		} );
+
+		// Unassign this label from all bookmarks
+		this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
+
+	}
+
+	/**
+	 * Get label template (for creating a new label)
+	 * @return {Label} Label template
+	 */
+	public getLabelTemplate(): Label {
+		return <Label> Map<string, any>( {
+			color: '#606060',
+			id: -1,
+			name: ''
+		} );
 	}
 
 }

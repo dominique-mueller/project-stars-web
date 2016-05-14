@@ -1,11 +1,24 @@
+<!-- List of existing labels -->
 <ul class="label-list__list">
 	<li *ngFor="let label of labels.toList()">
 		<app-label-advanced
 			[label]="label"
 			[editable]="editedLabelId === null || editedLabelId === label.get( 'id' )"
+			[creatable]="false"
 			(changeEditMode)="onChangeEditMode( label.get( 'id' ), $event )"
 			(update)="onLabelUpdate( label.get( 'id' ), $event )"
 			(delete)="onLabelDelete( label.get( 'id' ) )">
 		</app-label-advanced>
 	</li>
 </ul>
+
+<hr class="label-list__divider">
+
+<!-- Create a new label -->
+<app-label-advanced
+	[label]="labelTemplate"
+	[editable]="editedLabelId === null || editedLabelId === -1"
+	[creatable]="true"
+	(changeEditMode)="onChangeEditMode( -1, $event )"
+	(update)="onLabelCreate( $event )">
+</app-label-advanced>

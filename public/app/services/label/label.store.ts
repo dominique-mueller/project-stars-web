@@ -15,7 +15,7 @@ import { Label } from './label.model';
 export const LOAD_LABELS: string = 'LOAD_LABELS';
 export const UPDATE_LABEL: string = 'UPDATE_LABEL';
 export const DELETE_LABEL: string = 'DELETE_LABEL';
-// export const ADD_LABEL: string = 'ADD_LABEL';
+export const ADD_LABEL: string = 'ADD_LABEL';
 
 /**
  * Initial state of the label data (empty per default)
@@ -41,6 +41,13 @@ export const labels: Reducer<Map<number, Label>> = ( state: Map<number, Label> =
 				} );
 
 			} );
+
+		// Add label
+		case ADD_LABEL:
+
+			// Set label in the correct state
+			return <Map<number, Label>> state
+				.set( action.payload.id, <Label> Map<string, any>( action.payload.data ) );
 
 		// Update label
 		case UPDATE_LABEL:

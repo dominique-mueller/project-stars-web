@@ -1,6 +1,18 @@
+<!-- Overlay -->
+<p class="label-advanced-overlay" [class.is-visible]="creatable && !isInEditMode" (click)="clickOnEdit( nameInput )">
+	Create new label
+</p>
+
+
+
 <!-- Colorized label icon -->
 <app-icon class="label-advanced-icon" name="label" size="18" [color]="label.get( 'color' )"
-	[class.is-visible]="!isInEditMode">
+	[class.is-visible]="!isInEditMode" *ngIf="!creatable">
+</app-icon>
+
+<!-- Add icon -->
+<app-icon class="label-advanced-icon" name="add" size="18" color="#606060"
+	[class.is-visible]="true" *ngIf="creatable">
 </app-icon>
 
 <!-- Color picker -->
@@ -11,12 +23,16 @@
 	<app-icon name="color_lens" size="18" [color]="labelColorPreview"></app-icon>
 </app-color-picker>
 
+
+
 <!-- Label name -->
 <input class="form-input label-advanced-input" type="text" placeholder="my label"
-	[readonly]="!isInEditMode" [value]="label.get( 'name' )" #nameInput>
+	[readonly]="!isInEditMode" [value]="label.get( 'name' )" [class.is-visible]="!creatable || ( creatable && isInEditMode )" #nameInput>
+
+
 
 <!-- Actions: Not in edit mode -->
-<ul class="label-advanced-actions" [class.is-visible]="!isInEditMode" *ngIf="editable">
+<ul class="label-advanced-actions" [class.is-visible]="!isInEditMode" *ngIf="editable && !creatable">
 	<li class="label-advanced-action">
 		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnEdit( nameInput )">
 			<app-icon name="edit" size="16" color="#888"></app-icon>
@@ -31,7 +47,7 @@
 <!-- Actions: In edit mode -->
 <ul class="label-advanced-actions" [class.is-visible]="isInEditMode" *ngIf="editable">
 	<li class="label-advanced-action">
-		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnSave( nameInput.value )">
+		<button class="button button-invisible label-advanced-button" type="button" (click)="clickOnSave( nameInput )">
 			<app-icon name="done" size="16" color="#888"></app-icon>
 		</button>
 	</li><li class="label-advanced-action">

@@ -13,7 +13,13 @@ import { List } from 'immutable';
  */
 import { AppStore, AppService } from './../app';
 import { Bookmark } from './bookmark.model';
-import { LOAD_BOOKMARKS, UPDATE_BOOKMARK, DELETE_BOOKMARK, DELETE_FOLDER_BOOKMARKS } from './bookmark.store';
+import {
+	LOAD_BOOKMARKS,
+	UPDATE_BOOKMARK,
+	UPDATE_BOOKMARKS_UNASSIGN_LABEL,
+	DELETE_BOOKMARK,
+	DELETE_FOLDER_BOOKMARKS
+} from './bookmark.store';
 
 /**
  * Bookmark data service
@@ -159,6 +165,23 @@ export class BookmarkDataService {
 				folderIds: folderIds
 			},
 			type: DELETE_FOLDER_BOOKMARKS
+		} );
+
+	}
+
+	/**
+	 * Unassign a label from all bookmarks this label is currently assigned to
+	 * Sidenote: Used in combination with deleting a label, no API call here
+	 * @param {number} labelId Label ID
+	 */
+	public unassignLabelFromAllBookmarks( labelId: number ): void {
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				labelId: labelId
+			},
+			type: UPDATE_BOOKMARKS_UNASSIGN_LABEL
 		} );
 
 	}

@@ -14,6 +14,7 @@ import { Bookmark } from './bookmark.model';
  */
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
 export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
+export const UPDATE_BOOKMARKS_UNASSIGN_LABEL: string = 'UPDATE_BOOKMARKS_UNASSIGN_LABEL';
 export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
 export const DELETE_FOLDER_BOOKMARKS: string = 'DELETE_FOLDER_BOOKMARKS';
 // export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
@@ -51,6 +52,20 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 				.map( ( bookmark: Bookmark ) => {
 					if ( bookmark.get( 'id' ) === action.payload.id ) {
 						return bookmark.merge( Map<string, any>( action.payload.data ) );
+					} else {
+						return bookmark;
+					}
+				} );
+
+		// Unassign a label from all bookmarks this label is currently assigned to
+		case UPDATE_BOOKMARKS_UNASSIGN_LABEL:
+
+			// Delete label ID out of the label list of each bookmark (if it exists)
+			return <List<Bookmark>> state
+				.map( ( bookmark: Bookmark ) => {
+					let labelPosition: number = bookmark.get( 'labels' ).indexOf( action.payload.labelId );
+					if ( labelPosition > -1 ) {
+						return bookmark.deleteIn( [ 'labels', labelPosition ] );
 					} else {
 						return bookmark;
 					}
