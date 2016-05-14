@@ -8,6 +8,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
  */
 import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 import { IconComponent } from './../icon/icon.component';
+import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
 
 /**
  * Exports
@@ -20,7 +21,8 @@ export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent
+		IconComponent,
+		ClickOutsideDirective
 	],
 	host: {
 		class: 'dropdown'
@@ -60,15 +62,6 @@ export class DropdownComponent {
 	}
 
 	/**
-	 * Select a dropdown item
-	 * @param {string} value Value of the selected dropdown item
-	 */
-	private onSelect( value: string ): void {
-		this.select.emit( value );
-		this.closeDropdown();
-	}
-
-	/**
 	 * Toggle dropdown menu
 	 */
 	private toggleDropdown(): void {
@@ -80,6 +73,29 @@ export class DropdownComponent {
 	 */
 	private closeDropdown(): void {
 		this.isOpen = false;
+	}
+
+	/**
+	 * Close dropdown when blurring the dropdown
+	 * @param {any}         $event  Event (probably mouse event)
+	 * @param {HTMLElement} trigger Trigger HTML element
+	 */
+	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
+
+		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
+		if ( $event.path.indexOf( trigger ) === -1 ) {
+			this.closeDropdown();
+		}
+
+	}
+
+	/**
+	 * Select a dropdown item
+	 * @param {string} value Value of the selected dropdown item
+	 */
+	private onSelect(value: string): void {
+		this.select.emit(value);
+		this.closeDropdown();
 	}
 
 }

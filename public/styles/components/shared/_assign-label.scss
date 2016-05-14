@@ -12,8 +12,8 @@
 	top: -2.2rem; // Button height
 	left: 0;
 	width: 26rem; // Fixed (for now)
-	transform: scale(.8);
 	transform-origin: 0 0;
+	transform: scale(.8);
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
 				transform $anim-speed-normal $anim-easing;
@@ -43,7 +43,6 @@
 }
 
 .assign-label-content {
-	transform-origin: 0 0;
 	transform: translateY(-.8rem);
 	transition: opacity $anim-speed-normal $anim-easing,
 				transform $anim-speed-normal $anim-easing;

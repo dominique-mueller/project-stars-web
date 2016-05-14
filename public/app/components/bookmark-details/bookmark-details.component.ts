@@ -16,6 +16,7 @@ import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.c
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
 import { AssignLabelComponent } from './../../shared/assign-label/assign-label.component';
+import { ClickOutsideDirective } from './../../shared/click-outside/click-outside.directive';
 
 /**
  * View component (smart): Bookmark details
@@ -27,7 +28,8 @@ import { AssignLabelComponent } from './../../shared/assign-label/assign-label.c
 		LabelSimpleComponent,
 		IconComponent,
 		EditableInputComponent,
-		AssignLabelComponent
+		AssignLabelComponent,
+		ClickOutsideDirective
 	],
 	providers: [
 		LabelLogicService

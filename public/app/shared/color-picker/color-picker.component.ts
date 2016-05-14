@@ -8,6 +8,7 @@ import { List } from 'immutable';
  * Internal imports
  */
 import { IconComponent } from './../icon/icon.component';
+import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
 
 /**
  * Shared component: Color picker
@@ -15,7 +16,8 @@ import { IconComponent } from './../icon/icon.component';
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent
+		IconComponent,
+		ClickOutsideDirective
 	],
 	host: {
 		class: 'color-picker'
@@ -69,6 +71,34 @@ export class ColorPickerComponent {
 	}
 
 	/**
+	 * Open dropdown menu
+	 */
+	private openDropdown(): void {
+		this.isOpen = true;
+	}
+
+	/**
+	 * Close dropdown menu
+	 */
+	private closeDropdown(): void {
+		this.isOpen = false;
+	}
+
+	/**
+	 * Close dropdown when blurring the dropdown
+	 * @param {any}         $event  Event (probably mouse event)
+	 * @param {HTMLElement} trigger Trigger HTML element
+	 */
+	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
+
+		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
+		if ( $event.path.indexOf( trigger ) === -1 ) {
+			this.closeDropdown();
+		}
+
+	}
+
+	/**
 	 * Call this when selecting a color
 	 * @param {string} color Color (HEX value)
 	 */
@@ -80,20 +110,6 @@ export class ColorPickerComponent {
 		}
 		this.closeDropdown();
 
-	}
-
-	/**
-	 * Toggle dropdown menu
-	 */
-	private toggleDropdown(): void {
-		this.isOpen = !this.isOpen;
-	}
-
-	/**
-	 * Close dropdown menu
-	 */
-	private closeDropdown(): void {
-		this.isOpen = false;
 	}
 
 }

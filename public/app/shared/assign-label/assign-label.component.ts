@@ -8,6 +8,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
  */
 import { Label } from './../../services/label';
 import { IconComponent } from './../icon/icon.component';
+import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
 
 /**
  * Shared component: Assign label
@@ -15,7 +16,8 @@ import { IconComponent } from './../icon/icon.component';
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent
+		IconComponent,
+		ClickOutsideDirective
 	],
 	host: {
 		class: 'assign-label'
@@ -55,10 +57,10 @@ export class AssignLabelComponent {
 	}
 
 	/**
-	 * Toggle dropdown menu
+	 * Open dropdown menu
 	 */
-	private toggleDropdown(): void {
-		this.isOpen = !this.isOpen;
+	private openDropdown(): void {
+		this.isOpen = true;
 	}
 
 	/**
@@ -66,6 +68,20 @@ export class AssignLabelComponent {
 	 */
 	private closeDropdown(): void {
 		this.isOpen = false;
+	}
+
+	/**
+	 * Close dropdown when blurring the dropdown
+	 * @param {any}         $event  Event (probably mouse event)
+	 * @param {HTMLElement} trigger Trigger HTML element
+	 */
+	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
+
+		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
+		if ( $event.path.indexOf( trigger ) === -1 ) {
+			this.closeDropdown();
+		}
+
 	}
 
 	/**

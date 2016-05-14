@@ -103,7 +103,7 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	 * We simply pipe the event through to the top until we reach the bookmarks component which then handles the navigation
 	 * @param {number} folderId ID of the folder we want to navigate to
 	 */
-	private onSelectFolder(folderId: number): void {
+	private onSelectFolder( folderId: number ): void {
 		if ( folderId !== this.openedFolderId ) {
 			this.selectFolder.emit(folderId);
 		}

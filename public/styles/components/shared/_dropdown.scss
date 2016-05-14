@@ -1,6 +1,6 @@
 // SHARED COMPONENT: DROPDOWN
 
-.dropdown-button {
+.dropdown__button {
 	position: relative;
 	width: 100%;
 	padding-right: 4.8rem;
@@ -15,6 +15,8 @@
 	&.is-active {
 		background-color: $color-white;
 		color: $color-black;
+		transition: background-color $anim-speed-normal $anim-easing,
+					color $anim-speed-normal $anim-easing;
 
 		.icon > svg {
 			fill: $color-tundora;
@@ -41,42 +43,42 @@
 
 }
 
-.dropdown-list {
-	position: relative;
+// Content
+
+.dropdown__list {
+	position: absolute;
+	width: 100%;
 	min-width: 15rem;
 	padding-top: .7rem;
 	padding-bottom: .7rem;
-	transform: translateY(-.7rem);
-	transition: opacity $anim-speed-normal $anim-easing,
-				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
-				transform $anim-speed-normal $anim-easing;
 	background-color: $color-white;
-	color: $color-black;
+	color: $color-tundora;
 	line-height: 1;
-	box-shadow: 0 .1rem .3rem rgba($color-black, .1);
+	transform: translateY(-.8rem);
+	transition: opacity $anim-speed-normal $anim-easing,
+				transform $anim-speed-instant $anim-easing $anim-speed-normal,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
 	opacity: 0;
 	visibility: hidden;
 
 	&.is-visible {
 		transform: translateY(0);
 		transition: opacity $anim-speed-normal $anim-easing,
-					visibility $anim-speed-instant $anim-linear,
-					transform $anim-speed-normal $anim-easing;
+					transform $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant $anim-linear;
 		opacity: 1;
 		visibility: visible;
-
-
 	}
 
 }
 
-.dropdown-divider {
+.dropdown__divider {
 	margin-top: .7rem;
 	margin-bottom: .7rem;
 	border-bottom: .1rem solid $color-gallery;
 }
 
-.dropdown-link {
+.dropdown__link {
 	display: block;
 	padding: 1rem 2.4rem;
 	transition: background-color $anim-speed-normal $anim-easing;

@@ -1,8 +1,8 @@
-<button class="button button-invisible" type="button" (click)="toggleDropdown()">
+<button class="button button-invisible" type="button" (click)="openDropdown()" #trigger>
 	<ng-content></ng-content>
 </button>
 
-<div class="color-picker-dropdown" [class.is-visible]="isOpen">
+<div class="color-picker-dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<div class="color-picker-content">
 		<header class="color-picker-header">
 			<p class="color-picker-title">Pick a color</p>

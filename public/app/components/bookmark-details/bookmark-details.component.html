@@ -1,5 +1,5 @@
-<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
-<div class="bookmark-details-panel" [class.is-visible]="isVisible">
+<div class="bookmark-details-overlay" [class.is-visible]="isVisible"></div>
+<div class="bookmark-details-panel" [class.is-visible]="isVisible" (clickOutside)="onClose()">
 
 	<header class="bookmark-details-header">
 		<h3 class="bookmark-details-title">Bookmark Details</h3>

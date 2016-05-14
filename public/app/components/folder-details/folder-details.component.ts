@@ -13,6 +13,7 @@ import { UiService } from './../../services/ui';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
+import { ClickOutsideDirective } from './../../shared/click-outside/click-outside.directive';
 
 /**
  * View component (smart): Folder details
@@ -22,7 +23,8 @@ import { EditableInputComponent } from './../../shared/editable-input/editable-i
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent,
-		EditableInputComponent
+		EditableInputComponent,
+		ClickOutsideDirective
 	],
 	templateUrl: './folder-details.component.html'
 } )

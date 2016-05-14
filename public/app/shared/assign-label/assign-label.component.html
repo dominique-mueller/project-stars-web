@@ -1,8 +1,8 @@
-<button class="button button-invisible label-simple label-simple-name" type="button" (click)="toggleDropdown()">
+<button class="button button-invisible label-simple label-simple-name" type="button" (click)="openDropdown()" #trigger>
 	ADD LABEL
 </button>
 
-<div class="assign-label-dropdown" [class.is-visible]="isOpen">
+<div class="assign-label-dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<div class="assign-label-content">
 		<header class="assign-label-header">
 			<p class="assign-label-title">Assign new label</p>
