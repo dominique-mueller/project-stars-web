@@ -48,13 +48,19 @@ export class LabelAdvancedComponent {
 	private editable: boolean;
 
 	/**
-	 * Update event emitter
+	 * Change edit mode event, emitting status as boolean value
+	 */
+	@Output()
+	private changeEditMode: EventEmitter<boolean>;
+
+	/**
+	 * Update event, emitting data
 	 */
 	@Output()
 	private update: EventEmitter<any>;
 
 	/**
-	 * Delete event emitter
+	 * Delete event, emitting nothing (null)
 	 */
 	@Output()
 	private delete: EventEmitter<any>;
@@ -85,6 +91,7 @@ export class LabelAdvancedComponent {
 		// Setup
 		this.label = null;
 		this.editable = false;
+		this.changeEditMode = new EventEmitter();
 		this.update = new EventEmitter();
 		this.delete = new EventEmitter();
 		this.isInEditMode = false;
@@ -114,6 +121,7 @@ export class LabelAdvancedComponent {
 	private clickOnEdit( nameInput: HTMLInputElement ): void {
 		this.labelColorPreview = this.label.get( 'color' );
 		this.isInEditMode = true;
+		this.changeEditMode.emit( true );
 		nameInput.focus();
 	}
 
@@ -125,6 +133,7 @@ export class LabelAdvancedComponent {
 		nameInput.value = this.label.get( 'name' ); // Manually reset name
 		this.labelColorPreview = this.label.get( 'color' ); // Manually reset color
 		this.isInEditMode = false;
+		this.changeEditMode.emit( false );
 	}
 
 	/**
@@ -150,6 +159,7 @@ export class LabelAdvancedComponent {
 			this.update.emit( data );
 		}
 		this.isInEditMode = false;
+		this.changeEditMode.emit( false );
 
 	}
 

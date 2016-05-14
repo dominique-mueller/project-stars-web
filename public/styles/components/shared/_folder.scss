@@ -10,10 +10,11 @@
 	&:focus,
 	&.is-selected {
 		background-color: $color-gallery;
-	}
 
-	&:active {
-		opacity: .66;
+		.folder-button {
+			opacity: 1;
+		}
+
 	}
 
 }
@@ -47,4 +48,6 @@
 .folder-button {
 	padding-right: 2.4rem;
 	padding-left: 2.4rem;
+	opacity: .5;
+	transition: opacity $anim-speed-fast $anim-easing;
 }

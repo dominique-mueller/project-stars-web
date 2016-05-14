@@ -24,10 +24,10 @@
 			opacity: 1;
 		}
 
-	}
+		.bookmark-button {
+			opacity: 1;
+		}
 
-	&:active {
-		opacity: .66;
 	}
 
 }
@@ -94,4 +94,6 @@
 .bookmark-button {
 	padding-right: 2.4rem;
 	padding-left: 2.4rem;
+	opacity: .5;
+	transition: opacity $anim-speed-fast $anim-easing;
 }

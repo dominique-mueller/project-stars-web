@@ -50,6 +50,11 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private labels: Map<number, Label>;
 
 	/**
+	 * ID of the currently edited label
+	 */
+	private editedLabelId: number;
+
+	/**
 	 * Constructor
 	 */
 	constructor( changeDetector: ChangeDetectorRef, labelDataService: LabelDataService ) {
@@ -61,6 +66,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 		// Setup
 		this.serviceSubscriptions = [];
 		this.labels = Map<number, Label>();
+		this.editedLabelId = null;
 
 	}
 
@@ -96,6 +102,19 @@ export class LabelListComponent implements OnInit, OnDestroy {
 			subscription.unsubscribe();
 		} );
 
+	}
+
+	/**
+	 * Change edited label ID
+	 * @param {number}  labelId Label ID
+	 * @param {boolean} status  Edit mode status
+	 */
+	private onChangeEditMode( labelId: number, status: boolean ): void {
+		if ( status ) {
+			this.editedLabelId = labelId;
+		} else {
+			this.editedLabelId = null;
+		}
 	}
 
 	/**
