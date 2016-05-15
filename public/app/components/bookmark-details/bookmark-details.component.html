@@ -1,18 +1,14 @@
-<div class="bookmark-details-overlay" [class.is-visible]="isVisible"></div>
-<div class="bookmark-details-panel" [class.is-visible]="isVisible" (clickOutside)="onClose()">
+<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
+<div class="bookmark-details-panel" [class.is-visible]="isVisible">
 
 	<header class="bookmark-details-header">
 		<h3 class="bookmark-details-title">Bookmark Details</h3>
 		<button class="button button-invisible bookmark-details-delete" type="button" (click)="onDelete()">
 			<app-icon name="delete" size="16" color="#FFF"></app-icon>
 		</button>
-
-
 		<a class="button button-invisible bookmark-details-open" [href]="bookmark?.get( 'url' )" target="_blank" rel="noreferrer noopener">
 			<app-icon name="launch" size="16" color="#FFF"></app-icon>
 		</a>
-
-
 		<button class="button button-invisible bookmark-details-close" type="button" (click)="onClose()">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>

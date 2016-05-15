@@ -11,9 +11,9 @@ import { List } from 'immutable';
  */
 import { UiService } from './../../services/ui';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
+import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
-import { ClickOutsideDirective } from './../../shared/click-outside/click-outside.directive';
 
 /**
  * View component (smart): Folder details
@@ -23,8 +23,7 @@ import { ClickOutsideDirective } from './../../shared/click-outside/click-outsid
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent,
-		EditableInputComponent,
-		ClickOutsideDirective
+		EditableInputComponent
 	],
 	templateUrl: './folder-details.component.html'
 } )
@@ -61,6 +60,11 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private folderLogicService: FolderLogicService;
 
 	/**
+	 * Dialog confirm service
+	 */
+	private dialogConfirmService: DialogConfirmService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -93,7 +97,8 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		changeDetector: ChangeDetectorRef,
 		uiService: UiService,
 		folderDataService: FolderDataService,
-		folderLogicService: FolderLogicService ) {
+		folderLogicService: FolderLogicService,
+		dialogConfirmService: DialogConfirmService ) {
 
 		// Initialize services
 		this.router = router;
@@ -101,6 +106,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService = uiService;
 		this.folderDataService = folderDataService;
 		this.folderLogicService = folderLogicService;
+		this.dialogConfirmService = dialogConfirmService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -216,12 +222,30 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onDelete(): void {
 
-		// Get all subfolders of the folder we want to delete
-		let foldersToDelete: Array<number> =
-			this.folderLogicService.getRecursiveSubfolderIds( this.allFolders, this.folderId );
+		// Setup confirmation dialog
+		let confirmationOptions: any = {
+			message: `Please confirm that you want to delete the "${ this.folder.get( 'name' ) }" folder.
+				Note that all folders and bookmarks that exist inside this folder will also be deleted.`,
+			noText: 'Cancel',
+			title: 'Deleting a folder',
+			type: 'danger',
+			yesText: 'Delete folder'
+		};
 
-		// Delete folder with all its subfolders, and bookmarks contained in them
-		this.folderDataService.deleteFolder( this.folderId, foldersToDelete );
+		// Ask for confirmation first
+		this.dialogConfirmService.requestConfirmation( confirmationOptions )
+			.then( ( answer: boolean ) => {
+				if ( answer ) {
+
+					// Get all subfolders of the folder we want to delete
+					let foldersToDelete: Array<number> =
+						this.folderLogicService.getRecursiveSubfolderIds( this.allFolders, this.folderId );
+
+					// Delete folder with all its subfolders, and bookmarks contained in them
+					this.folderDataService.deleteFolder( this.folderId, foldersToDelete );
+
+				}
+			} );
 
 	}
 

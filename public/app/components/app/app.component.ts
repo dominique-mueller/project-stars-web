@@ -1,10 +1,11 @@
 /**
  * External imports
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes, Route } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { provideStore } from '@ngrx/store';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Internal imports
@@ -14,6 +15,8 @@ import { bookmarks } from './../../services/bookmark';
 import { folders } from './../../services/folder';
 import { labels } from './../../services/label';
 import { ui, UiService } from './../../services/ui';
+import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
+import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-confirm.component';
 import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 
 /**
@@ -21,7 +24,8 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
  */
 @Component( {
 	directives: [
-		ROUTER_DIRECTIVES
+		ROUTER_DIRECTIVES,
+		DialogConfirmComponent
 	],
 	providers: [
 		HTTP_PROVIDERS,
@@ -33,7 +37,8 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 			ui
 		} ),
 		AppService,
-		UiService
+		UiService,
+		DialogConfirmService
 	],
 	selector: 'app',
 	templateUrl: './app.component.html'
@@ -45,8 +50,27 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 	} )
 	// TODO: Settings Route, Login Route, ...
 ] )
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
 
-	// TODO: Decide which route to take depending on whether we are logged in or not
+	/**
+	 * Constructor
+	 */
+	constructor() {
+
+	}
+
+	/**
+	 * Call this when the view gets initialized
+	 */
+	public ngOnInit(): void {
+
+	}
+
+	/**
+	 * Call this when the view gets destroyed
+	 */
+	public ngOnDestroy(): void {
+
+	}
 
 }

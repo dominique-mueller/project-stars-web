@@ -12,11 +12,11 @@ import { List, Map } from 'immutable';
 import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
+import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
 import { AssignLabelComponent } from './../../shared/assign-label/assign-label.component';
-import { ClickOutsideDirective } from './../../shared/click-outside/click-outside.directive';
 
 /**
  * View component (smart): Bookmark details
@@ -28,8 +28,7 @@ import { ClickOutsideDirective } from './../../shared/click-outside/click-outsid
 		LabelSimpleComponent,
 		IconComponent,
 		EditableInputComponent,
-		AssignLabelComponent,
-		ClickOutsideDirective
+		AssignLabelComponent
 	],
 	providers: [
 		LabelLogicService
@@ -79,6 +78,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private labelLogicService: LabelLogicService;
 
 	/**
+	 * Dialog confirm service
+	 */
+	private dialogConfirmService: DialogConfirmService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -118,7 +122,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		bookmarkDataService: BookmarkDataService,
 		bookmarkLogicService: BookmarkLogicService,
 		labelDataService: LabelDataService,
-		labelLogicService: LabelLogicService ) {
+		labelLogicService: LabelLogicService,
+		dialogConfirmService: DialogConfirmService) {
 
 		// Initialize
 		this.router = router;
@@ -128,6 +133,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.bookmarkLogicService = bookmarkLogicService;
 		this.labelDataService = labelDataService;
 		this.labelLogicService = labelLogicService;
+		this.dialogConfirmService = dialogConfirmService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -262,8 +268,25 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * Delete this bookmark, close the panel
 	 */
 	private onDelete(): void {
-		this.bookmarkDataService.deleteBookmark( this.bookmarkId );
-		this.onClose();
+
+		// Setup confirmation dialog
+		let confirmationOptions: any = {
+			message: `Please confirm that you want to delete the "${ this.bookmark.get( 'title' ) }" bookmark.`,
+			noText: 'Cancel',
+			title: 'Deleting a bookmark',
+			type: 'danger',
+			yesText: 'Delete bookmark'
+		};
+
+		// Ask for confirmation first
+		this.dialogConfirmService.requestConfirmation( confirmationOptions )
+			.then( ( answer: boolean ) => {
+				if ( answer ) {
+					this.bookmarkDataService.deleteBookmark( this.bookmarkId );
+					this.onClose();
+				}
+			} );
+
 	}
 
 	/**

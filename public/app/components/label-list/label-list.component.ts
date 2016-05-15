@@ -9,6 +9,7 @@ import { Map } from 'immutable';
  * Internal imports
  */
 import { Label, LabelDataService } from './../../services/label';
+import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { LabelAdvancedComponent } from './../../shared/label-advanced/label-advanced.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
@@ -40,6 +41,11 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private labelDataService: LabelDataService;
 
 	/**
+	 * Dialog confirmation service
+	 */
+	private dialogConfirmService: DialogConfirmService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -62,11 +68,15 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	/**
 	 * Constructor
 	 */
-	constructor( changeDetector: ChangeDetectorRef, labelDataService: LabelDataService ) {
+	constructor(
+		changeDetector: ChangeDetectorRef,
+		labelDataService: LabelDataService,
+		dialogConfirmService: DialogConfirmService ) {
 
 		// Initialize
 		this.changeDetector = changeDetector;
 		this.labelDataService = labelDataService;
+		this.dialogConfirmService = dialogConfirmService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -148,7 +158,25 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	 * @param {number} labelId Label ID
 	 */
 	private onLabelDelete( labelId: number ): void {
-		this.labelDataService.deleteLabel( labelId );
+
+		// Setup confirmation dialog
+		let confirmationOptions: any = {
+			message: `Please confirm that you want to delete the "${ this.labels.getIn( [ labelId, 'name' ] ) }" label.
+				Note that this label will also be removed from every bookmark it currently is assigned to.`,
+			noText: 'Cancel',
+			title: 'Deleting a label',
+			type: 'danger',
+			yesText: 'Delete label'
+		};
+
+		// Ask for confirmation first
+		this.dialogConfirmService.requestConfirmation( confirmationOptions )
+			.then( ( answer: boolean ) => {
+				if ( answer ) {
+					this.labelDataService.deleteLabel( labelId );
+				}
+			} );
+
 	}
 
 }

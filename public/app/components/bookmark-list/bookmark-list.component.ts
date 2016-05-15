@@ -256,8 +256,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		// Get bookmarks from its service
 		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
-				this.bookmarks = this.bookmarkLogicService.getBookmarksByFolderId( bookmarks, this.openedFolderId );
-				this.changeDetector.markForCheck(); // Trigger change detection
+				if ( bookmarks.size > 0 ) {
+					this.bookmarks = this.bookmarkLogicService.getBookmarksByFolderId( bookmarks, this.openedFolderId );
+					this.changeDetector.markForCheck(); // Trigger change detection
+				}
 			}
 		);
 
