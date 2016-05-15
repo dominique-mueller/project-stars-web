@@ -57,8 +57,8 @@ export class BookmarkComponent {
 	constructor() {
 
 		// Setup
-		this.bookmark = null;
-		this.labels = null;
+		this.bookmark = <Bookmark> Map<string, any>();
+		this.labels = Map<number, Label>();
 		this.clickOnDetails = new EventEmitter();
 
 	}
@@ -67,7 +67,7 @@ export class BookmarkComponent {
 	 * Show bookmark details panel
 	 * @param {number} bookmarkId Id of the selected bookmark
 	 */
-	private onClickOnDetails( bookmarkId: number ): void {
+	private onClickDetails( bookmarkId: number ): void {
 		this.clickOnDetails.emit( bookmarkId );
 	}
 

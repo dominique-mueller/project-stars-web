@@ -2,6 +2,7 @@
  * External imports
  */
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Map } from 'immutable';
 
 /**
  * Internal imports
@@ -50,7 +51,7 @@ export class AssignLabelComponent {
 	constructor() {
 
 		// Setup
-		this.labels = null;
+		this.labels = Map<number, Label>();
 		this.select = new EventEmitter();
 		this.isOpen = false;
 

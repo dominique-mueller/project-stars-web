@@ -1,27 +1,32 @@
-<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
-<div class="bookmark-details-panel" [class.is-visible]="isVisible">
+<!-- Overlay -->
+<div class="bookmark-details__overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
 
-	<header class="bookmark-details-header">
-		<h3 class="bookmark-details-title">Folder Details</h3>
-		<button class="button button-invisible bookmark-details-delete" type="button" (click)="onDelete()">
+<!-- Panel -->
+<article class="bookmark-details__panel" [class.is-visible]="isVisible">
+
+	<!-- Panel header -->
+	<header class="bookmark-details__panel-header">
+		<h1 class="bookmark-details__panel-header-title">Folder Details</h1>
+		<button class="button bookmark-details__panel-header-action does-delete" type="button" (click)="onDelete()">
 			<app-icon name="delete" size="16" color="#FFF"></app-icon>
 		</button>
-		<button class="button button-invisible bookmark-details-close" type="button" (click)="onClose()">
+		<button class="button bookmark-details__panel-header-action does-close" type="button" (click)="onClose()">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
 	</header>
 
-	<form class="bookmark-details-content">
+	<!-- Panel content -->s
+	<form class="bookmark-details__panel-content">
 
 		<!-- (important) folder information -->
 		<fieldset class="form-fieldset">
 			<ul>
-				<li class="bookmark-details-section">
+				<li class="bookmark-details__panel-section">
 					<app-input-editable [name]="'folder-name'" [label]="'Name'" [type]="'text'" [placeholder]="'My folder'"
 						[value]="folder?.get( 'name' )" (update)="onUpdate( 'name', $event )">
 					</app-input-editable>
 				</li>
-				<li class="bookmark-details-section">
+				<li class="bookmark-details__panel-section">
 					<app-input-editable [name]="'folder-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My folder description'"
 						[value]="folder?.get( 'description' )" (update)="onUpdate( 'description', $event )">
 					</app-input-editable>
@@ -34,11 +39,11 @@
 		<!-- Additional information (mostly timestamps) -->
 		<fieldset class="form-fieldset">
 			<ul>
-				<li class="form-component bookmark-details-section">
+				<li class="form-component bookmark-details__panel-section">
 					<input class="form-input" id="folder-created" type="text" [value]="folder?.get( 'created' )" readonly>
 					<label class="form-label" for="folder-created">Created on</label>
 				</li>
-				<li class="form-component bookmark-details-section">
+				<li class="form-component bookmark-details__panel-section">
 					<input class="form-input" id="folder-updated" type="text" [value]="folder?.get( 'updated' )" readonly>
 					<label class="form-label" for="folder-updated">Last updated on</label>
 				</li>
@@ -47,4 +52,4 @@
 
 	</form>
 
-</div>
+</article>

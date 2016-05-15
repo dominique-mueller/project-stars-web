@@ -16,9 +16,6 @@
 
 // Styles
 
-.button-invisible {
-}
-
 .button-primary {
 	background-color: $color-primary;
 	color: $color-white;
@@ -33,6 +30,12 @@
 
 .button-danger {
 	background-color: $color-danger;
+	color: $color-white;
+	border-radius: .1rem;
+}
+
+.button-success {
+	background-color: $color-success;
 	color: $color-white;
 	border-radius: .1rem;
 }

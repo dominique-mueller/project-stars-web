@@ -9,9 +9,9 @@
 
 	&:hover,
 	&:focus {
-		background-color: #DADADA;
+		background-color: $color-alto;
 
-		.label-advanced-action {
+		.label-advanced__action {
 			opacity: 1;
 		}
 
@@ -20,7 +20,7 @@
 	&.is-edited {
 		background-color: $color-white;
 
-		.label-advanced-action {
+		.label-advanced__action {
 			opacity: 1;
 		}
 
@@ -30,7 +30,7 @@
 
 // Icons
 
-.label-advanced-icon {
+.label-advanced__icon {
 	position: absolute;
 	top: 1.2rem;
 	left: 2.3rem;
@@ -50,7 +50,7 @@
 
 // Input / Text
 
-.label-advanced-input {
+.label-advanced__input {
 	position: absolute;
 	top: .3rem;
 	left: 5rem;
@@ -69,8 +69,8 @@
 
 }
 
-.label-advanced-overlay {
-	position: absolute;
+.label-advanced__overlay {
+	position: absolute; // To be all over the place & clickable
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -96,7 +96,7 @@
 
 // Actions
 
-.label-advanced-actions {
+.label-advanced__actions {
 	position: absolute;
 	top: 0;
 	right: 1.8rem;
@@ -117,14 +117,14 @@
 
 }
 
-.label-advanced-action {
+.label-advanced__action {
 	display: inline-block;
 	height: 100%;
 	opacity: .5;
 	transition: opacity $anim-speed-normal $anim-easing;
 }
 
-.label-advanced-button {
+.label-advanced__action-button {
 	height: 4.3rem;
 	padding-left: .7rem;
 	padding-right: .7rem;

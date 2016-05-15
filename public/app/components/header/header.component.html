@@ -1,18 +1,21 @@
 <header class="header">
 
-	<a class="header-product" href="/">
-		<div class="header-product-logo"></div>
-		<h1 class="header-product-name">{{ app }}</h1>
+	<!-- Product -->
+	<a class="header__product" href="/">
+		<div class="header__product-logo"></div>
+		<h1 class="header__product-name">{{ app }}</h1>
 	</a>
 
-	<form class="header-search search" [ngFormModel]="searchForm" (ngSubmit)="submitSearch()">
+	<!-- Search -->
+	<form class="header__search search" [ngFormModel]="searchForm" (ngSubmit)="submitSearch()">
 		<input class="search-input" type="search" placeholder="Search and filter ..." [ngFormControl]="searchForm.find( 'search' )">
-		<app-icon class="search-icon" name="search" color="#FAFAFA" size="24px"></app-icon>
-		<button class="button button-invisible search-button-clear" type="button" (click)="reset()">
-			<app-icon name="close" color="#FAFAFA" size="20px"></app-icon>
+		<app-icon class="search-icon" name="search" color="#FFF" size="24"></app-icon>
+		<button class="button search-button-clear" type="button" (click)="reset()">
+			<app-icon name="close" color="#FFF" size="20"></app-icon>
 		</button>
 	</form>
 
+	<!-- User menu -->
 	<app-dropdown [items]="dropdownItems" (select)="log( $event )">
 		{{ name }}
 	</app-dropdown>

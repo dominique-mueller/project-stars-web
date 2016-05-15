@@ -43,14 +43,15 @@
 		background-color: $color-primary;
 		content: '';
 		transition: transform $anim-speed-normal $anim-easing;
+		will-change: transform; // Lalalala ... does is work?
 	}
 
 	&.is-active-first::after {
-		transform: translateX(0);
+		transform: translate3D(0,0,0);
 	}
 
 	&.is-active-second::after {
-		transform: translateX(100%);
+		transform: translate3D(100%,0,0);
 	}
 
 }
@@ -63,6 +64,7 @@
 	padding-bottom: .2rem;
 	line-height: 4.8rem;
 	overflow: hidden; // Hide overlapping ::after element
+	will-change: transform; // DO YOUR JOB ... please ...
 
 	&::after {
 		position: absolute;
@@ -76,18 +78,18 @@
 	}
 
 	&.is-first::after {
-		transform: translateX(100%);
+		transform: translate3D(100%,0,0);
 	}
 
 	&.is-second::after {
-		transform: translateX(-100%);
+		transform: translate3D(-100%,0,0);
 	}
 
 	&:hover,
 	&:focus {
 
 		&::after {
-			transform: translateX(0);
+			transform: translate3D(0,0,0);
 		}
 
 	}
@@ -114,11 +116,12 @@
 	opacity: 0;
 	visibility: hidden;
 	overflow-y: auto;
+	will-change: transform; // Hm ...
 
 	&.is-active {
 		opacity: 1;
 		visibility: visible;
-		transform: translateX(0);
+		transform: translate3D(0,0,0);
 		transition: opacity $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant $anim-linear,
 					transform $anim-speed-normal $anim-easing;
@@ -128,10 +131,10 @@
 
 .bookmarks__sidebar-content-directory {
 	padding-left: 2.5rem; // Root directory indention
-	transform: translateX(-100%);
+	transform: translate3D(-100%,0,0);
 }
 
 .bookmarks__sidebar-content-labels {
 	display: block;
-	transform: translateX(100%);
+	transform: translate3D(100%,0,0);
 }

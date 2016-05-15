@@ -1,20 +1,20 @@
 // VIEW COMPONENT: BOOKMARK & FOLDER DETAILS
 
-.bookmark-details-overlay {
+.bookmark-details__overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 2;
 	height: 100%;
 	width: 100%;
-	background-color: $color-white;
+	background-color: rgba($color-white, .75);
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant linear $anim-speed-normal;
 
 	&.is-visible {
-		opacity: .75;
+		opacity: 1;
 		visibility: visible;
 		transition: opacity $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant linear;
@@ -22,26 +22,26 @@
 
 }
 
-.bookmark-details-panel {
+.bookmark-details__panel {
 	position: fixed;
-	top: 6.4rem;
+	top: 6.4rem; // Header bar height
 	right: 0;
 	z-index: 2;
 	overflow-y: auto;
 	overflow-x: hidden;
 	height: calc(100% - 6.4rem);
-	width: 50rem; // TODO: flexible
+	width: 50rem; // Fixed width
 	background-color: $color-white;
-	box-shadow: 0 .1rem .5rem rgba($color-black, .15);
-	transform: translateX(100%) translateZ(0); // Hackihack
+	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
+	transform: translate3D(100%,0,0);
 	visibility: hidden;
 	transition: transform $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant linear $anim-speed-normal;
-	will-change: transform; // Does it work? Who knows ...
+	will-change: transform, visibility; // Does it work? Who knows ...
 
 	&.is-visible {
 		visibility: visible;
-		transform: translateX(0) translateZ(0);
+		transform: translate3D(0,0,0);
 		transition: transform $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant linear;
 	}
@@ -50,10 +50,10 @@
 
 // Header
 
-.bookmark-details-header {
+.bookmark-details__panel-header {
 	display: flex;
 	width: 100%;
-	padding-right: 1.5rem;
+	padding-right: 1.3rem;
 	padding-left: 2.5rem;
 	padding-top: .2rem;
 	height: 6rem;
@@ -61,7 +61,7 @@
 	color: $color-white;
 }
 
-.bookmark-details-title {
+.bookmark-details__panel-header-title {
 	flex: 1;
 	font-size: 1.6rem;
 	font-weight: normal;
@@ -69,9 +69,7 @@
 	line-height: 5.8rem;
 }
 
-.bookmark-details-delete,
-.bookmark-details-open,
-.bookmark-details-close {
+.bookmark-details__panel-header-action {
 	opacity: 1;
 	transition: opacity $anim-speed-fast $anim-easing;
 
@@ -84,29 +82,29 @@
 		transform: scale(.75);
 	}
 
-}
+	&.does-delete,
+	&.does-open {
+		padding: 2.2rem 1.4rem;
+	}
 
-.bookmark-details-delete,
-.bookmark-details-open {
-	padding: 2.2rem 1.4rem;
-}
+	&.does-close {
+		padding: 2rem 1.1rem;
+	}
 
-.bookmark-details-close {
-	padding: 2rem 1.1rem;
 }
 
 // Content
 
-.bookmark-details-content {
+.bookmark-details__panel-content {
 	padding-top: 3rem;
 	padding-bottom: 1.6rem;
 }
 
-.bookmark-details-section {
+.bookmark-details__panel-section {
 	margin-right: 2.5rem;
 	margin-left: 2.5rem;
 
-	+ .bookmark-details-section {
+	+ .bookmark-details__panel-section {
 		margin-top: 3.2rem;
 	}
 
@@ -114,12 +112,12 @@
 
 // Special content: Labels
 
-.bookmark-details-label {
+.bookmark-details__panel-label {
 	display: inline-block;
 	margin-right: .4rem;
 }
 
-.bookmark-details-label-title {
+.bookmark-details__panel-label-title { // Similar to form label
 	color: $color-gray;
 	font-size: 1.2rem;
 	font-weight: 500;
@@ -129,6 +127,6 @@
 	letter-spacing: .01rem; // Because of the small text
 }
 
-.bookmark-details-label-assign {
-	margin-top: .4rem;
+.bookmark-details__panel-label-assign {
+	margin-top: .5rem;
 }

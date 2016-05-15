@@ -7,19 +7,33 @@
 	background-color: $color-scorpion; // Fallback color
 }
 
-.label-simple-name {
-	padding-right: 1rem;
-	padding-left: 1rem;
+// Content
+
+.label-simple__name {
+	padding-right: 1.1rem;
+	padding-left: 1.1rem;
 	color: $color-white;
 	font-size: 1.1rem;
-	letter-spacing: .02rem;
+	letter-spacing: .02rem; // For better readability
 	line-height: 2.2rem;
 	vertical-align: top;
 }
 
-.label-simple-button {
+.label-simple__action {
 	height: 2.2rem;
 	width: 2.2rem;
 	padding: .5rem; // 2.2rem - 12px icon size / 2
 	margin-left: -1.1rem; // Because this button is optional
+	opacity: .8;
+	transition: opacity $anim-speed-fast $anim-easing;
+
+	&:hover,
+	&:focus {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.75);
+	}
+
 }

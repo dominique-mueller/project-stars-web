@@ -11,7 +11,7 @@
 	&.is-selected {
 		background-color: $color-gallery;
 
-		.folder-button {
+		.folder__action {
 			opacity: 1;
 		}
 
@@ -21,14 +21,14 @@
 
 // Content
 
-.folder-link {
+.folder__link {
 	position: relative;
 	flex: 1;
-	height: 6rem;
+	height: 6rem; // Fixed height
 	cursor: pointer; // Necessary because link does not have an href here
 }
 
-.folder-icon {
+.folder__favicon {
 	position: absolute;
 	top: 1.8rem;
 	left: 3rem;
@@ -36,7 +36,7 @@
 	height: 2.4rem;
 }
 
-.folder-name {
+.folder__name {
 	position: absolute;
 	top: 1.8rem;
 	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
@@ -45,9 +45,16 @@
 	line-height: 2.4rem; // Same as icon height
 }
 
-.folder-button {
-	padding-right: 2.4rem;
-	padding-left: 2.4rem;
+// Action
+
+.folder__action {
+	padding-right: 2.5rem;
+	padding-left: 2.5rem;
 	opacity: .5;
 	transition: opacity $anim-speed-fast $anim-easing;
+
+	&:active {
+		transform: scale(.825);
+	}
+
 }

@@ -1,35 +1,40 @@
-<div class="bookmark-details-overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
-<div class="bookmark-details-panel" [class.is-visible]="isVisible">
+<!-- Overlay -->
+<div class="bookmark-details__overlay" [class.is-visible]="isVisible" (click)="onClose()"></div>
 
-	<header class="bookmark-details-header">
-		<h3 class="bookmark-details-title">Bookmark Details</h3>
-		<button class="button button-invisible bookmark-details-delete" type="button" (click)="onDelete()">
+<!-- Panel -->
+<article class="bookmark-details__panel" [class.is-visible]="isVisible">
+
+	<!-- Panel header -->
+	<header class="bookmark-details__panel-header">
+		<h1 class="bookmark-details__panel-header-title">Bookmark Details</h1>
+		<button class="button bookmark-details__panel-header-action does-delete" type="button" (click)="onDelete()">
 			<app-icon name="delete" size="16" color="#FFF"></app-icon>
 		</button>
-		<a class="button button-invisible bookmark-details-open" [href]="bookmark?.get( 'url' )" target="_blank" rel="noreferrer noopener">
+		<a class="button bookmark-details__panel-header-action does-open" [href]="bookmark?.get( 'url' )" target="_blank" rel="noreferrer noopener">
 			<app-icon name="launch" size="16" color="#FFF"></app-icon>
 		</a>
-		<button class="button button-invisible bookmark-details-close" type="button" (click)="onClose()">
+		<button class="button bookmark-details__panel-header-action does-close" type="button" (click)="onClose()">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
 	</header>
 
-	<form class="bookmark-details-content">
+	<!-- Panel content -->
+	<form class="bookmark-details__panel-content">
 
 		<!-- (important) bookmark information -->
 		<fieldset class="form-fieldset">
 			<ul>
-				<li class="bookmark-details-section">
+				<li class="bookmark-details__panel-section">
 					<app-input-editable [name]="'bookmark-title'" [label]="'Title'" [type]="'text'" [placeholder]="'My bookmark'"
 						[value]="bookmark?.get( 'title' )" (update)="onUpdate( 'title', $event )">
 					</app-input-editable>
 				</li>
-				<li class="bookmark-details-section">
+				<li class="bookmark-details__panel-section">
 					<app-input-editable [name]="'bookmark-url'" [label]="'Url'" [type]="'url'" [placeholder]="'https://www.example.com'"
 						[value]="bookmark?.get( 'url' )" (update)="onUpdate( 'url', $event )">
 					</app-input-editable>
 				</li>
-				<li class="bookmark-details-section">
+				<li class="bookmark-details__panel-section">
 					<app-input-editable [name]="'bookmark-description'" [label]="'Description'" [type]="'text'" [placeholder]="'My bookmark description'"
 						[value]="bookmark?.get( 'description' )" (update)="onUpdate( 'description', $event )">
 					</app-input-editable>
@@ -41,13 +46,13 @@
 
 		<!-- Assigned labels -->
 		<fieldset class="form-fieldset">
-			<p class="bookmark-details-label-title">Labels</p>
-			<ul class="bookmark-details-section">
-				<li class="bookmark-details-label" *ngFor="let labelId of bookmark?.get( 'labels' )">
+			<p class="bookmark-details__panel-label-title">Labels</p>
+			<ul class="bookmark-details__panel-section">
+				<li class="bookmark-details__panel-label" *ngFor="let labelId of bookmark?.get( 'labels' )">
 					<app-label-simple [label]="allLabels?.get( labelId )" [isRemovable]="true" (remove)="unassignLabel( labelId )">
 					</app-label-simple>
 				</li>
-				<li class="bookmark-details-label-assign">
+				<li class="bookmark-details__panel-label-assign">
 					<app-assign-label
 						*ngIf="unassignedLabels.size > 0"
 						[labels]="unassignedLabels"
@@ -62,11 +67,11 @@
 		<!-- Additional information (mostly timestamps) -->
 		<fieldset class="form-fieldset">
 			<ul>
-				<li class="form-component bookmark-details-section">
+				<li class="form-component bookmark-details__panel-section">
 					<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
 					<label class="form-label" for="bookmark-created">Created on</label>
 				</li>
-				<li class="form-component bookmark-details-section">
+				<li class="form-component bookmark-details__panel-section">
 					<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
 					<label class="form-label" for="bookmark-updated">Last updated on</label>
 				</li>
@@ -75,4 +80,4 @@
 
 	</form>
 
-</div>
+</article>

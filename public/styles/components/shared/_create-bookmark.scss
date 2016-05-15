@@ -2,7 +2,7 @@
 
 .create-bookmark {
 	position: relative;
-	z-index: 2;
+	z-index: 2; // To overlap upcoming content
 }
 
 // Dropdown
@@ -12,7 +12,7 @@
 	top: 0;
 	right: 0;
 	width: 35rem; // Fixed width
-	transform-origin: 100% 0;
+	transform-origin: 100% 0; // Top right
 	transform: scale(.8);
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
@@ -49,14 +49,14 @@
 	opacity: 0;
 }
 
-.create-bookmark__dropdown-button {
+.create-bookmark__dropdown-trigger {
 	height: 3.3rem;
 	padding: .7rem 1.6rem .6rem 3.5rem;
 	color: $color-tundora;
 	font-weight: bold;
 	line-height: 2rem; // Same as icon height
 	letter-spacing: .01rem;
-	opacity: .8;
+	opacity: .75;
 	transition: background-color $anim-speed-normal $anim-easing,
 				opacity $anim-speed-normal $anim-easing;
 
@@ -66,11 +66,16 @@
 		opacity: 1;
 	}
 
-	.icon {
+	&:active {
+		transform: scale(.92);
+	}
+
+	> .icon {
 		position: absolute;
 		top: .7rem;
 		left: 1rem;
 	}
+
 }
 
 // Header
@@ -78,9 +83,8 @@
 .create-bookmark__dropdown-header {
 	display: flex;
 	width: 100%;
-	height: 4.1rem;
-	padding-top: .1rem;
-	padding-left: 1.2rem;
+	height: 4rem;
+	padding-left: 1.4rem;
 	border-bottom: .1rem solid $color-gallery;
 }
 
@@ -92,10 +96,10 @@
 	line-height: 4rem;
 }
 
-.create-bookmark__dropdown-header-button {
-	padding-right: 1rem;
-	padding-left: 1rem;
-	opacity: .4;
+.create-bookmark__dropdown-header-action {
+	padding-right: 1.2rem;
+	padding-left: 1.2rem;
+	opacity: .5;
 	transition: opacity $anim-speed-normal $anim-easing;
 
 	&:hover,
@@ -112,7 +116,7 @@
 // Content
 
 .create-bookmark__dropdown-main {
-	padding: 2.2rem 1.2rem 1.2rem;
+	padding: 2.2rem 1.4rem 1.2rem;
 }
 
 .create-bookmark__dropdown-main-section + .create-bookmark__dropdown-main-section {
@@ -124,7 +128,7 @@
 .create-bookmark__dropdown-footer {
 	width: 100%;
 	height: 5.1rem;
-	padding: 1rem 1.2rem;
+	padding: 1rem 1.4rem;
 	border-top: .1rem solid $color-gallery;
 }
 
@@ -135,6 +139,17 @@
 	padding-right: 1.6rem;
 	padding-left: 1.5rem;
 	font-size: 1.3rem;
+	opacity: 1;
+	transition: opacity $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:focus {
+		opacity: .8;
+	}
+
+	&:active {
+		transform: scale(.92);
+	}
 
 	&.does-create {
 		float: left;

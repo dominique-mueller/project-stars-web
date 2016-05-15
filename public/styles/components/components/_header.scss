@@ -14,11 +14,13 @@
 	line-height: 6.4rem;
 }
 
-.header-product {
-	width: 35rem; // Fixed
+// Content
+
+.header__product {
+	width: 35rem; // Fixed width
 }
 
-.header-product-logo { // TODO: TEMP ONLY
+.header__product-logo { // TODO: Switch to SVG logo
 	width: 3.2rem;
 	height: 3.2rem;
 	margin: 1.6rem 1.8rem 1.6rem 2.4rem;
@@ -27,21 +29,14 @@
 	background-color: $color-white;
 }
 
-.header-product-name {
+.header__product-name {
 	float: left;
 }
 
-.header-search {
+.header__search {
 	flex: 1;
 	width: 100%;
 	padding-top: .8rem;
 	padding-right: 1rem;
 	padding-bottom: .8rem;
-}
-
-.header-user {
-	display: block;
-	padding-right: 2.4rem;
-	padding-left: 2.4rem;
-	white-space: nowrap;
 }

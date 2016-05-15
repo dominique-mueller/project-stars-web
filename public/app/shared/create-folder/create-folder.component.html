@@ -1,5 +1,5 @@
 <!-- Triggering button -->
-<button class="button button-secondary create-bookmark__dropdown-button" type="button"
+<button class="button button-secondary create-bookmark__dropdown-trigger" type="button"
 	(click)="openDropdown( nameInput )" #trigger>
 	<app-icon name="add" size="20" color="#444"></app-icon>
 	Folder
@@ -8,14 +8,14 @@
 <!-- Dropdown menu -->
 <div class="create-bookmark__dropdown" [class.is-visible]="isOpen"
 	(clickOutside)="closeDropdownOnBlur( $event, trigger, nameInput )">
-	<div class="create-bookmark__dropdown-content">
+	<article class="create-bookmark__dropdown-content">
 
 		<!-- Dropdown header -->
 		<header class="create-bookmark__dropdown-header">
-			<p class="create-bookmark__dropdown-header-title">Create new folder</p>
-			<button class="button button-invisible create-bookmark__dropdown-header-button" type="button"
+			<h1 class="create-bookmark__dropdown-header-title">Create new folder</h1>
+			<button class="button create-bookmark__dropdown-header-action" type="button"
 				(click)="closeDropdown( nameInput )">
-				<app-icon name="close" size="16" color="#333"></app-icon>
+				<app-icon name="close" size="16" color="#444"></app-icon>
 			</button>
 		</header>
 
@@ -28,8 +28,9 @@
 			</li>
 		</ul>
 
+		<!-- Dropdown footer -->
 		<footer class="create-bookmark__dropdown-footer">
-			<button class="button button-primary create-bookmark__dropdown-footer-action does-create" type="button"
+			<button class="button button-success create-bookmark__dropdown-footer-action does-create" type="button"
 				(click)="onClickOnCreate( nameInput )">
 				Create
 			</button><button class="button button-secondary create-bookmark__dropdown-footer-action does-cancel" type="button"
@@ -38,5 +39,5 @@
 			</button>
 		</footer>
 
-	</div>
+	</article>
 </div>

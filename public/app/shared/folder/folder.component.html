@@ -1,9 +1,11 @@
-<a class="folder-link" (click)="onClickOnFolder( folder.get( 'id' ) )">
-	<app-icon class="folder-icon" name="folder" size="24" color="#606060"></app-icon>
-	<p class="folder-name">{{ folder.get( 'name' ) }}</p>
+<!-- Link -->
+<a class="folder__link" (click)="onClickOnFolder( folder.get( 'id' ) )">
+	<app-icon class="folder__favicon" name="folder" size="24" color="#606060"></app-icon>
+	<p class="folder__name">{{ folder.get( 'name' ) }}</p>
 </a>
 
-<button class="button button-invisible folder-button" type="button"
+<!-- Details button -->
+<button class="button folder__action" type="button"
 	(click)="onClickOnDetails( folder.get( 'id' ) )">
-	<app-icon name="info" size="20" color="#888"></app-icon>
+	<app-icon name="info" size="20" color="#606060"></app-icon>
 </button>

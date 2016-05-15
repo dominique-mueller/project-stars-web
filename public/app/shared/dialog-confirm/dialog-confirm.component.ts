@@ -85,6 +85,7 @@ export class DialogConfirmComponent {
 		this.noText = 'No';
 		this.message = '';
 		this.type = 'primary';
+		this.resolve = new Function();
 
 	}
 
@@ -93,15 +94,15 @@ export class DialogConfirmComponent {
 	 * @param  {any}              options Options object
 	 * @return {Promise<boolean>}         Promise, tells the result as a boolean value
 	 */
-	public requestConfirmation(options: any): Promise<boolean> {
+	public requestConfirmation( options: any ): Promise<boolean> {
 
 		// Setup content and open dialog
 		this.openDialog(options);
 
 		// Create and return the promise
-		return new Promise<boolean>((resolve: Function) => {
+		return new Promise<boolean>( ( resolve: Function ) => {
 			this.resolve = resolve;
-		});
+		} );
 
 	}
 

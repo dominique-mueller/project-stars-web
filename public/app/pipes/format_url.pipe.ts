@@ -28,7 +28,7 @@ export class FormatUrlPipe implements PipeTransform {
 
 		// Mark the protocol green when the website uses a secure https connection
 		if ( parser.protocol === 'https:' ) {
-			value = value.replace( 'https', '<em style="color: green;">https</em>' ); // TODO: Color
+			value = value.replace( 'https', '<em>https</em>' ); // TODO: Color
 		}
 
 		// Done

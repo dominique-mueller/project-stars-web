@@ -1,11 +1,7 @@
 // VIEW COMPONENT: LABEL LIST
 
-.label-list__list {
-	overflow-y: hidden; // Some weird bug makes the list too long
-}
-
 .label-list__divider {
-	margin-top: 1.8rem;
-	margin-bottom: 1.8rem;
+	margin-top: 1.7rem;
+	margin-bottom: 1.7rem;
 	border-bottom-color: $color-alto;
 }
