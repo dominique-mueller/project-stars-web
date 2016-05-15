@@ -1,0 +1,42 @@
+<!-- Triggering button -->
+<button class="button button-secondary create-bookmark__dropdown-button" type="button"
+	(click)="openDropdown( nameInput )" #trigger>
+	<app-icon name="add" size="20" color="#444"></app-icon>
+	Folder
+</button>
+
+<!-- Dropdown menu -->
+<div class="create-bookmark__dropdown" [class.is-visible]="isOpen"
+	(clickOutside)="closeDropdownOnBlur( $event, trigger, nameInput )">
+	<div class="create-bookmark__dropdown-content">
+
+		<!-- Dropdown header -->
+		<header class="create-bookmark__dropdown-header">
+			<p class="create-bookmark__dropdown-header-title">Create new folder</p>
+			<button class="button button-invisible create-bookmark__dropdown-header-button" type="button"
+				(click)="closeDropdown( nameInput )">
+				<app-icon name="close" size="16" color="#333"></app-icon>
+			</button>
+		</header>
+
+		<!-- Dropdown content -->
+		<ul class="create-bookmark__dropdown-main">
+			<li class="form-component create-bookmark__dropdown-main-section">
+				<input class="form-input" id="create-folder-title" type="text" placeholder="My folder"
+					[value]="template?.get( 'name' )" #nameInput>
+				<label class="form-label" for="create-folder-title">Name</label>
+			</li>
+		</ul>
+
+		<footer class="create-bookmark__dropdown-footer">
+			<button class="button button-primary create-bookmark__dropdown-footer-action does-create" type="button"
+				(click)="onClickOnCreate( nameInput )">
+				Create
+			</button><button class="button button-secondary create-bookmark__dropdown-footer-action does-cancel" type="button"
+				(click)="closeDropdown( nameInput )">
+				Cancel
+			</button>
+		</footer>
+
+	</div>
+</div>

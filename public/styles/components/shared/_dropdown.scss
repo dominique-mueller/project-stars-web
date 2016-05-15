@@ -54,6 +54,7 @@
 	background-color: $color-white;
 	color: $color-tundora;
 	line-height: 1;
+	box-shadow: 0 .1rem .3rem rgba($color-black, .2);
 	transform: translateY(-.8rem);
 	transition: opacity $anim-speed-normal $anim-easing,
 				transform $anim-speed-instant $anim-easing $anim-speed-normal,

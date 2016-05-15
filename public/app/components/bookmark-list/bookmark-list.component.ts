@@ -18,6 +18,8 @@ import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details
 import { FolderDetailsComponent } from './../folder-details/folder-details.component';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { FolderComponent } from './../../shared/folder/folder.component';
+import { CreateBookmarkComponent } from './../../shared/create-bookmark/create-bookmark.component';
+import { CreateFolderComponent } from './../../shared/create-folder/create-folder.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -29,6 +31,8 @@ import { IconComponent } from './../../shared/icon/icon.component';
 		ROUTER_DIRECTIVES,
 		BookmarkComponent,
 		FolderComponent,
+		CreateBookmarkComponent,
+		CreateFolderComponent,
 		IconComponent
 	],
 	host: {
@@ -118,6 +122,16 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private labels: Map<number, Label>;
 
 	/**
+	 * Bookmark template for a new bookmark
+	 */
+	private bookmarkTemplate: Bookmark;
+
+	/**
+	 * Folder template for a new folder
+	 */
+	private folderTemplate: Folder;
+
+	/**
 	 * ID of the currently opened folder
 	 */
 	private openedFolderId: number;
@@ -163,6 +177,8 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.bookmarks = List<Bookmark>();
 		this.folders = List<Folder>();
 		this.labels = Map<number, Label>();
+		this.bookmarkTemplate = <Bookmark> Map<string, any>();
+		this.folderTemplate = <Folder> Map<string, any>();
 		this.openedFolderId = null;
 		this.openedFolderName = '';
 		this.serviceSubscriptions = [];
@@ -253,6 +269,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 			}
 		);
 
+		// Set templates
+		this.bookmarkTemplate = this.bookmarkDataService.getBookmarkTemplate();
+		this.folderTemplate = this.folderDataService.getFolderTemplate();
+
 		// Save subscriptions
 		this.serviceSubscriptions = [
 			bookmarkDataServiceSubscription,
@@ -291,6 +311,36 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onClickOnDetails( elementType: string, elementId: number ): void {
 		this.router.navigate( [ elementType, elementId ], this.currentUrlSegment );
+	}
+
+	/**
+	 * Create new bookmark
+	 * @param {any} data Bookmark data
+	 */
+	private onCreateBookmark( data: any ): void {
+
+		// Add additional data to bookmark
+		data.path = this.openedFolderId;
+		data.position = this.bookmarks.size + 1;
+
+		// Save
+		this.bookmarkDataService.addBookmark( data );
+
+	}
+
+	/**
+	 * Create new folder
+	 * @param {any} data Folder data
+	 */
+	private onCreateFolder( data: any ): void {
+
+		// Add additional data to folder
+		data.path = this.openedFolderId;
+		data.position = this.folders.size + 1;
+
+		// Save
+		this.folderDataService.addFolder( data );
+
 	}
 
 }

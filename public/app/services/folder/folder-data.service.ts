@@ -6,7 +6,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
@@ -14,7 +14,12 @@ import { List } from 'immutable';
 import { BookmarkDataService } from './../bookmark';
 import { AppStore, AppService } from './../app';
 import { Folder } from './folder.model';
-import { LOAD_FOLDERS, UPDATE_FOLDER, DELETE_FOLDER } from './folder.store';
+import {
+	LOAD_FOLDERS,
+	ADD_FOLDER,
+	UPDATE_FOLDER,
+	DELETE_FOLDER
+} from './folder.store';
 
 /**
  * Folder data service
@@ -98,6 +103,27 @@ export class FolderDataService {
 	}
 
 	/**
+	 * Add a new folder
+	 * @param {any} data Data
+	 */
+	public addFolder( data: any ): void {
+
+		// TODO: API CALL, gets also created?
+		let apiCallResultId: number = 40;
+		data.id = apiCallResultId;
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				data: data,
+				id: apiCallResultId
+			},
+			type: ADD_FOLDER
+		} );
+
+	}
+
+	/**
 	 * Update one value of a folder
 	 * @param {number} folderId  Folder ID
 	 * @param {string} attribute Attribute
@@ -137,7 +163,7 @@ export class FolderDataService {
 	 * @param {number} folderId Folder ID
 	 * @param {any}    data     Data
 	 */
-	private updateFolder( folderId: number, data: any ): void {
+	public updateFolder( folderId: number, data: any ): void {
 
 		// TODO: API CALL
 
@@ -151,4 +177,16 @@ export class FolderDataService {
 		} );
 
 	}
+
+	/**
+	 * Get folder template (for creating a new folder)
+	 * @return {Folder} Folder template
+	 */
+	public getFolderTemplate(): Folder {
+		return <Folder> Map<string, any>( {
+			description: '',
+			name: 'Unnamed folder'
+		} );
+	}
+
 }

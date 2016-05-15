@@ -9,7 +9,7 @@
 	height: 6.4rem; // Fixed height
 	background-color: $color-primary;
 	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
-	z-index: 1; // For the overlapping box-shadow
+	z-index: 3; // For the overlapping box-shadow
 	color: $color-white;
 	line-height: 6.4rem;
 }

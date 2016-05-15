@@ -1,15 +1,21 @@
+<!-- Triggering button -->
 <button class="button button-invisible label-simple label-simple-name" type="button" (click)="openDropdown()" #trigger>
 	ADD LABEL
 </button>
 
+<!-- Dropdown menu -->
 <div class="assign-label-dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<div class="assign-label-content">
+
+		<!-- Dropdown header -->
 		<header class="assign-label-header">
 			<p class="assign-label-title">Assign new label</p>
 			<button class="button button-invisible assign-label-close" type="button" (click)="closeDropdown()">
 				<app-icon name="close" size="16" color="#333"></app-icon>
 			</button>
 		</header>
+
+		<!-- Dropdown content -->
 		<ul class="assign-label-list">
 			<li class="assign-label-item" *ngFor="let label of labels.toList()">
 				<button class="button button-invisible assign-label-button" type="button" (click)="onSelectLabel( label.get( 'id' ) )">
@@ -18,5 +24,6 @@
 				</button>
 			</li>
 		</ul>
+
 	</div>
 </div>

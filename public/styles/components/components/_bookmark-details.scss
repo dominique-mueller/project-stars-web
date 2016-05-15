@@ -4,6 +4,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 2;
 	height: 100%;
 	width: 100%;
 	background-color: $color-white;
@@ -25,6 +26,7 @@
 	position: fixed;
 	top: 6.4rem;
 	right: 0;
+	z-index: 2;
 	overflow-y: auto;
 	overflow-x: hidden;
 	height: calc(100% - 6.4rem);

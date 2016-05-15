@@ -6,7 +6,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
@@ -15,6 +15,7 @@ import { AppStore, AppService } from './../app';
 import { Bookmark } from './bookmark.model';
 import {
 	LOAD_BOOKMARKS,
+	ADD_BOOKMARK,
 	UPDATE_BOOKMARK,
 	UPDATE_BOOKMARKS_UNASSIGN_LABEL,
 	DELETE_BOOKMARK,
@@ -93,6 +94,27 @@ export class BookmarkDataService {
 			);
 
 			// TODO: Error handling
+
+	}
+
+	/**
+	 * Add a new bookmark
+	 * @param {any} data Data
+	 */
+	public addBookmark( data: any ): void {
+
+		// TODO: API CALL, gets also created?
+		let apiCallResultId: number = 30;
+		data.id = apiCallResultId;
+
+		// Dispatch action
+		this.store.dispatch( {
+			payload: {
+				data: data,
+				id: apiCallResultId
+			},
+			type: ADD_BOOKMARK
+		} );
 
 	}
 
@@ -191,7 +213,7 @@ export class BookmarkDataService {
 	 * @param {number} bookmarkId Bookmark ID
 	 * @param {any]    data       Data
 	 */
-	private updateBookmark( bookmarkId: number, data: any ): void {
+	public updateBookmark( bookmarkId: number, data: any ): void {
 
 		// TODO: API CALL
 
@@ -204,6 +226,21 @@ export class BookmarkDataService {
 			type: UPDATE_BOOKMARK
 		} );
 
+	}
+
+	/**
+	 * Get bookmark template (for creating a new bookmark)
+	 * @return {Bookmark} Bookmark template
+	 */
+	public getBookmarkTemplate(): Bookmark {
+		return <Bookmark> Map<string, any>( {
+			description: '',
+			labels: List<number>(),
+			path: null,
+			position: null,
+			title: 'Unnamed bookmark',
+			url: ''
+		} );
 	}
 
 }

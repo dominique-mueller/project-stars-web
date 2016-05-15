@@ -13,11 +13,11 @@ import { Bookmark } from './bookmark.model';
  * Action constants
  */
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
+export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
 export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
 export const UPDATE_BOOKMARKS_UNASSIGN_LABEL: string = 'UPDATE_BOOKMARKS_UNASSIGN_LABEL';
 export const DELETE_BOOKMARK: string = 'DELETE_BOOKMARK';
 export const DELETE_FOLDER_BOOKMARKS: string = 'DELETE_FOLDER_BOOKMARKS';
-// export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
 
 /**
  * Initial state of the bookmark data (empty per default)
@@ -43,6 +43,13 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 				} );
 
 			} );
+
+		// Add bookmark
+		case ADD_BOOKMARK:
+
+			// Push the bookmark to the list
+			return <List<Bookmark>> state
+				.push( fromJS( action.payload.data ) );
 
 		// Update bookmark
 		case UPDATE_BOOKMARK:

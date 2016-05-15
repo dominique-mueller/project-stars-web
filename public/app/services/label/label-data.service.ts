@@ -14,7 +14,12 @@ import { Map } from 'immutable';
 import { AppStore, AppService } from './../app';
 import { BookmarkDataService } from './../bookmark';
 import { Label } from './label.model';
-import { LOAD_LABELS, ADD_LABEL, UPDATE_LABEL, DELETE_LABEL } from './label.store';
+import {
+	LOAD_LABELS,
+	ADD_LABEL,
+	UPDATE_LABEL,
+	DELETE_LABEL
+} from './label.store';
 
 /**
  * Label data service
@@ -105,7 +110,7 @@ export class LabelDataService {
 
 		// TODO: API CALL
 		let apiCallResultId: number = 20;
-		data[ 'id' ] = apiCallResultId;
+		data.id = apiCallResultId;
 
 		// Dispatch action
 		this.store.dispatch( {

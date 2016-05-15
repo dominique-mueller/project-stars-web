@@ -4,15 +4,17 @@
 	<!-- Current folder name - TODO: Maybe the whole path? -->
 	<h2 class="bookmark-list__header-title">{{ openedFolderName }}</h2>
 
-	<!-- Actions: TODO - Click handler -->
-	<button class="button button-invisible bookmark-list__header-action" type="button">
-		<app-icon name="add" size="20" color="#444"></app-icon>
-		Folder
-	</button>
-	<button class="button button-invisible bookmark-list__header-action" type="button">
-		<app-icon name="add" size="20" color="#444"></app-icon>
-		Bookmark
-	</button>
+	<!-- Actions-->
+	<app-create-folder
+		class="bookmark-list__header-action"
+		[template]="folderTemplate"
+		(create)="onCreateFolder( $event )">
+	</app-create-folder>
+	<app-create-bookmark
+		class="bookmark-list__header-action"
+		[template]="bookmarkTemplate"
+		(create)="onCreateBookmark( $event )">
+	</app-create-bookmark>
 
 </header>
 

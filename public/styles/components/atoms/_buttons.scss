@@ -7,12 +7,26 @@
 	color: inherit;
 	box-shadow: none;
 	cursor: pointer;
-}
-
-.button-invisible {
 
 	&:focus {
 		outline: none;
 	}
 
+}
+
+// Styles
+
+.button-invisible {
+}
+
+.button-primary {
+	background-color: $color-primary;
+	color: $color-white;
+	border-radius: .1rem;
+}
+
+.button-secondary {
+	background-color: $color-gallery;
+	color: $color-gray;
+	border-radius: .1rem;
 }

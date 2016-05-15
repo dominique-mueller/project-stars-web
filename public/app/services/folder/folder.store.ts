@@ -13,9 +13,9 @@ import { Folder } from './folder.model';
  * Action constants
  */
 export const LOAD_FOLDERS: string = 'LOAD_FOLDERS';
+export const ADD_FOLDER: string = 'ADD_FOLDER';
 export const UPDATE_FOLDER: string = 'UPDATE_FOLDER';
 export const DELETE_FOLDER: string = 'DELETE_FOLDER';
-// export const ADD_FOLDER: string = 'ADD_FOLDER';
 
 /**
  * Initial state of the folder data (empty per default)
@@ -41,6 +41,13 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 				} );
 
 			} );
+
+		// Add folder
+		case ADD_FOLDER:
+
+			// Push the folder to the list
+			return <List<Folder>> state
+				.push( fromJS( action.payload.data ) );
 
 		// Update folder
 		case UPDATE_FOLDER:
