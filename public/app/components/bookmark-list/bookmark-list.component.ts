@@ -238,6 +238,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 				if ( openedFolder !== null ) {
 					this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
 					this.openedFolderName = openedFolder.get( 'name' );
+					this.uiService.setDocumentTitle( this.openedFolderName );
 					this.changeDetector.markForCheck(); // Trigger change detection
 				} else {
 					this.navigateToFolder( 0 );
@@ -286,6 +287,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 			subscription.unsubscribe();
 		} );
 
+	}
+
+	public OnActivate(): void {
+		console.log('#######');
 	}
 
 	/**

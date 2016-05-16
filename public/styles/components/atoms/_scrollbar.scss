@@ -1,0 +1,26 @@
+// ATOMIC COMPONENT: CUSTOM SCROLLBAR
+
+.scrollbar-small {
+
+	::-webkit-scrollbar {
+		width: .8rem;
+	}
+
+	::-webkit-scrollbar-track {
+		background-color: $color-gallery;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: lighten( $color-gray, 10% );
+
+		&:hover {
+			background-color: $color-gray;
+		}
+
+		&:active {
+			background-color: darken( $color-gray, 15% );
+		}
+
+	}
+
+}

@@ -25,12 +25,12 @@
 
 // LAYER 05: OBJECTS (empty for now)
 
-// LAYER 06: COMPONENTS
-@import "components/search"; // TODO: Throw into some category
+// LAYER 06: COMPONENTS (with subsections)
 
 // LAYER 06: ATOMIC COMPONENTS
 @import "components/atoms/buttons";
 @import "components/atoms/forms";
+@import "components/atoms/scrollbar";
 
 // LAYER 06: SHARED COMPONENTS
 @import "components/shared/assign-label";

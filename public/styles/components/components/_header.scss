@@ -14,7 +14,7 @@
 	line-height: 6.4rem;
 }
 
-// Content
+// Content: Product
 
 .header__product {
 	width: 35rem; // Fixed width
@@ -33,10 +33,74 @@
 	float: left;
 }
 
+// Content: Search
+
 .header__search {
+	position: relative;
 	flex: 1;
 	width: 100%;
 	padding-top: .8rem;
 	padding-right: 1rem;
 	padding-bottom: .8rem;
+	line-height: 4.8rem;
+}
+
+.header__search-input {
+	width: 100%;
+	padding: .1rem 7rem 0;
+	transition: background-color $anim-speed-fast $anim-easing;
+	border: none;
+	border-radius: .1rem;
+	background-color: rgba($color-white, .12);
+	color: $color-white;
+	line-height: 4.7rem;
+
+	&::-webkit-input-placeholder {
+		transition: opacity $anim-speed-fast $anim-easing;
+		color: $color-white;
+		opacity: .75;
+	}
+
+	&:focus {
+		background-color: rgba($color-white, .2);
+
+		&::-webkit-input-placeholder {
+			opacity: .3;
+		}
+
+		+ .header__search-icon {
+			opacity: 1;
+		}
+
+	}
+
+}
+
+.header__search-icon {
+	position: absolute;
+	top: 2.1rem;
+	left: 2.8rem;
+	opacity: .75;
+	transition: opacity $anim-speed-fast $anim-easing;
+}
+
+.header__search-action {
+	position: absolute;
+	top: .8rem;
+	right: 1rem;
+	height: 4.8rem;
+	width: 6.4rem;
+	padding: 1.5rem 2.2rem 1.3rem;
+	opacity: .5;
+	transition: opacity $anim-speed-fast $anim-easing;
+
+	&:hover,
+	&:focus {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.92);
+	}
+
 }

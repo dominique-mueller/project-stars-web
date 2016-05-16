@@ -143,6 +143,8 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
+		this.uiService.setDocumentTitle( 'Search' );
+
 		// Get folders from its service
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {

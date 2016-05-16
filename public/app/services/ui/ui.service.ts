@@ -2,6 +2,7 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Map } from 'immutable';
@@ -9,7 +10,7 @@ import { Map } from 'immutable';
 /**
  * Internal imports
  */
-import { AppStore } from './../app';
+import { AppStore, AppService } from './../app';
 import {
 	SET_OPENED_FOLDER_ID,
 	SET_SELECTED_ELEMENT,
@@ -35,12 +36,28 @@ export class UiService {
 	private store: Store<AppStore>;
 
 	/**
+	 * Title service
+	 */
+	private titleService: Title;
+
+	/**
+	 * App service
+	 */
+	private appService: AppService;
+
+	/**
 	 * Constructor
 	 */
-	constructor( store: Store<AppStore> ) {
+	constructor(
+		store: Store<AppStore>,
+		titleService: Title,
+		appService: AppService
+	) {
 
-		// Initialize services
+		// Initialize
 		this.store = store;
+		this.titleService = titleService;
+		this.appService = appService;
 
 		// Setup
 		this.uiState = this.store.select( 'ui' );
@@ -101,6 +118,15 @@ export class UiService {
 		this.store.dispatch( {
 			type: RESET_SEARCH
 		} );
+	}
+
+	/**
+	 * Set document title
+	 * This will be visible in the browser tab / window, as well as in the history stack and bookmarks
+	 * @param {string} title Document title
+	 */
+	public setDocumentTitle( title: string ): void {
+		this.titleService.setTitle( `${ title } ‒ ${ this.appService.APP_NAME }` );
 	}
 
 }

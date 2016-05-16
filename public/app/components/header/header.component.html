@@ -7,10 +7,10 @@
 	</a>
 
 	<!-- Search -->
-	<form class="header__search search" [ngFormModel]="searchForm">
-		<input class="search-input" type="search" placeholder="Search ..." [ngFormControl]="searchForm.controls[ 'text' ]">
-		<app-icon class="search-icon" name="search" color="#FFF" size="24"></app-icon>
-		<button class="button search-button-clear" type="button" (click)="onResetSearch()">
+	<form class="header__search" [ngFormModel]="searchForm">
+		<input class="header__search-input" type="search" placeholder="Search ..." [ngFormControl]="searchForm.controls[ 'text' ]">
+		<app-icon class="header__search-icon" name="search" color="#FFF" size="24"></app-icon>
+		<button class="button header__search-action" type="button" (click)="onResetSearch()">
 			<app-icon name="close" color="#FFF" size="20"></app-icon>
 		</button>
 	</form>
