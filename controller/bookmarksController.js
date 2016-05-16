@@ -61,7 +61,7 @@ var BookmarksController = function(req, res, authentication){
 	}
 
 	this.put = function(){
-		logger.debug('Bookmark Put');
+		logger.debug('controller put');
 		var bookmarkUpdatePromise = Bookmark.update(self.req.params.bookmark_id, self.data);
 		bookmarkUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();

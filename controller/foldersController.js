@@ -13,7 +13,53 @@ var FoldersController = function(req, res, authentication){
 
 	//#### PRIVATE FUNCTIONS ####
 
+	function deleteSubFolders(pathId){
+		return new Promise(function(resolve, reject){
+			var findSubFolderPromise = Folder.findAll(pathId);
+			findSubFolderPromise.then(function(folders){
+				var deletePromises = new Array();
+				for(var i = 0; i < folders.length; i++){
+					logger.debug('Delete Subfolder with the Id:' + folders[i]._id);
+					deletePromises.push(self.recursiveDelete(folders[i]._id));
+				}
+				Promise.all(deletePromises).then(function(){
+					resolve();
+				})
+				.catch(reject);
+			})
+			.catch(reject);
+		});	
+	}
 
+	function deleteSubBookmarks(pathId){
+		return new Promise(function(ersolve, reject){
+			var findSubBookmarksPromise = require('../modules/bookmark/bookmarks.model.js').findAll(pathId);
+			findSubBookmarksPromise.then(function(bookmarks){
+				var deletePromises = new Array();
+				for(var i = 0; i < bookmarks.length; i++){
+					logger.debug('Delete Subbookmark with the Id:' + bookmarks[i]._id);
+					deletePromises.push(require('../modules/bookmark/bookmarks.model.js').delete(bookmarks[i]._id));
+				}
+				Promise.all(deletePromises).then(function(){
+					resolve();
+				})
+				.catch(reject);
+			})
+			.catch(reject);
+		});
+	}
+
+	function recursiveDelete(folderId){
+		var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
+		var deleteSubFolderPromise = deleteSubFolders(folderId);
+		var deleteSubBookmarksPromise = deleteSubBookmarks(folderId);
+		return new Promise(function(resolve, reject){
+			Promise.all([deleteFolderPromise, deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
+				resolve();
+			})
+			.catch(reject);
+		});
+	}
 
 	//#### PUBLIC FUNCTIONS ####
 	
@@ -63,19 +109,16 @@ var FoldersController = function(req, res, authentication){
 		});
 	};
 
-	this.delete = function(){
+	this.delete = function(folderId){
 		var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
-		//TODO: delete all sub elements
-			//find all with path id from this folder
-			//iter over search result
-				//if bookmark -> delete
-				//if folder -> recall this function with subfolder id and delete folder
-		deleteFolderPromise.then(function(){
+		var deleteSubFolderPromise = deleteSubFolders(self.req.params.folder_id);
+		var deleteSubBookmarksPromise = deleteSubBookmarks(self.req.params.folder_id);
+		Promise.all([deleteFolderPromise, deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
 		.catch(function(err){
-			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-		});
+			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});	
+		});	
 	};
 
 

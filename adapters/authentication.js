@@ -92,13 +92,6 @@ function Authentication(token){
 			return {token: "DUMMY ACTIVATION TOKEN", tempPassword:"ZERO"};
 		}
 	}
-
-	
-
-	// // function will compare the two input parameters whether they are equal or not. 
-	// // @param: takes to parameters. both parameters are the password the proceed. 
-	// // @return: returns a promise. the resolve's param is a hashed password with a salt in form algorithm$salt$hash. 
-	// // 		if params are not equal, the promise will reject with the Error message 'passwords are not equal'
 	
 	/*
 	@return: hashed password (input param) in form: algorithm$salt$hash

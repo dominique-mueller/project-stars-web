@@ -27,6 +27,13 @@ var UsersController = function(req, res, authentication){
 
 	}
 
+	/*
+	create users sets all keys of an user object which are the same for both returned functions
+	@return: returns an Object containing two functions. The function register and asAdmin
+		register: is used, with the api 'users/register' 
+		asAdmin: used in case an user account is created by an admin
+		Both functions have a slightly different implementation 
+	*/
 	function createUser(newUserData){
 		var mongooseUserObject = {
 			firstName: newUserData.firstName, 

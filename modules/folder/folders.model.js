@@ -5,7 +5,6 @@ var logger = require('../../adapters/logger.js');
 
 
 var FoldersModel = function(caller, userId){
-	logger.debug('FOLDER MODEL');
 
 	var self; //@see: adapters/authentication.js 
 	this.userId;
@@ -74,9 +73,7 @@ var FoldersModel = function(caller, userId){
 				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
 				//Something did not went well, but it could have been also the work of another bug so maybe we should try it again
 				// var saveFolderPromise = saveFolderAndReturnPromise(folder);
-				var createFolderPromise = new Promise(function(resolve, reject){
-					Folder.create(folder);
-				});
+				var createFolderPromise = Folder.create(folder);
 				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(){
 					callback(null);
@@ -147,7 +144,8 @@ var FoldersModel = function(caller, userId){
 	@return: returns a promise 
 	*/
 	this.changeNumberOfContainedElements = function(path, changeBy){
-			// logger.debug('START: changeNumberOfContainedElements ');
+		// logger.debug('START: changeNumberOfContainedElements ');
+		logger.debug('folder model changeNumberOfContainedElements');
 		return new Promise(function(resolve, reject){
 			Folder.findById(path, function(err, folder){
 				// logger.debug('changeNumberOfContainedElements folder: ' + folder.name);
@@ -171,27 +169,27 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 
+	//The startPosition won't be affected, 
+	// so if you plan to shift folders to get an empty position you have set the startPosition to <planedFreePosition> - 1 
 	this.shiftFoldersPosition = function(path, startPosition, shift){
-		// logger.debug('shiftFoldersPosition');
+		logger.debug('folder model shiftFoldersPosition');
 		return new Promise(function(resolve, reject){
 			var allFolderPromise = self.findAll(path);
 			allFolderPromise.then(function(folderArray){
 				// logger.debug('shiftFolders');
 				folderArray = sortFoldersAfterPositionASC(folderArray);
-				// logger.debug('shift folders sorted: ' + folderArray);
-				logger.debug('FolderArray.length: ' + folderArray.length);
-				logger.debug('startPosition: ' + startPosition);
 				var savePromiseArray = new Array();
 				for(var i = 0; i < folderArray.length; i++){
-					logger.debug('FolderName: ' + folderArray[i].name);
+					//logger.debug('FolderName: ' + folderArray[i].name);
 					if(folderArray[i].position > startPosition){
-						logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
+						// logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
 						folderArray[i].position = folderArray[i].position + shift;
 						savePromiseArray.push(saveFolderAndReturnPromise(folderArray[i]));
 					}
 				}
 				Promise.all(savePromiseArray).then(function(){
-					logger.debug('save all promise fullfiled');
+					logger.debug('shifted folder');
+					// logger.debug('save all promise fullfiled');
 					resolve();
 				})
 				.catch(reject);
@@ -280,14 +278,13 @@ var FoldersModel = function(caller, userId){
 		return new Promise(function(resolve, reject){
 			var folderPromise = self.findOne(folderId);
 			folderPromise.then(function(folder){
-				logger.debug('folderPromise');
+				// logger.debug('folderPromise');
 				if(folder.name !== '.'){
-					logger.debug('non root folder');
+					// logger.debug('non root folder');
 					var updateAffectedElementsPromise = updateAffectedElements(folder);
 					updateAffectedElementsPromise.then(function(){
 						logger.debug('updateAffectedElementsPromise fullfiled');
 						Folder.findByIdAndRemove(folderId, function(err){
-						//TODO Rekrusives löschen der Unterordner
 							if(err){
 								reject(err);
 							}

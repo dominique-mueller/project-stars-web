@@ -170,7 +170,7 @@ routerBackend.route('/bookmarks/:bookmark_id')
 	});
 routerBackend.route('/bookmarks/folders')
 	.get(function(req, res){
-
+		res.end();
 	});
 // routerBackend.route('bookmarks/user/:user_id')
 // 	.get(function(req, res){
