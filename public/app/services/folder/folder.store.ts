@@ -75,7 +75,7 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 				.filterNot( ( folder: Folder ) => {
 					if ( folder.get( 'id' ) === action.payload.id ) {
 						removedPosition = folder.get( 'position' );
-						folderPathId = folder.get('path');
+						folderPathId = folder.get( 'path' );
 					}
 					return action.payload.subfolderIds.indexOf( folder.get( 'id' ) ) > -1;
 

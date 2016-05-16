@@ -94,10 +94,8 @@ export class LabelListComponent implements OnInit, OnDestroy {
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: Map<number, Label> ) => {
-				if ( labels.size > 0 ) {
-					this.labels = labels;
-					this.changeDetector.markForCheck(); // Trigger change detection
-				}
+				this.labels = labels;
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 

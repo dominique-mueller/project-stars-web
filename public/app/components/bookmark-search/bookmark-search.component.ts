@@ -146,30 +146,24 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 		// Get folders from its service
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				if ( folders.size > 0 ) {
-					this.folders = folders;
-					this.changeDetector.markForCheck(); // Trigger change detection
-				}
+				this.folders = folders;
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
 		// Get bookmarks from its service
 		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
-				if ( bookmarks.size > 0 ) {
-					this.bookmarks = bookmarks;
-					this.changeDetector.markForCheck(); // Trigger change detection
-				}
+				this.bookmarks = bookmarks;
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: Map<number, Label> ) => {
-				if ( labels.size > 0 ) {
-					this.labels = labels;
-					this.changeDetector.markForCheck(); // Trigger change detection
-				}
+				this.labels = labels;
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 

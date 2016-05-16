@@ -194,6 +194,10 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onClose(): void {
 
+		// Remove especially the bookmark data service subscription
+		// Otherwise the current bookmark will be deleted and later on (after the timeout) we cannot get the path
+		this.ngOnDestroy();
+
 		// Update UI state
 		// This should notify other components, like the bookmark list one
 		this.uiService.unsetSelectedElement();
@@ -228,6 +232,8 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.dialogConfirmService.requestConfirmation( confirmationOptions )
 			.then( ( answer: boolean ) => {
 				if ( answer ) {
+
+					this.onClose();
 
 					// Get all subfolders of the folder we want to delete
 					let foldersToDelete: Array<number> =

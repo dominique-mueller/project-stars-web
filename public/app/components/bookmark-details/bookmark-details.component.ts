@@ -165,45 +165,41 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		// Get bookmarks from its service, then find the right one
 		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
-				if ( bookmarks.size > 0 ) {
 
-					// Try to find the correct bookmark
-					this.bookmark = this.bookmarkLogicService.getBookmarkByBookmarkId( bookmarks, this.bookmarkId );
+				// Try to find the correct bookmark
+				this.bookmark = this.bookmarkLogicService.getBookmarkByBookmarkId( bookmarks, this.bookmarkId );
 
-					// Navigate back if the bookmark doesn't exist
-					if ( this.bookmark === null ) {
-						this.onClose();
-					} else {
+				// Navigate back if the bookmark doesn't exist
+				if ( this.bookmark === null ) {
+					this.onClose();
+				} else {
 
-						// Update UI state
-						// This should notify other components, like the bookmark list one
-						this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
+					// Update UI state
+					// This should notify other components, like the bookmark list one
+					this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
 
-						// Calculate unassigned labels
-						if ( this.allLabels.size > 0 ) {
-							this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
-						}
-						this.changeDetector.markForCheck(); // Trigger change detection
-
+					// Calculate unassigned labels
+					if ( this.allLabels.size > 0 ) {
+						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
 					}
+					this.changeDetector.markForCheck(); // Trigger change detection
 
 				}
+
 			}
 		);
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: any ) => {
-				if ( labels.size > 0 ) {
 
-					this.allLabels = labels;
+				this.allLabels = labels;
 
-					// Calculate unassigned labels
-					if ( this.bookmark !== null ) {
-						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
-					}
-					this.changeDetector.markForCheck(); // Trigger change detection
+				// Calculate unassigned labels
+				if ( this.bookmark !== null ) {
+					this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
 				}
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
@@ -241,6 +237,10 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onClose(): void {
 
+		// Remove especially the bookmark data service subscription
+		// Otherwise the current bookmark will be deleted and later on (after the timeout) we cannot get the path
+		this.ngOnDestroy();
+
 		// Update UI state
 		// This should notify other components, like the bookmark list one
 		this.uiService.unsetSelectedElement();
@@ -274,8 +274,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.dialogConfirmService.requestConfirmation( confirmationOptions )
 			.then( ( answer: boolean ) => {
 				if ( answer ) {
-					this.bookmarkDataService.deleteBookmark( this.bookmarkId );
 					this.onClose();
+					this.bookmarkDataService.deleteBookmark( this.bookmarkId );
 				}
 			} );
 

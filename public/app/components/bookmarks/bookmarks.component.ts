@@ -159,9 +159,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		// Get folders from their services
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				if ( folders.size > 0 ) {
-					this.folders = folders;
-				}
+				this.folders = folders;
 			}
 		);
 

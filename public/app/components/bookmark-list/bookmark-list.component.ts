@@ -232,39 +232,33 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		// Get folders from its service
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				if ( folders.size > 0 ) {
 
-					// Check if the currently opened folder ID even exists, else navigate back to root
-					let openedFolder: Folder = this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId );
-					if ( openedFolder !== null ) {
-						this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
-						this.openedFolderName = openedFolder.get( 'name' );
-						this.changeDetector.markForCheck(); // Trigger change detection
-					} else {
-						this.navigateToFolder( 0 );
-					}
-
+				// Check if the currently opened folder ID even exists, else navigate back to root
+				let openedFolder: Folder = this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId );
+				if ( openedFolder !== null ) {
+					this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
+					this.openedFolderName = openedFolder.get( 'name' );
+					this.changeDetector.markForCheck(); // Trigger change detection
+				} else {
+					this.navigateToFolder( 0 );
 				}
+
 			}
 		);
 
 		// Get bookmarks from its service
 		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
-				if ( bookmarks.size > 0 ) {
-					this.bookmarks = this.bookmarkLogicService.getBookmarksByFolderId( bookmarks, this.openedFolderId );
-					this.changeDetector.markForCheck(); // Trigger change detection
-				}
+				this.bookmarks = this.bookmarkLogicService.getBookmarksByFolderId( bookmarks, this.openedFolderId );
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: Map<number, Label> ) => {
-				if ( labels.size > 0 ) {
-					this.labels = labels;
-					this.changeDetector.markForCheck(); // Trigger change detection
-				}
+				this.labels = labels;
+				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
