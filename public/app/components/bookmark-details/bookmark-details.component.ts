@@ -133,7 +133,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		// Setup
 		this.serviceSubscriptions = [];
 		this.bookmarkId = null;
-		this.bookmark = null;
+		this.bookmark = <Bookmark> Map<string, any>();
 		this.allLabels = Map<number, Label>();
 		this.unassignedLabels = Map<number, Label>();
 		this.isVisible = false;
@@ -165,25 +165,27 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		// Get bookmarks from its service, then find the right one
 		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
+				if ( bookmarks.size > 0 ) {
 
-				// Try to find the correct bookmark
-				this.bookmark = this.bookmarkLogicService.getBookmarkByBookmarkId( bookmarks, this.bookmarkId );
+					// Try to find the correct bookmark
+					this.bookmark = this.bookmarkLogicService.getBookmarkByBookmarkId( bookmarks, this.bookmarkId );
 
-				// Navigate back if the bookmark doesn't exist
-				if ( this.bookmark === null ) {
-					this.onClose();
-				} else {
+					// Navigate back if the bookmark doesn't exist
+					if ( this.bookmark === null ) {
+						this.onClose();
+					} else {
 
-					// Update UI state
-					// This should notify other components, like the bookmark list one
-					this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
+						// Update UI state
+						// This should notify other components, like the bookmark list one
+						this.uiService.setSelectedElement( 'bookmark', this.bookmarkId );
 
-					// Calculate unassigned labels
-					if ( this.allLabels.size > 0 ) {
-						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
+						// Calculate unassigned labels
+						if ( this.allLabels.size > 0 ) {
+							this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
+						}
+						this.changeDetector.markForCheck(); // Trigger change detection
+
 					}
-					this.changeDetector.markForCheck(); // Trigger change detection
-
 				}
 
 			}
@@ -246,10 +248,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Animate out, navigate when animation is done
+		const folderId: number = ( this.bookmark !== null && this.bookmark.size > 0 ) ? this.bookmark.get( 'path' ) : 0;
 		this.isVisible = false;
 		setTimeout(
 			() => {
-				this.router.navigate( [ 'bookmarks', 'view', this.bookmark.get( 'path' ) ] ); // Absolute
+				this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 			},
 			275 // Needs 250, plus some (maybe unnecessary) extra time
 		);

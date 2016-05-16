@@ -203,10 +203,11 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Animate out, navigate when animation is done
+		const folderId: number = ( this.folder !== null && this.folder.size > 0 ) ? this.folder.get( 'path' ) : 0;
 		this.isVisible = false;
 		setTimeout(
 			() => {
-				this.router.navigate( [ 'bookmarks', 'view', this.folder.get( 'path' ) ] ); // Absolute
+				this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 			},
 			275 // Needs 250, plus some (maybe unnecessary) extra time
 		);

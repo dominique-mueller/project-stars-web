@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 		// Setup
 		this.changeSearch = new EventEmitter();
-		this.isChangeSearchDisabled = false;
+		this.isChangeSearchDisabled = true; // Also skip the first initial one
 		this.app = appService.APP_NAME;
 		this.searchForm = formBuilder.group( {
 			text: ''

@@ -232,18 +232,20 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		// Get folders from its service
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
+				if ( folders.size > 0 ) {
 
-				// Check if the currently opened folder ID even exists, else navigate back to root
-				let openedFolder: Folder = this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId );
-				if ( openedFolder !== null ) {
-					this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
-					this.openedFolderName = openedFolder.get( 'name' );
-					this.uiService.setDocumentTitle( this.openedFolderName );
-					this.changeDetector.markForCheck(); // Trigger change detection
-				} else {
-					this.navigateToFolder( 0 );
+					// Check if the currently opened folder ID even exists, else navigate back to root
+					let openedFolder: Folder = this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId );
+					if ( openedFolder !== null ) {
+						this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
+						this.openedFolderName = openedFolder.get( 'name' );
+						this.uiService.setDocumentTitle( this.openedFolderName );
+						this.changeDetector.markForCheck(); // Trigger change detection
+					} else {
+						this.navigateToFolder( 0 );
+					}
+
 				}
-
 			}
 		);
 
