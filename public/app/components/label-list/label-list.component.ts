@@ -142,7 +142,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	 * @param {any}    data    Data object
 	 */
 	private onLabelUpdate( labelId: number, data: any ): void {
-		this.labelDataService.updateLabel( labelId, data) ;
+		this.labelDataService.updateLabel( labelId, data );
 	}
 
 	/**

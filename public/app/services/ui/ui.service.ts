@@ -10,7 +10,13 @@ import { Map } from 'immutable';
  * Internal imports
  */
 import { AppStore } from './../app';
-import { SET_OPENED_FOLDER_ID, SET_SELECTED_ELEMENT, UNSET_SELECTED_ELEMENT } from './ui.store';
+import {
+	SET_OPENED_FOLDER_ID,
+	SET_SELECTED_ELEMENT,
+	UNSET_SELECTED_ELEMENT,
+	SET_SEARCH,
+	RESET_SEARCH
+} from './ui.store';
 
 /**
  * Navigation service
@@ -73,6 +79,27 @@ export class UiService {
 	public unsetSelectedElement(): void {
 		this.store.dispatch( {
 			type: UNSET_SELECTED_ELEMENT
+		} );
+	}
+
+	/**
+	 * Set search
+	 */
+	public setSearch( text: string ): void {
+		this.store.dispatch( {
+			payload: {
+				text: text
+			},
+			type: SET_SEARCH
+		} );
+	}
+
+	/**
+	 * Reset search
+	 */
+	public resetSearch(): void {
+		this.store.dispatch( {
+			type: RESET_SEARCH
 		} );
 	}
 

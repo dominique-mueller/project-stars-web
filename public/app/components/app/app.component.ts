@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes, Route } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { provideStore } from '@ngrx/store';
@@ -50,27 +50,4 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 	} )
 	// TODO: Settings Route, Login Route, ...
 ] )
-export class AppComponent implements OnInit, OnDestroy {
-
-	/**
-	 * Constructor
-	 */
-	constructor() {
-
-	}
-
-	/**
-	 * Call this when the view gets initialized
-	 */
-	public ngOnInit(): void {
-
-	}
-
-	/**
-	 * Call this when the view gets destroyed
-	 */
-	public ngOnDestroy(): void {
-
-	}
-
-}
+export class AppComponent {}

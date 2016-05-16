@@ -1,8 +1,8 @@
 /**
  * External imports
  */
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router, OnActivate } from '@angular/router';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
@@ -17,6 +17,7 @@ import { LabelDataService } from './../../services/label';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
+import { BookmarkSearchComponent } from './../bookmark-search/bookmark-search.component';
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
 import { LabelListComponent } from './../label-list/label-list.component';
 
@@ -30,6 +31,7 @@ import { LabelListComponent } from './../label-list/label-list.component';
 		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
+		BookmarkSearchComponent,
 		BookmarkDirectoryComponent,
 		LabelListComponent
 	],
@@ -50,24 +52,18 @@ import { LabelListComponent } from './../label-list/label-list.component';
 	new Route( {
 		component: BookmarkListComponent,
 		path: '/view/:id'
+	} ),
+	new Route( {
+		component: BookmarkSearchComponent,
+		path: '/search'
 	} )
 ] )
-export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
+export class BookmarksComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Router
 	 */
 	private router: Router;
-
-	/**
-	 * Current URL segment
-	 */
-	private currentUrlSegment: RouteSegment;
-
-	/**
-	 * Change detector
-	 */
-	private changeDetector: ChangeDetectorRef;
 
 	/**
 	 * UI service
@@ -119,7 +115,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	constructor(
 		router: Router,
-		changeDetector: ChangeDetectorRef,
 		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
 		folderDataService: FolderDataService,
@@ -129,7 +124,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Initialize
 		this.router = router;
-		this.changeDetector = changeDetector;
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.folderDataService = folderDataService;
@@ -141,17 +135,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.openedFolderId = null;
 		this.openedFolderName = '';
 		this.openedTab = 0;
-
-	}
-
-	/**
-	 * Call this when the router gets activated
-	 * This function only handles stuff that has to do with routing
-	 */
-	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
-
-		// Save current URL segment, needed for relative navigation later on
-		this.currentUrlSegment = curr;
 
 	}
 
@@ -168,7 +151,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
-					this.changeDetector.detectChanges(); // Detect changes
 				}
 
 			}
@@ -179,7 +161,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 			( folders: List<Folder> ) => {
 				if ( folders.size > 0 ) {
 					this.folders = folders;
-					this.changeDetector.markForCheck(); // Mark for change detection
 				}
 			}
 		);
@@ -221,7 +202,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Navigate to folder (relative)
-		this.router.navigate( [ 'view', folderId ], this.currentUrlSegment );
+		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 
 	}
 
@@ -231,6 +212,21 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onClickOnTab( tabId: number ): void {
 		this.openedTab = tabId;
+	}
+
+	/**
+	 * Navigate to the view or the search route when the saerch parameters change
+	 * @param {any} searchParameters Search parameters object (already optimized)
+	 */
+	private onChangeSearch( searchParameters: any ): void {
+
+		// Check if the search text is empty or not
+		if ( searchParameters.text === '' ) {
+			this.router.navigate( [ 'bookmarks', 'view', this.openedFolderId ] ); // Absolute, recently opened folder
+		} else {
+			this.router.navigate( [ 'bookmarks', 'search', searchParameters ] ); // Absolute, matrix search parameters
+		}
+
 	}
 
 }

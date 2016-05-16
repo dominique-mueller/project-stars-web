@@ -62,11 +62,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private router: Router;
 
 	/**
-	 * Current URL segment
-	 */
-	private currentUrlSegment: RouteSegment;
-
-	/**
 	 * Change detector
 	 */
 	private changeDetector: ChangeDetectorRef;
@@ -195,8 +190,9 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
-		// Save current URL segment, needed for relative navigation later on
-		this.currentUrlSegment = curr;
+		// No matter what happens, reset search parameters when entering this route
+		// This is much easier to do here because now it's in one place
+		this.uiService.resetSearch();
 
 		// Get folder ID from the route URL
 		// Pre-filter: If the ID is not a number, we navigate back to the root folder
@@ -228,7 +224,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 					|| uiState.getIn( [ 'selectedElement', 'type' ] ) !== this.selectedElement.type ) {
 					this.selectedElement.id = uiState.getIn( [ 'selectedElement', 'id' ] );
 					this.selectedElement.type = uiState.getIn( [ 'selectedElement', 'type' ] );
-					this.changeDetector.markForCheck(); // Trigger change detection
 				}
 
 			}
@@ -266,8 +261,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
 			( labels: Map<number, Label> ) => {
-				this.labels = labels;
-				this.changeDetector.markForCheck(); // Trigger change detection
+				if ( labels.size > 0 ) {
+					this.labels = labels;
+					this.changeDetector.markForCheck(); // Trigger change detection
+				}
 			}
 		);
 
@@ -302,8 +299,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {number} folderId Name of the subfolder
 	 */
 	private navigateToFolder( folderId: number ): void {
-		// this.router.navigate( [ `../${ folderId }` ], this.currentUrlSegment ); // TODO: Sometimes an error gets thrown
-		this.router.navigateByUrl( `/bookmarks/view/${ folderId }` );
+		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 	}
 
 	/**
@@ -312,7 +308,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {number} elementId  Element ID
 	 */
 	private onClickOnDetails( elementType: string, elementId: number ): void {
-		this.router.navigate( [ elementType, elementId ], this.currentUrlSegment );
+		this.router.navigate( [ 'bookmarks', 'view', this.openedFolderId, elementType, elementId ] ); // Absolute
 	}
 
 	/**
@@ -321,11 +317,9 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onCreateBookmark( data: any ): void {
 
-		// Add additional data to bookmark
+		// Add additional data to bookmark before creating it
 		data.path = this.openedFolderId;
 		data.position = this.bookmarks.size + 1;
-
-		// Save
 		this.bookmarkDataService.addBookmark( data );
 
 	}
@@ -336,11 +330,9 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onCreateFolder( data: any ): void {
 
-		// Add additional data to folder
+		// Add additional data to folder before creating it
 		data.path = this.openedFolderId;
 		data.position = this.folders.size + 1;
-
-		// Save
 		this.folderDataService.addFolder( data );
 
 	}

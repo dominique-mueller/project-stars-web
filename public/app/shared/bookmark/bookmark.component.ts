@@ -9,7 +9,7 @@ import { Map } from 'immutable';
  */
 import { Bookmark } from './../../services/bookmark';
 import { Label } from './../../services/label';
-import { FormatUrlPipe } from './../../pipes/format_url.pipe';
+import { FormatUrlPipe } from './../../pipes/format-url.pipe';
 import { LabelSimpleComponent } from './../label-simple/label-simple.component';
 import { IconComponent } from './../icon/icon.component';
 

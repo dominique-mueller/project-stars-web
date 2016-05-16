@@ -95,7 +95,6 @@ export class BookmarkDirectoryComponent implements OnChanges {
 			this.subfolders = this.folderLogicService
 				.getSubfoldersByFolderId( changes.folders.currentValue, this.parentFolderId );
 		}
-
 	}
 
 	/**
@@ -105,7 +104,8 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	 */
 	private onSelectFolder( folderId: number ): void {
 		if ( folderId !== this.openedFolderId ) {
-			this.selectFolder.emit(folderId);
+			this.selectFolder.emit( folderId );
+			this.openedFolderId = folderId; // Need to set it here to also detect changes for children
 		}
 	}
 

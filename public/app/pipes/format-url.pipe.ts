@@ -7,17 +7,17 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Pipe for pretty URL formatting (hostname, https)
  */
 @Pipe( {
-	name: 'formatUrl'
+	name: 'formatUrl',
+	pure: true
 } )
 export class FormatUrlPipe implements PipeTransform {
 
 	/**
-	 * Transform
-	 * @param  {string} value Value
-	 * @param  {any[]}  args  List of arguments
-	 * @return {string}       New value
+	 * Pipe transform
+	 * @param  {string}        value Bookmark URL
+	 * @return {string}              Formatted bookmark URL
 	 */
-	public transform( value: string, args: any[] ): string {
+	public transform( value: string ): string {
 
 		// Create parser
 		let parser: HTMLAnchorElement = document.createElement( 'a' );
@@ -28,7 +28,7 @@ export class FormatUrlPipe implements PipeTransform {
 
 		// Mark the protocol green when the website uses a secure https connection
 		if ( parser.protocol === 'https:' ) {
-			value = value.replace( 'https', '<em>https</em>' ); // TODO: Color
+			value = value.replace( 'https', '<em>https</em>' );
 		}
 
 		// Done

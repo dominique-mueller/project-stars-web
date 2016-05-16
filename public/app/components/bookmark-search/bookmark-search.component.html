@@ -1,0 +1,29 @@
+<!-- Bookmark search: Header -->
+<header class="bookmark-search__header">
+	<h2 class="bookmark-search__header-title">Search results for <em>{{ searchText }}</em></h2>
+</header>
+
+<!-- Bookmark search: Content -->
+<section class="bookmark-search__content">
+
+	<!-- Bookmark search: Bookmarks -->
+	<h3 class="bookmark-search__subtitle">Bookmarks</h3>
+	<ul class="bookmark-search__list">
+		<li class="bookmark-search__item" *ngFor="let bookmark of ( bookmarks | filterBookmarks:searchText )">
+			<app-bookmark [bookmark]="bookmark" [labels]="labels"
+				(clickOnDetails)="onClickOnDetails( 'bookmark', bookmark.get( 'id' ), bookmark.get( 'path' ) )">
+			</app-bookmark>
+		</li>
+	</ul>
+
+	<!-- Bookmark search: Folders -->
+	<h3 class="bookmark-search__subtitle">Folders</h3>
+	<ul class="bookmark-search__list">
+		<li class="bookmark-search__item" *ngFor="let folder of ( folders | filterFolders:searchText )">
+			<app-folder [folder]="folder" (select)="onSelectFolder( $event )"
+				(clickOnDetails)="onClickOnDetails( 'folder', folder.get( 'id' ), folder.get( 'path' ) )">
+			</app-folder>
+		</li>
+	</ul>
+
+</section>

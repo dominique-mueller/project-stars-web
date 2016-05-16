@@ -1,42 +1,41 @@
 /**
  * External imports
  */
-import { Component, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Control, ControlGroup, FormBuilder } from '@angular/common';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
+import { Map } from 'immutable';
 
 /**
  * Internal imports
  */
 import { AppService } from './../../services/app';
+import { UiService } from './../../services/ui';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	from './../../shared/dropdown/dropdown.component';
 
 /**
- * Header Component (dumb)
+ * View component (smart): Header
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
+		FORM_DIRECTIVES,
 		IconComponent,
 		DropdownComponent
 	],
 	selector: 'app-header',
 	templateUrl: './header.component.html'
 } )
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
 	/**
-	 * Search update event
+	 * Output: Change search event, emits search parameters
 	 */
 	@Output()
-	private search: EventEmitter<any>;
-
-	/**
-	 * Search form model
-	 */
-	private searchForm: ControlGroup;
+	private changeSearch: EventEmitter<any>;
 
 	/**
 	 * App service
@@ -44,34 +43,60 @@ export class HeaderComponent implements OnInit {
 	private appService: AppService;
 
 	/**
+	 * UI service
+	 */
+	private uiService: UiService;
+
+	/**
+	 * List containing all service subscriptions
+	 */
+	private serviceSubscriptions: Array<Subscription>;
+
+	/**
+	 * Search form model
+	 */
+	private searchForm: ControlGroup;
+
+	/**
 	 * App name
 	 */
 	private app: string;
 
-	// TODO: Put them somewhere else (maybe a service or a config?)
-	private name: string = 'Niklas Agethen';
+	/**
+	 * Flag for temporarily disabling the change search event emitting
+	 */
+	private isChangeSearchDisabled: boolean;
 
 	/**
 	 * List of dropdown items
 	 */
 	private dropdownItems: DropdownItem[];
 
+	// TODO: Put them into user service
+	private name: string = 'Niklas Agethen';
+
 	/**
 	 * Constructor
 	 */
-	constructor( appService: AppService, formBuilder: FormBuilder ) {
+	constructor(
+		appService: AppService,
+		uiService: UiService,
+		formBuilder: FormBuilder ) {
 
-		// Initialize services
+		// Initialize
 		this.appService = appService;
+		this.uiService = uiService;
 
 		// Setup
+		this.changeSearch = new EventEmitter();
+		this.isChangeSearchDisabled = false;
 		this.app = appService.APP_NAME;
-		this.search = new EventEmitter();
 		this.searchForm = formBuilder.group( {
-			'search': ''
+			text: ''
 		} );
 
-		// Set dropdown values - TODO: Maybe extract to somewhere?
+		// Setup dropdown values - TODO: Maybe extract to somewhere? App service?
+		// TODO: Map / List
 		this.dropdownItems = [
 			new DropdownLink( 'settings', 'Settings' ),
 			new DropdownLink( 'apps', 'Apps' ),
@@ -90,18 +115,80 @@ export class HeaderComponent implements OnInit {
 	 */
 	public ngOnInit(): void {
 
-		// Subscribe to search form value updates
-		// this.searchForm.valueChanges
-		// 	.debounceTime( 150 ) // Debounce in ms
-		// 	.subscribe(
-		// 		( data: any ) => {
-		// 			this.submitSearch();
-		// 		},
-		// 		( error: any ) => {
-		// 			console.log( 'Angular 2 form error.' ); // TODO
-		// 		}
-		// 	);
+		// Get notified when the search parameters change
+		const searchFormSubscription: Subscription = this.searchForm.valueChanges
+			.debounceTime( 150 ) // Debounce in ms
+			.subscribe(
+				( formData: any ) => {
 
+					// Do not emit the change search event if the change actually came from the UI service
+					if ( this.isChangeSearchDisabled ) {
+						this.isChangeSearchDisabled = false; // Disabling for one round done
+					} else {
+						this.onSubmitSearch();
+					}
+
+				}
+			);
+
+		// Get informed when the search parameters change from outside
+		// For example, this might happen when interacting with the search result items (which trigger routing by themself)
+		const uiServiceSubscription: Subscription = this.uiService.uiState.subscribe(
+			( uiState: Map<string, any> ) => {
+
+				// Update search parameters (only when the value actually changed)
+				// This should only fire once, when the search route gets directly called / reloaded
+				if ( uiState.getIn( [ 'search', 'text' ] ) !== this.searchForm.value.text ) {
+
+					// Skip the change search event emitting for one round
+					// We do this because at this time routing already happens in another component
+					this.isChangeSearchDisabled = true;
+
+					// Update search text
+					( <Control> this.searchForm.controls[ 'text' ] ) // Case form AbstractControl
+						.updateValue( uiState.getIn( [ 'search', 'text' ] ) );
+
+				}
+
+			}
+
+		);
+
+		// Save subscriptions
+		this.serviceSubscriptions = [
+			searchFormSubscription,
+			uiServiceSubscription
+		];
+
+	}
+
+	/**
+	 * Call this when the view gets destroyed
+	 */
+	public ngOnDestroy(): void {
+
+		// Unsubscribe from all services (free resources manually)
+		this.serviceSubscriptions.forEach( ( subscription: Subscription ) => {
+			subscription.unsubscribe();
+		} );
+
+	}
+
+	/**
+	 * Reset search form
+	 */
+	private onResetSearch(): void {
+		( <Control> this.searchForm.controls[ 'text' ] ) // Cast from AbstractControl
+			.updateValue( '' );
+	}
+
+	/**
+	 * Submit search form, emit search change event containing the search parameters
+	 */
+	private onSubmitSearch(): void {
+		this.changeSearch.emit( {
+			text: this.searchForm.value.text.toLowerCase() // Better have lowercase in the URL
+		} );
 	}
 
 	/**
@@ -109,23 +196,7 @@ export class HeaderComponent implements OnInit {
 	 * @param {string} value Value of the dropdown item
 	 */
 	private log( value: string ): void {
-		console.log( value ); // TODO
+		console.log( value ); // TODO: Redirect to route and stuff
 	}
-
-	/**
-	 * Reset search form (currently search input only)
-	 */
-	private reset(): void {
-		( <Control> this.searchForm.find( 'search' ) ).updateValue( '' ); // Cast from AbstractControl
-	}
-
-	/**
-	 * Submit search form, emit update
-	 */
-	// private submitSearch(): void {
-	// 	this.search.emit( {
-	// 		value: this.searchForm.value.search.toLowerCase()
-	// 	} );
-	// }
 
 }

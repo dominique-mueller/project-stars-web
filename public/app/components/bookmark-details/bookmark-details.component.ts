@@ -43,11 +43,6 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private router: Router;
 
 	/**
-	 * Current URL segment
-	 */
-	private currentUrlSegment: RouteSegment;
-
-	/**
 	 * Change detector
 	 */
 	private changeDetector: ChangeDetectorRef;
@@ -150,9 +145,6 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * This function only handles stuff that has to do with routing
 	 */
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
-
-		// Save current URL segment, needed for relative navigation later on
-		this.currentUrlSegment = curr;
 
 		// Get bookmark ID from the route URL
 		// Pre-filter: If the ID is not a number, we navigate back
@@ -257,7 +249,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.isVisible = false;
 		setTimeout(
 			() => {
-				this.router.navigate( [ '../..' ], this.currentUrlSegment ); // TODO: Mysteriously sometimes work, sometimes not
+				this.router.navigate( [ 'bookmarks', 'view', this.bookmark.get( 'path' ) ] ); // Absolute
 			},
 			275 // Needs 250, plus some (maybe unnecessary) extra time
 		);
