@@ -125,11 +125,11 @@ export class FolderDataService {
 
 	/**
 	 * Update one value of a folder
-	 * @param {number} folderId  Folder ID
-	 * @param {string} attribute Attribute
-	 * @param {string} newValue  New / updated value
+	 * @param {number}        folderId  Folder ID
+	 * @param {string}        attribute Attribute
+	 * @param {string|number} newValue  New / updated value
 	 */
-	public updateFolderValue( folderId: number, attribute: string, newValue: string ): void {
+	public updateFolderValue( folderId: number, attribute: string, newValue: string|number ): void {
 		let data: any = {};
 		data[ attribute ] = newValue;
 		this.updateFolder( folderId, data );

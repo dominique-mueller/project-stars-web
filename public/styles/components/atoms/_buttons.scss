@@ -8,6 +8,15 @@
 	box-shadow: none;
 	cursor: pointer;
 
+	&[disabled],
+	&[disabled]:hover,
+	&[disabled]:focus,
+	&[disabled]:active {
+		opacity: .33 !important;
+		cursor: not-allowed !important;
+		transform: scale(1) !important;
+	}
+
 	&:focus {
 		outline: none;
 	}

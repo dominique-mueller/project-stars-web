@@ -7,6 +7,15 @@
 	<!-- Panel header -->
 	<header class="bookmark-details__panel-header">
 		<h1 class="bookmark-details__panel-header-title">Folder Details</h1>
+		<app-move-into-folder
+			class="bookmark-details__panel-header-action-move"
+			[elementType]="'folder'"
+			[elementId]="folder?.get( 'id' )"
+			[currentPathId]="folder?.get( 'path' )"
+			[folders]="allFolders"
+			(select)="onMoveFolder( $event )">
+			<app-icon name="folder_move" size="16" color="#FFF"></app-icon>
+		</app-move-into-folder>
 		<button class="button bookmark-details__panel-header-action does-delete" type="button" (click)="onDelete()">
 			<app-icon name="delete" size="16" color="#FFF"></app-icon>
 		</button>

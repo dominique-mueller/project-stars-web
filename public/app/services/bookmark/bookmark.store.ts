@@ -51,17 +51,51 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 			return <List<Bookmark>> state
 				.push( fromJS( action.payload.data ) );
 
-		// Update bookmark
+		// Update bookmark (only direct attributes, not labels)
+		// TODO: Implement position swapping
 		case UPDATE_BOOKMARK:
 
-			// Update only the changed values
+			// Check whether path and position changed
+			let hasPathChanged: boolean = action.payload.data.hasOwnProperty( 'path' );
+			let hasPositionChanged: boolean = action.payload.data.hasOwnProperty( 'position' );
+
+			// Calculate the new position if only the path changed
+			if ( hasPathChanged && !hasPositionChanged ) {
+				action.payload.data.position = ( state
+					.filter( ( bookmark: Bookmark ) => {
+						return bookmark.get( 'path' ) === action.payload.data.path;
+					} )
+					.size ) + 1; // New position is on +1
+				hasPositionChanged = true;
+			}
+
+			// Save old bookmark position and path for later on
+			let oldPosition: number;
+			let oldPath: number;
+
 			return <List<Bookmark>> state
+
+				// Update the bookmark attributes, save old position and path for later
 				.map( ( bookmark: Bookmark ) => {
 					if ( bookmark.get( 'id' ) === action.payload.id ) {
+						oldPosition = bookmark.get( 'position' );
+						oldPath = bookmark.get( 'path' );
 						return bookmark.merge( Map<string, any>( action.payload.data ) );
 					} else {
 						return bookmark;
 					}
+				} )
+
+				// Update positions of other bookmarks in the same old folder
+				.map( ( bookmark: Bookmark ) => {
+
+					// Only update positions if necessary and in the same old folder
+					if ( hasPositionChanged && bookmark.get( 'path' ) === oldPath && bookmark.get( 'position' ) > oldPosition ) {
+						return bookmark.set( 'position', bookmark.get( 'position' ) - 1 ); // Move one up
+					} else {
+						return bookmark;
+					}
+
 				} );
 
 		// Unassign a label from all bookmarks this label is currently assigned to

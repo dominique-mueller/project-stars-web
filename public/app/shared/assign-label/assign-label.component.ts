@@ -24,7 +24,7 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 		class: 'assign-label scrollbar-small'
 	},
 	selector: 'app-assign-label',
-	templateUrl: 'assign-label.component.html'
+	templateUrl: './assign-label.component.html'
 } )
 export class AssignLabelComponent {
 

@@ -14,6 +14,7 @@ import { Folder, FolderDataService, FolderLogicService } from './../../services/
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
+import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-into-folder.component';
 
 /**
  * View component (smart): Folder details
@@ -23,7 +24,8 @@ import { EditableInputComponent } from './../../shared/editable-input/editable-i
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		IconComponent,
-		EditableInputComponent
+		EditableInputComponent,
+		MoveIntoFolderComponent
 	],
 	templateUrl: './folder-details.component.html'
 } )
@@ -255,6 +257,15 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onUpdate( attribute: string, newValue: string ): void {
 		this.folderDataService.updateFolderValue( this.folderId, attribute, newValue );
+	}
+
+	/**
+	 * Move folder into another folder
+	 * @param {number} parentFolderId New parent folder ID
+	 */
+	private onMoveFolder( parentFolderId: number ): void {
+		this.onClose();
+		this.folderDataService.updateFolderValue( this.folderId, 'path', parentFolderId );
 	}
 
 }

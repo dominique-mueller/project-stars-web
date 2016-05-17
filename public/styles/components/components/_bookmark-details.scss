@@ -93,6 +93,30 @@
 
 }
 
+.bookmark-details__panel-header-action-move {
+
+	> .button {
+		padding: 2.2rem 1.4rem;
+		opacity: 1;
+		transition: opacity $anim-speed-fast $anim-easing;
+
+		&:hover,
+		&:focus {
+			opacity: .8;
+		}
+
+		&:active {
+			transform: scale(.75);
+		}
+
+	}
+
+	> .move-bookmark__dropdown {
+		top: 1.4rem;
+	}
+
+}
+
 // Content
 
 .bookmark-details__panel-content {

@@ -22,7 +22,7 @@ export class FolderLogicService {
 	 * @param  {number}       folderId Folder ID
 	 * @return {Folder}                Folder result OR null
 	 */
-	public getFolderByFolderId( folders: List<Folder>, folderId: number ): Folder { // TODO: findFolder func.
+	public getFolderByFolderId( folders: List<Folder>, folderId: number ): Folder {
 
 		// We try to find the folder, and return null if we cannot find it
 		let result: Folder = folders.find( ( folder: Folder ) => {

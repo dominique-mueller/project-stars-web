@@ -11,12 +11,14 @@ import { List, Map } from 'immutable';
  */
 import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
+import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
 import { AssignLabelComponent } from './../../shared/assign-label/assign-label.component';
+import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-into-folder.component';
 
 /**
  * View component (smart): Bookmark details
@@ -28,7 +30,8 @@ import { AssignLabelComponent } from './../../shared/assign-label/assign-label.c
 		LabelSimpleComponent,
 		IconComponent,
 		EditableInputComponent,
-		AssignLabelComponent
+		AssignLabelComponent,
+		MoveIntoFolderComponent
 	],
 	providers: [
 		LabelLogicService
@@ -63,6 +66,16 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private bookmarkLogicService: BookmarkLogicService;
 
 	/**
+	 * Folder data service
+	 */
+	private folderDataService: FolderDataService;
+
+	/**
+	 * Folder logics service
+	 */
+	private folderLogicService: FolderLogicService;
+
+	/**
 	 * Label data service
 	 */
 	private labelDataService: LabelDataService;
@@ -93,6 +106,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private bookmark: Bookmark;
 
 	/**
+	 * List of folders
+	 */
+	private folders: List<Folder>;
+
+	/**
 	 * Map of all labels
 	 */
 	private allLabels: Map<number, Label>;
@@ -116,6 +134,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
 		bookmarkLogicService: BookmarkLogicService,
+		folderDataService: FolderDataService,
+		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService,
 		labelLogicService: LabelLogicService,
 		dialogConfirmService: DialogConfirmService) {
@@ -126,6 +146,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.bookmarkLogicService = bookmarkLogicService;
+		this.folderDataService = folderDataService;
+		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
 		this.labelLogicService = labelLogicService;
 		this.dialogConfirmService = dialogConfirmService;
@@ -133,7 +155,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		// Setup
 		this.serviceSubscriptions = [];
 		this.bookmarkId = null;
-		this.bookmark = <Bookmark> Map<string, any>();
+		this.bookmark = null;
+		this.folders = List<Folder>();
 		this.allLabels = Map<number, Label>();
 		this.unassignedLabels = Map<number, Label>();
 		this.isVisible = false;
@@ -191,23 +214,38 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 			}
 		);
 
+		// Get folders from its service
+		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
+			( folders: List<Folder> ) => {
+				if ( folders.size > 0 ) {
+					this.folders = folders;
+					this.changeDetector.markForCheck(); // Trigger change detection
+				}
+
+			}
+		);
+
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: any ) => {
+			( labels: Map<number, Label> ) => {
+				if ( labels.size > 0 ) {
 
-				this.allLabels = labels;
+					this.allLabels = labels;
 
-				// Calculate unassigned labels
-				if ( this.bookmark !== null ) {
-					this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
+					// Calculate unassigned labels
+					if ( this.bookmark !== null ) {
+						this.unassignedLabels = this.labelLogicService.getUnassignedLabelsByBookmark( this.allLabels, this.bookmark );
+					}
+					this.changeDetector.markForCheck(); // Trigger change detection
+
 				}
-				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
 		// Save subscriptions
 		this.serviceSubscriptions = [
 			bookmarkDataServiceSubscription,
+			folderDataServiceSubscription,
 			labelDataServiceSubscription
 		];
 
@@ -307,6 +345,15 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private unassignLabel( labelId: number ): void {
 		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
+	}
+
+	/**
+	 * Move bookmark into another folder
+	 * @param {number} parentFolderId New parent folder ID
+	 */
+	private onMoveBookmark( parentFolderId: number ): void {
+		this.onClose();
+		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, 'path', parentFolderId );
 	}
 
 }

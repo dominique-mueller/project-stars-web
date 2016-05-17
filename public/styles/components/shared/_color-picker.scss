@@ -1,6 +1,7 @@
 // SHARED COMPONENT: COLOR PICKER
 
 .color-picker {
+	display: block; // Correct positioning
 	position: relative;
 	z-index: 2; // To overlap upcoming content
 }
@@ -43,7 +44,6 @@
 }
 
 .color-picker__dropdown-content {
-	transform-origin: 0 0;
 	transform: translate3D(0,-.8rem,0);
 	transition: opacity $anim-speed-normal $anim-easing,
 				transform $anim-speed-normal $anim-easing;

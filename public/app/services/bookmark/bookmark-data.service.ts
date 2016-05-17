@@ -120,11 +120,11 @@ export class BookmarkDataService {
 
 	/**
 	 * Update one value of a bookmark
-	 * @param {number} bookmarkId Bookmark ID
-	 * @param {string} attribute  Attribute
-	 * @param {string} newValue   New / updated value
+	 * @param {number}        bookmarkId Bookmark ID
+	 * @param {string}        attribute  Attribute
+	 * @param {string|number} newValue   New / updated value
 	 */
-	public updateBookmarkValue( bookmarkId: number, attribute: string, newValue: string ): void {
+	public updateBookmarkValue( bookmarkId: number, attribute: string, newValue: string|number ): void {
 		let data: any = {};
 		data[ attribute ] = newValue;
 		this.updateBookmark( bookmarkId, data );

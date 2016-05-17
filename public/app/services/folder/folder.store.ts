@@ -50,17 +50,51 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 				.push( fromJS( action.payload.data ) );
 
 		// Update folder
+		// TODO: Implement position swapping
 		case UPDATE_FOLDER:
 
-			// Update only the changed values
+			// Check whether path and position changed
+			let hasPathChanged: boolean = action.payload.data.hasOwnProperty( 'path' );
+			let hasPositionChanged: boolean = action.payload.data.hasOwnProperty( 'position' );
+
+			// Calculate the new position if only the path changed
+			if ( hasPathChanged && !hasPositionChanged ) {
+				action.payload.data.position = ( state
+					.filter( ( folder: Folder ) => {
+						return folder.get( 'path' ) === action.payload.data.path;
+					})
+					.size) + 1; // New position is on +1
+				hasPositionChanged = true;
+			}
+
+			// Save old folder position and path for later on
+			let oldPosition: number;
+			let oldPath: number;
+
 			return <List<Folder>> state
+
+				// Update the folder attributes, save old position and path for later
 				.map( ( folder: Folder ) => {
 					if ( folder.get( 'id' ) === action.payload.id ) {
+						oldPosition = folder.get( 'position' );
+						oldPath = folder.get( 'path' );
 						return folder.merge( Map<string, any>( action.payload.data ) );
 					} else {
 						return folder;
 					}
-				} );
+				} )
+
+				// Update positions of other folders in the same old folder
+				.map( ( folder: Folder ) => {
+
+					// Only update positions if necessary and in the same old folder
+					if ( hasPositionChanged && folder.get( 'path' ) === oldPath && folder.get( 'position' ) > oldPosition) {
+						return folder.set( 'position', folder.get( 'position' ) - 1); // Move one up
+					} else {
+						return folder;
+					}
+
+				});
 
 		// Delete folder
 		case DELETE_FOLDER:
