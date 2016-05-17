@@ -1,0 +1,15 @@
+<!-- Dropdown trigger -->
+<button class="button dropdown__button" type="button"
+	[class.is-active]="isOpen" (click)="toggleDropdown()" #trigger>
+	<ng-content></ng-content>
+	<app-icon name="dropdown" color="#FFF" size="24"></app-icon>
+</button>
+
+<!-- Dropdown menu -->
+<ul class="dropdown__list" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+	<li *ngFor="let item of items" [class.dropdown__divider]="item.type === 'divider'">
+		<a class="dropdown__link" *ngIf="item.type === 'link'" (click)="onSelect( item.value )">
+			{{ item.label }}
+		</a>
+	</li>
+</ul>

@@ -1,31 +1,32 @@
 /**
  * Import configurations
  */
-import config 		from './config.json';
+import config 				from './config.json';
 
 /**
  * Gulp imports
  */
-import browserSync 	from 'browser-sync';
-import gulp 		from 'gulp';
-import tslint 		from 'gulp-tslint';
-import webpack 		from 'webpack-stream';
+import browserSync 			from 'browser-sync';
+import gulp 				from 'gulp';
+import gutil 				from 'gulp-util';
+import inlineNg2Template 	from 'gulp-inline-ng2-template';
+import tslint 				from 'gulp-tslint';
+import typescript 			from 'gulp-typescript';
 
 /**
- * webpack options
+ * typescript project
  */
-const webpackOptions = {
-	output: {
-		filename: config.names.app
-	},
-	resolve: {
-		extensions: [ '', '.ts', '.js' ]
-	},
-	module: {
-		loaders: [
-			{ test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ }
-		]
-	}
+const typescriptProject = typescript.createProject( './tsconfig.json' );
+
+/**
+ * inlineNg2TemplateOptions options
+ */
+const inlineNg2TemplateOptions = {
+	base: './public/app',
+	indent: 0,
+	target: 'es6',
+	templateExtension: '.html',
+	useRelativePaths: true
 };
 
 /**
@@ -53,13 +54,22 @@ export const typescriptBuild = gulp.task( 'typescript:build', () => {
 
 	return gulp
 
-		// Get the typescript entry file
-		.src( `${ config.paths.app.src }/main.ts` )
+		// Get al typescript files
+		.src( [
+			`${ config.paths.app.src }/**/*.ts`,
+			`${ config.paths.typings.default }/browser.d.ts`
+		] )
 
-		// Compile and bundle
-		.pipe( webpack( webpackOptions ) )
+		// Inline Angular 2 component templates
+		.pipe( inlineNg2Template( inlineNg2TemplateOptions ) )
 
-		// Save JavaScript file
-		.pipe( gulp.dest( config.paths.app.dest ) );
+		// Transpile
+		.pipe( typescript( typescriptProject ), undefined, typescript.reporter.fullReporter() )
+
+		// Save
+		.pipe( gulp.dest( config.paths.app.dest ) )
+
+		// Trigger BrowserSync
+		.pipe( browserSync.stream( { once: true } ) );
 
 } );

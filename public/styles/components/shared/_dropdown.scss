@@ -1,0 +1,93 @@
+// SHARED COMPONENT: DROPDOWN
+
+.dropdown__button {
+	position: relative;
+	width: 100%;
+	padding-right: 4.8rem;
+	padding-left: 2.6rem;
+	transition: background-color $anim-speed-normal $anim-easing,
+				color $anim-speed-normal $anim-easing;
+	white-space: nowrap;
+	z-index: 1;
+
+	&:hover,
+	&:active,
+	&.is-active {
+		background-color: $color-white;
+		color: $color-black;
+		transition: background-color $anim-speed-normal $anim-easing,
+					color $anim-speed-normal $anim-easing;
+
+		.icon > svg {
+			fill: $color-tundora;
+		}
+
+	}
+
+	.icon {
+		position: absolute;
+		top: 2rem;
+		right: 2rem;
+		transform: rotate(0);
+		transition: transform $anim-speed-normal $anim-easing;
+
+		> svg {
+			transition: fill $anim-speed-normal $anim-easing;
+		}
+
+	}
+
+	&.is-active .icon {
+		transform: rotate(180deg);
+	}
+
+}
+
+// Content
+
+.dropdown__list {
+	position: absolute;
+	width: 100%;
+	min-width: 15rem;
+	padding-top: .7rem;
+	padding-bottom: .7rem;
+	background-color: $color-white;
+	color: $color-tundora;
+	line-height: 1;
+	box-shadow: 0 .1rem .3rem rgba($color-black, .2);
+	transform: translate3D(0,-.8rem,0);
+	transition: opacity $anim-speed-normal $anim-easing,
+				transform $anim-speed-instant $anim-easing $anim-speed-normal,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+	opacity: 0;
+	visibility: hidden;
+
+	&.is-visible {
+		transform: translate3D(0,0,0);
+		transition: opacity $anim-speed-normal $anim-easing,
+					transform $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant $anim-linear;
+		opacity: 1;
+		visibility: visible;
+	}
+
+}
+
+.dropdown__divider {
+	margin-top: .7rem;
+	margin-bottom: .7rem;
+	border-bottom: .1rem solid $color-gallery;
+}
+
+.dropdown__link {
+	display: block;
+	padding: 1rem 2.4rem;
+	transition: background-color $anim-speed-normal $anim-easing;
+	cursor: pointer; // Because a href does not exist
+
+	&:hover,
+	&:active {
+		background-color: $color-gallery;
+	}
+
+}

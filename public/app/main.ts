@@ -1,16 +1,38 @@
 /**
- * Imports
+ * External imports
  */
-import { bootstrap } 		from 'angular2/platform/browser';
-// TODO: import { enableProdMode } 	from 'angular2/core';
-import { AppComponent } 	from './components/app/app.component';
+import { provide } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { bootstrap } from '@angular/platform-browser-dynamic';
+import { Title } from '@angular/platform-browser';
 
 /**
- * Enable production mode
+ * Internal imports
  */
-// TODO: enableProdMode();
+import { AppComponent } from './components/app/app.component';
 
 /**
- * We use the AppComponent as the root component for our application
+ * Bootstrap the application for the browser
+ * TODO: Find a better way of error handling here
  */
-bootstrap( AppComponent );
+bootstrap( AppComponent, [
+		Title,
+		{
+			provide: APP_BASE_HREF,
+			useValue: '/'
+		}
+	] )
+	.then( () => {
+		window.console.clear();
+		window.console.info( 'App successfully started!' );
+	} )
+	.catch( ( error: any ) => {
+		window.console.warn( 'ERROR: An error occured while starting this app.' );
+		window.console.log( error );
+		alert(
+			`ERROR:
+
+An error occured while starting this app.
+More details can be found in the browser developer console (press F12).`
+		);
+	} );

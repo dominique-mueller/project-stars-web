@@ -1,0 +1,112 @@
+// SHARED COMPONENT: BOOKMARK
+
+.bookmark {
+	display: flex;
+	width: 100%;
+	transition: background-color $anim-speed-fast $anim-easing;
+	background-color: $color-white;
+
+	&:hover,
+	&:focus,
+	&.is-selected {
+		background-color: $color-gallery;
+
+		.bookmark__content {
+			transform: translateY(0);
+		}
+
+		.bookmark__content-labels {
+			transform: scale(.7);
+		}
+
+		.bookmark__url {
+			transform: translateY(0);
+			opacity: 1;
+		}
+
+		.bookmark__action {
+			opacity: 1;
+		}
+
+	}
+
+}
+
+// Content
+
+.bookmark__link {
+	position: relative;
+	flex: 1;
+	height: 6rem; // Fixed height
+}
+
+.bookmark__favicon {
+	position: absolute;
+	top: 1.8rem;
+	left: 3rem;
+	width: 2.4rem;
+	height: 2.4rem;
+}
+
+.bookmark__content {
+	position: absolute;
+	top: 1rem;
+	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
+	width: calc(100% - 7rem);
+	height: 2.4rem; // Same as icon height
+	transform: translateY(.8rem);
+	transition: transform $anim-speed-fast $anim-easing;
+}
+
+.bookmark__content-title {
+	display: inline-block;
+	font-weight: bold;
+	line-height: 2.4rem; // Same as icon height
+}
+
+.bookmark__content-labels {
+	display: inline-block;
+	margin-top: .1rem; // Icon height - label height
+	margin-left: .9rem; // Extra room to title
+	transform-origin: left center;
+	transition: transform $anim-speed-fast $anim-easing;
+	vertical-align: top;
+}
+
+.bookmark__content-label {
+	display: inline-block;
+	margin-left: .5rem;
+}
+
+.bookmark__url {
+	position: absolute;
+	top: 3.3rem;
+	left: 7rem;
+	transform: translateY(-.4rem);
+	transition: opacity $anim-speed-fast $anim-easing,
+				transform $anim-speed-fast $anim-easing;
+	color: $color-scorpion;
+	font-size: 1.2rem;
+	letter-spacing: .02rem;
+	opacity: 0;
+
+	// URL formatting
+	> em {
+		color: $color-success;
+	}
+
+}
+
+// Action
+
+.bookmark__action {
+	padding-right: 2.5rem;
+	padding-left: 2.5rem;
+	opacity: .5;
+	transition: opacity $anim-speed-fast $anim-easing;
+
+	&:active {
+		transform: scale(.825);
+	}
+
+}

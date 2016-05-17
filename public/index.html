@@ -7,16 +7,46 @@
 
 	<title>Project Stars</title>
 
-	<link rel="stylesheet" href="style.min.css">
+	<link rel="stylesheet" href="http://localhost:3000/build/style.min.css">
+
+	<!-- Step 1: Load polyfills for older browsers -->
+	<script src="http://localhost:3000/node_modules/es6-shim/es6-shim.min.js"></script>
+
+	<!-- Step 2: Load libraries -->
+	<script src="http://localhost:3000/node_modules/zone.js/dist/zone.js"></script>
+	<script src="http://localhost:3000/node_modules/reflect-metadata/Reflect.js"></script>
+	<script src="http://localhost:3000/node_modules/systemjs/dist/system.src.js"></script>
+
+	<!-- Step 3: Configure and run systemjs to load modules -->
+	<script src="http://localhost:3000/build/systemjs.config.js"></script>
+	<script>
+		System.import( 'app' ).catch( function( error ) {
+			console.error( error );
+		} );
+	</script>
+
+	<!-- Load web fonts from Adobe TypeKit -->
+	<!-- TODO: Optimize number of loaded font styles -->
+	<script>
+		(function(d) {
+			var config = {
+				kitId: 'qnt7pjj',
+				scriptTimeout: 3000,
+				async: true
+			},
+			h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+		})(document);
+	</script>
 
 </head>
 <body>
 
-	<app>Loading ...</app>
+	<div class="svgstore">
+		<!-- inject:svg -->
+		<!-- endinject -->
+	</div>
 
-	<!-- Load all JavaScript files -->
-	<script src="angular2-polyfills.js"></script>
-	<script src="app.min.js"></script>
+	<app>Loading ...</app>
 
 </body>
 </html>

@@ -1,0 +1,94 @@
+<!-- Dropdown trigger -->
+<button class="button" type="button" (click)="openDropdown()" #trigger>
+	<ng-content></ng-content>
+</button>
+
+<!-- Dropdown menu -->
+<div class="move-into-folder__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+	<article class="move-into-folder__dropdown-content">
+
+		<!-- Dropdown header -->
+		<header class="move-into-folder__dropdown-header">
+			<h1 class="move-into-folder__dropdown-header-title">Move {{ elementType }}</h1>
+			<button class="button move-into-folder__dropdown-header-action" type="button" (click)="closeDropdown()">
+				<app-icon name="close" size="16" color="#444"></app-icon>
+			</button>
+		</header>
+
+
+
+		<!-- Dropdown subheader showing the current folder -->
+		<button class="button move-into-folder__dropdown-subheader is-visible" type="button"
+			[class.is-root]="visibleFolder.get( 'id' ) === 0" [class.is-animating-out]="isNavigating !== ''"
+			(click)="onSwitchToFolder( visibleFolder.get( 'path' ), 'up' )">
+			<app-icon name="chevron_left" size="18" color="#606060">
+			</app-icon>
+			{{ visibleFolder.get( 'name' ) }}
+		</button>
+
+		<!-- Temporary dropdown subheader showing the current folder, for animation purposes -->
+		<button class="button move-into-folder__dropdown-subheader is-hidden" type="button"
+			[class.is-root]="nextVisibleFolder.get( 'id' ) === 0" [class.is-animating-in]="isNavigating !== ''">
+			<app-icon name="chevron_left" size="18" color="#606060">
+			</app-icon>
+			{{ nextVisibleFolder.get( 'name' ) }}
+		</button>
+
+
+
+		<!-- Dropdown content showing the current subfolders -->
+		<ul class="move-into-folder__dropdown-list is-visible"
+			[class.is-moving-out-left]="isNavigating === 'down'"
+			[class.is-moving-out-left]="isNavigating === 'up'">
+			<li class="move-into-folder__dropdown-folder" *ngFor="let subfolder of visibleSubfolders">
+				<button class="button move-into-folder__dropdown-folder-action" type="button"
+					[disabled]="elementType === 'folder' && subfolder.get( 'id' ) === elementId"
+					(click)="onSwitchToFolder( subfolder.get( 'id' ), 'down' )">
+					<app-icon name="folder" size="18" color="#606060"></app-icon>
+					<span class="move-into-folder__dropdown-folder-name">{{ subfolder.get( 'name' ) }}</span>
+					<app-icon name="chevron_right" size="18" color="#606060"></app-icon>
+				</button>
+			</li>
+		</ul>
+
+		<!-- Temporary dropdown content showing the next subfolders, for animation purposes only -->
+		<ul class="move-into-folder__dropdown-list is-hidden-right"
+			[class.is-moving-in-right]="isNavigating === 'down'">
+			<li class="move-into-folder__dropdown-folder" *ngFor="let nextSubfolder of nextVisibleSubfolders">
+				<button class="button move-into-folder__dropdown-folder-action" type="button"
+					[disabled]="elementType === 'folder' && nextSubfolder.get( 'id' ) === elementId">
+					<app-icon name="folder" size="18" color="#606060"></app-icon>
+					<span class="move-into-folder__dropdown-folder-name">{{ nextSubfolder.get( 'name' ) }}</span>
+					<app-icon name="chevron_right" size="18" color="#606060"></app-icon>
+				</button>
+			</li>
+		</ul>
+
+		<!-- Temporary dropdown content showing the next subfolders, for animation purposes only -->
+		<ul class="move-into-folder__dropdown-list is-hidden-left"
+			[class.is-moving-in-left]="isNavigating === 'up'">
+			<li class="move-into-folder__dropdown-folder" *ngFor="let nextSubfolder of nextVisibleSubfolders">
+				<button class="button move-into-folder__dropdown-folder-action" type="button"
+					[disabled]="elementType === 'folder' && nextSubfolder.get( 'id' ) === elementId">
+					<app-icon name="folder" size="18" color="#606060"></app-icon>
+					<span class="move-into-folder__dropdown-folder-name">{{ nextSubfolder.get( 'name' ) }}</span>
+					<app-icon name="chevron_right" size="18" color="#606060"></app-icon>
+				</button>
+			</li>
+		</ul>
+
+
+
+		<!-- Dropdown footer -->
+		<footer class="move-into-folder__dropdown-footer">
+			<button class="button button-success move-into-folder__dropdown-footer-action does-move" type="button"
+				(click)="onClickOnMove()" [disabled]="visibleFolder.get( 'id' ) === currentPathId">
+				Move into here
+			</button><button class="button button-secondary move-into-folder__dropdown-footer-action does-cancel" type="button"
+				(click)="closeDropdown()">
+				Cancel
+			</button>
+		</footer>
+
+	</article>
+</div>

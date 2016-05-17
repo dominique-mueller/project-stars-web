@@ -1,0 +1,23 @@
+<header class="header">
+
+	<!-- Product -->
+	<a class="header__product" [routerLink]="[ '/', 'bookmarks', 'view', 0 ]">
+		<app-icon class="header__product-logo" name="star" size="32" color="#F1C40F"></app-icon>
+		<h1 class="header__product-name">{{ app }}</h1>
+	</a>
+
+	<!-- Search -->
+	<form class="header__search" [ngFormModel]="searchForm">
+		<input class="header__search-input" type="search" placeholder="Search ..." [ngFormControl]="searchForm.controls[ 'text' ]">
+		<app-icon class="header__search-icon" name="search" color="#FFF" size="24"></app-icon>
+		<button class="button header__search-action" type="button" (click)="onResetSearch()">
+			<app-icon name="close" color="#FFF" size="20"></app-icon>
+		</button>
+	</form>
+
+	<!-- User menu -->
+	<app-dropdown [items]="dropdownItems" (select)="log( $event )">
+		{{ name }}
+	</app-dropdown>
+
+</header>
