@@ -3,6 +3,7 @@
  */
 import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import { Map } from 'immutable';
@@ -22,6 +23,7 @@ import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
+		ROUTER_DIRECTIVES,
 		FORM_DIRECTIVES,
 		IconComponent,
 		DropdownComponent
