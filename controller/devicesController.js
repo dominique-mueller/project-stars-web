@@ -14,7 +14,25 @@ var DevicesController = function(req, res, authentication){
 
 	//#### PUBLIC FUNCTIONS ####
 
+	this.post = function(){
 
+	}
+
+	this.put = function(){
+
+	}
+
+	this.delete = function(){
+
+	}
+
+	this.getAll = function(){
+
+	}
+
+	this.getOne = function(){
+		
+	}
 
 
 	//CONSTRUCTOR

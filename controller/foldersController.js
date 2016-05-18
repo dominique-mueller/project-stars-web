@@ -14,6 +14,7 @@ var FoldersController = function(req, res, authentication){
 	//#### PRIVATE FUNCTIONS ####
 
 	function deleteSubFolders(pathId){
+		logger.debug('deleteSubFolders: ' + pathId);
 		return new Promise(function(resolve, reject){
 			var findSubFolderPromise = Folder.findAll(pathId);
 			findSubFolderPromise.then(function(folders){
@@ -32,13 +33,14 @@ var FoldersController = function(req, res, authentication){
 	}
 
 	function deleteSubBookmarks(pathId){
+		logger.debug('deleteSubBookmarks: ' + pathId);
 		return new Promise(function(ersolve, reject){
-			var findSubBookmarksPromise = require('../modules/bookmark/bookmarks.model.js').findAll(pathId);
+			var findSubBookmarksPromise = require('../modules/bookmark/bookmarks.model.js')(self, authentication.tokenUserId).findAll(pathId);
 			findSubBookmarksPromise.then(function(bookmarks){
 				var deletePromises = new Array();
 				for(var i = 0; i < bookmarks.length; i++){
 					logger.debug('Delete Subbookmark with the Id:' + bookmarks[i]._id);
-					deletePromises.push(require('../modules/bookmark/bookmarks.model.js').delete(bookmarks[i]._id));
+					deletePromises.push(require('../modules/bookmark/bookmarks.model.js')(self, authentication.tokenUserId).delete(bookmarks[i]._id));
 				}
 				Promise.all(deletePromises).then(function(){
 					resolve();
@@ -132,14 +134,7 @@ var FoldersController = function(req, res, authentication){
 	if(req.method != 'GET' && req.method != 'DELETE'){
 		this.data = JSON.parse(req.body.data);
 	}	
-	// try{
-	// 	this.data = JSON.parse(req.body.data);
-	// }
-	// catch(e){
-	// 	logger.error('could not parse req.body.data to json');
-	// }
 
-	// logger.debug('FoldersController Konstruktor');
 	return this;
 }
 

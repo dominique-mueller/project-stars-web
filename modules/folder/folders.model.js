@@ -71,8 +71,6 @@ var FoldersModel = function(caller, userId){
 				var changeNumberOfContainedElementsPromise = self.changeNumberOfContainedElements(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
 				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
-				//Something did not went well, but it could have been also the work of another bug so maybe we should try it again
-				// var saveFolderPromise = saveFolderAndReturnPromise(folder);
 				var createFolderPromise = Folder.create(folder);
 				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(){

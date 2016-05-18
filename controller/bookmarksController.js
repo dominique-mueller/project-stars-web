@@ -77,6 +77,7 @@ var BookmarksController = function(req, res, authentication){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
 		.catch(function(err){
+			logger.error(err);
 			self.res.status(httpStatus.BAD_REQUEST).json({'error':'Failed to delete bookmark with id ' + self.req.params.bookmark_id});
 		});
 	}
