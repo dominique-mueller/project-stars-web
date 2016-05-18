@@ -73,10 +73,8 @@
 		"typescript": "1.8.x",
 		"typings": "0.8.x"
 	},
-	"engines":
-		{
-			"node": "5.x"
-		}
+	"engines": {
+		"node": "5.x"
 	},
 	"private": true
 }
