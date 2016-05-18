@@ -1,0 +1,40 @@
+<!-- Dropdown trigger -->
+<button class="button" type="button" (click)="openDropdown()" #trigger>
+	<ng-content></ng-content>
+</button>
+
+<!-- Dropdown menu -->
+<div class="color-picker__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+	<article class="color-picker__dropdown-content">
+
+		<!-- Dropdown header -->
+		<header class="color-picker__dropdown-header">
+			<h1 class="color-picker__dropdown-header-title">Pick a color</h1>
+			<button class="button color-picker__dropdown-header-action" type="button" (click)="closeDropdown()">
+				<app-icon name="close" size="16" color="#444"></app-icon>
+			</button>
+		</header>
+
+		<!-- Dropdown content -->
+		<ul class="color-picker__dropdown-list">
+
+			<!-- Current color (optional) & color presets & pick custom color -->
+			<li class="color-picker__dropdown-item" *ngIf="colorPresets.indexOf( selectedColor ) === -1">
+				<button class="button color-picker__dropdown-color" type="button"
+					[style.backgroundColor]="selectedColor" (click)="onSelectColor( selectedColor )">
+					<app-icon name="done" size="20" color="#FFF"></app-icon>
+				</button>
+			</li><li class="color-picker__dropdown-item" *ngFor="let colorPreset of colorPresets">
+				<button class="button color-picker__dropdown-color" type="button"
+					[style.backgroundColor]="colorPreset" (click)="onSelectColor( colorPreset )">
+					<app-icon name="done" size="20" color="#FFF" *ngIf="selectedColor === colorPreset"></app-icon>
+				</button>
+			</li><li class="color-picker__dropdown-item" *ngIf="allowCustomColor">
+				<input class="color-picker__dropdown-picker-input" type="color" [value]="selectedColor" (change)="onSelectColor( colorInput.value )" #colorInput>
+				<app-icon class="color-picker__dropdown-color color-picker__dropdown-picker-icon" name="add" size="20" color="#444"></app-icon>
+			</li>
+
+		</ul>
+
+	</article>
+</div>

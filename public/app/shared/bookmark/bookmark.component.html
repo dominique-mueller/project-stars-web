@@ -1,0 +1,19 @@
+<!-- Link -->
+<a class="bookmark__link" [href]="bookmark.get( 'url' )" target="_blank" rel="noreferrer noopener">
+	<img class="bookmark__favicon" src="https://icons.better-idea.org/icon?url={{ bookmark.get( 'url' ) }}&size=24">
+	<div class="bookmark__content">
+		<p class="bookmark__content-title">{{ bookmark.get( 'title' ) }}</p>
+		<ul class="bookmark__content-labels">
+			<li class="bookmark__content-label" *ngFor="let labelId of bookmark.get( 'labels' )">
+				<app-label-simple [label]="labels.get( labelId )" [isRemovable]="false">
+				</app-label-simple>
+			</li>
+		</ul>
+	</div>
+	<p class="bookmark__url" [innerHTML]="bookmark.get( 'url' ) | formatUrl"></p>
+</a>
+
+<!-- Details button -->
+<button class="button bookmark__action" type="button" (click)="onClickDetails( bookmark.get( 'id' ) )">
+	<app-icon name="info" size="20" color="#606060"></app-icon>
+</button>

@@ -15,21 +15,6 @@ import sass 			from 'gulp-sass';
 import scsslint 		from 'gulp-scss-lint';
 
 /**
- * autoprefixer options
- */
-const autoprefixerOptions = {
-	'path': 'browserlist'
-};
-
-
-/**
- * scsslint options
- */
-const scsslintOptions = {
-	'config': '.scss-lint.yml'
-};
-
-/**
  * sass options
  */
 const sassOptions = {
@@ -48,7 +33,7 @@ export const sassLint = gulp.task( 'sass:lint', () => {
 		.src( `${config.paths.styles.src}/**/*.scss` )
 
 		// Lint
-		.pipe( scsslint( scsslintOptions ) )
+		.pipe( scsslint() )
 
 		// Report problems
 		.pipe( scsslint.failReporter() );
@@ -69,15 +54,18 @@ export const sassBuild = gulp.task( 'sass:build', () => {
 		.pipe( sass( sassOptions ).on( 'error', sass.logError ) )
 
 		// Autoprefix CSS
-		.pipe( autoprefixer( autoprefixerOptions ) )
+		.pipe( autoprefixer() )
 
 		// Minify CSS
-		.pipe( cssmin() )
+		// .pipe( cssmin() )
 
 		// Rename CSS file name
 		.pipe( rename( config.names.styles ) )
 
 		// Save CSS file
-		.pipe( gulp.dest( config.paths.styles.dest ) );
+		.pipe( gulp.dest( config.paths.styles.dest ) )
+
+		// Trigger BrowserSync
+		.pipe( browserSync.stream( { once: true } ) );
 
 } );

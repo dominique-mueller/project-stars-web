@@ -1,23 +1,32 @@
 {
 	"paths": {
+		"root": "./",
 		"project": {
 			"src": "./public",
 			"dest": "./build"
 		},
 		"app": {
 			"src": "./public/app",
-			"dest": "./build"
+			"dest": "./build",
+			"apimock": "./build/apimock"
 		},
 		"styles": {
 			"src": "./public/styles",
 			"dest": "./build"
+		},
+		"icons": {
+			"src": "./public/assets/icons"
+		},
+		"documentation": {
+			"base": "./docs",
+			"frontend": "./docs/frontend",
+			"backend": "./docs/backend"
 		},
 		"typings": {
 			"default": "./typings"
 		}
 	},
 	"names": {
-		"app": "app.min.js",
 		"styles": "style.min.css"
 	}
 }

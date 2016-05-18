@@ -12,19 +12,12 @@ import gutil 	from 'gulp-util';
 import ncu 		from 'npm-check-updates';
 
 /**
- * ncu options
- */
-const ncuOptions = {
-	'packageFile': './package.json'
-};
-
-/**
  * Gulp task: Clean build folder
  */
 export const envClean = gulp.task( 'env:clean', () => {
 
 	// Delete folder and files
-	return del( `${config.paths.app.dest}/**/*` );
+	return del( `${config.paths.project.dest}/**/*` );
 
 } );
 
@@ -34,7 +27,7 @@ export const envClean = gulp.task( 'env:clean', () => {
 export const envNpm = gulp.task( 'env:npm', () => {
 
 	// Check for npm dependency updates
-	ncu.run( ncuOptions ).then( ( results ) => {
+	ncu.run().then( ( results ) => {
 
 		// Print (pretty) results
 		if ( Object.keys( results ).length === 0 ) {
@@ -48,23 +41,5 @@ export const envNpm = gulp.task( 'env:npm', () => {
 		}
 
 	} );
-
-} );
-
-/**
- * Gulp task: Seup env
- */
-export const html = gulp.task( 'env:setup', () => {
-
-	return gulp
-
-		// Get all typescript files
-		.src( [
-			`${config.paths.project.src}/index.html`,
-			'./node_modules/angular2/bundles/angular2-polyfills.js'
-		] )
-
-		// Report problems
-		.pipe( gulp.dest( config.paths.project.dest ) );
 
 } );

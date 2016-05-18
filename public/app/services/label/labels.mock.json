@@ -1,0 +1,34 @@
+{
+	"data": [
+		{
+			"id": 0,
+			"name": "study",
+			"color": "#4F86C6"
+		},
+		{
+			"id": 1,
+			"name": "important",
+			"color": "#754F44"
+		},
+		{
+			"id": 2,
+			"name": "favourite",
+			"color": "#AFB42B"
+		},
+		{
+			"id": 3,
+			"name": "work",
+			"color": "#5D4037"
+		},
+		{
+			"id": 4,
+			"name": "family",
+			"color": "#F57C00"
+		},
+		{
+			"id": 5,
+			"name": "to read",
+			"color": "#E91E63"
+		}
+	]
+}

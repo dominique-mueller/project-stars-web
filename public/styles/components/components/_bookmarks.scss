@@ -1,0 +1,140 @@
+// VIEW COMPONENT: BOOKMARKS
+
+.bookmarks__main {
+	position: absolute;
+	top: 6.4rem;
+	left: 0;
+	display: flex;
+	width: 100%;
+	height: calc(100% - 6.4rem);
+}
+
+// Layout containers
+
+.bookmarks__sidebar {
+	position: relative; // For animations
+	width: 35rem; // Fixed width
+	height: 100%;
+	background-color: $color-gallery;
+	border-right: .1rem solid $color-alto;
+	overflow: hidden; // Don't allow scrolling produced by animations
+}
+
+.bookmarks__content {
+	flex: 1;
+	height: 100%;
+	background-color: $color-white;
+}
+
+// Sidebar: Header with tabs
+
+.bookmarks__sidebar-header {
+	position: relative; // Because of ::after
+	width: 100%;
+	height: 7.2rem; // Fixed height
+	border-bottom: .1rem solid $color-alto;
+
+	&::after {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 50%;
+		height: .2rem;
+		background-color: $color-primary;
+		content: '';
+		transition: transform $anim-speed-normal $anim-easing;
+		will-change: transform; // Lalalala ... does is work?
+	}
+
+	&.is-active-first::after {
+		transform: translate3D(0,0,0);
+	}
+
+	&.is-active-second::after {
+		transform: translate3D(100%,0,0);
+	}
+
+}
+
+.bookmarks__sidebar-header-tab {
+	position: relative; // Because of ::after
+	display: inline-block;
+	width: 50%; // 2 equally spread tabs
+	padding-top: 2.1rem;
+	padding-bottom: .2rem;
+	line-height: 4.8rem;
+	overflow: hidden; // Hide overlapping ::after element
+	will-change: transform; // DO YOUR JOB ... please ...
+
+	&::after {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: .2rem;
+		background-color: $color-primary;
+		content: '';
+		transition: transform $anim-speed-normal $anim-easing;
+	}
+
+	&.is-first::after {
+		transform: translate3D(100%,0,0);
+	}
+
+	&.is-second::after {
+		transform: translate3D(-100%,0,0);
+	}
+
+	&:hover,
+	&:focus {
+
+		&::after {
+			transform: translate3D(0,0,0);
+		}
+
+	}
+
+	&.is-active {
+		font-weight: bold;
+	}
+
+}
+
+// Sidebar: Content
+
+.bookmarks__sidebar-content {
+	position: absolute; // To allow animation
+	top: 7.2rem;
+	left: 0;
+	width: 35rem;
+	height: calc(100% - 7.2rem); // Show scrollbar if necessary
+	padding-top: 1.8rem;
+	padding-bottom: 1.8rem;
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
+				transform $anim-speed-normal $anim-easing;
+	opacity: 0;
+	visibility: hidden;
+	overflow-y: auto;
+	will-change: transform; // Hm ...
+
+	&.is-active {
+		opacity: 1;
+		visibility: visible;
+		transform: translate3D(0,0,0);
+		transition: opacity $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant $anim-linear,
+					transform $anim-speed-normal $anim-easing;
+	}
+
+}
+
+.bookmarks__sidebar-content-directory {
+	padding-left: 2.5rem; // Root directory indention
+	transform: translate3D(-100%,0,0);
+}
+
+.bookmarks__sidebar-content-labels {
+	display: block;
+	transform: translate3D(100%,0,0);
+}
