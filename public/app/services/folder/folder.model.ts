@@ -11,7 +11,7 @@ export interface Folder extends Map<string, any> {
 	/**
 	 * Folder ID
 	 */
-	id: number;
+	id: number; // TODO: String
 
 	/**
 	 * Folder name
@@ -21,11 +21,16 @@ export interface Folder extends Map<string, any> {
 	/**
 	 * Folder path
 	 */
-	path?: number;
+	path?: number; // TODO: String
 
 	/**
 	 * Folder position
 	 */
 	position: number;
+
+	/**
+	 * Root folder
+	 */
+	isRoot: boolean; // TODO: New param => implement
 
 }

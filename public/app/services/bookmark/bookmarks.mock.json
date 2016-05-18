@@ -7,7 +7,9 @@
 			"url": "https://www.google.de",
 			"labels": [ 0, 1 ],
 			"path": 1,
-			"position": 1
+			"position": 1,
+			"created": "2016-05-17",
+			"updated": "2016-05-17"
 		},
 		{
 			"id": 1,

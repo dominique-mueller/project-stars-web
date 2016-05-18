@@ -79,6 +79,9 @@ export class BookmarkDataService {
 		this.isFetching = true;
 		this.http.get( `${ this.appService.API_URL }/bookmarks.mock.json` ) // TODO: Change to REST API
 
+			// => GET /api/v1/bookmarks
+			// TODO: Updated is not always set
+
 			// Convert data
 			.map( ( response: Response ) => <Array<any>> response.json().data )
 

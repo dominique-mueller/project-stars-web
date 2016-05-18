@@ -11,7 +11,7 @@ export interface Bookmark extends Map<string, any> {
 	/**
 	 * Bookmark ID
 	 */
-	id: number;
+	id: number; // TODO: String
 
 	/**
 	 * Bookmark title
@@ -36,7 +36,7 @@ export interface Bookmark extends Map<string, any> {
 	/**
 	 * List of label ids
 	 */
-	labels?: number[];
+	labels?: number[]; // TODO: String Array
 
 	/**
 	 * Time when this bookmark was created
@@ -49,14 +49,9 @@ export interface Bookmark extends Map<string, any> {
 	updated?: Date;
 
 	/**
-	 * Time when this bookmark was archived
-	 */
-	archived?: Date;
-
-	/**
 	 * Folder id
 	 */
-	path: number;
+	path: number; // TODO: String
 
 	/**
 	 * Bookmark position number

@@ -84,6 +84,8 @@ export class FolderDataService {
 		this.isFetching = true;
 		this.http.get( `${ this.appService.API_URL }/folders.mock.json` ) // TODO: Change to REST API
 
+			// TODO: GET => /api/v1/folders
+
 			// Convert data
 			.map( ( response: Response ) => <Array<any>> response.json().data )
 

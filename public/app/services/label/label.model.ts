@@ -11,7 +11,7 @@ export interface Label extends Map<string, any> {
 	/**
 	 * Label ID
 	 */
-	id: Number;
+	id: Number; // TODO: String
 
 	/**
 	 * Label name
