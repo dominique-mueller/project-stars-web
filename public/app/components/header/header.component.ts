@@ -1,7 +1,8 @@
 /**
  * External imports
  */
-import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy,
+	ChangeDetectorRef } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -13,6 +14,7 @@ import { Map } from 'immutable';
  */
 import { AppService } from './../../services/app';
 import { UiService } from './../../services/ui';
+import { UserDataService, User } from './../../services/user';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
 	from './../../shared/dropdown/dropdown.component';
@@ -40,9 +42,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	private changeSearch: EventEmitter<any>;
 
 	/**
+	 * Change detector
+	 */
+	private changeDetector: ChangeDetectorRef;
+
+	/**
 	 * App service
 	 */
 	private appService: AppService;
+
+	/**
+	 * User data service
+	 */
+	private userDataService: UserDataService;
 
 	/**
 	 * UI service
@@ -74,31 +86,38 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	 */
 	private dropdownItems: DropdownItem[];
 
-	// TODO: Put them into user service
-	private name: string = 'Niklas Agethen';
+	/**
+	 * Full user name
+	 */
+	private userName: string;
 
 	/**
 	 * Constructor
 	 */
 	constructor(
+		changeDetector: ChangeDetectorRef,
 		appService: AppService,
 		uiService: UiService,
+		userDataService: UserDataService,
 		formBuilder: FormBuilder ) {
 
 		// Initialize
+		this.changeDetector = changeDetector;
 		this.appService = appService;
 		this.uiService = uiService;
+		this.userDataService = userDataService;
 
 		// Setup
 		this.changeSearch = new EventEmitter();
 		this.isChangeSearchDisabled = true; // Also skip the first initial one
 		this.app = appService.APP_NAME;
+		this.userName = 'User';
 		this.searchForm = formBuilder.group( {
 			text: ''
 		} );
 
-		// Setup dropdown values - TODO: Maybe extract to somewhere? App service?
-		// TODO: Map / List
+		// Setup dropdown values
+		// TODO: Change to Map or List?
 		this.dropdownItems = [
 			new DropdownLink( 'settings', 'Settings' ),
 			new DropdownLink( 'apps', 'Apps' ),
@@ -156,10 +175,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 		);
 
+		// Get notified when the user changes
+		const userDataServiceSubscription: Subscription = this.userDataService.user.subscribe(
+			( user: User ) => {
+
+				// Save full user name
+				if ( user.get( 'firstName' ) !== null && user.get( 'lastName' ) !== null ) {
+					this.userName = `${ user.get( 'firstName' ) } ${ user.get( 'lastName' ) }`;
+					this.changeDetector.markForCheck(); // Trigger change detection
+				}
+
+			}
+		);
+
 		// Save subscriptions
 		this.serviceSubscriptions = [
 			searchFormSubscription,
-			uiServiceSubscription
+			uiServiceSubscription,
+			userDataServiceSubscription
 		];
 
 	}

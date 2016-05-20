@@ -14,6 +14,7 @@ import { UiService } from './../../services/ui';
 import { BookmarkDataService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
+import { UserDataService } from './../../services/user';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
@@ -43,7 +44,8 @@ import { LabelListComponent } from './../label-list/label-list.component';
 		FolderDataService,
 		FolderLogicService,
 		LabelDataService,
-		UiService
+		UiService,
+		UserDataService
 	],
 	selector: 'app-bookmarks',
 	templateUrl: './bookmarks.component.html'
@@ -91,6 +93,11 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private labelDataService: LabelDataService;
 
 	/**
+	 * User data service
+	 */
+	private userDataService: UserDataService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -129,7 +136,8 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		bookmarkDataService: BookmarkDataService,
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
-		labelDataService: LabelDataService
+		labelDataService: LabelDataService,
+		userDataService: UserDataService
 	) {
 
 		// Initialize
@@ -139,6 +147,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		this.folderDataService = folderDataService;
 		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
+		this.userDataService = userDataService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -201,6 +210,9 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		this.folderDataService.loadFolders();
 		this.bookmarkDataService.loadBookmarks();
 		this.labelDataService.loadLabels();
+
+		// TODO: Set real ID
+		this.userDataService.loadUser( 'USER42' );
 
 		// Save subscriptions
 		this.serviceSubscriptions = [

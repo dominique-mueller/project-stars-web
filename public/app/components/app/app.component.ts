@@ -15,9 +15,11 @@ import { bookmarks } from './../../services/bookmark';
 import { folders } from './../../services/folder';
 import { labels } from './../../services/label';
 import { ui, UiService } from './../../services/ui';
+import { user } from './../../services/user';
+import { BookmarksComponent } from './../bookmarks/bookmarks.component';
+import { LoginComponent } from './../login/login.component';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-confirm.component';
-import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 
 /**
  * View component (smart): App
@@ -34,7 +36,8 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 			bookmarks,
 			folders,
 			labels,
-			ui
+			ui,
+			user
 		} ),
 		AppService,
 		UiService,
@@ -45,10 +48,14 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 } )
 @Routes( [
 	new Route( {
+		component: LoginComponent,
+		path: '/login'
+	} ),
+	new Route( {
 		component: BookmarksComponent,
 		path: '/bookmarks'
 	} )
-	// TODO: Settings Route, Login Route, ...
+	// TODO: Settings route, Register route ...
 ] )
 export class AppComponent implements OnInit {
 

@@ -67,6 +67,7 @@ export const systemjs = gulp.task( 'setup:systemjs', () => {
 
 /**
  * Gulp task: Setup temp api data
+ * TODO: Remove me
  */
 export const api = gulp.task( 'setup:api', () => {
 
@@ -76,7 +77,8 @@ export const api = gulp.task( 'setup:api', () => {
 		.src( [
 			`${ config.paths.app.src }/services/bookmark/bookmarks.mock.json`,
 			`${ config.paths.app.src }/services/folder/folders.mock.json`,
-			`${ config.paths.app.src }/services/label/labels.mock.json`
+			`${ config.paths.app.src }/services/label/labels.mock.json`,
+			`${ config.paths.app.src }/services/user/user.mock.json`
 		] )
 		.pipe( gulp.dest( config.paths.app.apimock ) );
 

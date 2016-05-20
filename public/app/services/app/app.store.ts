@@ -9,6 +9,7 @@ import { List, Map } from 'immutable';
 import { Bookmark } from './../bookmark';
 import { Folder } from './../folder';
 import { Label } from './../label';
+import { User } from './../user';
 
 /**
  * App store interface
@@ -18,4 +19,5 @@ export interface AppStore {
 	folders: List<Folder>;
 	labels: Map<string, Label>;
 	ui: Map<string, any>;
+	user: User;
 };
