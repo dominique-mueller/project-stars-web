@@ -3,6 +3,7 @@
  */
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
@@ -11,6 +12,7 @@ import { Store, Action } from '@ngrx/store';
  * Internal imports
  */
 import { AppStore, AppService } from './../app';
+import { UserAuthService } from './user-auth.service';
 import { User } from './user.model';
 import {
 	LOAD_USER
@@ -30,9 +32,9 @@ export class UserDataService {
 	public user: Observable<User>;
 
 	/**
-	 * HTTP service
+	 * Authenticated HTTP service
 	 */
-	private http: Http;
+	private authHttp: AuthHttp;
 
 	/**
 	 * App service
@@ -45,18 +47,25 @@ export class UserDataService {
 	private store: Store<AppStore>;
 
 	/**
+	 * User authentication service
+	 */
+	private userAuthService: UserAuthService;
+
+	/**
 	 * Constructor
 	 */
 	constructor(
-		http: Http,
+		authHttp: AuthHttp,
 		appService: AppService,
-		store: Store<AppStore>
+		store: Store<AppStore>,
+		userAuthService: UserAuthService
 	) {
 
 		// Initialize
-		this.http = http;
+		this.authHttp = authHttp;
 		this.appService = appService;
 		this.store = store;
+		this.userAuthService = userAuthService;
 
 		// Setup
 		this.user = store.select( 'user' ); // Select returns an observable
@@ -73,7 +82,7 @@ export class UserDataService {
 		setTimeout(
 			() => {
 
-				this.http
+				this.authHttp
 
 					// Fetch data and parse response
 					.get( `${ this.appService.API_URL}/user.mock.json` )
@@ -95,10 +104,10 @@ export class UserDataService {
 
 		/* TODO: This is the production code
 
-		this.http
+		this.authHttp
 
 			// Fetch data and parse response
-			.get( `${ this.appService.API_URL }/users/${ userId }` )
+			.get( `${ this.appService.API_URL }/users/${ this.userAuthService.getUserId() }` )
 			.map( ( response: Response ) => <any> response.json() )
 
 			// Dispatch action

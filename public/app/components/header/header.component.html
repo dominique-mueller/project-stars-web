@@ -3,7 +3,7 @@
 	<!-- Product -->
 	<a class="header__product" [routerLink]="[ '/', 'bookmarks', 'view', 0 ]">
 		<app-icon class="header__product-logo" name="star" size="32" color="#F1C40F"></app-icon>
-		<h1 class="header__product-name">{{ app }}</h1>
+		<h1 class="header__product-name">{{ appName }}</h1>
 	</a>
 
 	<!-- Search -->
@@ -16,7 +16,7 @@
 	</form>
 
 	<!-- User menu -->
-	<app-dropdown [items]="dropdownItems" (select)="log( $event )">
+	<app-dropdown [items]="dropdownItems" (select)="onDropdownSelect( $event )">
 		{{ userName }}
 	</app-dropdown>
 

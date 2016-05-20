@@ -9,6 +9,7 @@
 		// Libraries
 		'@ngrx/store': 	'/node_modules/@ngrx/store',
 		'@angular': 	'/node_modules/@angular',
+		'angular2-jwt': '/node_modules/angular2-jwt',
 		'immutable': 	'/node_modules/immutable/dist',
 		'rxjs': 		'/node_modules/rxjs'
 
@@ -56,10 +57,14 @@
 			defaultExtension: 'js',
 			main: 'index.js'
 		},
-		rxjs: {
+		'angular2-jwt': {
+			defaultExtension: 'js',
+			main: 'angular2-jwt.js'
+		},
+		'rxjs': {
 			defaultExtension: 'js'
 		},
-		immutable: {
+		'immutable': {
 			defaultExtension: 'js',
 			main: 'immutable.js'
 		}

@@ -29,6 +29,7 @@
 		"@angular/platform-browser": "2.0.0-rc.1",
 		"@angular/platform-browser-dynamic": "2.0.0-rc.1",
 		"@angular/router": "2.0.0-rc.1",
+		"angular2-jwt": "0.1.x",
 		"bcryptjs": "2.3.x",
 		"body-parser": "1.15.x",
 		"bunyan": "1.7.x",
@@ -45,8 +46,8 @@
 		"zone.js": "0.6.12"
 	},
 	"devDependencies": {
-		"babel-core": "6.8.x",
-		"babel-preset-es2015": "6.6.x",
+		"babel-core": "6.9.x",
+		"babel-preset-es2015": "6.9.x",
 		"browser-sync": "2.12.x",
 		"chai": "3.5.x",
 		"connect-history-api-fallback": "1.2.x",
@@ -54,11 +55,11 @@
 		"gulp": "3.9.x",
 		"gulp-autoprefixer": "3.1.x",
 		"gulp-cssmin": "0.1.x",
-		"gulp-inject": "4.0.x",
+		"gulp-inject": "4.1.x",
 		"gulp-inline-ng2-template": "1.1.x",
 		"gulp-rename": "1.2.x",
 		"gulp-sass": "2.3.x",
-		"gulp-scss-lint": "0.3.x",
+		"gulp-scss-lint": "0.4.x",
 		"gulp-svgstore": "6.0.x",
 		"gulp-tslint": "5.0.x",
 		"gulp-typedoc": "2.0.x",
@@ -67,11 +68,11 @@
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
 		"npm-check-updates": "2.6.x",
-		"run-sequence": "1.1.x",
+		"run-sequence": "1.2.x",
 		"tslint": "3.10.x",
 		"typedoc": "0.3.x",
 		"typescript": "1.8.x",
-		"typings": "0.8.x"
+		"typings": "1.0.x"
 	},
 	"engines": {
 		"node": "5.x"

@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router } from '@angular/router';
+import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router, OnActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
@@ -14,7 +14,7 @@ import { UiService } from './../../services/ui';
 import { BookmarkDataService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
-import { UserDataService } from './../../services/user';
+import { UserDataService, UserAuthService } from './../../services/user';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
@@ -60,7 +60,7 @@ import { LabelListComponent } from './../label-list/label-list.component';
 		path: '/search'
 	} )
 ] )
-export class BookmarksComponent implements OnInit, OnDestroy {
+export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Router
@@ -96,6 +96,11 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 * User data service
 	 */
 	private userDataService: UserDataService;
+
+	/**
+	 * User authentication service
+	 */
+	private userAuthService: UserAuthService;
 
 	/**
 	 * List containing all service subscriptions
@@ -137,7 +142,8 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService,
-		userDataService: UserDataService
+		userDataService: UserDataService,
+		userAuthService: UserAuthService
 	) {
 
 		// Initialize
@@ -148,6 +154,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
 		this.userDataService = userDataService;
+		this.userAuthService = userAuthService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -156,6 +163,20 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		this.openedFolderId = null; // Same as in the UI store
 		this.openedFolderName = '';
 		this.openedTab = 0; // Automatically show the folders tab
+
+	}
+
+	/**
+	 * Call this when the router gets activated
+	 * This function only handles stuff that has to do with routing
+	 */
+	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
+
+		// This route and all its subroutes are only available if the user is logged in
+		// Else we redirect to the login page
+		if ( !this.userAuthService.isUserLoggedIn() ) {
+			this.router.navigate( [ 'login' ] ); // Absolute
+		}
 
 	}
 
@@ -270,6 +291,14 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 			this.router.navigate( [ 'bookmarks', 'search', searchParameters ] ); // Absolute, matrix search parameters
 		}
 
+	}
+
+	/**
+	 * Log out request, coming from header
+	 */
+	private onLogout(): void {
+		this.userAuthService.logoutUser(); // TODO: Route after promise resolve
+		this.router.navigate( [ 'login' ] ); // Absolute
 	}
 
 }

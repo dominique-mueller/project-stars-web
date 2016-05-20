@@ -57,7 +57,7 @@ export const typescriptBuild = gulp.task( 'typescript:build', () => {
 		// Get al typescript files
 		.src( [
 			`${ config.paths.app.src }/**/*.ts`,
-			`${ config.paths.typings.default }/browser.d.ts`
+			`${ config.paths.typings.default }/index.d.ts`
 		] )
 
 		// Inline Angular 2 component templates

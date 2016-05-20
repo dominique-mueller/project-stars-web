@@ -1,5 +1,8 @@
 <!-- Header -->
-<app-header (changeSearch)="onChangeSearch( $event )"></app-header>
+<app-header
+	(changeSearch)="onChangeSearch( $event )"
+	(logout)="onLogout()">
+</app-header>
 
 <!-- Main -->
 <main class="bookmarks__main">
@@ -8,7 +11,7 @@
 	<section class="bookmarks__sidebar">
 
 		<!-- Sidebar header -->
-		<header class="bookmarks__sidebar-header" [class.is-active-first]="openedTab === 0" [class.is-active-second]="openedTab === 1">
+		<nav class="bookmarks__sidebar-header" [class.is-active-first]="openedTab === 0" [class.is-active-second]="openedTab === 1">
 			<button class="button button-invisible bookmarks__sidebar-header-tab is-first" type="button"
 				[class.is-active]="openedTab === 0" (click)="onClickOnTab( 0 )">
 				Folders
@@ -16,7 +19,7 @@
 				[class.is-active]="openedTab === 1" (click)="onClickOnTab( 1 )">
 				Labels
 			</button>
-		</header>
+		</nav>
 
 		<!-- Sidebar content (tab 1): Folder directory -->
 		<div class="bookmarks__sidebar-content bookmarks__sidebar-content-directory" [class.is-active]="openedTab === 0">

@@ -42,6 +42,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	private changeSearch: EventEmitter<any>;
 
 	/**
+	 * Output: Logout event, emitting nothing
+	 */
+	@Output()
+	private logout: EventEmitter<any>;
+
+	/**
 	 * Change detector
 	 */
 	private changeDetector: ChangeDetectorRef;
@@ -74,7 +80,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	/**
 	 * App name
 	 */
-	private app: string;
+	private appName: string;
 
 	/**
 	 * Flag for temporarily disabling the change search event emitting
@@ -109,9 +115,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 		// Setup
 		this.changeSearch = new EventEmitter();
+		this.logout = new EventEmitter();
 		this.isChangeSearchDisabled = true; // Also skip the first initial one
-		this.app = appService.APP_NAME;
+		this.appName = appService.APP_NAME;
 		this.userName = 'User';
+		this.serviceSubscriptions = [];
 		this.searchForm = formBuilder.group( {
 			text: ''
 		} );
@@ -227,11 +235,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Dropdown event handler
+	 * Select an entry in the user dropdown menu
 	 * @param {string} value Value of the dropdown item
 	 */
-	private log( value: string ): void {
-		console.log( value ); // TODO: Redirect to route and stuff
+	private onDropdownSelect( value: string ): void {
+
+		switch ( value ) {
+
+			// Logout
+			case 'logout':
+				this.logout.emit( null );
+				break;
+
+			default:
+				break;
+
+		}
+
 	}
 
 }

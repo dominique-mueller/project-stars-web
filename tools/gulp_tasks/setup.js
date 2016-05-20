@@ -78,7 +78,8 @@ export const api = gulp.task( 'setup:api', () => {
 			`${ config.paths.app.src }/services/bookmark/bookmarks.mock.json`,
 			`${ config.paths.app.src }/services/folder/folders.mock.json`,
 			`${ config.paths.app.src }/services/label/labels.mock.json`,
-			`${ config.paths.app.src }/services/user/user.mock.json`
+			`${ config.paths.app.src }/services/user/user.mock.json`,
+			`${ config.paths.app.src }/services/user/jwt.mock.json`
 		] )
 		.pipe( gulp.dest( config.paths.app.apimock ) );
 

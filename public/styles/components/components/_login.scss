@@ -1,0 +1,136 @@
+// VIEW COMPONENT: LOGIN
+
+.login {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: $color-primary;
+}
+
+// Login box layout
+
+.login__box {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	width: 80rem;
+	height: 30rem;
+	box-shadow: 0 .2rem .7rem rgba($color-black, .1);
+	transform: translate3D(-50%,-50%,0);
+}
+
+.login__box-product {
+	display: inline-block;
+	width: 35rem;
+	height: 100%;
+	padding: 4rem 4rem 4rem;
+	background-color: $color-tundora;
+	color: $color-white;
+	text-align: center;
+	vertical-align: top;
+}
+
+.login__box-user {
+	display: inline-block;
+	width: 45rem;
+	height: 100%;
+	vertical-align: top;
+	background-color: $color-gallery;
+}
+
+// Login: Product box
+
+.login__box-product-logo {
+	display: block;
+	width: 6.4rem;
+	height: 6.4rem;
+	margin-left: calc(50% - 3.2rem);
+	margin-right: calc(50% - 3.2rem);
+}
+
+.login__box-product-name {
+	margin-top: 1.4rem;
+	margin-bottom: 3.6rem;
+	font-size: 2.4rem;
+	letter-spacing: .02rem;
+}
+
+.login__box-product-description {
+	color: $color-gallery;
+	letter-spacing: .01rem;
+	line-height: 1.6;
+}
+
+// Login: User box
+
+.login__box-user-tabs {
+	width: 100%;
+	height: 6.4rem;
+	background-color: $color-white;
+	border-bottom: .1rem solid $color-alto;
+}
+
+.login__box-user-tab {
+	position: relative; // Because of ::after
+	display: inline-block;
+	width: 50%; // 2 equally spread tabs
+	padding-top: .4rem;
+	line-height: 6rem;
+	text-transform: uppercase;
+	overflow: hidden;
+
+	&::after {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: .2rem;
+		background-color: $color-primary;
+		content: '';
+		transition: transform $anim-speed-normal $anim-easing;
+	}
+
+	&.is-first::after {
+		transform: translate3D(100%,0,0);
+	}
+
+	&.is-second::after {
+		transform: translate3D(-100%,0,0);
+	}
+
+	&:hover,
+	&.is-active {
+
+		&::after {
+			transform: translate3D(0,0,0);
+		}
+
+	}
+
+	&.is-active {
+		font-weight: bold;
+	}
+
+}
+
+.login__box-user-form {
+	padding: 3.4rem;
+}
+
+.login__box-user-input {
+	margin-bottom: 2.4rem;
+	padding: 1.3rem 1.4rem 1.2rem;
+	background-color: $color-white;
+	border-radius: .1rem;
+	line-height: 1.6rem;
+	// border: .1rem solid $color-alto;
+}
+
+.login__box-user-button {
+	padding: 1.3rem 4rem 1.2rem;
+	border-radius: .1rem;
+	font-size: 1.3rem;
+	line-height: 1.5rem;
+	text-transform: uppercase;
+	letter-spacing: .02rem;
+}
