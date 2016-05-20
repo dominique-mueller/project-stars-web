@@ -17,12 +17,12 @@ import { Bookmark } from './bookmark.model';
 export class BookmarkLogicService {
 
 	/**
-	 * Get a bookmark by providing its ID (pure function)
+	 * Get a bookmark by its ID (pure function)
 	 * @param  {List<Bookmark>} bookmarks  List of bookmarks to search in
-	 * @param  {number}         bookmarkId Bookmark ID
+	 * @param  {string}         bookmarkId Bookmark ID
 	 * @return {Bookmark}                  Bookmark result OR null
 	 */
-	public getBookmarkByBookmarkId( bookmarks: List<Bookmark>, bookmarkId: number ): Bookmark {
+	public getBookmarkByBookmarkId( bookmarks: List<Bookmark>, bookmarkId: string ): Bookmark {
 
 		// We try to find the bookmark, and return null if we cannot find it
 		let result: Bookmark = bookmarks.find( ( bookmark: Bookmark ) => {
@@ -33,12 +33,12 @@ export class BookmarkLogicService {
 	}
 
 	/**
-	 * Get all bookmarks living inside a parent folder (pure function)
+	 * Get all bookmarks in order which live inside a provided folder (pure function)
 	 * @param  {List<Bookmark>} bookmarks List of all bookmarks
-	 * @param  {number}         folderId  Folder ID
+	 * @param  {string}         folderId  Folder ID
 	 * @return {List<Bookmark>}           List of bookmarks in the folder
 	 */
-	public getBookmarksByFolderId( bookmarks: List<Bookmark>, folderId: number ): List<Bookmark> {
+	public getBookmarksByFolderId( bookmarks: List<Bookmark>, folderId: string ): List<Bookmark> {
 
 		// We create a new list and put only the included bookmarks in it (ordered)
 		return List<Bookmark>().withMutations( ( result: List<Bookmark> ) => {

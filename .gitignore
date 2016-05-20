@@ -7,7 +7,7 @@ Gemfile.lock
 index.html
 build
 
-# Docs
+# Documentation
 docs
 
 # Generated error logs
@@ -15,7 +15,6 @@ undefinederror.json
 undefinedinfo.json
 info.log.json
 error.log.json
-
 
 # Editor settings
 *.sublime-workspace

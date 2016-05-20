@@ -1,8 +1,8 @@
 /**
  * External imports
  */
-import { Component } from '@angular/core';
-import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes, Route } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Router, Routes, Route } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { provideStore } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -50,4 +50,28 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 	} )
 	// TODO: Settings Route, Login Route, ...
 ] )
-export class AppComponent {}
+export class AppComponent implements OnInit {
+
+	/**
+	 * Router
+	 */
+	private router: Router;
+
+	/**
+	 * Constructor
+	 */
+	constructor( router: Router ) {
+
+		// Initialize
+		this.router = router;
+
+	}
+
+	public ngOnInit(): void {
+
+		// TODO: Route depending on login status, only when on root
+		// this.router.navigate( [ 'bookmarks' ] ); // Absolute
+
+	}
+
+}

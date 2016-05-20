@@ -38,13 +38,13 @@ export class MoveIntoFolderComponent {
 	 * Input Element ID
 	 */
 	@Input()
-	private elementId: number;
+	private elementId: string;
 
 	/**
 	 * Input: ID of the current folder
 	 */
 	@Input()
-	private currentPathId: number;
+	private currentPathId: string;
 
 	/**
 	 * Input: List of all folders
@@ -56,7 +56,7 @@ export class MoveIntoFolderComponent {
 	 * Output: Select event, emits new folder ID
 	 */
 	@Output()
-	private select: EventEmitter<number>;
+	private select: EventEmitter<string>;
 
 	/**
 	 * Change detector
@@ -180,10 +180,10 @@ export class MoveIntoFolderComponent {
 
 	/**
 	 * Switch to another folder
-	 * @param {number} folderId  Folder ID
+	 * @param {string} folderId  Folder ID
 	 * @param {string} direction Navigation direction, 'up' or 'down'
 	 */
-	private onSwitchToFolder( folderId: number, direction: string ): void {
+	private onSwitchToFolder( folderId: string, direction: string ): void {
 
 		// Skip if we're already in the root folder
 		if ( typeof folderId === 'undefined' ) {

@@ -1,32 +1,32 @@
 {
 	"data": [
 		{
-			"id": 0,
+			"id": "LAB0",
 			"name": "study",
 			"color": "#4F86C6"
 		},
 		{
-			"id": 1,
+			"id": "LAB1",
 			"name": "important",
 			"color": "#754F44"
 		},
 		{
-			"id": 2,
+			"id": "LAB2",
 			"name": "favourite",
 			"color": "#AFB42B"
 		},
 		{
-			"id": 3,
+			"id": "LAB3",
 			"name": "work",
 			"color": "#5D4037"
 		},
 		{
-			"id": 4,
+			"id": "LAB4",
 			"name": "family",
 			"color": "#F57C00"
 		},
 		{
-			"id": 5,
+			"id": "LAB5",
 			"name": "to read",
 			"color": "#E91E63"
 		}

@@ -1,9 +1,6 @@
 ( function( window ) {
 
-	// Tell systemjs the server base url
-	var baseUrl = 'http://localhost:3000';
-
-	// Tell systemjs where to look for things
+	// Tell SystemJS where to find modules
 	var map = {
 
 		// App
@@ -17,7 +14,7 @@
 
 	};
 
-	// Tell systemjs which files to load
+	// Tell SystemHS which files to actually load
 	var packages = {
 
 		// App
@@ -69,9 +66,8 @@
 
 	};
 
-	// Configure systemjs
+	// Configure SystemJS
 	System.config( {
-		baseUrl: baseUrl,
 		map: map,
 		packages: packages
 	} );

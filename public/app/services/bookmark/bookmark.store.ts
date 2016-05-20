@@ -23,6 +23,18 @@ export const DELETE_FOLDER_BOOKMARKS: string = 'DELETE_FOLDER_BOOKMARKS';
  * Initial state of the bookmark data (empty per default)
  */
 const initialState: List<Bookmark> = List<Bookmark>();
+const initialBookmarkState: Bookmark = <Bookmark> Map<string, any>( {
+	created: null,
+	description: '',
+	favicon: null,
+	id: null,
+	labels: List<string>(),
+	path: null,
+	position: null,
+	title: '',
+	updated: null,
+	url: ''
+} );
 
 /**
  * Bookmark store (reducer)
@@ -39,7 +51,7 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 
 				// Set bookmarks as a list (because order is important)
 				action.payload.forEach( ( bookmark: any ) => {
-					newState.push( fromJS( bookmark ) );
+					newState.push( <Bookmark> initialBookmarkState.merge( fromJS( bookmark ) ) );
 				} );
 
 			} );
@@ -49,7 +61,7 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 
 			// Push the bookmark to the list
 			return <List<Bookmark>> state
-				.push( fromJS( action.payload.data ) );
+				.push( <Bookmark> fromJS( action.payload.data ) );
 
 		// Update bookmark (only direct attributes, not labels)
 		// TODO: Implement position swapping
@@ -117,7 +129,7 @@ export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = init
 
 			// Save temporary values of the deleted bookmark
 			let removedPosition: number;
-			let folderPathId: number;
+			let folderPathId: string;
 
 			return <List<Bookmark>> state
 

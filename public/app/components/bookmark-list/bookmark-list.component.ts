@@ -114,7 +114,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Map of labels
 	 */
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Bookmark template for a new bookmark
@@ -129,7 +129,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * ID of the currently opened folder
 	 */
-	private openedFolderId: number;
+	private openedFolderId: string;
 
 	/**
 	 * Name of the currently opened folder
@@ -141,7 +141,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * Currently selected element details
 	 */
 	private selectedElement: {
-		id: number,
+		id: string,
 		type: string
 	};
 
@@ -171,7 +171,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		// Setup
 		this.bookmarks = List<Bookmark>();
 		this.folders = List<Folder>();
-		this.labels = Map<number, Label>();
+		this.labels = Map<string, Label>();
 		this.bookmarkTemplate = <Bookmark> Map<string, any>();
 		this.folderTemplate = <Folder> Map<string, any>();
 		this.openedFolderId = null;
@@ -195,12 +195,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.resetSearch();
 
 		// Get folder ID from the route URL
-		// Pre-filter: If the ID is not a number, we navigate back to the root folder
-		if ( /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
-			this.openedFolderId = parseInt( curr.parameters[ 'id' ], 10 );
-		} else {
-			this.navigateToFolder( 0 );
-		}
+		this.openedFolderId = curr.parameters[ 'id' ];
 
 	}
 
@@ -242,7 +237,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 						this.uiService.setDocumentTitle( this.openedFolderName );
 						this.changeDetector.markForCheck(); // Trigger change detection
 					} else {
-						this.navigateToFolder( 0 );
+						this.navigateToFolder( null ); // Absolute, to the root folder
 					}
 
 				}
@@ -259,7 +254,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
@@ -291,16 +286,17 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	}
 
-	public OnActivate(): void {
-		console.log('#######');
-	}
-
 	/**
 	 * Navigate to another route
-	 * @param {number} folderId Name of the subfolder
+	 * @param {string} folderId Name of the subfolder
 	 */
-	private navigateToFolder( folderId: number ): void {
-		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
+	private navigateToFolder( folderId: string ): void {
+		if ( folderId === null ) {
+			this.uiService.unsetOpenedFolderId(); // Remove opened folder
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute, root folder
+		} else {
+			this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
+		}
 	}
 
 	/**
@@ -314,27 +310,23 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Create new bookmark
-	 * @param {any} data Bookmark data
+	 * @param {any} newBookmark Bookmark data
 	 */
-	private onCreateBookmark( data: any ): void {
-
-		// Add additional data to bookmark before creating it
-		data.path = this.openedFolderId;
-		data.position = this.bookmarks.size + 1;
-		this.bookmarkDataService.addBookmark( data );
+	private onCreateBookmark( newBookmark: any ): void {
+		newBookmark.path = this.openedFolderId;
+		newBookmark.position = this.bookmarks.size + 1; // Just append to the bookmark list
+		this.bookmarkDataService.addBookmark( newBookmark );
 
 	}
 
 	/**
 	 * Create new folder
-	 * @param {any} data Folder data
+	 * @param {any} newFolder Folder data
 	 */
-	private onCreateFolder( data: any ): void {
-
-		// Add additional data to folder before creating it
-		data.path = this.openedFolderId;
-		data.position = this.folders.size + 1;
-		this.folderDataService.addFolder( data );
+	private onCreateFolder( newFolder: any ): void {
+		newFolder.path = this.openedFolderId;
+		newFolder.position = this.folders.size + 1; // Just append to the folder list
+		this.folderDataService.addFolder( newFolder );
 
 	}
 

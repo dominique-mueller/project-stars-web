@@ -31,15 +31,10 @@ export class LabelDataService {
 	/**
 	 * Observable map of labels
 	 */
-	public labels: Observable<Map<number, Label>>;
+	public labels: Observable<Map<string, Label>>;
 
 	/**
-	 * Status flag representing the current fetching status
-	 */
-	public isFetching: boolean;
-
-	/**
-	 * Http service
+	 * HTTP service
 	 */
 	private http: Http;
 
@@ -49,130 +44,262 @@ export class LabelDataService {
 	private appService: AppService;
 
 	/**
-	 * Bookmark data service
-	 */
-	private bookmarkDataService: BookmarkDataService;
-
-	/**
 	 * App store
 	 */
 	private store: Store<AppStore>;
 
 	/**
+	 * Bookmark data service
+	 */
+	private bookmarkDataService: BookmarkDataService;
+
+	/**
 	 * Constructor
 	 */
-	constructor( http: Http, appService: AppService, bookmarkDataService: BookmarkDataService, store: Store<AppStore> ) {
+	constructor(
+		http: Http,
+		appService: AppService,
+		store: Store<AppStore>,
+		bookmarkDataService: BookmarkDataService
+	) {
 
-		// Initialize services
+		// Initialize
 		this.http = http;
 		this.appService = appService;
-		this.bookmarkDataService = bookmarkDataService;
 		this.store = store;
+		this.bookmarkDataService = bookmarkDataService;
 
 		// Setup
 		this.labels = store.select( 'labels' ); // Select returns an observable
-		this.isFetching = false;
 
 	}
 
 	/**
-	 * Load all labels from the server
+	 * API request: Load all labels
 	 */
 	public loadLabels(): void {
 
-		// Fetch data from server
-		this.isFetching = true;
-		this.http.get( `${ this.appService.API_URL }/labels.mock.json` ) // TODO: Change to REST API
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
 
-			// Convert data
-			.map( ( response: Response ) => <Array<any>> response.json().data )
+				this.http
 
-			// Create action
-			.map( ( payload: Array<any> ) => ( { type: LOAD_LABELS, payload } ) )
+					// Fetch data and parse response
+					.get( `${ this.appService.API_URL }/labels.mock.json` )
+					.map( ( response: Response ) => <any> response.json() )
+
+					// Dispatch action
+					.subscribe(
+						( data: any ) => {
+							this.store.dispatch( {
+								payload: data.data,
+								type: LOAD_LABELS
+							} );
+						}
+					);
+
+			},
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Fetch data and parse response
+			.get( `${ this.appService.API_URL }/labels` )
+			.map( ( response: Response ) => <any> response.json() )
 
 			// Dispatch action
 			.subscribe(
-				( action: Action ) => {
-					this.isFetching = false;
-					this.store.dispatch( action );
+				( data: any ) => {
+					this.store.dispatch( {
+						payload: data.data,
+						type: LOAD_LABELS
+					} );
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'LABEL SERVICE ERROR' );
+					console.dir( error );
 				}
 			);
 
-			// TODO: Error handling
+		*/
 
 	}
 
 	/**
-	 * Add a new label
-	 * @param {any} data Data
+	 * API request: Add a new label
+	 * @param {any} newLabel Data of the new label
 	 */
-	public addLabel( data: any ): void {
+	public addLabel( newLabel: any ): void {
 
-		// TODO: API CALL
-		let apiCallResultId: number = 20;
-		data.id = apiCallResultId;
-
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				data: data,
-				id: apiCallResultId
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
+				newLabel.id = `LAB${ Math.floor( Math.random() * 11 ) }`;
+				this.store.dispatch( {
+					payload: {
+						data: newLabel
+					},
+					type: ADD_LABEL
+				} );
 			},
-			type: ADD_LABEL
-		} );
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Send data and parse response
+			.post( `${ this.appService.API_URL }/labels`, JSON.stringify( { data: newLabel } ) )
+			.map( ( response: Response ) => <any> response.json() )
+
+			// Dispatch action
+			.subscribe(
+				( data: any ) => {
+					newLabel.id = data.data.id;
+					this.store.dispatch( {
+						payload: {
+							data: newLabel
+						},
+						type: ADD_LABEL
+					} );
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'LABEL SERVICE ERROR' );
+					console.dir( error );
+				}
+			);
+
+		*/
 
 	}
 
 	/**
-	 * Update label
-	 * @param {number} labelId Label ID
-	 * @param {any}    data    Data
+	 * API request: Update an existing label
+	 * @param {string} labelId      Label ID
+	 * @param {any}    updatedLabel Updated label data
 	 */
-	public updateLabel( labelId: number, data: any ): void {
+	public updateLabel( labelId: string, updatedLabel: any ): void {
 
-		// TODO: API CALL
-
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				data: data,
-				id: labelId
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
+				this.store.dispatch( {
+					payload: {
+						data: updatedLabel,
+						id: labelId
+					},
+					type: UPDATE_LABEL
+				} );
 			},
-			type: UPDATE_LABEL
-		} );
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Send data and parse response
+			.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( { data: updatedLabel } ) )
+			.map( ( response: Response ) => <any> response.json() )
+
+			// Dispatch action
+			.subscribe(
+				( data: any ) => {
+					this.store.dispatch( {
+						payload: {
+							data: updatedLabel,
+							id: labelId
+						},
+						type: UPDATE_LABEL
+					} );
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'LABEL SERVICE ERROR' );
+					console.dir( error );
+				}
+			);
+
+		*/
 
 	}
 
 	/**
-	 * Delete one label
-	 * @param {number} labelId Label ID
+	 * API request: Delete an existing bookmark
+	 * @param {string} labelId Label ID
 	 */
-	public deleteLabel( labelId: number ): void {
+	public deleteLabel( labelId: string ): void {
 
-		// TODO: API CALL
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
 
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				id: labelId
+				// Delete this label
+				this.store.dispatch( {
+					payload: {
+						id: labelId
+					},
+					type: DELETE_LABEL
+				} );
+
+				// Also unassign this label from all bookmarks
+				this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
+
 			},
-			type: DELETE_LABEL
-		} );
+			1000
+		);
 
-		// Unassign this label from all bookmarks
-		this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
+		/* TODO: This is the production code
+
+		this.http
+
+			// Send data and parse response
+			.delete( `${ this.appService.API_URL }/labels/${ labelId }` )
+			.map( ( response: Response ) => <any> response.json() )
+
+			// Dispatch action
+			.subscribe(
+				( data: any ) => {
+
+					// Delete this label
+					this.store.dispatch( {
+						payload: {
+							id: labelId
+						},
+						type: DELETE_LABEL
+					} );
+
+					// Also unassign this label from all bookmarks
+					this.bookmarkDataService.unassignLabelFromAllBookmarks(labelId);
+
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'LABEL SERVICE ERROR' );
+					console.dir( error );
+				}
+			);
+
+		*/
 
 	}
 
 	/**
-	 * Get label template (for creating a new label)
+	 * Get label template, used when creating a new label
 	 * @return {Label} Label template
 	 */
 	public getLabelTemplate(): Label {
 		return <Label> Map<string, any>( {
 			color: '#606060',
-			id: -1,
-			name: ''
+			id: null,
+			name: 'Unnamed label'
 		} );
 	}
 

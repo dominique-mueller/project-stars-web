@@ -20,12 +20,17 @@ export const ADD_LABEL: string = 'ADD_LABEL';
 /**
  * Initial state of the label data (empty per default)
  */
-const initialState: Map<number, Label> = Map<number, Label>();
+const initialState: Map<string, Label> = Map<string, Label>();
+const initialLabelState: Label = <Label> Map<string, any>( {
+	color: '',
+	id: null,
+	name: ''
+} );
 
 /**
  * Label store (reducer)
  */
-export const labels: Reducer<Map<number, Label>> = ( state: Map<number, Label> = initialState, action: Action ) => {
+export const labels: Reducer<Map<string, Label>> = ( state: Map<string, Label> = initialState, action: Action ) => {
 
 	switch ( action.type ) {
 
@@ -33,11 +38,11 @@ export const labels: Reducer<Map<number, Label>> = ( state: Map<number, Label> =
 		case LOAD_LABELS:
 
 			// Compute new state from initial state (with multiple mutations, better performance)
-			return initialState.withMutations( ( newState: Map<number, Label> ) => {
+			return initialState.withMutations( ( newState: Map<string, Label> ) => {
 
 				// Set labels as a map (for easier access later on)
 				action.payload.forEach( ( label: any ) => {
-					newState.set( label.id, fromJS( label ) );
+					newState.set( label.id, <Label> initialLabelState.merge( fromJS( label ) ) );
 				} );
 
 			} );
@@ -46,17 +51,17 @@ export const labels: Reducer<Map<number, Label>> = ( state: Map<number, Label> =
 		case ADD_LABEL:
 
 			// Set label in the correct state
-			return <Map<number, Label>> state
-				.set( action.payload.id, <Label> Map<string, any>( action.payload.data ) );
+			return <Map<string, Label>> state
+				.set( action.payload.data.id, <Label> initialLabelState.merge( fromJS( action.payload.data ) ) );
 
 		// Update label
 		case UPDATE_LABEL:
 
 			// Update only the changed values
-			return <Map<number, Label>> state
+			return <Map<string, Label>> state
 				.map( ( label: Label ) => {
 					if ( label.get( 'id' ) === action.payload.id ) {
-						return label.merge( Map<number, any>( action.payload.data ) );
+						return label.merge( Map<string, any>( action.payload.data ) );
 					} else {
 						return label;
 					}
@@ -66,7 +71,7 @@ export const labels: Reducer<Map<number, Label>> = ( state: Map<number, Label> =
 		case DELETE_LABEL:
 
 			// Filter the deleted label out of the list
-			return <Map<number, Label>> state
+			return <Map<string, Label>> state
 				.filterNot( ( label: Label ) => {
 					return label.get( 'id' ) === action.payload.id;
 				} );

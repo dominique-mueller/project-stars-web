@@ -16,6 +16,6 @@ import { Label } from './../label';
 export interface AppStore {
 	bookmarks: List<Bookmark>;
 	folders: List<Folder>;
-	labels: Map<number, Label>;
+	labels: Map<string, Label>;
 	ui: Map<string, any>;
 };

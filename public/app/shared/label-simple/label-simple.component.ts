@@ -42,7 +42,7 @@ export class LabelSimpleComponent {
 	 * Output: Remove event, emits label ID
 	 */
 	@Output()
-	private remove: EventEmitter<number>;
+	private remove: EventEmitter<string>;
 
 	/**
 	 * Constructor

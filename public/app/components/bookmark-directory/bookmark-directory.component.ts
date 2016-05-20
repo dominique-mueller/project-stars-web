@@ -38,19 +38,19 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	 * Input: ID of the parent folder
 	 */
 	@Input()
-	private parentFolderId: number;
+	private parentFolderId: string;
 
 	/**
 	 * Input: ID of the currently opened folder
 	 */
 	@Input()
-	private openedFolderId: number;
+	private openedFolderId: string;
 
 	/**
 	 * Output: Select event, emits folder ID
 	 */
 	@Output()
-	private selectFolder: EventEmitter<number>;
+	private selectFolder: EventEmitter<string>;
 
 	/**
 	 * Internal: Folder logic service
@@ -100,9 +100,9 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	/**
 	 * Handle click on a folder element (but only when the selected folder is not already the currently opened one)
 	 * We simply pipe the event through to the top until we reach the bookmarks component which then handles the navigation
-	 * @param {number} folderId ID of the folder we want to navigate to
+	 * @param {string} folderId Folder ID
 	 */
-	private onSelectFolder( folderId: number ): void {
+	private onSelectFolder( folderId: string ): void {
 		if ( folderId !== this.openedFolderId ) {
 			this.selectFolder.emit( folderId );
 			this.openedFolderId = folderId; // Need to set it here to also detect changes for children

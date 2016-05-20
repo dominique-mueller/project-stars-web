@@ -98,7 +98,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Current bookmark ID
 	 */
-	private bookmarkId: number;
+	private bookmarkId: string;
 
 	/**
 	 * Current bookmark
@@ -113,12 +113,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Map of all labels
 	 */
-	private allLabels: Map<number, Label>;
+	private allLabels: Map<string, Label>;
 
 	/**
 	 * Map of all currently unassigned labels
 	 */
-	private unassignedLabels: Map<number, Label>;
+	private unassignedLabels: Map<string, Label>;
 
 	/**
 	 * Visibility status flag (for animation purposes)
@@ -157,8 +157,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.bookmarkId = null;
 		this.bookmark = null;
 		this.folders = List<Folder>();
-		this.allLabels = Map<number, Label>();
-		this.unassignedLabels = Map<number, Label>();
+		this.allLabels = Map<string, Label>();
+		this.unassignedLabels = Map<string, Label>();
 		this.isVisible = false;
 
 	}
@@ -170,18 +170,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
 		// Get bookmark ID from the route URL
-		// Pre-filter: If the ID is not a number, we navigate back
-		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
-			this.bookmarkId = parseInt( curr.parameters[ 'id' ], 10 );
-		} else {
-			this.onClose();
-		}
+		this.bookmarkId = curr.parameters[ 'id' ];
 
 	}
 
 	/**
 	 * Call this when the view gets initialized
-	 * We do NOT land here if we have been thrown out in the 'routerOnActive' function above
 	 */
 	public ngOnInit(): void {
 
@@ -227,7 +221,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				if ( labels.size > 0 ) {
 
 					this.allLabels = labels;
@@ -286,14 +280,19 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Animate out, navigate when animation is done
-		const folderId: number = ( this.bookmark !== null && this.bookmark.size > 0 ) ? this.bookmark.get( 'path' ) : 0;
-		this.isVisible = false;
-		setTimeout(
-			() => {
-				this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
-			},
-			275 // Needs 250, plus some (maybe unnecessary) extra time
-		);
+		if ( this.bookmark !== null && this.bookmark.size > 0 ) {
+			this.isVisible = false;
+			setTimeout(
+				() => {
+					this.router.navigate( [ 'bookmarks', 'view', this.bookmark.get( 'path' ) ] ); // Absolute
+				},
+				275 // Needs 250, plus some (maybe unnecessary) extra time
+			);
+		} else {
+			this.isVisible = false;
+			this.uiService.unsetOpenedFolderId();
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		}
 
 	}
 
@@ -328,32 +327,37 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} newValue  New / updated value
 	 */
 	private onUpdate( attribute: string, newValue: string ): void {
-		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, attribute, newValue );
+		let updatedBookmark: any = {};
+		updatedBookmark[ attribute ] = newValue;
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark );
 	}
 
 	/**
 	 * Assign a new label to the current bookmark
-	 * @param {number} labelId Label ID
+	 * @param {string} labelId Label ID
 	 */
-	private assignLabel( labelId: number ): void {
+	private assignLabel( labelId: string ): void {
 		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
 	}
 
 	/**
 	 * Unassign a label from the current bookmark
-	 * @param {number} labelId Label ID
+	 * @param {string} labelId Label ID
 	 */
-	private unassignLabel( labelId: number ): void {
+	private unassignLabel( labelId: string ): void {
 		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
 	}
 
 	/**
 	 * Move bookmark into another folder
-	 * @param {number} parentFolderId New parent folder ID
+	 * @param {string} parentFolderId New parent folder ID
 	 */
-	private onMoveBookmark( parentFolderId: number ): void {
+	private onMoveBookmark( parentFolderId: string ): void {
 		this.onClose();
-		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, 'path', parentFolderId );
+		let updatedBookmark: any = {
+			path: parentFolderId
+		};
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark );
 	}
 
 }

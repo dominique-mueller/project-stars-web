@@ -69,7 +69,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Current folder ID
 	 */
-	private folderId: number;
+	private folderId: string;
 
 	/**
 	 * Current folder
@@ -121,18 +121,12 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
 		// Get folder ID from the route URL
-		// Pre-filter: If the ID is not a number, we navigate back
-		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
-			this.folderId = parseInt( curr.parameters[ 'id' ], 10 );
-		} else {
-			this.onClose();
-		}
+		this.folderId = curr.parameters[ 'id' ];
 
 	}
 
 	/**
 	 * Call this when the view gets initialized
-	 * We do NOT land here if we have been thrown out in the 'routerOnActive' function above
 	 */
 	public ngOnInit(): void {
 
@@ -205,14 +199,19 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Animate out, navigate when animation is done
-		const folderId: number = ( this.folder !== null && this.folder.size > 0 ) ? this.folder.get( 'path' ) : 0;
-		this.isVisible = false;
-		setTimeout(
-			() => {
-				this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
-			},
-			275 // Needs 250, plus some (maybe unnecessary) extra time
-		);
+		if ( this.folder !== null && this.folder.size > 0 ) {
+			this.isVisible = false;
+			setTimeout(
+				() => {
+					this.router.navigate( [ 'bookmarks', 'view', this.folder.get( 'path' ) ] ); // Absolute
+				},
+				275 // Needs 250, plus some (maybe unnecessary) extra time
+			);
+		} else {
+			this.isVisible = false;
+			this.uiService.unsetOpenedFolderId();
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		}
 
 	}
 
@@ -239,7 +238,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 					this.onClose();
 
 					// Get all subfolders of the folder we want to delete
-					let foldersToDelete: Array<number> =
+					let foldersToDelete: Array<string> =
 						this.folderLogicService.getRecursiveSubfolderIds( this.allFolders, this.folderId );
 
 					// Delete folder with all its subfolders, and bookmarks contained in them
@@ -256,16 +255,21 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} newValue  New / updated value
 	 */
 	private onUpdate( attribute: string, newValue: string ): void {
-		this.folderDataService.updateFolderValue( this.folderId, attribute, newValue );
+		let updatedFolder: any = {};
+		updatedFolder[ attribute ] = newValue;
+		this.folderDataService.updateFolder( this.folderId, updatedFolder );
 	}
 
 	/**
 	 * Move folder into another folder
-	 * @param {number} parentFolderId New parent folder ID
+	 * @param {string} parentFolderId New parent folder ID
 	 */
-	private onMoveFolder( parentFolderId: number ): void {
+	private onMoveFolder( parentFolderId: string ): void {
 		this.onClose();
-		this.folderDataService.updateFolderValue( this.folderId, 'path', parentFolderId );
+		let updatedFolder: any = {
+			path: parentFolderId
+		};
+		this.folderDataService.updateFolder( this.folderId, updatedFolder );
 	}
 
 }

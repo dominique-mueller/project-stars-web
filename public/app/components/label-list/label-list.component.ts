@@ -53,7 +53,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	/**
 	 * Map of labels
 	 */
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Label template for a new label
@@ -63,7 +63,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	/**
 	 * ID of the currently edited label
 	 */
-	private editedLabelId: number;
+	private editedLabelId: string;
 
 	/**
 	 * Constructor
@@ -80,7 +80,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 
 		// Setup
 		this.serviceSubscriptions = [];
-		this.labels = Map<number, Label>();
+		this.labels = Map<string, Label>();
 		this.labelTemplate = <Label> Map<string, any>();
 		this.editedLabelId = null;
 
@@ -93,7 +93,7 @@ export class LabelListComponent implements OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
@@ -123,10 +123,10 @@ export class LabelListComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Change edited label ID
-	 * @param {number}  labelId Label ID
+	 * @param {string}  labelId Label ID
 	 * @param {boolean} status  Edit mode status
 	 */
-	private onChangeEditMode( labelId: number, status: boolean ): void {
+	private onChangeEditMode( labelId: string, status: boolean ): void {
 		if ( status ) {
 			this.editedLabelId = labelId;
 		} else {
@@ -136,10 +136,10 @@ export class LabelListComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Update a label
-	 * @param {number} labelId Label ID
+	 * @param {string} labelId Label ID
 	 * @param {any}    data    Data object
 	 */
-	private onLabelUpdate( labelId: number, data: any ): void {
+	private onLabelUpdate( labelId: string, data: any ): void {
 		this.labelDataService.updateLabel( labelId, data );
 	}
 
@@ -153,9 +153,9 @@ export class LabelListComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Delete a label
-	 * @param {number} labelId Label ID
+	 * @param {string} labelId Label ID
 	 */
-	private onLabelDelete( labelId: number ): void {
+	private onLabelDelete( labelId: string ): void {
 
 		// Setup confirmation dialog
 		let confirmationOptions: any = {

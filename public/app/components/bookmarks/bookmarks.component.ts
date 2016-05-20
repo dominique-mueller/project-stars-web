@@ -81,6 +81,11 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private folderDataService: FolderDataService;
 
 	/**
+	 * Folder logic service
+	 */
+	private folderLogicService: FolderLogicService;
+
+	/**
 	 * Label data service
 	 */
 	private labelDataService: LabelDataService;
@@ -96,9 +101,14 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private folders: List<Folder>;
 
 	/**
+	 * ID of the root folder
+	 */
+	private rootFolderId: string;
+
+	/**
 	 * ID of the currently opened folder
 	 */
-	private openedFolderId: number;
+	private openedFolderId: string;
 
 	/**
 	 * Name of the currently opened folder
@@ -120,21 +130,23 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService
-		) {
+	) {
 
 		// Initialize
 		this.router = router;
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.folderDataService = folderDataService;
+		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
 
 		// Setup
 		this.serviceSubscriptions = [];
 		this.folders = List<Folder>();
-		this.openedFolderId = null;
+		this.rootFolderId = null; // Explicitely set to null
+		this.openedFolderId = null; // Same as in the UI store
 		this.openedFolderName = '';
-		this.openedTab = 0;
+		this.openedTab = 0; // Automatically show the folders tab
 
 	}
 
@@ -153,6 +165,12 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
+
+					// We select the root folder when the opened folder gets unselected
+					if ( uiState.get( 'openedFolderId' ) === null ) {
+						this.onSelectFolder( this.rootFolderId );
+					}
+
 				}
 
 			}
@@ -161,7 +179,20 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		// Get folders from their services
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				this.folders = folders;
+				if ( folders.size > 0 ) {
+
+					// Set all folders
+					this.folders = folders;
+
+					// Find the root folder
+					// If not yet done - this is only relevant for the first visit, to get into some folder (the root here)
+					if ( this.rootFolderId === null ) {
+						this.rootFolderId = this.folderLogicService.getRootFolder( folders ).get( 'id' );
+						this.uiService.setRootFolderId( this.rootFolderId );
+						this.onSelectFolder( this.rootFolderId );
+					}
+
+				}
 			}
 		);
 
@@ -192,10 +223,18 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Navigate to a folder (event comes from the directory)
-	 * @param {number} folderId ID of the folder we want to navigate to
+	 * Tabs: Switch to a tab
+	 * @param {number} tabId Number of the tab we want to show
 	 */
-	private onSelectFolder( folderId: number ): void {
+	private onClickOnTab(tabId: number): void {
+		this.openedTab = tabId;
+	}
+
+	/**
+	 * Navigate to a folder when selecting one in the bookmarks directory
+	 * @param {string} folderId Folder ID
+	 */
+	private onSelectFolder( folderId: string ): void {
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one
@@ -204,14 +243,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		// Navigate to folder (relative)
 		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 
-	}
-
-	/**
-	 * Open / switch to tab
-	 * @param {number} tabId Number of the tab we want to show
-	 */
-	private onClickOnTab( tabId: number ): void {
-		this.openedTab = tabId;
 	}
 
 	/**

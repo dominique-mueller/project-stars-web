@@ -18,7 +18,8 @@ import {
 	LOAD_FOLDERS,
 	ADD_FOLDER,
 	UPDATE_FOLDER,
-	DELETE_FOLDER
+	DELETE_FOLDER,
+	DELETE_FOLDERS
 } from './folder.store';
 
 /**
@@ -34,12 +35,7 @@ export class FolderDataService {
 	public folders: Observable<List<Folder>>;
 
 	/**
-	 * Status flag representing the current fetching status
-	 */
-	public isFetching: boolean;
-
-	/**
-	 * Http service
+	 * HTTP service
 	 */
 	private http: Http;
 
@@ -49,144 +45,287 @@ export class FolderDataService {
 	private appService: AppService;
 
 	/**
-	 * Bookmark data service
-	 */
-	private bookmarkDataService: BookmarkDataService;
-
-	/**
 	 * App store
 	 */
 	private store: Store<AppStore>;
 
 	/**
+	 * Bookmark data service
+	 */
+	private bookmarkDataService: BookmarkDataService;
+
+	/**
 	 * Constructor
 	 */
-	constructor( http: Http, appService: AppService, bookmarkDataService: BookmarkDataService, store: Store<AppStore> ) {
+	constructor(
+		http: Http,
+		appService: AppService,
+		store: Store<AppStore>,
+		bookmarkDataService: BookmarkDataService
+	) {
 
-		// Initialize services
+		// Initialize
 		this.http = http;
 		this.appService = appService;
-		this.bookmarkDataService = bookmarkDataService;
 		this.store = store;
+		this.bookmarkDataService = bookmarkDataService;
 
 		// Setup
 		this.folders = store.select( 'folders' ); // Select returns an obervable
-		this.isFetching = false;
 
 	}
 
 	/**
-	 * Load all folders from the server
+	 * API request: Load all folders
 	 */
 	public loadFolders(): void {
 
-		// Fetch data from server
-		this.isFetching = true;
-		this.http.get( `${ this.appService.API_URL }/folders.mock.json` ) // TODO: Change to REST API
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
 
-			// TODO: GET => /api/v1/folders
+				this.http
 
-			// Convert data
-			.map( ( response: Response ) => <Array<any>> response.json().data )
+					// Fetch data and parse response
+					.get( `${ this.appService.API_URL }/folders.mock.json` )
+					.map( ( response: Response ) => <any> response.json() )
 
-			// Create action
-			.map( ( payload: Array<any> ) => ( { type: LOAD_FOLDERS, payload } ) )
+					// Dispatch action
+					.subscribe(
+						( data: any ) => {
+							this.store.dispatch( {
+								payload: data.data,
+								type: LOAD_FOLDERS
+							} );
+						}
+					);
+
+			},
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Fetch data and parse response
+			.get( `${ this.appService.API_URL }/folders` )
+			.map( ( response: Response ) => <any> response.json() )
 
 			// Dispatch action
 			.subscribe(
-				( action: Action ) => {
-					this.isFetching = false;
-					this.store.dispatch( action );
+				( data: any ) => {
+					this.store.dispatch( {
+						payload: data.data,
+						type: LOAD_FOLDERS
+					} );
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'FOLDER SERVICE ERROR' );
+					console.dir( error );
 				}
 			);
 
-			// TODO: Error handling
+		*/
 
 	}
 
 	/**
-	 * Add a new folder
-	 * @param {any} data Data
+	 * API request: Add a new folder
+	 * @param {any} newFolder Data of the new folder
 	 */
-	public addFolder( data: any ): void {
+	public addFolder( newFolder: any ): void {
 
-		// TODO: API CALL, gets also created?
-		let apiCallResultId: number = 40;
-		data.id = apiCallResultId;
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
+				newFolder.id = `FOL${ Math.floor( Math.random() * 11 ) }`;
+				this.store.dispatch( {
+					payload: {
+						data: newFolder
+					},
+					type: ADD_FOLDER
+				} );
+			},
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Send data and parse response
+			.post( `${ this.appService.API_URL }/folders`, JSON.stringify( { data: newFolder } ) )
+			.map( ( response: Response ) => <any> response.json() )
+
+			// Dispatch action
+			.subscribe(
+				( data: any ) => {
+					newFolder.id = data.data.id;
+					this.store.dispatch( {
+						payload: {
+							data: newFolder
+						},
+						type: ADD_FOLDER
+					} );
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'FOLDER SERVICE ERROR' );
+					console.dir( error );
+				}
+			);
+
+		*/
+
+	}
+
+	/**
+	 * API request: Update an existing folder
+	 * @param {string} folderId      Folder ID
+	 * @param {any}    updatedFolder Updated folder data
+	 */
+	public updateFolder( folderId: string, updatedFolder: any ): void {
+
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
+				this.store.dispatch( {
+					payload: {
+						data: updatedFolder,
+						id: folderId
+					},
+					type: UPDATE_FOLDER
+				} );
+			},
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Send data and parse response
+			.put( `${ this.appService.API_URL }/folders/${ folderId }`, JSON.stringify( { data: updatedFolder } ) )
+			.map( ( response: Response ) => <any> response.json() )
+
+			// Dispatch action
+			.subscribe(
+				( data: any ) => {
+					this.store.dispatch( {
+						payload: {
+							data: updatedFolder,
+							id: folderId
+						},
+						type: UPDATE_FOLDER
+					} );
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'FOLDER SERVICE ERROR' );
+					console.dir( error );
+				}
+			);
+
+		*/
+
+	}
+
+	/**
+	 * API request: Delete an existing folder
+	 * Sidenote: This will also (recursively) delete all subfolders and contained bookmarks
+	 * @param {string}        folderId     Folder ID
+	 * @param {Array<string>} subfolderIds List of subfolders that also should be deleted
+	 */
+	public deleteFolder( folderId: string, subfolderIds: Array<string> ): void {
+
+		// TODO: This is only the dev text code, real code follows up
+		setTimeout(
+			() => {
+
+				// Delete this folder
+				this.store.dispatch( {
+					payload: {
+						id: folderId
+					},
+					type: DELETE_FOLDER
+				} );
+
+				// Also (recursively) delete all contained subfolders
+				this.deleteMultipleFolders( subfolderIds );
+
+				// Also delete all the bookmarks contained in these folders
+				this.bookmarkDataService.deleteAllBookmarksInFolders( subfolderIds );
+
+			},
+			1000
+		);
+
+		/* TODO: This is the production code
+
+		this.http
+
+			// Send data and parse response
+			.delete( `${ this.appService.API_URL }/folders/${ folderId }` )
+			.map( ( response: Response ) => <any> response.json() )
+
+			// Dispatch action
+			.subscribe(
+				( data: any ) => {
+
+					// Delete this folder
+					this.store.dispatch( {
+						payload: {
+							id: folderId
+						},
+						type: DELETE_FOLDER
+					} );
+
+					// Also (recursively) delete all contained subfolders
+					this.deleteMultipleFolders( subfolderIds );
+
+					// Also delete all the bookmarks contained in these folders
+					this.bookmarkDataService.deleteAllBookmarksInFolders( subfolderIds );
+
+				},
+				( error: any ) => {
+					// TODO: Proper error handling
+					console.error( 'FOLDER SERVICE ERROR' );
+					console.dir( error );
+				}
+			);
+
+		*/
+
+	}
+
+	/**
+	 * Delete multiple folders
+	 * Sidenote: Used in combination with deleting a folder (no API call here)
+	 * @param {Array<string>} folderIds List of folder IDs
+	 */
+	public deleteMultipleFolders( folderIds: Array<string> ): void {
 
 		// Dispatch action
 		this.store.dispatch( {
 			payload: {
-				data: data,
-				id: apiCallResultId
+				folderIds: folderIds
 			},
-			type: ADD_FOLDER
+			type: DELETE_FOLDERS
 		} );
 
 	}
 
 	/**
-	 * Update one value of a folder
-	 * @param {number}        folderId  Folder ID
-	 * @param {string}        attribute Attribute
-	 * @param {string|number} newValue  New / updated value
-	 */
-	public updateFolderValue( folderId: number, attribute: string, newValue: string|number ): void {
-		let data: any = {};
-		data[ attribute ] = newValue;
-		this.updateFolder( folderId, data );
-	}
-
-	/**
-	 * Delete one folder, and all the (recursive) subfolders and contained bookmarks
-	 * @param {number}        folderId  Folder ID
-	 * @param {Array<number>} folderIds List of subfolders
-	 */
-	public deleteFolder( folderId: number, folderIds: Array<number> ): void {
-
-		// TODO: API CALL
-
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				id: folderId,
-				subfolderIds: folderIds
-			},
-			type: DELETE_FOLDER
-		} );
-
-		// Also delete all the bookmarks contained in these folders
-		this.bookmarkDataService.deleteAllBookmarksInFolders( folderIds );
-
-	}
-
-	/**
-	 * Update folder
-	 * @param {number} folderId Folder ID
-	 * @param {any}    data     Data
-	 */
-	public updateFolder( folderId: number, data: any ): void {
-
-		// TODO: API CALL
-
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				data: data,
-				id: folderId
-			},
-			type: UPDATE_FOLDER
-		} );
-
-	}
-
-	/**
-	 * Get folder template (for creating a new folder)
+	 * Get folder template, used when creating a new folder
 	 * @return {Folder} Folder template
 	 */
 	public getFolderTemplate(): Folder {
 		return <Folder> Map<string, any>( {
 			description: '',
+			id: null,
+			isRoot: false,
 			name: 'Unnamed folder'
 		} );
 	}

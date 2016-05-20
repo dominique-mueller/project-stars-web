@@ -87,7 +87,7 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Map of labels
 	 */
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Search: Text
@@ -117,7 +117,7 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 		this.serviceSubscriptions = [];
 		this.bookmarks = List<Bookmark>();
 		this.folders = List<Folder>();
-		this.labels = Map<number, Label>();
+		this.labels = Map<string, Label>();
 		this.searchText = '';
 
 	}
@@ -163,7 +163,7 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
@@ -192,19 +192,19 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Navigate to a folder when selecting (clicking on) it
-	 * @param {number} folderId Folder ID
+	 * @param {string} folderId Folder ID
 	 */
-	private onSelectFolder( folderId: number ): void {
+	private onSelectFolder( folderId: string ): void {
 		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 	}
 
 	/**
 	 * Navigate to a details panel when clicking on the details button
 	 * @param {string} elementType    Element type
-	 * @param {number} elementId      Element ID
-	 * @param {number} parentFolderId ID of the parent folder
+	 * @param {string} elementId      Element ID
+	 * @param {string} parentFolderId ID of the parent folder
 	 */
-	private onClickOnDetails( elementType: string, elementId: number, parentFolderId: number ): void {
+	private onClickOnDetails( elementType: string, elementId: string, parentFolderId: string ): void {
 		this.router.navigate( [ 'bookmarks', 'view', parentFolderId, elementType, elementId ] ); // Absolute
 	}
 

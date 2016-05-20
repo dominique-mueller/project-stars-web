@@ -35,13 +35,13 @@ export class FolderComponent {
 	 * Output: Select event, emitting folder ID
 	 */
 	@Output()
-	private select: EventEmitter<number>;
+	private select: EventEmitter<string>;
 
 	/**
 	 * Output: Click on details event
 	 */
 	@Output()
-	private clickOnDetails: EventEmitter<number>;
+	private clickOnDetails: EventEmitter<string>;
 
 	/**
 	 * Constructor
@@ -57,17 +57,17 @@ export class FolderComponent {
 
 	/**
 	 * Click on folder
-	 * @param {number} folderId Id of selected folder
+	 * @param {string} folderId Id of selected folder
 	 */
-	private onClickOnFolder( folderId: number ): void {
+	private onClickOnFolder( folderId: string ): void {
 		this.select.emit( folderId );
 	}
 
 	/**
 	 * Show folder details panel
-	 * @param {number} folderId Id of selected folder
+	 * @param {string} folderId Id of selected folder
 	 */
-	private onClickOnDetails( folderId: number ): void {
+	private onClickOnDetails( folderId: string ): void {
 		this.clickOnDetails.emit( folderId );
 	}
 

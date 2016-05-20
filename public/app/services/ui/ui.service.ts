@@ -12,7 +12,9 @@ import { Map } from 'immutable';
  */
 import { AppStore, AppService } from './../app';
 import {
+	SET_ROOT_FOLDER_ID,
 	SET_OPENED_FOLDER_ID,
+	UNSET_OPENED_FOLDER_ID,
 	SET_SELECTED_ELEMENT,
 	UNSET_SELECTED_ELEMENT,
 	SET_SEARCH,
@@ -65,10 +67,21 @@ export class UiService {
 	}
 
 	/**
-	 * Set opened folder ID
-	 * @param {number} folderId Folder
+	 * Set root folder ID
+	 * @param {string} folderId ID of the root folder
 	 */
-	public setOpenedFolderId( folderId: number ): void {
+	public setRootFolderId( folderId: string ): void {
+		this.store.dispatch( {
+			payload: folderId,
+			type: SET_ROOT_FOLDER_ID
+		} );
+	}
+
+	/**
+	 * Set opened folder ID
+	 * @param {string} folderId ID of the new opened folder
+	 */
+	public setOpenedFolderId( folderId: string ): void {
 		this.store.dispatch( {
 			payload: folderId,
 			type: SET_OPENED_FOLDER_ID
@@ -76,11 +89,20 @@ export class UiService {
 	}
 
 	/**
-	 * Set the selected element
-	 * @param {string} elementType Element type
-	 * @param {number} elementId   ELement ID
+	 * Unset opened folder ID (should really happen never)
 	 */
-	public setSelectedElement( elementType: string, elementId: number ): void {
+	public unsetOpenedFolderId(): void {
+		this.store.dispatch( {
+			type: UNSET_OPENED_FOLDER_ID
+		} );
+	}
+
+	/**
+	 * Set the selected element
+	 * @param {string} elementType Type of the new selected element (bookmark / folder)
+	 * @param {strnig} elementId   ID of the new selected element
+	 */
+	public setSelectedElement( elementType: string, elementId: string ): void {
 		this.store.dispatch( {
 			payload: {
 				id: elementId,

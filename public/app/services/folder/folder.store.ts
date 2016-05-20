@@ -16,11 +16,20 @@ export const LOAD_FOLDERS: string = 'LOAD_FOLDERS';
 export const ADD_FOLDER: string = 'ADD_FOLDER';
 export const UPDATE_FOLDER: string = 'UPDATE_FOLDER';
 export const DELETE_FOLDER: string = 'DELETE_FOLDER';
+export const DELETE_FOLDERS: string = 'DELETE_FOLDERS';
 
 /**
  * Initial state of the folder data (empty per default)
  */
 const initialState: List<Folder> = List<Folder>();
+const initialFolderState: Folder = <Folder> Map<string, any>( {
+	description: '',
+	id: null,
+	isRoot: false,
+	name: null,
+	path: null,
+	position: null
+} );
 
 /**
  * Folder store (reducer)
@@ -37,7 +46,7 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 
 				// Set folders as a list (because order is important)
 				action.payload.forEach( ( folder: any ) => {
-					newState.push( fromJS( folder ) );
+					newState.push( <Folder> initialFolderState.merge( fromJS( folder ) ) );
 				} );
 
 			} );
@@ -47,7 +56,7 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 
 			// Push the folder to the list
 			return <List<Folder>> state
-				.push( fromJS( action.payload.data ) );
+				.push( <Folder> fromJS( action.payload.data ) );
 
 		// Update folder
 		// TODO: Implement position swapping
@@ -69,7 +78,7 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 
 			// Save old folder position and path for later on
 			let oldPosition: number;
-			let oldPath: number;
+			let oldPath: string;
 
 			return <List<Folder>> state
 
@@ -101,17 +110,19 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 
 			// Save temporary values of the deleted folder
 			let removedPosition: number;
-			let folderPathId: number;
+			let folderPathId: string;
 
 			return <List<Folder>> state
 
 				// Filter all deleted folders out of the list
-				.filterNot( ( folder: Folder ) => {
+				.filter( ( folder: Folder ) => {
 					if ( folder.get( 'id' ) === action.payload.id ) {
 						removedPosition = folder.get( 'position' );
 						folderPathId = folder.get( 'path' );
+						return false;
+					} else {
+						return true;
 					}
-					return action.payload.subfolderIds.indexOf( folder.get( 'id' ) ) > -1;
 
 				} )
 
@@ -121,6 +132,22 @@ export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialSta
 						return folder.set( 'position', folder.get( 'position' ) - 1 );
 					} else {
 						return folder;
+					}
+				} );
+
+		// Delete multiple folders
+		// This removes all folder in the list, and does not swap position or similar
+		// Sidenote: This is used in combination with deleting a single folder
+		case DELETE_FOLDERS:
+
+			return <List<Folder>> state
+
+				// Filter out the folders that should be deleted
+				.filter( ( folder: Folder ) => {
+					if ( action.payload.folderIds.indexOf( folder.get( 'id' ) ) === -1 ) {
+						return true;
+					} else {
+						return false;
 					}
 				} );
 
