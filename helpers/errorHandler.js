@@ -1,21 +1,21 @@
-var logger = require('../adapters/logger.js');
+// var logger = require('../adapters/logger.js');
 
-// #### DEFAULT MESSAGES ####
-var defaultErrorMsg = 'Action failed due to an unknown problem. Please try again later or contact the support.';
-var defaultValidateMsg = "Action failed, because some inputValue parameter are not valid. The invalid parameter(s) can't be specified.";
+// // #### DEFAULT MESSAGES ####
+// var defaultErrorMsg = 'Action failed due to an unknown problem. Please try again later or contact the support.';
+// var defaultValidateMsg = "Action failed, because some inputValue parameter are not valid. The invalid parameter(s) can't be specified.";
 
 
-module.exports = {
-	handleMongooseError: function(error, definedSchema){
-		var errorMessage = defaultErrorMsg;
-		logger.error(error);
+// module.exports = {
+// 	handleMongooseError: function(error, definedSchema){
+// 		var errorMessage = defaultErrorMsg;
+// 		logger.error(error);
 
-		if(error.name == 'ValidationError'){
-			errorMessage = validationError(error, definedSchema);
-		}
-		return errorMessage;
-	}
-}
+// 		if(error.name == 'ValidationError'){
+// 			errorMessage = validationError(error, definedSchema);
+// 		}
+// 		return errorMessage;
+// 	}
+// }
 
 
 function validationError(error, definedSchema){

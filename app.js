@@ -30,7 +30,7 @@ Otherwise, there will be unnecessary comparisons or even worth.
 app.use('/api/v1',router.Backend);
 app.use('/', router.Frontend);
 //for static file requests
-app.use('/', express.static('public/assets'));
+app.use('/', express.static('public/'));
 
 redirectHTTP.use('/', router.Redirect);
 

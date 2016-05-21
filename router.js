@@ -28,9 +28,17 @@ routerBackend.use(function(req, res, next){
 
 //###### Frontend API ######
 
-routerFrontend.get('',function(req, res){
-	console.log('RICHTIGE STELLE FÜR INDEX.HTML')
+// routerFrontend.get('*',function(req, res){
+// 	console.log('RICHTIGE STELLE FÜR INDEX.HTML')
+// 	res.sendFile('public/index.html', {root:__dirname});
+// 	res.end();
+// });
+
+routerFrontend.route('').all(function(req, res){
+	console.log('RICHTIGE STELLE FÜR INDEX.HTML');
+	console.log('URL Request Route: ' + req.url);
 	res.sendFile('public/index.html', {root:__dirname});
+	// res.json({"data":"RESPONSE"});
 	res.end();
 });
 

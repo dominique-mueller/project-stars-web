@@ -7,7 +7,8 @@ var logger = require('./logger');
 var secret = require('../config.js').authentication.secret;
 
 
-function Authentication(token){
+// function Authentication(token){
+function Authentication(){
 	
 	var self; 
 	/*workaround for an ECMA bug in the scope of the 'this' propertie. 
@@ -15,7 +16,7 @@ function Authentication(token){
 	variable is set in the constructor (end of function)*/
 	this.token = null;
 	this.tokenUserId = null;
-	this.isAdmin = null; 
+	this.isAdmin = false; 
 
 	//#### PRIVATE FUNCTIONS ####
 
@@ -143,16 +144,16 @@ function Authentication(token){
 
 	//#### CONSTRUCTOR ####
 	self = this;
-	if(token){
-		this.setToken(token, function(err){
-			if(err){
+	// if(token){
+	// 	this.setToken(token, function(err){
+	// 		if(err){
 
-			}
-		});
-	}
-	else{
+	// 		}
+	// 	});
+	// }
+	// else{
 
-	}
+	// }
 	
 	return this;
 }

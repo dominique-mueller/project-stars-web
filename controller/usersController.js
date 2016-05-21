@@ -1,12 +1,13 @@
 var logger = require('../adapters/logger.js');
 var httpStatus = require('../config.js').httpStatus;
+var helpers = require('../helpers/generalHelpers.js');
 // var eMail = require('./eMail'); 	//reminder for later development with e-mail adapter
 
 var UsersController = function(req, res, authentication){
 	
 	var self; //@see: adapters/authentication.js 
 	this.User = require('../modules/user/users.model.js');
-	this.req, this.res, this.authentication, this.data;
+	this.req, this.res, this.authentication, this.reqBody;
 
 	//#### PRIVATE FUNCTIONS ####
 
@@ -15,7 +16,11 @@ var UsersController = function(req, res, authentication){
 		var userPromise = self.User.findOne(userId);
 		userPromise.then(function(user){
 		 	logger.debug('userPromise then');
-		 	self.res.status(httpStatus.OK).json({data:user});
+		 	self.res.status(httpStatus.OK)
+		 		.json({'data':
+		 			helpers.mongooseObjToFrontEndObj(user)
+		 		}
+		 	);
 		})
 		.catch(function(err){
 			logger.error(err);
@@ -24,7 +29,8 @@ var UsersController = function(req, res, authentication){
 	}
 	
 	function deactivate(){
-
+		//TODO first deaktivate accounts instead of deleteing them
+		//a real deletion should only be done when a deaktivated account will be deleted
 	}
 
 	/*
@@ -42,11 +48,12 @@ var UsersController = function(req, res, authentication){
 			accountActivation: self.authentication.activationToken()
 		};
 		var userCreatePromise;
+		logger.debug("createUser: " +newUserData.firstName);
 		
 		return {
 			register: function(){
+				logger.debug("!!!!!!!!!!!!!!!!!!!!!!!! "+mongooseUserObject.firstName);
 				mongooseUserObject['password'] = self.authentication.convertRawPassword(newUserData.password);
-
 				userCreatePromise = self.User.create(mongooseUserObject);
 				userCreatePromise.then(function(newUser){
 					tokenPromise = self.authentication.login();
@@ -62,7 +69,9 @@ var UsersController = function(req, res, authentication){
 				.catch(function(err){
 					logger.error(err);
 					//TODO: check for unique (email address not unique) error.
-					self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+					self.res.status(httpStatus.BAD_REQUEST)
+						.json({'error':err}
+					);
 				});
 			},
 
@@ -78,7 +87,9 @@ var UsersController = function(req, res, authentication){
 				})
 				.catch(function(err){
 					logger.error(err);
-					self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
+					self.res.status(httpStatus.BAD_REQUEST)
+						.json({'error':err}
+					);
 				});
 				//TODO send mail with password and activation link to given e-mail address
 			}
@@ -86,12 +97,12 @@ var UsersController = function(req, res, authentication){
 	}
 
 	function createRootFolder(userId){
-		var rootFolder = {
-			name:'.',	//every root folder has this name. 
-						//furthermore this name is reserved and cannot be created a second time per user
-			path:undefined
-		}
-		var folderCreatePromise = require('../modules/folder/folders.model.js')(this, userId).create(rootFolder);
+		// var rootFolder = {
+		// 	name:'.',	//every root folder has this name. 
+		// 				//furthermore this name is reserved and cannot be created a second time per user
+		// 	path:undefined
+		// }
+		var folderCreatePromise = require('../modules/folder/folders.model.js')(this, userId).createRootFolder();
 		folderCreatePromise.then(function(){
 			logger.debug('Created Root Folder');
 		})
@@ -103,22 +114,22 @@ var UsersController = function(req, res, authentication){
 	function getUpdateObjectForUserChangeableDataFields(){
 		// TODO: move this function to the users.model
 		var updateData = {};
-		if(self.data.hasOwnProperty('firstName')){
-			updateData['firstName'] = self.data.firstName;
+		if(self.reqBody.hasOwnProperty('firstName')){
+			updateData['firstName'] = self.reqBody.firstName;
 		}
-		if(self.data.hasOwnProperty('lastName')){
-			updateData['lastName'] = self.data.lastName;
+		if(self.reqBody.hasOwnProperty('lastName')){
+			updateData['lastName'] = self.reqBody.lastName;
 		}
-		if(self.data.hasOwnProperty('profileImage')){
-			updateData['profileImage'] = self.data.profileImage;
+		if(self.reqBody.hasOwnProperty('profileImage')){
+			updateData['profileImage'] = self.reqBody.profileImage;
 		}
-		if(self.data.hasOwnProperty('emailAddress')){
-			updateData['emailAddress'] = self.data.emailAddress
+		if(self.reqBody.hasOwnProperty('emailAddress')){
+			updateData['emailAddress'] = self.reqBody.emailAddress
 			//TODO send verificiation mail
 			//TODO use accountActivation token for verification authentication
 		}
-		if(self.data.hasOwnProperty('password')){
-		 	updateData['password'] = self.authentication.convertRawPassword(self.data.password);
+		if(self.reqBody.hasOwnProperty('password')){
+		 	updateData['password'] = self.authentication.convertRawPassword(self.reqBody.password);
 		}	
 		return updateData;
 	}
@@ -135,7 +146,9 @@ var UsersController = function(req, res, authentication){
 			getOne(self.req.params.user_id);
 		}
 		else{
-			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
+			self.res.status(httpStatus.FORBIDDEN)
+				.json({'error':'Only admins have access to this ressource'}
+			);
 		}
 	};
 
@@ -152,17 +165,20 @@ var UsersController = function(req, res, authentication){
 			});
 		}
 		else{
-			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
+			self.res.status(httpStatus.FORBIDDEN)
+				.json({'error': 'Only admins have access to this ressource'}
+			);
 			self.res.end();
 		}
 	};
 
 	this.post = function(){
-		var userCreate = new createUser(self.data)
+		var userCreate = new createUser(self.reqBody);
 		if(self.authentication.isAdmin){	
 			userCreate.asAdmin();
 		}
 		else{
+			logger.debug("call register");
 			userCreate.register();
 		}
 	};
@@ -173,10 +189,12 @@ var UsersController = function(req, res, authentication){
 			userUpdatePromise = self.User.update(authentication.tokenUserId, getUpdateObjectForUserChangeableDataFields());
 		}
 		else if(self.authentication.isAdmin){
-			userUpdatePromise = self.User.update(self.req.params.user_id, JSON.parse(self.data));
+			userUpdatePromise = self.User.update(self.req.params.user_id, JSON.parse(self.reqBody));
 		}
 		else{
-			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
+			self.res.status(httpStatus.FORBIDDEN)
+				.json({'error': 'Only admins have access to this ressource'}
+			);
 			self.res.end();
 			return;
 		}
@@ -186,14 +204,16 @@ var UsersController = function(req, res, authentication){
 		})
 		.catch(function(err){
 			logger.error(err);
-			self.res.status(httpStatus.BAD_REQUEST).json({error:err});
+			self.res.status(httpStatus.BAD_REQUEST)
+				.json({error:err}
+			);
 			self.res.end();
 		});
 	};
 
 	this.delete = function(){
 		//TODO Delete the root Folder and everything else
-		if(self.data._id == 'tokenUserId'){
+		if(self.reqBody._id == 'tokenUserId'){
 			var userPromise = User.findOne(authentication.tokenUserId);
 			userPromise.then(function(user){
 				//TODO deactivate instead of delete
@@ -207,7 +227,9 @@ var UsersController = function(req, res, authentication){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		}
 		else{
-			self.res.status(httpStatus.FORBIDDEN).json({'error': 'Only admins have access to this ressource'});
+			self.res.status(httpStatus.FORBIDDEN)
+				.json({'error': 'Only admins have access to this ressource'}
+			);
 		}
 	};
 
@@ -217,7 +239,7 @@ var UsersController = function(req, res, authentication){
 	this.res = res;
 	this.authentication = authentication;
 	if(req.method != 'GET'){
-		this.data = JSON.parse(req.body.data);
+		this.reqBody = JSON.parse(req.body.data);
 	}
 	if(req.method == 'POST'){
 		this.User = new User(this, null);

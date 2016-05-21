@@ -25,6 +25,7 @@ var UsersModel = function(caller, userId){
 	
 	//create expects that the userData can allreay be used as direct input parameter
 	this.create = function(userData){
+		logger.debug("Create the User");
 		return new Promise(function(resolve, reject){
 			var user = new User(userData);
 			user.save(function(err, user){

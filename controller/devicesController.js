@@ -1,13 +1,14 @@
 var logger = require('../adapters/logger.js');
 var httpStatus = require('../config.js').httpStatus;
+var helpers = require('../helpers/generalHelpers.js');
 
 var DevicesController = function(req, res, authentication){
 
 	var self; //@see: adapters/authentication.js 
 	this.Device = require('../modules/device/devices.model.js');
 	this.Device = new Device(authentication.tokenUserId);
-	this.req, this.res, this.authentication, this.data;
-
+	this.req, this.res, this.authentication, this.reqBody;
+	
 
 	//#### PRIVATE FUNCTIONS ####
 
@@ -42,7 +43,7 @@ var DevicesController = function(req, res, authentication){
 	this.res = res;
 	this.authentication = authentication
 	if(req.method != 'GET' && req.method != 'DELETE'){
-		this.data = JSON.parse(req.body.data);
+		this.reqBody = JSON.parse(req.body.data);
 	}	
 
 	return this;

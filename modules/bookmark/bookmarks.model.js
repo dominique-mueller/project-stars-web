@@ -2,7 +2,7 @@ var Bookmark = require('../schemaExport.js').Bookmark;
 var logger = require('../../adapters/logger.js');
 
 
-var BookmarksModel = function(caller, userId){
+var BookmarksModel = function(userId){
 
 	var self; //@see: adapters/authentication.js 
 	this.userId;
@@ -46,9 +46,10 @@ var BookmarksModel = function(caller, userId){
 			deleteBookmarkPromise.then(function(){
 				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmark.path, 1);
 				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1);
-				var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position -1, 1);
+				// var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position -1, 1);
 				var createBookmarkPromise = Bookmark.create(bookmark);
-				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createBookmarkPromise])
+				// Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createBookmarkPromise])
+				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, createBookmarkPromise])
 				.then(function(){
 					logger.debug('moving bookmark was successful');
 					callback();
@@ -149,12 +150,12 @@ var BookmarksModel = function(caller, userId){
 	};
 
 
-	this.create = function(bookmarkData){
+	this.create = function(bookmarkData, promises){
 		return new Promise(function(resolve, reject){
 			bookmarkData['owner'] = self.userId;
-			var checkIfPathRegardsToOwnerPromise = caller.checkIfPathRegardsToOwner(bookmarkData.path);
-			var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmarkData.path, 1);
-			Promise.all([changeNumberOfContainedElementsPromise, checkIfPathRegardsToOwnerPromise]).then(function(results){
+			// var checkIfPathRegardsToOwnerPromise = caller.checkIfPathRegardsToOwner(bookmarkData.path);
+			// var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedBookmarks(bookmarkData.path, 1);
+			Promise.all(promises).then(function(results){
 				logger.debug('Model create Bookmark: ' + bookmarkData);
 				logger.debug('ALL RESULTS: ' + results[0]);
 				bookmarkData['position'] = results[0];
@@ -174,7 +175,7 @@ var BookmarksModel = function(caller, userId){
 		});
 	};
 
-	this.update = function(bookmarkId, bookmarkData){
+	this.update = function(bookmarkId, bookmarkData, promises){
 		logger.debug('model update');
 		return new Promise(function(resolve, reject){
 			var bookmarkPromise = self.findOne(bookmarkId);
@@ -215,9 +216,9 @@ var BookmarksModel = function(caller, userId){
 		return new Promise(function(resolve, reject){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
-				var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position, -1);
+				// var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position, -1);
 				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1);
-				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmark.path, -1);
+				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedBookmarks(bookmark.path, -1);
 				Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromise])
 				.then(function(results){
 					// logger.debug('In the all Promise');

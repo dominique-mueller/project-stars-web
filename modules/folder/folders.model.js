@@ -11,30 +11,31 @@ var FoldersModel = function(caller, userId){
 
 	//#### PRIVATE FUNCTIONS ####
 
-	function createRootFolder(folder){
-		return new Promise(function(resolve, reject){
-			//TODO: FIX BUG change this check so no user can send a path with 'undefined'
-			// if a root folder is created, there is no path, so the path's id will be the folder itself
-			folder.position = 0;
-			folder.path = self.userId;
-			resolve(folder);
-		});
-	}
+	// function createRootFolder(folder){
+	// 	return new Promise(function(resolve, reject){
+	// 		//TODO: FIX BUG change this check so no user can send a path with 'undefined'	DEPRECATED
+	// 		// if a root folder is created, there is no path, so the path's id will be the folder itself DEPRECATED
+	// 		folder.position = 0;
+	// 		// folder.path = self.userId; DEPRECATED
+	// 		folder.isRoot = true;
+	// 		resolve(folder);
+	// 	});
+	// }
 
-	function createNormalFolder(folder){
-		return new Promise(function(resolve, reject){
-			var positionPromise = self.changeNumberOfContainedElements(folder.path, 1);
-			positionPromise.then(function(highestPosition){
-				logger.debug('highestPosition: '+highestPosition);
-				folder.position = highestPosition;
-				resolve(folder);
-			})
-			.catch(function(err){
-				logger.error("FUCKING ERROR: " + err);
-				reject(err);
-			});
-		});
-	}
+	// function createNormalFolder(folder){
+	// 	return new Promise(function(resolve, reject){
+	// 		var positionPromise = self.changeNumberOfContainedFolders(folder.path, 1);
+	// 		positionPromise.then(function(highestPosition){
+	// 			logger.debug('highestPosition: '+highestPosition);
+	// 			folder.position = highestPosition;
+	// 			resolve(folder);
+	// 		})
+	// 		.catch(function(err){
+	// 			logger.error("FUCKING ERROR: " + err);
+	// 			reject(err);
+	// 		});
+	// 	});
+	// }
 
 	function checkIfRootFolder(folderId){
 		return new Promise(function(resolve, reject){
@@ -43,7 +44,8 @@ var FoldersModel = function(caller, userId){
 					reject(err);
 				}
 				else{
-					if(folder.name !== '.'){
+					// if(folder.name !== '.'){
+					if(folder.isRoot){
 						resolve(folder);
 					}
 					else{
@@ -68,11 +70,11 @@ var FoldersModel = function(caller, userId){
 			var deleteFolderPromise = self.delete(folderId);
 			deleteFolderPromise.then(function(){
 				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
-				var changeNumberOfContainedElementsPromise = self.changeNumberOfContainedElements(folder.path, +1);
+				var changeNumberOfContainedFoldersPromise = self.changeNumberOfContainedFolders(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
 				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
 				var createFolderPromise = Folder.create(folder);
-				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
+				Promise.all([changeNumberOfContainedFoldersPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(){
 					callback(null);
 				})
@@ -110,9 +112,10 @@ var FoldersModel = function(caller, userId){
 		//TODO: move this function to an adapter
 		return new Promise(function(resolve, reject){
 			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
-			var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
-			var changeNumberOfContainedElementsPromsie = self.changeNumberOfContainedElements(folder.path, -1);
-			Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie]).then(function(resolveArray){
+			// var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
+			var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
+			// Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie]).then(function(resolveArray){
+			Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
 				logger.debug('all updateAffectedElements resolve');
 				resolve();
 			})
@@ -127,13 +130,13 @@ var FoldersModel = function(caller, userId){
 
 	//#### Public Functions #####
 
- 	this.checkIfPathRegardsToOwner = function(path){
-		return new Promise(function(resolve, reject){
-			//TODO !!!!
-			logger.debug('checkIfPathRegardsToOwner');
-			resolve(true);
-		});
-	}
+ // 	this.checkIfPathRegardsToOwner = function(path){
+	// 	return new Promise(function(resolve, reject){
+	// 		//TODO !!!!
+	// 		logger.debug('checkIfPathRegardsToOwner');
+	// 		resolve(true);
+	// 	});
+	// }
 
 	/*
 	@param path: the folder id of the 'parent' folder, called path
@@ -141,22 +144,45 @@ var FoldersModel = function(caller, userId){
 	@resolve: gives back the new numberOfContainedElements 
 	@return: returns a promise 
 	*/
-	this.changeNumberOfContainedElements = function(path, changeBy){
-		// logger.debug('START: changeNumberOfContainedElements ');
-		logger.debug('folder model changeNumberOfContainedElements');
+	// this.changeNumberOfContainedElements = function(path, changeBy){
+	// 	// logger.debug('START: changeNumberOfContainedElements ');
+	// 	logger.debug('folder model changeNumberOfContainedElements');
+	// 	return new Promise(function(resolve, reject){
+	// 		Folder.findById(path, function(err, folder){
+	// 			// logger.debug('changeNumberOfContainedElements folder: ' + folder.name);
+	// 			try{
+	// 				folder.numberOfContainedElements = folder.numberOfContainedElements + changeBy;
+	// 				folder.save(function(err, folder){
+	// 					if(err){
+	// 						logger.error(err);
+	// 						reject(err);
+	// 					}
+	// 					else{
+	// 						logger.debug('changeNumberOfContainedElements resolved');
+	// 						resolve(folder.numberOfContainedElements);
+	// 					}
+	// 				});
+	// 			}
+	// 			catch(err){
+	// 				reject(err);
+	// 			}
+	// 		});
+	// 	});
+	// }
+
+	this.changeNumberOfContainedFolders = function(path, changeBy){
 		return new Promise(function(resolve, reject){
 			Folder.findById(path, function(err, folder){
-				// logger.debug('changeNumberOfContainedElements folder: ' + folder.name);
 				try{
-					folder.numberOfContainedElements = folder.numberOfContainedElements + changeBy;
+					folder.numberOfContainedFolders = folder.numberOfContainedFolders + changeBy;
 					folder.save(function(err, folder){
 						if(err){
 							logger.error(err);
 							reject(err);
 						}
 						else{
-							logger.debug('changeNumberOfContainedElements resolved');
-							resolve(folder.numberOfContainedElements);
+							logger.debug('changeNumberOfContainedFolders resolved');
+							resolve(folder.numberOfContainedFolders);
 						}
 					});
 				}
@@ -166,6 +192,29 @@ var FoldersModel = function(caller, userId){
 			});
 		});
 	}
+	this.changeNumberOfContainedBookmarks = function(path, changeBy){
+		return new Promise(function(resolve, reject){
+			Folder.findById(path, function(err, folder){
+				try{
+					folder.numberOfContainedBookmarkss = folder.numberOfContainedBookmarks + changeBy;
+					folder.save(function(err, folder){
+						if(err){
+							logger.error(err);
+							reject(err);
+						}
+						else{
+							logger.debug('changeNumberOfContainedBookmarks resolved');
+							resolve(folder.numberOfContainedBookmarks);
+						}
+					});
+				}
+				catch(err){
+					reject(err);
+				}
+			});
+		});
+	}
+
 
 	//The startPosition won't be affected, 
 	// so if you plan to shift folders to get an empty position you have set the startPosition to <planedFreePosition> - 1 
@@ -224,15 +273,11 @@ var FoldersModel = function(caller, userId){
 				path: folderData.path
 			});
 			var folderPromise;
-			if(typeof folderData.path === 'undefined'){ 
-				folderPromise = createRootFolder(folder);
-			}
-			else{
-				logger.debug('call create normal folder ');
-				folderPromise = createNormalFolder(folder);
-			}
-			folderPromise.then(function(folder){
-				logger.debug("Name: " + folder.name + "_-_Position: " + self.userId);
+
+			var positionPromise = self.changeNumberOfContainedFolders(folder.path, 1);
+			positionPromise.then(function(highestPosition){
+				logger.debug('highestPosition: '+highestPosition);
+				folder.position = highestPosition;
 				folder.save(function(err, folder){
 					if(err){
 						reject(err);
@@ -242,9 +287,32 @@ var FoldersModel = function(caller, userId){
 					}
 				});
 			})
-			.catch(reject);
+			.catch(function(err){
+				logger.error("FUCKING ERROR: " + err);
+				reject(err);
+			});
 		});
 	};
+
+	this.createRootFolder = function(){
+		return new Promise(function(resolve, reject){
+			var folder = new Folder({
+				name: '.',
+				owner: self.userId,
+				isRoot: true,
+				position: 1
+			});
+			folder.path = folder._id;
+			folder.save(function(err, foldr){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(folder);
+				}
+			});
+		});
+	}
 
 	this.update = function(folderId, folderData){
 		return new Promise(function(resolve, reject){

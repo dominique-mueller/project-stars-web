@@ -6,8 +6,9 @@ var logger = require('../adapters/logger.js');
 var config = require('../config.js');
 var mongoose = require('mongoose');
 
-// var databaseURL = 'mongodb://127.0.0.1:27017@admin:stars-web/dev';
-var databaseURL = config.database.url + config.database.database;
+// var databaseURL = 'mongodb://localhost/dev';
+// var databaseURL = 'mongodb://devAdmin:stars-web@127.0.0.1:27017/dev';
+var databaseURL = config.database.url + config.database.authorization + config.database.database;
 mongoose.connect(databaseURL);
 
 mongoose.connection.on('connected', function(){
