@@ -1,6 +1,8 @@
 
 module.exports = {
 
+
+	
 	
 	mongooseObjToFrontEndObj: function(object){
 		var modifiedObject;
@@ -13,7 +15,6 @@ module.exports = {
 		else{
 			modifiedObject = alterSingleObject(object);
 		}
-		console.log(JSON.stringify(modifiedObject));
 		return modifiedObject;
 	}
 
@@ -21,12 +22,9 @@ module.exports = {
 
 function alterSingleObject(obj){
 	//remove version field from object. It isn't needed anywhere
-	object = obj;
-	console.log(delete object['__v']);
-	console.log(object.__v);
+	object = JSON.parse(JSON.stringify(obj));
 	//change the key _id to id because of convention
 	object['id'] = object['_id'];
 	delete object['_id'];
-	console.log("New Object for Frontend: " + JSON.stringify(object));
 	return object;
 }
