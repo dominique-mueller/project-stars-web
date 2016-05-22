@@ -14,8 +14,10 @@
 			"src": "./public/styles",
 			"dest": "./build"
 		},
-		"icons": {
-			"src": "./public/assets/icons"
+		"assets": {
+			"icons": "./public/assets/icons",
+			"images": "./public/assets/images",
+			"dest": "./build/assets"
 		},
 		"documentation": {
 			"base": "./docs",

@@ -24,7 +24,7 @@ import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confi
 import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-confirm.component';
 
 /**
- * View component (smart): App
+ * View component (ROOT): App
  */
 @Component( {
 	directives: [
@@ -41,14 +41,14 @@ import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-con
 		UserAuthService,
 		JwtHelper,
 		DialogConfirmService,
-		provideStore( {
+		provideStore( { // Setup the redux store (provided by module)
 			bookmarks,
 			folders,
 			labels,
 			ui,
 			user
 		} ),
-		provide( AuthHttp, {
+		provide( AuthHttp, { // Setup the authenticated HTTP service (provided by module)
 			deps: [
 				Http
 			],
@@ -60,7 +60,7 @@ import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-con
 								'Content-Type': 'application/json'
 							}
 						],
-						headerName: 'X-AUTHORIZATION', // Special field
+						headerName: 'Authorization', // Standard
 						headerPrefix: 'Bearer',
 						noJwtError: true, // We do this manually
 						tokenName: 'jwt' // Name for the local storage entry
@@ -92,23 +92,37 @@ export class AppComponent implements OnInit {
 	private router: Router;
 
 	/**
+	 * User authentication service
+	 */
+	private userAuthService: UserAuthService;
+
+	/**
 	 * Constructor
 	 */
-	constructor( router: Router ) {
+	constructor(
+		router: Router,
+		userAuthService: UserAuthService
+	) {
 
 		// Initialize
 		this.router = router;
+		this.userAuthService = userAuthService;
 
 	}
 
+	/**
+	 * Call this when the view gets initialized
+	 */
 	public ngOnInit(): void {
 
-
-
-
-
-		// TODO: Route depending on login status, only when on root
-		// this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		// This component is the root component and basically just acts as a root container
+		// So when visiting this page, we just navigated to the root project URL
+		// Therefore we redirect instantly depending on whether we're logged in or not
+		if ( this.userAuthService.isUserLoggedIn() ) {
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		} else {
+			this.router.navigate( [ 'login' ] ); // Absolute
+		}
 
 	}
 

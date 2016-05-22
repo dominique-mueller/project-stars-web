@@ -1,46 +1,43 @@
 // VIEW COMPONENT: LOGIN
 
-.login {
+.login { // The whole page
+	position: relative;
 	display: block;
 	width: 100%;
 	height: 100%;
-	background-color: $color-primary;
-}
 
-// Login box layout
+	// Stars background image, compressed version
+	// Thanks to Adrian Pelletier on unsplash.com
+	// URL: https://unsplash.com/photos/BeIvjuz6k2k
+	background: url('./assets/login_background.jpg') center center;
+	background-size: cover;
+
+	&::after { // Colored semi-transparent overlay
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background-color: darken($color-primary, 10%); // Slightly darker than normal
+		opacity: .8;
+		content: "";
+	}
+
+}
 
 .login__box {
 	position: relative;
 	top: 50%;
 	left: 50%;
-	width: 80rem;
-	height: 30rem;
-	box-shadow: 0 .2rem .7rem rgba($color-black, .1);
+	width: 31rem; // Fixed width
+	z-index: 1; // Above the colored overlay
+	padding-bottom: 7rem; // Slighly shifted to the top
 	transform: translate3D(-50%,-50%,0);
 }
 
-.login__box-product {
-	display: inline-block;
-	width: 35rem;
-	height: 100%;
-	padding: 4rem 4rem 4rem;
-	background-color: $color-tundora;
-	color: $color-white;
-	text-align: center;
-	vertical-align: top;
-}
+// Login: Product
 
-.login__box-user {
-	display: inline-block;
-	width: 45rem;
-	height: 100%;
-	vertical-align: top;
-	background-color: $color-gallery;
-}
-
-// Login: Product box
-
-.login__box-product-logo {
+.login__box-logo {
 	display: block;
 	width: 6.4rem;
 	height: 6.4rem;
@@ -48,89 +45,32 @@
 	margin-right: calc(50% - 3.2rem);
 }
 
-.login__box-product-name {
-	margin-top: 1.4rem;
-	margin-bottom: 3.6rem;
+.login__box-name {
+	margin-top: 1rem;
+	margin-bottom: 4.6rem;
 	font-size: 2.4rem;
+	color: $color-white;
 	letter-spacing: .02rem;
+	text-align: center;
 }
 
-.login__box-product-description {
-	color: $color-gallery;
-	letter-spacing: .01rem;
-	line-height: 1.6;
-}
-
-// Login: User box
-
-.login__box-user-tabs {
-	width: 100%;
-	height: 6.4rem;
-	background-color: $color-white;
-	border-bottom: .1rem solid $color-alto;
-}
-
-.login__box-user-tab {
-	position: relative; // Because of ::after
-	display: inline-block;
-	width: 50%; // 2 equally spread tabs
-	padding-top: .4rem;
-	line-height: 6rem;
-	text-transform: uppercase;
-	overflow: hidden;
-
-	&::after {
-		position: absolute;
-		left: 0;
-		bottom: 0;
-		width: 100%;
-		height: .2rem;
-		background-color: $color-primary;
-		content: '';
-		transition: transform $anim-speed-normal $anim-easing;
-	}
-
-	&.is-first::after {
-		transform: translate3D(100%,0,0);
-	}
-
-	&.is-second::after {
-		transform: translate3D(-100%,0,0);
-	}
-
-	&:hover,
-	&.is-active {
-
-		&::after {
-			transform: translate3D(0,0,0);
-		}
-
-	}
-
-	&.is-active {
-		font-weight: bold;
-	}
-
-}
-
-.login__box-user-form {
-	padding: 3.4rem;
-}
+// Login: User
 
 .login__box-user-input {
-	margin-bottom: 2.4rem;
-	padding: 1.3rem 1.4rem 1.2rem;
+	margin-bottom: 1rem;
+	padding: 1.5rem 1.8rem 1.4rem;
 	background-color: $color-white;
-	border-radius: .1rem;
+	border-radius: .2rem;
 	line-height: 1.6rem;
-	// border: .1rem solid $color-alto;
 }
 
 .login__box-user-button {
-	padding: 1.3rem 4rem 1.2rem;
-	border-radius: .1rem;
+	width: 100%;
+	padding-top: 1.5rem;
+	padding-bottom: 1.4rem;
+	border-radius: .2rem;
 	font-size: 1.3rem;
 	line-height: 1.5rem;
-	text-transform: uppercase;
+	// text-transform: uppercase;
 	letter-spacing: .02rem;
 }

@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
@@ -27,7 +27,7 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	selector: 'app-login',
 	templateUrl: './login.component.html'
 } )
-export class LoginComponent implements OnActivate, OnInit {
+export class LoginComponent implements OnActivate {
 
 	/**
 	 * Router
@@ -91,21 +91,29 @@ export class LoginComponent implements OnActivate, OnInit {
 
 	}
 
-	public ngOnInit(): void {
-
-		// TODO: Something to do here?
-
-	}
-
 	/**
 	 * Submit the login form
 	 */
 	public onSubmit(): void {
 
-		// Try to authenticate the user
+		// Collect form data
 		let email: string = this.loginForm.value.email;
 		let password: string = this.loginForm.value.password;
-		this.userAuthService.loginUser( email, password );
+
+		// Try to authenticate the user, the login and navigate to the bookmarks view
+		this.userAuthService.loginUser( email, password )
+
+			// Success
+			.then( ( data: any ) => {
+				console.log( 'APP > User > Login successful.' );
+				this.router.navigate( [ 'bookmarks' ] ); // Absolute
+			} )
+
+			// Error
+			.catch( ( error: any ) => {
+				console.warn( 'APP > User > Login not successful.' );
+				( <Control> this.loginForm.controls[ 'password' ] ).updateValue( '' ); // Reset password input
+			} );
 
 	}
 

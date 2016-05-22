@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { provide } from '@angular/core';
+import { provide, enableProdMode } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { Title } from '@angular/platform-browser';
@@ -11,9 +11,11 @@ import { Title } from '@angular/platform-browser';
  */
 import { AppComponent } from './components/app/app.component';
 
+// TODO: Move prod move status into some king of env file
+// enableProdMode();
+
 /**
  * Bootstrap the application for the browser
- * TODO: Find a better way of error handling here
  */
 bootstrap( AppComponent, [
 		Title,
@@ -23,16 +25,9 @@ bootstrap( AppComponent, [
 		}
 	] )
 	.then( () => {
-		window.console.clear();
-		window.console.info( 'App successfully started!' );
+		console.log( 'APP > Application bootstrap successfully finished!' );
 	} )
 	.catch( ( error: any ) => {
-		window.console.warn( 'ERROR: An error occured while starting this app.' );
-		window.console.log( error );
-		alert(
-			`ERROR:
-
-An error occured while starting this app.
-More details can be found in the browser developer console (press F12).`
-		);
+		console.warn( 'APP > An error occured while starting this app.' );
+		console.dir( error );
 	} );

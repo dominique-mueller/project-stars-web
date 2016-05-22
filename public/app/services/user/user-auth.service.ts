@@ -13,7 +13,7 @@ import { AppService } from './../app';
 /**
  * User authentication service
  * Contains functions for authenticating the user, including login, logout
- * TODO: Register
+ * => TODO Next steps would be: Register / sign up functionality
  */
 @Injectable()
 export class UserAuthService {
@@ -40,6 +40,10 @@ export class UserAuthService {
 
 	/**
 	 * Constructor
+	 * @param {Http}       http       HTTP service
+	 * @param {AuthHttp}   authHttp   Authenticated HTTP service
+	 * @param {JwtHelper}  jwtHelper  JWT helper
+	 * @param {AppService} appService App service
 	 */
 	constructor(
 		http: Http,
@@ -57,8 +61,8 @@ export class UserAuthService {
 	}
 
 	/**
-	 * Check if the user is logged in
-	 * This function checks that the JWT exists and is valid (expiration time) AS WELL AS check that the user ID is set
+	 * Checks if the user is logged in
+	 * This function checks that the JWT exists and is valid (expiration time) AS WELL AS checks that the user ID is set
 	 * @return {boolean} Status: true / false
 	 */
 	public isUserLoggedIn(): boolean {
@@ -66,7 +70,7 @@ export class UserAuthService {
 	}
 
 	/**
-	 * Get the current user ID (or null if it doesn't exist)
+	 * Gets the current user ID (or null implicitely if it doesn't exist)
 	 * @return {string} User ID
 	 */
 	public getUserId(): string {
@@ -74,111 +78,139 @@ export class UserAuthService {
 	}
 
 	/**
-	 * API request: Log the user in, and save all authentication details
-	 * @param {string} emailAddress    E-Mail address
-	 * @param {string} password        Password
+	 * Unauthenticated API request
+	 * Logs the user in, receives a JWT and saves all authentication details to the local storage
+	 * @param  {string}       emailAddress E-Mail address
+	 * @param  {string}       password     Password
+	 * @return {Promise<any>}              Promise to tell we're done
 	 */
-	public loginUser( emailAddress: string, password: string ): void {
+	public loginUser( emailAddress: string, password: string ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
-				this.http
+			// TODO: This is only the dev text code, real code follows up
+			setTimeout(
+				() => {
 
-					// Fetch data and parse response
-					.get( `${ this.appService.API_URL }/jwt.mock.json` )
-					.map( ( response: Response ) => <any> response.json() )
+					this.http
 
-					// Dispatch action
-					.subscribe(
-						( data: any ) => {
+						// Fetch data and parse response
+						.get( `${ this.appService.API_URL}/jwt.mock.json` )
+						.map( ( response: Response ) => <any> response.json() )
 
-							// If the returned JWT is valid, safe it in the local storage
-							if ( tokenNotExpired( 'jwt', data.data ) ) {
-								this.saveAuthenticationDetails( data.data );
-							} else {
-								console.log('JWT IS INVALID');
-								// TODO: Some error
+						// Save authentication information
+						.subscribe(
+							( data: any ) => {
+
+								// If the returned JWT is valid, safe it in the local storage
+								if ( tokenNotExpired( 'jwt', data.data ) && password === 'test' ) {
+									this.saveAuthenticationDetails( data.data );
+									resolve();
+								} else {
+									reject();
+									// TODO: Error message ?
+								}
+
+							},
+							( error: any ) => {
+								// TODO: Proper error handling
+								console.error( 'APP > User Authentication Service, HTTP request error.' );
+								console.dir( error );
+								reject();
 							}
+						);
 
-						}
-					);
+				},
+				Math.floor( Math.random() * 1001 ) + 1
+			);
 
-			},
-			1000
-		);
+		} );
 
 		/* TODO: This is the production code
 
-		// Prepare data
-		const authenticationData: any = {
-			emailAddress: emailAddress,
-			password: password
-		};
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
-		this.http
+			// Prepare data
+			const authenticationData: any = {
+				emailAddress: emailAddress,
+				password: password
+			};
 
-			// Fetch data and parse response
-			.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authenticationData } ) )
-			.map( ( response: Response ) => <any> response.json() )
+			this.http
 
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
+				// Fetch data and parse response
+				.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authenticationData } ) )
+				.map( ( response: Response ) => <any> response.json() )
 
-					// If the returned JWT is valid, safe it in the local storage
-					if ( tokenNotExpired( 'jwt', data.data ) ) {
-						this.saveAuthenticationDetails( data.data );
-					} else {
-						console.log('JWT IS INVALID');
-						// TODO: Some error
+				// Save authentication information
+				.subscribe(
+					( data: any ) => {
+
+						// If the returned JWT is valid, safe it in the local storage
+						if ( tokenNotExpired( 'jwt', data.data ) ) {
+							this.saveAuthenticationDetails( data.data );
+							resolve();
+						} else {
+							reject();
+							// TODO: Proper error handling
+							console.error( 'USER SERVICE: JWT INVALID' );
+						}
+
+					},
+					( error: any ) => {
+						// TODO: Proper error handling
+						console.error( 'APP > User Authentication Service, User Login, HTTP request error.' );
+						console.dir( error );
+						reject();
 					}
+				);
 
-				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'USER SERVICE ERROR' );
-					console.dir( error );
-				}
-			);
+		} );
 
 		*/
 
 	}
 
 	/**
-	 * API request: Explicitely log the user out, and remove all authentication details
+	 * Authenticated API request
+	 * Explicitely log the user out, and remove all authentication details from the local storage
+	 * @return {Promise<any>} Promise to tell we're done
 	 */
-	public logoutUser(): void {
+	public logoutUser(): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
-		// Delete all authentication information
-		this.deleteAuthenticationDetails();
+			// TODO: This is only the dev text code, real code follows up
+			this.deleteAuthenticationDetails();
+			resolve();
+
+		} );
 
 		/* TODO: This is the production code
 
-		this.authHttp
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
-			// Fetch data and parse response
-			.delete( `${ this.appService.API_URL }/authenticate/logout` )
-			.map( ( response: Response ) => <any> response.json() )
+			this.authHttp
 
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
+				// Fetch data and parse response
+				.delete( `${ this.appService.API_URL }/authenticate/logout` )
+				.map( ( response: Response ) => <any> response.json() )
 
-					// Delete all authentication information
-					this.deleteAuthenticationDetails();
+				// Delete all authentication information
+				.subscribe(
+					( data: any ) => {
+						this.deleteAuthenticationDetails();
+						resolve();
+					},
+					( error: any ) => {
+						// TODO: Proper error handling
+						console.error( 'APP > User Authentication Service, User, Logout, HTTP request error.' );
+						console.dir( error );
+						reject();
+					}
+				);
 
-				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'USER SERVICE ERROR' );
-					console.dir( error );
-				}
-			);
+		} );
 
 		*/
 

@@ -28,7 +28,7 @@ export const icons = gulp.task( 'setup:index', () => {
 	const svgString = gulp
 
 		// Get all SVG icons
-		.src( `${config.paths.icons.src}/*.svg` )
+		.src( `${ config.paths.assets.icons }/*.svg` )
 
 		// Prefix file name
 		.pipe( rename( { prefix: 'icon-' } ) )
@@ -40,7 +40,7 @@ export const icons = gulp.task( 'setup:index', () => {
 	return gulp
 
 		// Get the index file
-		.src( `${config.paths.project.src}/index.html` )
+		.src( `${ config.paths.project.src }/index.html` )
 
 		// Inject svg String into index
 		.pipe( inject( svgString, { transform: ( path, file ) => {
@@ -51,6 +51,19 @@ export const icons = gulp.task( 'setup:index', () => {
 		.pipe( gulp.dest( config.paths.root ) )
 
 		.pipe( browserSync.stream( { once: true } ) );
+
+} );
+
+/**
+ * Gulp task: Copy assets (e.g. images)
+ */
+export const images = gulp.task( 'setup:assets', () => {
+
+	// Copy images
+	return gulp
+
+		.src( `${ config.paths.assets.images }/*.jpg` )
+		.pipe( gulp.dest( config.paths.assets.dest ) );
 
 } );
 

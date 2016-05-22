@@ -1,28 +1,16 @@
 <article class="login__box">
 
-	<section class="login__box-product">
-		<app-icon class="login__box-product-logo" name="star" size="64" color="#F1C40F"></app-icon>
-		<h1 class="login__box-product-name">{{ appName }}</h1>
-		<p class="login__box-product-description">Project Stars allows you to organize your bookmarks - in every browser, on every device and in every way you want to.</p>
-		<!-- <a href="#">Learn more</a> -->
-	</section><section class="login__box-user">
+	<!-- Product info -->
+	<app-icon class="login__box-logo" name="star" size="64" color="#F1C40F"></app-icon>
+	<h1 class="login__box-name">{{ appName }}</h1>
 
-		<nav class="login__box-user-tabs">
-			<button class="button login__box-user-tab is-first is-active" type="button">
-				Login
-			</button><button class="button login__box-user-tab is-second" type="button">
-				Sign up
-			</button>
-		</nav>
-
-		<form class="login__box-user-form" [ngFormModel]="loginForm" (ngSubmit)="onSubmit()">
-			<input class="login__box-user-input" id="login-email" type="email" placeholder="Your e-mail"
-				[ngFormControl]="loginForm.controls[ 'email' ]">
-			<input class="login__box-user-input" id="login-password" type="password" placeholder="Your password"
-				[ngFormControl]="loginForm.controls[ 'password' ]">
-			<button class="button button-success login__box-user-button" type="submit">Login</button>
-		</form>
-
-	</section>
+	<!-- User login form -->
+	<form [ngFormModel]="loginForm" (ngSubmit)="onSubmit()">
+		<input class="login__box-user-input" id="login-email" type="email" placeholder="your e-mail"
+			[ngFormControl]="loginForm.controls[ 'email' ]">
+		<input class="login__box-user-input" id="login-password" type="password" placeholder="your password"
+			[ngFormControl]="loginForm.controls[ 'password' ]">
+		<button class="button button-success login__box-user-button" type="submit">Login</button>
+	</form>
 
 </article>

@@ -227,13 +227,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		);
 
 		// Fetch initial data from server
-		// We do this in the bookmarks component in order to prevent multiple requests at the same time
+		// We do this here to prevent multiple requests at the same time
 		this.folderDataService.loadFolders();
 		this.bookmarkDataService.loadBookmarks();
 		this.labelDataService.loadLabels();
-
-		// TODO: Set real ID
-		this.userDataService.loadUser( 'USER42' );
+		this.userDataService.loadUser( this.userAuthService.getUserId() );
 
 		// Save subscriptions
 		this.serviceSubscriptions = [
@@ -297,8 +295,22 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Log out request, coming from header
 	 */
 	private onLogout(): void {
-		this.userAuthService.logoutUser(); // TODO: Route after promise resolve
-		this.router.navigate( [ 'login' ] ); // Absolute
+
+		// Try to log the user out, then navigate to the login page
+		this.userAuthService.logoutUser()
+
+			// Success
+			.then( ( data: any ) => {
+				console.log( 'APP > Logout successful.' );
+				this.router.navigate( [ 'login' ] ); // Absolute
+			} )
+
+			// Error
+			.catch( ( error: any ) => {
+				console.warn( 'APP > Logout not completely successful, only client-side.' );
+				this.router.navigate( [ 'login' ] ); // Absolute
+			} );
+
 	}
 
 }

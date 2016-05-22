@@ -26,7 +26,7 @@ import * as typescript 		from './tools/gulp_tasks/typescript';
 gulp.task( 'build:dev', ( done ) => {
 	runSequence(
 		[ 'env:clean' ],
-		[ 'setup:index', 'setup:systemjs', 'setup:api', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'setup:systemjs', 'setup:assets', 'setup:api', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -39,7 +39,7 @@ gulp.task( 'build:prod', ( done ) => {
 		[ 'env:npm' ],
 		[ 'sass:lint', 'typescript:lint' ],
 		[ 'env:clean' ],
-		[ 'setup:index', 'setup:systemjs', 'sass:build', 'typescript:build' ],
+		[ 'setup:index', 'setup:systemjs', 'setup:assets', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -69,7 +69,7 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 		logPrefix: 'Browsersync',
 		logConnections: true,
 		notify: {
-			styles: {
+			styles: { // Custom styles for the notification in the browser
 				top: 'auto',
 				bottom: '0',
 				right: 'auto',
