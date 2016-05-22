@@ -2,7 +2,7 @@ var Bookmark = require('../schemaExport.js').Bookmark;
 var logger = require('../../adapters/logger.js');
 
 
-var BookmarksModel = function(userId){
+var BookmarksModel = function(caller, userId){
 
 	var self; //@see: adapters/authentication.js 
 	this.userId;

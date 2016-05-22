@@ -72,7 +72,7 @@ var FoldersModel = function(caller, userId){
 				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
 				var changeNumberOfContainedFoldersPromise = self.changeNumberOfContainedFolders(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
-				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
+				// var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
 				var createFolderPromise = Folder.create(folder);
 				Promise.all([changeNumberOfContainedFoldersPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(){

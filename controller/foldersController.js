@@ -9,6 +9,8 @@ var FoldersController = function(req, res, authentication){
 	//TODO remove the first parameter from the Folder.model. 
 	//All Promises will be passed as an array to the called function so there won't be a need of a bidirectional communication anymore
 	this.Folder = new Folder(this, authentication.tokenUserId);
+	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
+	this.Bookmark = new Bookmark(this, authentication.tokenUserId);
 	this.req, this.res, this.authentication, this.reqBody;
 
 	//#### PRIVATE FUNCTIONS ####

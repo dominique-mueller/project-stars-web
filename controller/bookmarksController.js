@@ -8,7 +8,7 @@ var BookmarksController = function(req, res, authentication){
 	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
 	this.Bookmark = new Bookmark(authentication.tokenUserId);
 	this.Folder = require('../modules/folder/folders.model.js');
-	this.Folder = new Folder(authentication.tokenUserId);
+	this.Folder = new Folder(this, authentication.tokenUserId);
 	this.req, this.res, this.authentication, this.reqBod;
 	
 
@@ -99,6 +99,7 @@ var BookmarksController = function(req, res, authentication){
 	}
 
 	this.delete = function(){
+		// var bookmarkPromise = Bookmark.delete(self.req.params.bookmark_id, Folder.changeNumberOfContainedElements);
 		var bookmarkPromise = Bookmark.delete(self.req.params.bookmark_id);
 		bookmarkPromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
