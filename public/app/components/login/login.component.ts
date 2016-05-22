@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
  */
 import { AppService } from './../../services/app';
 import { UserAuthService } from './../../services/user';
+import { UiService } from './../../services/ui';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -27,7 +28,7 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	selector: 'app-login',
 	templateUrl: './login.component.html'
 } )
-export class LoginComponent implements OnActivate {
+export class LoginComponent implements OnActivate, OnInit {
 
 	/**
 	 * Router
@@ -43,6 +44,11 @@ export class LoginComponent implements OnActivate {
 	 * User authentication service
 	 */
 	private userAuthService: UserAuthService;
+
+	/**
+	 * UI service
+	 */
+	private uiService: UiService;
 
 	/**
 	 * App name
@@ -61,6 +67,7 @@ export class LoginComponent implements OnActivate {
 		router: Router,
 		appService: AppService,
 		userAuthService: UserAuthService,
+		uiService: UiService,
 		formBuilder: FormBuilder
 	) {
 
@@ -68,6 +75,7 @@ export class LoginComponent implements OnActivate {
 		this.router = router;
 		this.appService = appService;
 		this.userAuthService = userAuthService;
+		this.uiService = uiService;
 
 		// Setup
 		this.appName = this.appService.APP_NAME;
@@ -88,6 +96,16 @@ export class LoginComponent implements OnActivate {
 		if ( this.userAuthService.isUserLoggedIn() ) {
 			this.router.navigate( [ 'bookmarks' ] ); // Absolute
 		}
+
+	}
+
+	/**
+	 * Call this when the view gets initialized
+	 */
+	public ngOnInit(): void {
+
+		// Set title
+		this.uiService.setDocumentTitle( 'Login' );
 
 	}
 
@@ -118,4 +136,3 @@ export class LoginComponent implements OnActivate {
 	}
 
 }
-

@@ -185,6 +185,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
+		// Set title
 		this.uiService.setDocumentTitle( 'Bookmarks' );
 
 		// Get informed when the opened folder changes so that we can update the directory view
