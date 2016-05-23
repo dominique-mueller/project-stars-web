@@ -1,36 +1,30 @@
+'use strict';
+
 /**
- * Import configuration
+ * Imports configuration
  */
-import config 			from './config.json';
+const config = require( './config.json' );
 
 /**
  * Gulp imports
  */
-import autoprefixer 	from 'gulp-autoprefixer';
-import browserSync 		from 'browser-sync';
-import cssmin 			from 'gulp-cssmin';
-import gulp 			from 'gulp';
-import rename 			from 'gulp-rename';
-import sass 			from 'gulp-sass';
-import scsslint 		from 'gulp-scss-lint';
-
-/**
- * sass options
- */
-const sassOptions = {
-	'errLogToConsole': true,
-	'outputStyle': 'expanded'
-};
+const autoprefixer = require( 'gulp-autoprefixer' );
+const browserSync = require( 'browser-sync' );
+const cssmin = require( 'gulp-cssmin' );
+const gulp = require( 'gulp' );
+const rename = require( 'gulp-rename' );
+const sass = require( 'gulp-sass' );
+const scsslint = require( 'gulp-scss-lint' );
 
 /**
  * Gulp task: Lint SASS
  */
-export const sassLint = gulp.task( 'sass:lint', () => {
+gulp.task( 'sass:lint', () => {
 
 	return gulp
 
 		// Get all SASS files
-		.src( `${config.paths.styles.src}/**/*.scss` )
+		.src( `${ config.paths.styles.src }/**/*.scss` )
 
 		// Lint
 		.pipe( scsslint() )
@@ -43,15 +37,19 @@ export const sassLint = gulp.task( 'sass:lint', () => {
 /**
  * Gulp task: Build SASS
  */
-export const sassBuild = gulp.task( 'sass:build', () => {
+gulp.task( 'sass:build', () => {
 
 	return gulp
 
 		// Get main SASS files
-		.src( `${config.paths.styles.src}/style.scss` )
+		.src( `${ config.paths.styles.src }/style.scss` )
 
 		// Compile SASS into CSS
-		.pipe( sass( sassOptions ).on( 'error', sass.logError ) )
+		.pipe( sass( {
+			'errLogToConsole': true,
+			'outputStyle': 'expanded'
+		} )
+		.on( 'error', sass.logError ) )
 
 		// Autoprefix CSS
 		.pipe( autoprefixer() )

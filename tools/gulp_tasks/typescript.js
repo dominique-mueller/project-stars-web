@@ -1,48 +1,29 @@
+'use strict';
+
 /**
  * Import configurations
  */
-import config 				from './config.json';
+const config = require( './config.json' );
 
 /**
  * Gulp imports
  */
-import browserSync 			from 'browser-sync';
-import gulp 				from 'gulp';
-import gutil 				from 'gulp-util';
-import inlineNg2Template 	from 'gulp-inline-ng2-template';
-import tslint 				from 'gulp-tslint';
-import typescript 			from 'gulp-typescript';
-
-/**
- * typescript project
- */
-const typescriptProject = typescript.createProject( './tsconfig.json' );
-
-/**
- * inlineNg2TemplateOptions options
- */
-const inlineNg2TemplateOptions = {
-	base: './public/app',
-	indent: 0,
-	target: 'es6',
-	templateExtension: '.html',
-	useRelativePaths: true
-};
+const browserSync = require( 'browser-sync' );
+const gulp = require( 'gulp' );
+const gutil = require( 'gulp-util' );
+const inlineNg2Template = require( 'gulp-inline-ng2-template' );
+const tslint = require( 'gulp-tslint' );
+const typescript = require( 'gulp-typescript' );
 
 /**
  * Gulp task: Lint TypeScript
  */
-export const typescriptLint = gulp.task( 'typescript:lint', () => {
+gulp.task( 'typescript:lint', () => {
 
+	// List all TypeScript source files
 	return gulp
-
-		// Get all typescript files
-		.src( `${config.paths.app.src}/**/*.ts` )
-
-		// Lint
+		.src( `${ config.paths.app.src }/**/*.ts` )
 		.pipe( tslint() )
-
-		// Report problems
 		.pipe( tslint.report( 'verbose' ) );
 
 } );
@@ -50,26 +31,27 @@ export const typescriptLint = gulp.task( 'typescript:lint', () => {
 /**
  * Gulp task: Build TypeScript
  */
-export const typescriptBuild = gulp.task( 'typescript:build', () => {
+gulp.task( 'typescript:build', () => {
 
+	// Inline component templates and transpile TypeScript to JavaScript
 	return gulp
-
-		// Get al typescript files
 		.src( [
 			`${ config.paths.app.src }/**/*.ts`,
 			`${ config.paths.typings.default }/index.d.ts`
 		] )
-
-		// Inline Angular 2 component templates
-		.pipe( inlineNg2Template( inlineNg2TemplateOptions ) )
-
-		// Transpile
-		.pipe( typescript( typescriptProject ), undefined, typescript.reporter.fullReporter() )
-
-		// Save
+		.pipe( inlineNg2Template( {
+			base: './public/app',
+			indent: 0,
+			target: 'es6',
+			templateExtension: '.html',
+			useRelativePaths: true
+		} ) )
+		.pipe(
+			typescript( typescript.createProject( './tsconfig.json' ) ),
+			undefined,
+			typescript.reporter.fullReporter()
+		)
 		.pipe( gulp.dest( config.paths.app.dest ) )
-
-		// Trigger BrowserSync
 		.pipe( browserSync.stream( { once: true } ) );
 
 } );

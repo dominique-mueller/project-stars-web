@@ -1,45 +1,46 @@
+'use strict';
+
 /**
- * Import configuration
+ * Imports configuration
  */
-import config 	from './config.json';
+const config = require( './config.json' );
 
 /**
  * Gulp imports
  */
-import del 		from 'del';
-import gulp 	from 'gulp';
-import gutil 	from 'gulp-util';
-import ncu 		from 'npm-check-updates';
+const del = require( 'del' );
+const gulp = require( 'gulp' );
+const gutil = require( 'gulp-util' );
+const ncu = require( 'npm-check-updates' );
 
 /**
  * Gulp task: Clean build folder
  */
-export const envClean = gulp.task( 'env:clean', () => {
-
-	// Delete folder and files
-	return del( `${config.paths.project.dest}/**/*` );
-
+gulp.task( 'env:clean', () => {
+	return del( `${ config.paths.project.dest }/**/*` );
 } );
 
 /**
- * Gulp task: Check for NPM dependency upgrades
+ * Gulp task: Check for available NPM dependency updates / upgrades
  */
-export const envNpm = gulp.task( 'env:npm', () => {
+gulp.task( 'env:npm', () => {
 
-	// Check for npm dependency updates
-	ncu.run().then( ( results ) => {
+	// Check for updates
+	ncu.run( {
+			packageFile: './package.json'
+		} )
 
-		// Print (pretty) results
-		if ( Object.keys( results ).length === 0 ) {
-			gutil.log( 'All npm dependencies match the latest package version :)' );
-		} else {
-			gutil.log( 'The following npm dependencies should be upgraded:' );
-			for ( const key in results ) {
-				gutil.log( '-', gutil.colors.blue( key ), '\t->',
-					gutil.colors.yellow( results[ key ] ), 'is available' );
+		// Pretty print the results
+		.then( ( results ) => {
+			if ( Object.keys( results ).length === 0 ) {
+				gutil.log( 'Hooray! All NPM dependencies match the latest package version.' );
+			} else {
+				gutil.log( 'There are updates available for the following NPM packages:' );
+				for ( let key in results ) {
+					gutil.log( gutil.colors.blue( key ), '=>',
+						gutil.colors.yellow( results[ key ] ), 'is available');
+				}
 			}
-		}
-
-	} );
+		} );
 
 } );

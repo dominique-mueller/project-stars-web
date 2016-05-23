@@ -15,6 +15,7 @@ undefinederror.json
 undefinedinfo.json
 info.log.json
 error.log.json
+npm-debug.log
 
 # Editor settings
 *.sublime-workspace

@@ -1,92 +1,72 @@
+'use strict';
+
 /**
  * Import configurations
  */
-import config 		from './config.json';
+const config = require( './config.json' );
 
 /**
  * Gulp imports
  */
-import browserSync 	from 'browser-sync';
-import gulp 		from 'gulp';
-import inject 		from 'gulp-inject';
-import rename 		from 'gulp-rename';
-import svgstore 	from 'gulp-svgstore';
-
-/**
- * svgstore options
- */
-const svgstoreOptions = {
-	inlineSvg: true
-};
+const browserSync = require( 'browser-sync' );
+const gulp = require( 'gulp' );
+const inject = require( 'gulp-inject' );
+const rename = require( 'gulp-rename' );
+const svgstore = require( 'gulp-svgstore' );
 
 /**
  * Gulp task: Setup index file
  */
-export const icons = gulp.task( 'setup:index', () => {
+gulp.task( 'setup:index', () => {
 
-	// First up generate the svg
+	// First up, get all SVG icons, prefix them and put them in the store
 	const svgString = gulp
-
-		// Get all SVG icons
 		.src( `${ config.paths.assets.icons }/*.svg` )
-
-		// Prefix file name
 		.pipe( rename( { prefix: 'icon-' } ) )
+		.pipe( svgstore( {
+			inlineSvg: true
+		} ) );
 
-		// Combine SVG icons
-		.pipe( svgstore( svgstoreOptions ) );
-
-	// Then inject the svg
+	// Second, inject the SVG into he index file
 	return gulp
-
-		// Get the index file
 		.src( `${ config.paths.project.src }/index.html` )
-
-		// Inject svg String into index
 		.pipe( inject( svgString, { transform: ( path, file ) => {
 			return file.contents.toString();
 		} } ) )
-
-		// Save the new index
 		.pipe( gulp.dest( config.paths.root ) )
-
 		.pipe( browserSync.stream( { once: true } ) );
 
 } );
 
 /**
+ * Gulp task: Setup SystemJS
+ */
+gulp.task( 'setup:systemjs', () => {
+	return gulp
+		.src( `${ config.paths.project.src }/systemjs.config.js` )
+		.pipe( gulp.dest( config.paths.app.dest ) );
+} );
+
+/**
  * Gulp task: Copy assets (e.g. images)
  */
-export const images = gulp.task( 'setup:assets', () => {
+gulp.task( 'setup:assets', () => {
 
-	// Copy images
+	// Copy all assets (for now just images)
 	return gulp
-
 		.src( `${ config.paths.assets.images }/*.jpg` )
 		.pipe( gulp.dest( config.paths.assets.dest ) );
 
 } );
 
 /**
- * Gulp task: Copy systemjs module configuration file
- */
-export const systemjs = gulp.task( 'setup:systemjs', () => {
-
-	return gulp
-		.src( `${ config.paths.project.src }/systemjs.config.js` )
-		.pipe( gulp.dest( config.paths.app.dest ) );
-
-} );
-
-/**
- * Gulp task: Setup temp api data
+ * Gulp task: Setup temp API mock data (for dev only)
  * TODO: Remove me
  */
-export const api = gulp.task( 'setup:api', () => {
+gulp.task( 'setup:apimock', () => {
 
-	// Copy data files
+	// Copy JSON data mock files
 	return gulp
-
 		.src( [
 			`${ config.paths.app.src }/services/bookmark/bookmarks.mock.json`,
 			`${ config.paths.app.src }/services/folder/folders.mock.json`,
