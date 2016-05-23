@@ -3,35 +3,24 @@
 /**
  * Imports configuration
  */
-const config = require( './config.json' );
+const config = require( './../config.json' );
 
 /**
  * Gulp imports
  */
-const del = require( 'del' );
 const gulp = require( 'gulp' );
 const gutil = require( 'gulp-util' );
 const ncu = require( 'npm-check-updates' );
 
 /**
- * Gulp task: Clean build folder
- */
-gulp.task( 'env:clean', () => {
-	return del( `${ config.paths.project.dest }/**/*` );
-} );
-
-/**
  * Gulp task: Check for available NPM dependency updates / upgrades
  */
-gulp.task( 'env:npm', () => {
-
-	// Check for updates
-	ncu.run( {
-			packageFile: './package.json'
+gulp.task( 'env:ncu', () => {
+	ncu
+		.run( {
+			packageFile: `${ config.paths.root }/${ config.names.package }`
 		} )
-
-		// Pretty print the results
-		.then( ( results ) => {
+		.then( ( results ) => { // Pretty print the results
 			if ( Object.keys( results ).length === 0 ) {
 				gutil.log( 'Hooray! All NPM dependencies match the latest package version.' );
 			} else {
@@ -42,5 +31,4 @@ gulp.task( 'env:npm', () => {
 				}
 			}
 		} );
-
 } );

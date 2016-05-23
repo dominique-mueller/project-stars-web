@@ -7,10 +7,10 @@ Gemfile.lock
 index.html
 build
 
-# Documentation
+# Documentation build
 docs
 
-# Generated error logs
+# Generated error logs (mostly by Node)
 undefinederror.json
 undefinedinfo.json
 info.log.json
@@ -23,3 +23,5 @@ stars-web.sublime*
 
 # Development files
 *.todo
+*.old
+*.temp

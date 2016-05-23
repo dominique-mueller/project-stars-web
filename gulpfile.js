@@ -3,7 +3,7 @@
 /**
  * Import configuration
  */
-const config = require( './tools/gulp_tasks/config.json' );
+const config = require( './gulp/config.json' );
 
 /**
  * Gulp imports
@@ -14,34 +14,42 @@ const historyApiFallback = require( 'connect-history-api-fallback' );
 const runSequence = require( 'run-sequence' );
 
 /**
- * Import other tasks
+ * Import all single Gulp tasks
  */
-const docs = require( './tools/gulp_tasks/docs.js' );
-const env = require( './tools/gulp_tasks/env.js' );
-const sass = require( './tools/gulp_tasks/sass.js' );
-const typescript = require( './tools/gulp_tasks/typescript.js' );
-const setup = require( './tools/gulp_tasks/setup.js' );
+const docsFrontend = require( './gulp/docs/docs-frontend.js' );
+const envCleanBuild = require( './gulp/env/env-clean-build.js' );
+const envCleanDocs = require( './gulp/env/env-clean-docs.js' );
+const envNcu = require( './gulp/env/env-ncu.js' );
+const typescriptBuild = require( './gulp/scripts/typescript-build.js' );
+const typescriptLint = require( './gulp/scripts/typescript-lint.js' );
+const setupApimock = require( './gulp/setup/setup-apimock.js' );
+const setupAssets = require( './gulp/setup/setup-assets.js' );
+const setupIndex = require( './gulp/setup/setup-index.js' );
+const sassBuild = require( './gulp/styles/sass-build.js' );
+const sassLint = require( './gulp/styles/sass-lint.js' );
 
 /**
- * Gulp task: Build for development
+ * Gulp task: Build application - for development
+ * TODO: Remove apimock
  */
 gulp.task( 'build:dev', ( done ) => {
 	runSequence(
-		[ 'env:clean' ],
-		[ 'setup:index', 'setup:systemjs', 'setup:assets', 'setup:apimock', 'sass:build', 'typescript:build' ],
+		[ 'env:clean:build' ],
+		[ 'setup:index', 'setup:assets', 'setup:apimock', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
 
 /**
- * Gulp task: Build for production
+ * Gulp task: Build application - for production
+ * TODO: Remove apimock
  */
 gulp.task( 'build:prod', ( done ) => {
 	runSequence(
-		[ 'env:npm' ],
+		[ 'env:ncu' ],
 		[ 'sass:lint', 'typescript:lint' ],
-		[ 'env:clean' ],
-		[ 'setup:index', 'setup:systemjs', 'setup:assets', 'sass:build', 'typescript:build' ],
+		[ 'env:clean:build' ],
+		[ 'setup:index', 'setup:assets', 'sass:build', 'typescript:build' ],
 		done
 	);
 } );
@@ -51,27 +59,29 @@ gulp.task( 'build:prod', ( done ) => {
  */
 gulp.task( 'build:docs', ( done ) => {
 	runSequence(
-		[ 'docs:clean' ],
+		[ 'env:clean:docs' ],
 		[ 'docs:frontend' ],
 		done
 	);
 } );
 
 /**
- * Gulp task: Watcher for development
+ * Gulp task: Browser sync watcher - for development
  */
 gulp.task( 'watch', [ 'build:dev' ], () => {
 
 	// Initialize browsersync
 	browserSync.init( {
 		server: {
-			baseDir: './',
-			middleware: [ historyApiFallback() ] // To make HTML5 history possible
+			baseDir: './', // To also get access to the node modules folder
+			middleware: [
+				historyApiFallback() // To allow usage of the HTML5 history
+			]
 		},
 		logPrefix: 'Browsersync',
 		logConnections: true,
 		notify: {
-			styles: { // Custom styles for the notification in the browser
+			styles: { // Custom styles for the notification in the browser, bottom center
 				top: 'auto',
 				bottom: '0',
 				right: 'auto',
@@ -82,8 +92,8 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 		}
 	} );
 
-	// Watch files (SASS, TypeScript, HTML)
-	gulp.watch( `${ config.paths.styles.src }/**/*.scss`, [ 'sass:build' ] );
-	gulp.watch( `${ config.paths.app.src }/**/*`, [ 'typescript:build' ] );
+	// Watch files
+	gulp.watch( `${ config.paths.project.styles }/**/*.scss`, [ 'sass:build' ] ); // SASS files
+	gulp.watch( `${ config.paths.project.scripts }/**/*`, [ 'typescript:build' ] ); // TypeScript files including HTML templates
 
 } );

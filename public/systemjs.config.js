@@ -1,3 +1,6 @@
+/**
+ * System JS configuration
+ */
 ( function( window ) {
 
 	// Tell SystemJS where to find modules
@@ -75,6 +78,11 @@
 	System.config( {
 		map: map,
 		packages: packages
+	} );
+
+	// Run SystemJS
+	System.import( 'app' ).catch( function( error ) {
+		console.error( error );
 	} );
 
 } )( this );

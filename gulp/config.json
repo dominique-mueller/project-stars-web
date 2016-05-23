@@ -1,0 +1,30 @@
+{
+	"paths": {
+		"root": ".",
+		"project": {
+			"base": "./public",
+			"scripts": "./public/app",
+			"styles": "./public/styles",
+			"dest": "./build"
+		},
+		"assets": {
+			"base": "./public/assets",
+			"icons": "./public/assets/icons",
+			"images": "./public/assets/images",
+			"dest": "./build/assets"
+		},
+		"docs": {
+			"base": "./docs",
+			"frontend": "./docs/frontend",
+			"backend": "./docs/backend"
+		},
+		"typings": "./typings"
+	},
+	"names": {
+		"index": "index.html",
+		"styles": "style.min.css",
+		"typings": "index.d.ts",
+		"tsconfig": "tsconfig.json",
+		"package": "package.json"
+	}
+}

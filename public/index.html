@@ -9,44 +9,27 @@
 
 	<link rel="stylesheet" href="/build/style.min.css">
 
-	<!-- Step 1: Load polyfills for older browsers -->
-	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
+	<!-- Load web fonts from Adobe TypeKit - TODO: Optimized number of loaded font styles -->
+	<script src="./typekit.config.js" inline></script> <!-- Gulp will inline this file -->
 
-	<!-- Step 2: Load libraries / dependencies -->
+	<!-- Step 1: Load polyfills and libraries -->
+	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
 	<script src="/node_modules/zone.js/dist/zone.js"></script>
 	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
 	<script src="/node_modules/systemjs/dist/system.src.js"></script>
 
-	<!-- Step 3: Configure and run SystemJS for module loading -->
-	<script src="/build/systemjs.config.js"></script>
-	<script>
-		System.import( 'app' ).catch( function( error ) {
-			console.error( error );
-		} );
-	</script>
-
-	<!-- Load web fonts from Adobe TypeKit -->
-	<!-- TODO: Optimize number of loaded font styles -->
-	<script>
-		(function(d) {
-			var config = {
-				kitId: 'qnt7pjj',
-				scriptTimeout: 3000,
-				async: true
-			},
-			h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-		})(document);
-	</script>
+	<!-- Step 2: Configure and run SystemJS to load modules -->
+	<script src="./systemjs.config.js" inline></script> <!-- Gulp wil inline this file -->
 
 </head>
 <body>
 
-	<div class="svgstore">
-		<!-- inject:svg -->
-		<!-- endinject -->
-	</div>
+<div class="svgstore">
+	<!-- inject:svg -->
+	<!-- endinject -->
+</div>
 
-	<app>Loading ...</app>
+<app>Loading ...</app>
 
 </body>
 </html>
