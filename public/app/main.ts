@@ -11,8 +11,7 @@ import { Title } from '@angular/platform-browser';
  */
 import { AppComponent } from './components/app/app.component';
 
-// TODO: Move prod move status into some king of env file
-// enableProdMode();
+// TODO: Set this depending on env file? => enableProdMode();
 
 /**
  * Bootstrap the application for the browser

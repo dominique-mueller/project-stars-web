@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChange,
+import { Component, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChange,
 	ChangeDetectionStrategy } from '@angular/core';
 import { List } from 'immutable';
 

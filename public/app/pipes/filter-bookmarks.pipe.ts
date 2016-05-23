@@ -13,7 +13,7 @@ import { Bookmark } from './../services/bookmark';
  * Pipe for filtering (aka searching in) bookmarks (pure function)
  */
 @Pipe( {
-	name: 'filterBookmarks',
+	name: 'appFilterBookmarks',
 	pure: true
 } )
 export class FilterBookmarksPipe implements PipeTransform {

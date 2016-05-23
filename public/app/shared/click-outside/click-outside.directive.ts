@@ -11,7 +11,7 @@ import { Directive, Output, EventEmitter } from '@angular/core';
 		'(click)': 'trackEvent( $event )',
 		'(document:click)': 'compareEvent( $event )'
 	},
-	selector: '[clickOutside]'
+	selector: '[appClickOutside]'
 } )
 export class ClickOutsideDirective {
 

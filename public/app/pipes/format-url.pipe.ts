@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Pipe for pretty URL formatting (hostname, https)
  */
 @Pipe( {
-	name: 'formatUrl',
+	name: 'appFormatUrl',
 	pure: true
 } )
 export class FormatUrlPipe implements PipeTransform {

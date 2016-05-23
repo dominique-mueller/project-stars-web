@@ -49,6 +49,7 @@
 	"devDependencies": {
 		"browser-sync": "2.12.x",
 		"chai": "3.5.x",
+		"codelyzer": "0.0.x",
 		"connect-history-api-fallback": "1.2.x",
 		"del": "2.2.x",
 		"gulp": "3.9.x",

@@ -4,7 +4,7 @@
 </button>
 
 <!-- Dropdown menu -->
-<div class="move-into-folder__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+<div class="move-into-folder__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<article class="move-into-folder__dropdown-content">
 
 		<!-- Dropdown header -->

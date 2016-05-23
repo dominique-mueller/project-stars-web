@@ -7,7 +7,7 @@
 
 <!-- Dropdown menu -->
 <div class="create-bookmark__dropdown" [class.is-visible]="isOpen"
-	(clickOutside)="closeDropdownOnBlur( $event, trigger, nameInput )">
+	(appClickOutside)="closeDropdownOnBlur( $event, trigger, nameInput )">
 	<article class="create-bookmark__dropdown-content">
 
 		<!-- Dropdown header -->

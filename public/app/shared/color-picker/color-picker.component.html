@@ -4,7 +4,7 @@
 </button>
 
 <!-- Dropdown menu -->
-<div class="color-picker__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+<div class="color-picker__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<article class="color-picker__dropdown-content">
 
 		<!-- Dropdown header -->

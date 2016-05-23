@@ -9,7 +9,7 @@
 	<!-- Bookmark search: Bookmarks -->
 	<h3 class="bookmark-search__subtitle">Bookmarks</h3>
 	<ul class="bookmark-search__list">
-		<li class="bookmark-search__item" *ngFor="let bookmark of ( bookmarks | filterBookmarks:searchText )">
+		<li class="bookmark-search__item" *ngFor="let bookmark of ( bookmarks | appFilterBookmarks:searchText )">
 			<app-bookmark [bookmark]="bookmark" [labels]="labels"
 				(clickOnDetails)="onClickOnDetails( 'bookmark', bookmark.get( 'id' ), bookmark.get( 'path' ) )">
 			</app-bookmark>
@@ -19,7 +19,7 @@
 	<!-- Bookmark search: Folders -->
 	<h3 class="bookmark-search__subtitle">Folders</h3>
 	<ul class="bookmark-search__list">
-		<li class="bookmark-search__item" *ngFor="let folder of ( folders | filterFolders:searchText )">
+		<li class="bookmark-search__item" *ngFor="let folder of ( folders | appFilterFolders:searchText )">
 			<app-folder [folder]="folder" (select)="onSelectFolder( $event )"
 				(clickOnDetails)="onClickOnDetails( 'folder', folder.get( 'id' ), folder.get( 'path' ) )">
 			</app-folder>

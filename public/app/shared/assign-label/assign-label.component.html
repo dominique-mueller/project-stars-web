@@ -5,7 +5,7 @@
 </button>
 
 <!-- Dropdown menu -->
-<div class="assign-label__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+<div class="assign-label__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<article class="assign-label__dropdown-content">
 
 		<!-- Dropdown header -->

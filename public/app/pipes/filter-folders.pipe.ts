@@ -13,7 +13,7 @@ import { Folder } from './../services/folder';
  * Pipe for filtering (aka searching in) folders (pure function)
  */
 @Pipe( {
-	name: 'filterFolders',
+	name: 'appFilterFolders',
 	pure: true
 } )
 export class FilterFoldersPipe implements PipeTransform {
