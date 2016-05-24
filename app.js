@@ -16,7 +16,7 @@ var mongoose = require('mongoose');
 var logger = require('./adapters/logger.js');
 
 //over writes the mongoose promises so they work like in the es6 specification
-mongoose.Promise = require('es6-promise').Promise; 
+// mongoose.Promise = require('es6-promise').Promise; 
 
 //pass the body-parser to express
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,9 +28,12 @@ From the most specific sub url to the top url (DOMAIN/)
 Otherwise, there will be unnecessary comparisons or even worth.
 */
 app.use('/api/v1',router.Backend);
-app.use('/', router.Frontend);
 //for static file requests
-app.use('/', express.static('public/'));
+app.use('/build', express.static('build'));
+app.use('/node_modules', express.static('node_modules'));
+//non of the static files matches
+//return index.html
+app.use('/', router.Frontend);
 
 redirectHTTP.use('/', router.Redirect);
 
@@ -40,7 +43,8 @@ redirectHTTP.use('/', router.Redirect);
 //https server. requires https for whole domain
 https.createServer({
 	key: fs.readFileSync('certs/key.pem'),
-	cert: fs.readFileSync('certs/cert.pem')
+	cert: fs.readFileSync('certs/cert.pem'), 
+	passphrase: 'stars-web'
 }, app).listen(443, "localhost", function(){ //listen on https default port 443
 	var host = this.address().address;
 	var port = this.address().port;

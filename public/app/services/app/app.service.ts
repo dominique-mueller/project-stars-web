@@ -33,7 +33,7 @@ export class AppService {
 
 		// Setup
 		this.APP_NAME = 'Project Stars';
-		this.API_URL = 'http://localhost:3000/build/apimock';
+		this.API_URL = 'https://localhost/build/apimock';
 		this.COLOR_PRESETS = List( [
 			'#9E9E9E',
 			'#F44336',

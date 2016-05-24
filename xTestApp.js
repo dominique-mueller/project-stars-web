@@ -1,3 +1,13 @@
+
+/*
+THIS FILE IS ONLY FOR DEVELOPMENT AND NOT MEANT TO BE IN THE PRODUCTIVE APP
+THE RIGTHS FOR EXISTENCE OF THIS FILE IS BASED ON SIMPLE TESTS ABOUT LANGUAGE SPECIFIC BEHAVIOUR
+*/
+
+
+
+
+
 //{"firstName":"Tim", "lastName":"Timer","emailAddress":"tim.timer@stars-web.de", "password":"stars-web-1"}
 
 require('es6-promise').polyfill();

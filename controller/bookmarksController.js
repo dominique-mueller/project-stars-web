@@ -67,9 +67,9 @@ var BookmarksController = function(req, res, authentication){
 
 	this.post = function(){
 		//TODO Label, check if exist and regard to owner
-		var changeNumberOfContaineElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
-		var checkIfPathRegardsToOwnerPromise = Folder.checkIf(self.reqBody.path);
-		var bookmarkPromise = Bookmark.create(self.reqBody, [changeNumberOfContaineElementsPromise, checkIfPathRegardsToOwnerPromise]);
+		var changeNumberOfContaineElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path);
+		// var checkIfPathRegardsToOwnerPromise = Folder.checkIfPathRegardsToOwner(self.reqBody.path);
+		var bookmarkPromise = Bookmark.create(self.reqBody, [changeNumberOfContaineElementsPromise]);
 		bookmarkPromise.then(function(bookmark){
 			self.res.status(httpStatus.OK)
 				.json({'data':

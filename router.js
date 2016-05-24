@@ -34,12 +34,12 @@ routerBackend.use(function(req, res, next){
 // 	res.end();
 // });
 
-routerFrontend.route('').all(function(req, res){
+routerFrontend.route('*').all(function(req, res){
 	console.log('RICHTIGE STELLE FÜR INDEX.HTML');
 	console.log('URL Request Route: ' + req.url);
-	res.sendFile('public/index.html', {root:__dirname});
+	res.sendFile('index.html', {root:__dirname});
 	// res.json({"data":"RESPONSE"});
-	res.end();
+	// res.end();
 });
 
 

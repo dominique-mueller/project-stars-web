@@ -7,18 +7,18 @@
 
 	<title>Project Stars</title>
 
-	<link rel="stylesheet" href="http://localhost:3000/build/style.min.css">
+	<link rel="stylesheet" href="/build/style.min.css">
 
 	<!-- Step 1: Load polyfills for older browsers -->
-	<script src="http://localhost:3000/node_modules/es6-shim/es6-shim.min.js"></script>
+	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
 
 	<!-- Step 2: Load libraries -->
-	<script src="http://localhost:3000/node_modules/zone.js/dist/zone.js"></script>
-	<script src="http://localhost:3000/node_modules/reflect-metadata/Reflect.js"></script>
-	<script src="http://localhost:3000/node_modules/systemjs/dist/system.src.js"></script>
+	<script src="/node_modules/zone.js/dist/zone.js"></script>
+	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
+	<script src="/node_modules/systemjs/dist/system.src.js"></script>
 
 	<!-- Step 3: Configure and run systemjs to load modules -->
-	<script src="http://localhost:3000/build/systemjs.config.js"></script>
+	<script src="/build/systemjs.config.js"></script>
 	<script>
 		System.import( 'app' ).catch( function( error ) {
 			console.error( error );

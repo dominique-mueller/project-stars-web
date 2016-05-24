@@ -5,7 +5,7 @@
   "contributors": [
     "Dominique Müller <hello@dominique-mueller.de>",
     "Marco Rönfeldt"
-  ],
+  ],     
   "homepage": "https://stars.dominique-mueller.de/",
   "license": "MIT",
   "repository": {
@@ -32,6 +32,7 @@
     "bcryptjs": "2.3.x",
     "body-parser": "1.15.x",
     "bunyan": "1.7.x",
+    "es6-promise": "3.2.1",
     "es6-shim": "0.35.x",
     "express": "4.13.x",
     "immutable": "3.8.x",
