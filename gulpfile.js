@@ -20,7 +20,6 @@ const runSequence = require( 'run-sequence' );
 const docsFrontend = require( './gulp/docs/docs-frontend.js' );
 const envCleanBuild = require( './gulp/env/env-clean-build.js' );
 const envCleanDocs = require( './gulp/env/env-clean-docs.js' );
-const envNcu = require( './gulp/env/env-ncu.js' );
 const typescriptBuild = require( './gulp/scripts/typescript-build.js' );
 const typescriptLint = require( './gulp/scripts/typescript-lint.js' );
 const setupApimock = require( './gulp/setup/setup-apimock.js' );

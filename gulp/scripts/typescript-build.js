@@ -123,7 +123,7 @@ gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], ( done ) => 
 
 			// Polyfills bundle (checks in the node_modules folder)
 			polyfills: [
-				'es6-shim/es6-shim.min.js',
+				'core-js/client/shim.min.js',
 				'zone.js/dist/zone.min.js',
 				'reflect-metadata/Reflect.js'
 			]

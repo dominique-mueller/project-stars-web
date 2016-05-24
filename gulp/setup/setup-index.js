@@ -53,7 +53,7 @@ gulp.task( 'setup:index--dev', () => {
 		// Inject required JS libraries, directly from the node modules folder
 		.pipe( inject(
 			gulp.src( [
-				`${ config.paths.dependencies }/es6-shim/es6-shim.min.js`,
+				`${ config.paths.dependencies }/core-js/client/shim.min.js`,
 				`${ config.paths.dependencies }/zone.js/dist/zone.js`,
 				`${ config.paths.dependencies }/reflect-metadata/Reflect.js`,
 				`${ config.paths.dependencies }/systemjs/dist/system.src.js`
