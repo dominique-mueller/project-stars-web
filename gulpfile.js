@@ -56,10 +56,10 @@ gulp.task( 'build:prod', ( done ) => {
 	gutil.log( gutil.colors.blue( '>>> Starting BUILD for PRODUCTION ...' ) );
 
 	runSequence(
-		[ 'sass:lint', 'typescript:lint' ],
-		[ 'env:clean:build' ],
+		[ 'sass:lint', 'typescript:lint', 'env:clean:build' ],
 		[ 'setup:assets', 'sass:build--prod', 'typescript:bundle--prod' ],
-		[ 'env:clean:tempbuild', 'setup:index--prod', 'env:ncu' ],
+		[ 'setup:index--prod' ],
+		[ 'env:clean:tempbuild' ],
 		done
 	);
 

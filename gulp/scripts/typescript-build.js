@@ -18,7 +18,6 @@ const inlineNg2Template = require( 'gulp-inline-ng2-template' );
 const stripDebug = require( 'gulp-strip-debug' );
 const typescript = require( 'gulp-typescript' );
 const webpack = require( 'webpack' );
-const webpackStream = require( 'webpack-stream' );
 
 /**
  * Gulp task: Build TypeScript (for development)
@@ -92,78 +91,82 @@ gulp.task( 'typescript:build--prod', () => {
 		// Remove all debugging information (like console logs & alerts)
 		.pipe( stripDebug() )
 
-		.pipe( gulp.dest( config.paths.project.dest ) ); // Only temporary save ...
+		.pipe( gulp.dest( `${ config.paths.project.dest }/temp` ) ); // Only temporary save ...
 
 } );
 
 /**
  * Gulp task: Bundle TypeScript (for production)
  */
-gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], () => {
+gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], ( done ) => {
 
 	gutil.log( '> Bundling JavaScript files (PROD) ...' );
 
-	return gulp
+	webpack( {
+		entry: {
 
-		// We use the entry point for the application
-		.src( [
-			`${ config.paths.project.dest }/**/*.js`
-		] )
+			// App bundle
+			app: `${ config.paths.project.dest }/temp/main`,
 
-		// Create bundles via Webpack
-		.pipe( webpackStream( {
-			entry: {
+			// Vendor bundle (checks in the node_modules folder)
+			vendor: [
+				'@angular/compiler',
+				'@angular/core',
+				'@angular/http',
+				'@angular/platform-browser',
+				'@angular/platform-browser-dynamic',
+				'@angular/router',
+				'angular2-jwt',
+				'immutable',
+				'rxjs'
+			],
 
-				// App bundle
-				app: `${ config.paths.project.dest }/main`,
-
-				// Vendor bundle (checks in the node_modules folder)
-				ventor: [
-					'@angular/compiler',
-					'@angular/core',
-					'@angular/http',
-					'@angular/platform-browser',
-					'@angular/platform-browser-dynamic',
-					'@angular/router',
-					'angular2-jwt',
-					'immutable',
-					'rxjs'
-				],
-
-				// Polyfills bundle (checks in the node_modules folder)
-				polyfills: [
-					'es6-shim/es6-shim.min.js',
-					'zone.js/dist/zone.min.js',
-					'reflect-metadata/Reflect.js'
-				]
-
-			},
-			output: {
-				filename: '[name].bundle.min.js'
-			},
-			resolve: {
-				extensions: [ '', '.js' ]
-			},
-			plugins: [
-
-				// Stop the build process if errors are thrown
-				new webpack.NoErrorsPlugin(),
-
-				// Detect (and skip / remove) identical files
-				new webpack.optimize.DedupePlugin(),
-
-				// Minify JavaScript
-				new webpack.optimize.UglifyJsPlugin(),
-
-				// Create multiple bundles
-				new webpack.optimize.CommonsChunkPlugin( {
-					name: [ 'app', 'vendor', 'polyfills' ]
-				} )
-
+			// Polyfills bundle (checks in the node_modules folder)
+			polyfills: [
+				'es6-shim/es6-shim.min.js',
+				'zone.js/dist/zone.min.js',
+				'reflect-metadata/Reflect.js'
 			]
-		} ) )
 
-		// Remove the old JS files, they were just temporary - because WebPack only seems to work with entry files
-		.pipe( gulp.dest( config.paths.project.dest ) );
+		},
+		output: {
+			path: config.paths.project.dest,
+			filename: '[name].bundle.min.js'
+		},
+		resolve: {
+			extensions: [ '', '.js' ]
+		},
+		plugins: [
+
+			// Minify JavaScript
+			new webpack.optimize.UglifyJsPlugin( {
+				mangle: false, // Necessary for Angular 2 for now
+				compress: {
+					warnings: false // Just hide them ... please ...
+				}
+			} ),
+
+			// Create multiple bundles
+			new webpack.optimize.CommonsChunkPlugin( {
+				name: [ 'app', 'vendor', 'polyfills' ]
+			} )
+
+		]
+	}, ( error, stats ) => {
+
+		// Check if an error occured
+		if( error ) {
+			throw new gutil.PluginError( 'webpack', error );
+		}
+
+		// Log output
+		gutil.log( stats.toString( {
+			colors: true,
+			chunks: false
+		} ) );
+
+		done();
+
+	} );
 
 } );
