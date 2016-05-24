@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Project Stars</title>
 
-	<link rel="stylesheet" href="/build/style.min.css">
+	<!-- Inject CSS file -->
+	<!-- inject:css -->
+	<!-- endinject -->
 
-	<!-- Load web fonts from Adobe TypeKit - TODO: Optimized number of loaded font styles -->
-	<script src="./typekit.config.js" inline></script> <!-- Gulp will inline this file -->
+	<!-- Inject polyfills and libraries -->
+	<!-- inject:js -->
+	<!-- endinject -->
 
-	<!-- Step 1: Load polyfills and libraries -->
-	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
-	<script src="/node_modules/zone.js/dist/zone.js"></script>
-	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
-	<script src="/node_modules/systemjs/dist/system.src.js"></script>
-
-	<!-- Step 2: Configure and run SystemJS to load modules -->
-	<script src="./systemjs.config.js" inline></script> <!-- Gulp wil inline this file -->
+	<!-- Inject TypeKit and SystemJS configuration -->
+	<!-- inject:js:inline -->
+	<!-- endinject -->
 
 </head>
 <body>
 
 <div class="svgstore">
+
+	<!-- Inject SVG -->
 	<!-- inject:svg -->
 	<!-- endinject -->
+
 </div>
 
 <app>Loading ...</app>

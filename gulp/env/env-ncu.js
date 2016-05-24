@@ -16,6 +16,9 @@ const ncu = require( 'npm-check-updates' );
  * Gulp task: Check for available NPM dependency updates / upgrades
  */
 gulp.task( 'env:ncu', () => {
+
+	gutil.log( '> Checking for available NPM package updates ...' );
+
 	ncu
 		.run( {
 			packageFile: `${ config.paths.root }/${ config.names.package }`
@@ -31,4 +34,5 @@ gulp.task( 'env:ncu', () => {
 				}
 			}
 		} );
+
 } );

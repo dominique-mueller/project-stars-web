@@ -18,11 +18,13 @@
 			"frontend": "./docs/frontend",
 			"backend": "./docs/backend"
 		},
-		"typings": "./typings"
+		"typings": "./typings",
+		"dependencies": "./node_modules"
 	},
 	"names": {
 		"index": "index.html",
-		"styles": "style.min.css",
+		"styles": "style.css",
+		"stylesMinified": "style.min.css",
 		"typings": "index.d.ts",
 		"tsconfig": "tsconfig.json",
 		"package": "package.json"

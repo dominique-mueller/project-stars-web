@@ -9,21 +9,25 @@ const config = require( './../config.json' );
  * Gulp imports
  */
 const gulp = require( 'gulp' );
+const gutil = require( 'gulp-util' );
 const typedoc = require( 'gulp-typedoc' );
 
 /**
  * Gulp task: Generate frontend documentation
  */
 gulp.task( 'docs:frontend', () => {
+
+	gutil.log( '> Generating frontend docs ...' );
+
 	return gulp
 		.src( [
 			`${ config.paths.project.scripts }/**/*.ts`,
-			`${ config.paths.typings }/${ config.names.typings }`
+			`${ config.paths.typings }/index.d.ts`
 		] )
 		.pipe( typedoc( {
 			out: config.paths.docs.frontend,
 			name: 'Project Stars',
-			module: 'system',
+			module: 'commonjs',
 			target: 'es5',
 			includeDeclarations: true,
 			experimentalDecorators: true,
@@ -33,4 +37,5 @@ gulp.task( 'docs:frontend', () => {
 			version: true,
 			theme: 'minimal'
 		} ) );
+
 } );

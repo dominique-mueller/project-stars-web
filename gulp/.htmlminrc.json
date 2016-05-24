@@ -10,7 +10,7 @@
 	"minifyCSS": false,
 	"minifyJS": false,
 	"minifyURLs": false,
-	"preserveLineBreaks": false,
+	"preserveLineBreaks": true,
 	"quoteCharacter": "\"",
 	"removeAttributeQuotes": false,
 	"removeComments": true,

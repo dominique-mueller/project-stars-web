@@ -10,6 +10,7 @@ const config = require( './gulp/config.json' );
  */
 const browserSync = require( 'browser-sync' );
 const gulp = require( 'gulp' );
+const gutil = require( 'gulp-util' );
 const historyApiFallback = require( 'connect-history-api-fallback' );
 const runSequence = require( 'run-sequence' );
 
@@ -24,6 +25,7 @@ const typescriptBuild = require( './gulp/scripts/typescript-build.js' );
 const typescriptLint = require( './gulp/scripts/typescript-lint.js' );
 const setupApimock = require( './gulp/setup/setup-apimock.js' );
 const setupAssets = require( './gulp/setup/setup-assets.js' );
+const setupConfig = require( './gulp/setup/setup-config.js' );
 const setupIndex = require( './gulp/setup/setup-index.js' );
 const sassBuild = require( './gulp/styles/sass-build.js' );
 const sassLint = require( './gulp/styles/sass-lint.js' );
@@ -33,11 +35,16 @@ const sassLint = require( './gulp/styles/sass-lint.js' );
  * TODO: Remove apimock
  */
 gulp.task( 'build:dev', ( done ) => {
+
+	gutil.log( gutil.colors.blue( '>>> Starting BUILD for DEVELOPMENT ...' ) );
+
 	runSequence(
 		[ 'env:clean:build' ],
-		[ 'setup:index', 'setup:assets', 'setup:apimock', 'sass:build', 'typescript:build' ],
+		[ 'setup:assets', 'setup:config', 'setup:apimock', 'sass:build--dev', 'typescript:build--dev' ],
+		[ 'setup:index--dev' ],
 		done
 	);
+
 } );
 
 /**
@@ -45,30 +52,40 @@ gulp.task( 'build:dev', ( done ) => {
  * TODO: Remove apimock
  */
 gulp.task( 'build:prod', ( done ) => {
+
+	gutil.log( gutil.colors.blue( '>>> Starting BUILD for PRODUCTION ...' ) );
+
 	runSequence(
-		[ 'env:ncu' ],
 		[ 'sass:lint', 'typescript:lint' ],
 		[ 'env:clean:build' ],
-		[ 'setup:index', 'setup:assets', 'sass:build', 'typescript:build' ],
+		[ 'setup:assets', 'sass:build--prod', 'typescript:bundle--prod' ],
+		[ 'env:clean:tempbuild', 'setup:index--prod', 'env:ncu' ],
 		done
 	);
+
 } );
 
 /**
  * Gulp task: Build documentations
  */
 gulp.task( 'build:docs', ( done ) => {
+
+	gutil.log( gutil.colors.blue( '>>> Starting BUILD for DOCUMENTATION ...' ) );
+
 	runSequence(
 		[ 'env:clean:docs' ],
 		[ 'docs:frontend' ],
 		done
 	);
+
 } );
 
 /**
  * Gulp task: Browser sync watcher - for development
  */
 gulp.task( 'watch', [ 'build:dev' ], () => {
+
+	gutil.log( gutil.colors.blue( '>>> Starting DEV ENVIRONMENT watcher ...' ) );
 
 	// Initialize browsersync
 	browserSync.init( {
@@ -93,7 +110,7 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 	} );
 
 	// Watch files
-	gulp.watch( `${ config.paths.project.styles }/**/*.scss`, [ 'sass:build' ] ); // SASS files
-	gulp.watch( `${ config.paths.project.scripts }/**/*`, [ 'typescript:build' ] ); // TypeScript files including HTML templates
+	gulp.watch( `${ config.paths.project.styles }/**/*.scss`, [ 'sass:build--dev' ] ); // SASS files
+	gulp.watch( `${ config.paths.project.scripts }/**/*`, [ 'typescript:build--dev' ] ); // TypeScript files including HTML templates
 
 } );

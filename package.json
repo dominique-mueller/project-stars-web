@@ -58,9 +58,11 @@
 		"gulp-inject": "4.1.x",
 		"gulp-inline-ng2-template": "1.1.x",
 		"gulp-inline-source": "2.1.x",
+		"gulp-htmlmin": "2.0.x",
 		"gulp-rename": "1.2.x",
 		"gulp-sass": "2.3.x",
 		"gulp-scss-lint": "0.4.x",
+		"gulp-strip-debug": "1.1.x",
 		"gulp-svgstore": "6.0.x",
 		"gulp-tslint": "5.0.x",
 		"gulp-typedoc": "2.0.x",
@@ -74,7 +76,9 @@
 		"tslint": "3.10.x",
 		"typedoc": "0.3.x",
 		"typescript": "1.8.x",
-		"typings": "1.0.x"
+		"typings": "1.0.x",
+		"webpack": "1.13.x",
+		"webpack-stream": "3.2.x"
 	},
 	"engines": {
 		"node": "<5"
