@@ -66,6 +66,7 @@
 		"gulp-typedoc": "2.0.x",
 		"gulp-typescript": "2.13.x",
 		"gulp-util": "3.0.x",
+		"html-minifier": "2.1.x",
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
 		"npm-check-updates": "2.6.x",
