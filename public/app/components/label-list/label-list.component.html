@@ -1,5 +1,5 @@
 <!-- List of existing labels -->
-<ul>
+<ul *ngIf="labels.size > 0">
 	<li *ngFor="let label of labels.toList()">
 		<app-label-advanced
 			[label]="label"
@@ -11,6 +11,13 @@
 		</app-label-advanced>
 	</li>
 </ul>
+
+<!-- Empty label list message -->
+<div class="label-list__empty" *ngIf="labels.size === 0">
+	<app-icon name="label" size="48" color="#CCC"></app-icon>
+	<p><strong>No labels yet.</strong></p>
+	<p>Continue by creating a brand new label.</p>
+</div>
 
 <hr class="label-list__divider">
 

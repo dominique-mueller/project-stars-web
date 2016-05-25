@@ -33,3 +33,17 @@
 .bookmark-list__item {
 	border-bottom: .1rem solid $color-gallery;
 }
+
+.bookmark-list__empty {
+	padding-top: 10rem;
+	padding-bottom: 10rem;
+	text-align: center;
+	color: $color-gray;
+	line-height: 1.5;
+
+	> .icon {
+		display: inline-block;
+		margin-bottom: 1rem;
+	}
+
+}

@@ -19,7 +19,7 @@
 </header>
 
 <!-- Bookmark list: Content -->
-<ul class="bookmark-list__list">
+<ul class="bookmark-list__list" *ngIf="folders.size > 0 || bookmarks.size > 0">
 
 	<!-- Folders first -->
 	<li class="bookmark-list__item" *ngFor="let folder of folders">
@@ -36,6 +36,13 @@
 	</li>
 
 </ul>
+
+<!-- Bookmark list: Empty folder message -->
+<div class="bookmark-list__empty" *ngIf="folders.size === 0 && bookmarks.size === 0">
+	<app-icon name="folder" size="96" color="#CCC"></app-icon>
+	<p><strong>This folder is empty.</strong></p>
+	<p>Continue by adding bookmarks or folders.</p>
+</div>
 
 <!-- Details panel route -->
 <router-outlet></router-outlet>
