@@ -37,6 +37,22 @@
 
 	}
 
+	&.is-error {
+
+		.login__box-user-email {
+			animation: shake 1s ease-out;
+		}
+
+		.login__box-user-password {
+			animation: shake 1s ease-out .02s;
+		}
+
+		.login__box-user-button {
+			animation: shake 1s ease-out .04s;
+		}
+
+	}
+
 }
 
 .login__box {
@@ -104,4 +120,18 @@
 	opacity: 0;
 	transition: opacity .8s $anim-easing .1s,
 				transform .8s $anim-easing .1s;
+}
+
+// Shake animation, occurs when login was not successful
+
+@keyframes shake {
+	0%, 100% {
+		transform: translate3d(0,0,0);
+	}
+	10%, 30%, 50%, 70%, 90% {
+		transform: translate3d(-.8rem,0,0);
+	}
+	20%, 40%, 60%, 80% {
+		transform: translate3d(.8rem,0,0);
+	}
 }

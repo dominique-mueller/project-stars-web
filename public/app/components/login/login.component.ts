@@ -24,7 +24,8 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	],
 	host: {
 		class: 'login',
-		'[class.is-visible]': 'isAnimatedIn'
+		'[class.is-visible]': 'isAnimatedIn',
+		'[class.is-error]': 'isAnimatingError'
 	},
 	selector: 'app-login',
 	templateUrl: './login.component.html'
@@ -67,9 +68,14 @@ export class LoginComponent implements OnActivate, OnInit {
 	private loginForm: ControlGroup;
 
 	/**
-	 * Animation flag
+	 * Animation flag, for initial loading
 	 */
 	private isAnimatedIn: boolean;
+
+	/**
+	 * Animation flag, for unsuccessful login try
+	 */
+	private isAnimatingError: boolean;
 
 	/**
 	 * Constructor
@@ -97,6 +103,7 @@ export class LoginComponent implements OnActivate, OnInit {
 			password: ''
 		} );
 		this.isAnimatedIn = false;
+		this.isAnimatingError = false;
 
 	}
 
@@ -146,6 +153,17 @@ export class LoginComponent implements OnActivate, OnInit {
 			.catch( ( error: any ) => {
 				console.warn( 'APP > User > Login not successful.' );
 				( <Control> this.loginForm.controls[ 'password' ] ).updateValue( '' ); // Reset password input
+
+				// Shake animation
+				this.isAnimatingError = true;
+				setTimeout(
+					() => {
+						this.isAnimatingError = false;
+						this.changeDetector.markForCheck();
+					},
+					1140 // Animation takes a bit more than 1 second, so give it 100ms more than it actually needs
+				);
+
 			} );
 
 	}
