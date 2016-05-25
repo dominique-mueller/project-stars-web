@@ -116,7 +116,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		// Setup
 		this.changeSearch = new EventEmitter();
 		this.logout = new EventEmitter();
-		this.isChangeSearchDisabled = true; // Also skip the first initial one
+		this.isChangeSearchDisabled = false;
 		this.appName = appService.APP_NAME;
 		this.userName = 'User';
 		this.serviceSubscriptions = [];

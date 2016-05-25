@@ -99,4 +99,22 @@ export class FolderLogicService {
 
 	}
 
+	/**
+	 * Filter folders, used instead of a pipe because intermedia ngFor variable doesn't exist (pure function)
+	 * @param  {List<Folder>} folders    List of all folders
+	 * @param  {string}       filterText Filter text
+	 * @return {List<Folder>}            List of filtered folders
+	 */
+	public filterFolders( folders: List<Folder>, filterText: string ): List<Folder> {
+
+		// Filter folders
+		// - Filter text must exist at least once in the name
+		// - Filtering is not case-sensitive
+		const optimizedFilterText: string = filterText.toLowerCase(); // Do it only once
+		return <List<Folder>> folders.filter( ( folder: Folder ) => {
+			return folder.get( 'name' ).toLowerCase().indexOf( optimizedFilterText ) > -1;
+		} );
+
+	}
+
 }

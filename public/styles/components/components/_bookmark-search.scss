@@ -16,11 +16,6 @@
 	padding-top: .1rem;
 	line-height: 3.3rem; // Same as button height
 	flex: 1;
-
-	> em {
-		color: $color-success;
-	}
-
 }
 
 // Content
@@ -41,7 +36,11 @@
 	border-bottom: .1rem solid $color-gallery;
 }
 
-.bookmark-search__list {
+.bookmark-search__noresults {
+	padding-top: 1.8rem;
+	padding-left: 3rem;
+	padding-bottom: 1.8rem;
+	font-style: italic;
 }
 
 .bookmark-search__item {

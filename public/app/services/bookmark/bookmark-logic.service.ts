@@ -51,4 +51,22 @@ export class BookmarkLogicService {
 
 	}
 
+	/**
+	 * Filter bookmarks, used instead of a pipe because intermedia ngFor variable doesn't exist (pure function)
+	 * @param  {List<Bookmark>} bookmarks  List of all bookmarks
+	 * @param  {string}         filterText Filter text
+	 * @return {List<Bookmark>}            List of filtered bookmarks
+	 */
+	public filterBookmarks( bookmarks: List<Bookmark>, filterText: string ): List<Bookmark> {
+
+		// Filter bookmarks
+		// - Filter text must exist at least once in the title
+		// - Filtering is not case-sensitive
+		const optimizedFilterText: string = filterText.toLowerCase(); // Do it only once
+		return <List<Bookmark>> bookmarks.filter( ( bookmark: Bookmark ) => {
+			return bookmark.get( 'title' ).toLowerCase().indexOf( optimizedFilterText ) > -1;
+		} );
+
+	}
+
 }

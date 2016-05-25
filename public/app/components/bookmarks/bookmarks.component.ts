@@ -11,7 +11,7 @@ import { List, Map } from 'immutable';
  * Internal imports
  */
 import { UiService } from './../../services/ui';
-import { BookmarkDataService } from './../../services/bookmark';
+import { BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
 import { UserDataService, UserAuthService } from './../../services/user';
@@ -41,6 +41,7 @@ import { LabelListComponent } from './../label-list/label-list.component';
 	},
 	providers: [
 		BookmarkDataService,
+		BookmarkLogicService,
 		FolderDataService,
 		FolderLogicService,
 		LabelDataService,

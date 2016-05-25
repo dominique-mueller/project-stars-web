@@ -38,9 +38,6 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	host: {
 		class: 'bookmark-list'
 	},
-	providers: [
-		BookmarkLogicService
-	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark-list.component.html'
 } )
