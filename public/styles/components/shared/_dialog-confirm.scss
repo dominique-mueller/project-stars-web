@@ -31,20 +31,20 @@
 	background-color: $color-white;
 	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
 	transform-origin: 50% 33%;
-	transform: translate3D(-50%,-50%, 0) scale(.9);
+	transform: translate3d(-50%,-50%,0) scale(.9);
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity $anim-speed-normal $anim-easing,
-				transform $anim-speed-normal $anim-easing
+				transform $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
 	will-change: transform, opacity;
 
 	&.is-visible {
-		transform: translate3D(-50%,-50%, 0) scale(1);
+		transform: translate3d(-50%,-50%,0) scale(1);
 		opacity: 1;
 		visibility: visible;
 		transition: opacity $anim-speed-normal $anim-easing,
-					transform $anim-speed-normal $anim-easing
+					transform $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant $anim-linear;
 	}
 

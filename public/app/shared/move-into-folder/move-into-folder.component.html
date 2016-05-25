@@ -19,8 +19,8 @@
 
 		<!-- Dropdown subheader showing the current folder -->
 		<button class="button move-into-folder__dropdown-subheader is-visible" type="button"
-			[class.is-root]="visibleFolder.get( 'id' ) === 0" [class.is-animating-out]="isNavigating !== ''"
-			(click)="onSwitchToFolder( visibleFolder.get( 'path' ), 'up' )">
+			[class.is-root]="visibleFolder.get( 'isRoot' )" [class.is-animating-out]="isNavigating !== ''"
+			(click)="onSwitchToFolder( visibleFolder, 'up' )">
 			<app-icon name="chevron_left" size="18" color="#606060">
 			</app-icon>
 			{{ visibleFolder.get( 'name' ) }}
@@ -28,7 +28,7 @@
 
 		<!-- Temporary dropdown subheader showing the current folder, for animation purposes -->
 		<button class="button move-into-folder__dropdown-subheader is-hidden" type="button"
-			[class.is-root]="nextVisibleFolder.get( 'id' ) === 0" [class.is-animating-in]="isNavigating !== ''">
+			[class.is-root]="nextVisibleFolder.get( 'isRoot' )" [class.is-animating-in]="isNavigating !== ''">
 			<app-icon name="chevron_left" size="18" color="#606060">
 			</app-icon>
 			{{ nextVisibleFolder.get( 'name' ) }}
@@ -43,7 +43,7 @@
 			<li class="move-into-folder__dropdown-folder" *ngFor="let subfolder of visibleSubfolders">
 				<button class="button move-into-folder__dropdown-folder-action" type="button"
 					[disabled]="elementType === 'folder' && subfolder.get( 'id' ) === elementId"
-					(click)="onSwitchToFolder( subfolder.get( 'id' ), 'down' )">
+					(click)="onSwitchToFolder( subfolder, 'down' )">
 					<app-icon name="folder" size="18" color="#606060"></app-icon>
 					<span class="move-into-folder__dropdown-folder-name">{{ subfolder.get( 'name' ) }}</span>
 					<app-icon name="chevron_right" size="18" color="#606060"></app-icon>

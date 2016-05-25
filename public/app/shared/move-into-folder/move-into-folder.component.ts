@@ -180,17 +180,18 @@ export class MoveIntoFolderComponent {
 
 	/**
 	 * Switch to another folder
-	 * @param {string} folderId  Folder ID
+	 * @param {string} folder    Folder object (because we do need the isRoot as well, not only the ID)
 	 * @param {string} direction Navigation direction, 'up' or 'down'
 	 */
-	private onSwitchToFolder( folderId: string, direction: string ): void {
+	private onSwitchToFolder( folder: Folder, direction: string ): void {
 
 		// Skip if we're already in the root folder
-		if ( typeof folderId === 'undefined' ) {
+		if ( folder.get( 'isRoot' ) ) {
 			return;
 		}
 
 		// Get new current folder and all its subfolders
+		let folderId: string = direction === 'up' ? folder.get( 'path' ) : folder.get( 'id' );
 		this.nextVisibleFolder = this.folderLogicService.getFolderByFolderId( this.folders, folderId );
 		this.nextVisibleSubfolders = this.folderLogicService.getSubfoldersByFolderId( this.folders, folderId );
 
