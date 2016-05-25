@@ -50,6 +50,18 @@ gulp.task( 'setup:index--dev', () => {
 			}
 		) )
 
+		// Inject inline stylesheet link
+		.pipe( inject(
+			gulp.src( `${ config.paths.project.dest }/style-inline.css`, {
+				read: false
+			} ), {
+				starttag: '<!-- inject:css:inline -->', // Special annotation for this, else it would override the injections from above
+				transform: ( path, file ) => {
+					return `<link rel="stylesheet" href="${ path }">`;
+				}
+			}
+		) )
+
 		// Inject required JS libraries, directly from the node modules folder
 		.pipe( inject(
 			gulp.src( [
@@ -124,6 +136,17 @@ gulp.task( 'setup:index--prod', () => {
 			}
 		) )
 
+		// Inject inline stylesheet link
+		.pipe( inject(
+			gulp.src( `${ config.paths.project.dest }/temp/style-inline.min.css`,
+			{ read: false } ), {
+				starttag: '<!-- inject:css:inline -->', // Special annotation for this, else it would override the injections from above
+				transform: ( path, file ) => {
+					return `<link rel="stylesheet" href="${ path }" inline>`;
+				}
+			}
+		) )
+
 		// Inject generated bundles
 		.pipe( inject(
 			gulp.src( [
@@ -146,14 +169,15 @@ gulp.task( 'setup:index--prod', () => {
 			], { read: false } ), {
 				starttag: '<!-- inject:js:inline -->', // Special annotation for this, else it would override the injections from above
 				transform: ( path, file ) => {
-					return `<script src="${ path.replace( 'public', '.' ) }" inline></script>`; // The replace ... I know it's weird ...
+					return `<script src="${ path }" inline></script>`;
 				}
 			}
 		) )
 
-		// Inline (only) the configuration files (which replaces the script tags)
+		// Inline sources
 		.pipe( inlinesource( {
-			compress: true
+			compress: true,
+			rootpath: config.paths.root // Set the root path explicitely
 		} ) )
 
 		// Inject SVG icons

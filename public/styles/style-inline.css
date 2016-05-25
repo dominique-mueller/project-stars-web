@@ -1,0 +1,65 @@
+/* INLINE STYLE FOR INITIAL APPLICATION START */
+
+.inline__background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #EFEFEF;
+	/* Stars background image, compressed version
+	   Thanks to Adrian Pelletier on unsplash.com
+	   URL: https://unsplash.com/photos/BeIvjuz6k2k */
+	background: url('/build/assets/login_background.jpg') center center;
+	background-size: 0 0;
+	/* We load the image here to trick the browser loading it very early, login will use the image without re-downloading */
+}
+
+.inline__loading-box {
+	position: fixed;
+	height: 10px;
+	width: 42px;
+	top: calc(50% - 20px);
+	left: calc(50% - 20px);
+}
+
+.inline__loading-spinner {
+	display: inline-block;
+	height: 10px;
+	width: 10px;
+	margin-left: 2px;
+	margin-right: 2px;
+	background-color: #29687C;
+	border-radius: 50%;
+	vertical-align: top;
+}
+
+.inline__loading-spinner-one {
+	animation: loading-spinner 2s infinite;
+}
+
+.inline__loading-spinner-two {
+	animation: loading-spinner 2s infinite .2s;
+}
+
+.inline__loading-spinner-three {
+	animation: loading-spinner 2s infinite .4s;
+}
+
+@keyframes loading-spinner {
+	0% {
+		transform: scale(0);
+	}
+	20%	{
+		transform: scale(1);
+	}
+	40%	{
+		transform: scale(1);
+	}
+	60% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(0);
+	}
+}

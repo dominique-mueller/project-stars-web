@@ -6,7 +6,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Project Stars</title>
+	<title>Loading ...</title>
+
+	<!-- Inject inline CSS file -->
+	<!-- inject:css:inline -->
+	<!-- endinject -->
 
 	<!-- Inject CSS file -->
 	<!-- inject:css -->
@@ -31,7 +35,20 @@
 
 </div>
 
-<app>Loading ...</app>
+<!-- App container for Angular 2 -->
+<app>
+
+	<!-- Temporary loading spinner while downloading and bootstrapping the application -->
+	<div class="inline__background">
+		<div class="inline__loading-box">
+			<div class="inline__loading-spinner inline__loading-spinner-one">
+			</div><div class="inline__loading-spinner inline__loading-spinner-two">
+			</div><div class="inline__loading-spinner inline__loading-spinner-three">
+			</div>
+		</div>
+	</div>
+
+</app>
 
 </body>
 </html>

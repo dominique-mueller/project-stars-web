@@ -28,6 +28,7 @@ const setupConfig = require( './gulp/setup/setup-config.js' );
 const setupIndex = require( './gulp/setup/setup-index.js' );
 const sassBuild = require( './gulp/styles/sass-build.js' );
 const sassLint = require( './gulp/styles/sass-lint.js' );
+const cssBuild = require( './gulp/styles/css-build.js' );
 
 /**
  * Gulp task: Build application - for development
@@ -38,10 +39,18 @@ gulp.task( 'build:dev', ( done ) => {
 	gutil.log( gutil.colors.blue( '>>> Starting BUILD for DEVELOPMENT ...' ) );
 
 	runSequence(
+
+		// Step 1: Clean build folder & files
 		[ 'env:clean:build' ],
-		[ 'setup:assets', 'setup:config', 'setup:apimock', 'sass:build--dev', 'typescript:build--dev' ],
+
+		// Step 2: Copy assets, setup config, build CSS & SASS & TypeScript
+		[ 'setup:assets', 'setup:config', 'setup:apimock', 'css:build--dev', 'sass:build--dev', 'typescript:build--dev' ],
+
+		// Step 3: Setup index file
 		[ 'setup:index--dev' ],
+
 		done
+
 	);
 
 } );
@@ -55,11 +64,21 @@ gulp.task( 'build:prod', ( done ) => {
 	gutil.log( gutil.colors.blue( '>>> Starting BUILD for PRODUCTION ...' ) );
 
 	runSequence(
-		[ 'sass:lint', 'typescript:lint', 'env:clean:build' ],
-		[ 'setup:assets', 'sass:build--prod', 'typescript:bundle--prod' ],
+
+		// Step 1: Clean build folder & files
+		[ 'env:clean:build' ],
+
+		// Step 2: Copy assets, lint as well as build CSS & SASS & TypeScript
+		[ 'setup:assets', 'sass:lint', 'typescript:lint', 'css:build--prod', 'sass:build--prod', 'typescript:bundle--prod' ],
+
+		// Step 3: Setup index file
 		[ 'setup:index--prod' ],
+
+		// Step 4: Clean temporary build files
 		[ 'env:clean:tempbuild' ],
+
 		done
+
 	);
 
 } );
@@ -72,15 +91,21 @@ gulp.task( 'build:docs', ( done ) => {
 	gutil.log( gutil.colors.blue( '>>> Starting BUILD for DOCUMENTATION ...' ) );
 
 	runSequence(
+
+		// Step 1: Clean docs folder
 		[ 'env:clean:docs' ],
+
+		// Step 2: Build frontend docs
 		[ 'docs:frontend' ],
+
 		done
+
 	);
 
 } );
 
 /**
- * Gulp task: Browser sync watcher - for development
+ * Gulp task: Browser sync watcher - FOR DEVELOPMENT ONLY
  */
 gulp.task( 'watch', [ 'build:dev' ], () => {
 

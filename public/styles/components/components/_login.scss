@@ -5,6 +5,8 @@
 	display: block;
 	width: 100%;
 	height: 100%;
+	opacity: 0;
+	transition: opacity $anim-speed-slow $anim-easing;
 
 	// Stars background image, compressed version
 	// Thanks to Adrian Pelletier on unsplash.com
@@ -23,6 +25,18 @@
 		content: "";
 	}
 
+	&.is-visible {
+		opacity: 1;
+
+		.login__box-user-email,
+		.login__box-user-password,
+		.login__box-user-button {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+	}
+
 }
 
 .login__box {
@@ -32,7 +46,7 @@
 	width: 31rem; // Fixed width
 	z-index: 1; // Above the colored overlay
 	padding-bottom: 7rem; // Slighly shifted to the top
-	transform: translate3D(-50%,-50%,0);
+	transform: translate3d(-50%,-50%,0);
 }
 
 // Login: Product
@@ -64,6 +78,20 @@
 	line-height: 1.6rem;
 }
 
+.login__box-user-email {
+	transform: translateY(2rem);
+	opacity: 0;
+	transition: opacity .8s $anim-easing,
+				transform .8s $anim-easing;
+}
+
+.login__box-user-password {
+	transform: translateY(2.6rem);
+	opacity: 0;
+	transition: opacity .8s $anim-easing .05s,
+				transform .8s $anim-easing .05s;
+}
+
 .login__box-user-button {
 	width: 100%;
 	padding-top: 1.5rem;
@@ -71,6 +99,9 @@
 	border-radius: .2rem;
 	font-size: 1.3rem;
 	line-height: 1.5rem;
-	// text-transform: uppercase;
 	letter-spacing: .02rem;
+	transform: translateY(3.2rem);
+	opacity: 0;
+	transition: opacity .8s $anim-easing .1s,
+				transform .8s $anim-easing .1s;
 }

@@ -6,9 +6,9 @@
 
 	<!-- User login form -->
 	<form [ngFormModel]="loginForm" (ngSubmit)="onSubmit()">
-		<input class="login__box-user-input" id="login-email" type="email" placeholder="your e-mail"
+		<input class="login__box-user-input login__box-user-email" id="login-email" type="email" placeholder="your e-mail"
 			[ngFormControl]="loginForm.controls[ 'email' ]">
-		<input class="login__box-user-input" id="login-password" type="password" placeholder="your password"
+		<input class="login__box-user-input login__box-user-password" id="login-password" type="password" placeholder="your password"
 			[ngFormControl]="loginForm.controls[ 'password' ]">
 		<button class="button button-success login__box-user-button" type="submit">Login</button>
 	</form>

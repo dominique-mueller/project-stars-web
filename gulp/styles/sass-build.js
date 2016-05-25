@@ -57,7 +57,7 @@ gulp.task( 'sass:build--prod', () => {
 		)
 		.pipe( autoprefixer() ) // Autoprefix CSS
 		.pipe( cssmin() ) // Minify CSS
-		.pipe( rename( config.names.stylesMinified ) ) // Rename CSS file
+		.pipe( rename( 'style.min.css' ) ) // Rename CSS file
 		.pipe( gulp.dest( config.paths.project.dest ) );
 
 } );

@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
@@ -23,12 +23,18 @@ import { IconComponent } from './../../shared/icon/icon.component';
 		IconComponent
 	],
 	host: {
-		class: 'login'
+		class: 'login',
+		'[class.is-visible]': 'isAnimatedIn'
 	},
 	selector: 'app-login',
 	templateUrl: './login.component.html'
 } )
 export class LoginComponent implements OnActivate, OnInit {
+
+	/**
+	 * Change detector
+	 */
+	private changeDetector: ChangeDetectorRef;
 
 	/**
 	 * Router
@@ -61,9 +67,15 @@ export class LoginComponent implements OnActivate, OnInit {
 	private loginForm: ControlGroup;
 
 	/**
+	 * Animation flag
+	 */
+	private isAnimatedIn: boolean;
+
+	/**
 	 * Constructor
 	 */
 	constructor(
+		changeDetector: ChangeDetectorRef,
 		router: Router,
 		appService: AppService,
 		userAuthService: UserAuthService,
@@ -72,6 +84,7 @@ export class LoginComponent implements OnActivate, OnInit {
 	) {
 
 		// Initialize
+		this.changeDetector = changeDetector;
 		this.router = router;
 		this.appService = appService;
 		this.userAuthService = userAuthService;
@@ -83,6 +96,7 @@ export class LoginComponent implements OnActivate, OnInit {
 			email: '',
 			password: ''
 		} );
+		this.isAnimatedIn = false;
 
 	}
 
@@ -103,10 +117,11 @@ export class LoginComponent implements OnActivate, OnInit {
 	 * Call this when the view gets initialized
 	 */
 	public ngOnInit(): void {
-
-		// Set title
 		this.uiService.setDocumentTitle( 'Login' );
-
+		setTimeout( () => {
+			this.isAnimatedIn = true;
+			this.changeDetector.markForCheck(); // Trigger change detection
+		} );
 	}
 
 	/**
