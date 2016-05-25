@@ -65,7 +65,9 @@ export class BookmarkDirectoryComponent implements OnChanges {
 	/**
 	 * Constructor
 	 */
-	constructor( folderLogicService: FolderLogicService ) {
+	constructor(
+		folderLogicService: FolderLogicService
+	) {
 
 		// Initialize
 		this.folderLogicService = folderLogicService;

@@ -140,7 +140,7 @@ export class FolderDataService {
 		// TODO: This is only the dev text code, real code follows up
 		setTimeout(
 			() => {
-				newFolder.id = `FOL${ Math.floor( Math.random() * 11 ) }`;
+				newFolder.id = `FOL${ Math.floor( Math.random() * 110 ) }`;
 				this.store.dispatch( {
 					payload: {
 						data: newFolder

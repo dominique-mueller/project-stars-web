@@ -198,10 +198,9 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
 
 					// We select the root folder when the opened folder gets unselected
-					if ( uiState.get( 'openedFolderId' ) === null ) {
+					if ( this.openedFolderId === null ) {
 						this.onSelectFolder( this.rootFolderId );
 					}
-
 				}
 
 			}
@@ -267,6 +266,9 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} folderId Folder ID
 	 */
 	private onSelectFolder( folderId: string ): void {
+
+		// Set the opened folder RIGHT NOW - otherwise the directory just says 'well ... nope'
+		this.openedFolderId = folderId;
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one

@@ -327,7 +327,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		newFolder.path = this.openedFolderId;
 		newFolder.position = this.folders.size + 1; // Just append to the folder list
 		this.folderDataService.addFolder( newFolder );
-
 	}
 
 }
