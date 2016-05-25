@@ -68,7 +68,7 @@ export class UserDataService {
 		this.userAuthService = userAuthService;
 
 		// Setup
-		this.user = store.select( 'user' ); // Select returns an observable
+		this.user = <Observable<User>> store.select( 'user' ); // Select returns an observable
 
 	}
 

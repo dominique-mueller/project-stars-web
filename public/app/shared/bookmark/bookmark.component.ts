@@ -59,7 +59,7 @@ export class BookmarkComponent {
 		// Setup
 		this.bookmark = <Bookmark> Map<string, any>();
 		this.labels = Map<string, Label>();
-		this.clickOnDetails = new EventEmitter();
+		this.clickOnDetails = new EventEmitter<string>();
 
 	}
 

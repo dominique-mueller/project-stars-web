@@ -52,7 +52,7 @@ export class LabelSimpleComponent {
 		// Setup
 		this.label = null;
 		this.isRemovable = false;
-		this.remove = new EventEmitter();
+		this.remove = new EventEmitter<string>();
 
 	}
 

@@ -33,7 +33,7 @@ export class ClickOutsideDirective {
 	constructor() {
 
 		// Setup
-		this.clickOutside = new EventEmitter();
+		this.clickOutside = new EventEmitter<MouseEvent>();
 		this.localEvent = null;
 
 	}

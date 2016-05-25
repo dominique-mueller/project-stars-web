@@ -115,7 +115,7 @@ export class MoveIntoFolderComponent {
 		this.elementId = null;
 		this.currentPathId = null;
 		this.folders = List<Folder>();
-		this.select = new EventEmitter();
+		this.select = new EventEmitter<string>();
 		this.visibleFolder = <Folder> Map<string, any>();
 		this.nextVisibleFolder = <Folder> Map<string, any>();
 		this.visibleSubfolders = List<Folder>();

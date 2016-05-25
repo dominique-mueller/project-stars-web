@@ -50,8 +50,8 @@ export class FolderComponent {
 
 		// Setup
 		this.folder = null;
-		this.select = new EventEmitter();
-		this.clickOnDetails = new EventEmitter();
+		this.select = new EventEmitter<string>();
+		this.clickOnDetails = new EventEmitter<string>();
 
 	}
 

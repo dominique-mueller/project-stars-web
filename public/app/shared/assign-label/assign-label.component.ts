@@ -52,7 +52,7 @@ export class AssignLabelComponent {
 
 		// Setup
 		this.labels = Map<string, Label>();
-		this.select = new EventEmitter();
+		this.select = new EventEmitter<string>();
 		this.isOpen = false;
 
 	}

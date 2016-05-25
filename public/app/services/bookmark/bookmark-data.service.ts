@@ -64,7 +64,7 @@ export class BookmarkDataService {
 		this.store = store;
 
 		// Setup
-		this.bookmarks = store.select( 'bookmarks' ); // Select returns an observable
+		this.bookmarks = <Observable<List<Bookmark>>> store.select( 'bookmarks' ); // Select returns an observable
 
 	}
 

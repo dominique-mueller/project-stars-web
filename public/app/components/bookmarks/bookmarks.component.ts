@@ -258,7 +258,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Tabs: Switch to a tab
 	 * @param {number} tabId Number of the tab we want to show
 	 */
-	private onClickOnTab(tabId: number): void {
+	private onClickOnTab( tabId: number ): void {
 		this.openedTab = tabId;
 	}
 

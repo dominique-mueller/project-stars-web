@@ -71,7 +71,7 @@ export class FolderDataService {
 		this.bookmarkDataService = bookmarkDataService;
 
 		// Setup
-		this.folders = store.select( 'folders' ); // Select returns an obervable
+		this.folders = <Observable<List<Folder>>> store.select( 'folders' ); // Select returns an obervable
 
 	}
 

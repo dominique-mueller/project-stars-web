@@ -62,7 +62,7 @@ export class UiService {
 		this.appService = appService;
 
 		// Setup
-		this.uiState = this.store.select( 'ui' );
+		this.uiState = <Observable<Map<string, any>>> this.store.select( 'ui' );
 
 	}
 

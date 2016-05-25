@@ -70,7 +70,7 @@ export class LabelDataService {
 		this.bookmarkDataService = bookmarkDataService;
 
 		// Setup
-		this.labels = store.select( 'labels' ); // Select returns an observable
+		this.labels = <Observable<Map<string, Label>>> store.select('labels'); // Select returns an observable
 
 	}
 

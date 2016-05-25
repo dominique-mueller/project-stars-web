@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, provide } from '@angular/core';
-import { FORM_PROVIDERS } from '@angular/common';
+import { FORM_PROVIDERS, Location } from '@angular/common';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Router, Routes, Route } from '@angular/router';
 import { HTTP_PROVIDERS, Http } from '@angular/http';
 import { AUTH_PROVIDERS, AuthConfig, AuthHttp, JwtHelper } from 'angular2-jwt';
@@ -92,6 +92,11 @@ export class AppComponent implements OnInit {
 	private router: Router;
 
 	/**
+	 * Location
+	 */
+	private location: Location;
+
+	/**
 	 * User authentication service
 	 */
 	private userAuthService: UserAuthService;
@@ -101,11 +106,13 @@ export class AppComponent implements OnInit {
 	 */
 	constructor(
 		router: Router,
+		location: Location,
 		userAuthService: UserAuthService
 	) {
 
 		// Initialize
 		this.router = router;
+		this.location = location;
 		this.userAuthService = userAuthService;
 
 	}
@@ -115,13 +122,18 @@ export class AppComponent implements OnInit {
 	 */
 	public ngOnInit(): void {
 
-		// This component is the root component and basically just acts as a root container
-		// So when visiting this page, we just navigated to the root project URL
-		// Therefore we redirect instantly depending on whether we're logged in or not
-		if ( this.userAuthService.isUserLoggedIn() ) {
-			this.router.navigate( [ 'bookmarks' ] ); // Absolute
-		} else {
-			this.router.navigate( [ 'login' ] ); // Absolute
+		// Only redirect automatically when we're loading at the root
+		if ( this.location.path() === '' ) {
+
+			// This component is the root component and basically just acts as a root container
+			// So when visiting this page, we just navigated to the root project URL
+			// Therefore we redirect instantly depending on whether we're logged in or not
+			if ( this.userAuthService.isUserLoggedIn() ) {
+				this.router.navigate( [ 'bookmarks' ] ); // Absolute
+			} else {
+				this.router.navigate( [ 'login' ] ); // Absolute
+			}
+
 		}
 
 	}

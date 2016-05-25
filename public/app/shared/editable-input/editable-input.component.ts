@@ -84,7 +84,7 @@ export class EditableInputComponent {
 		this.placeholder = 'Text';
 		this.type = 'text';
 		this.value = '';
-		this.update = new EventEmitter();
+		this.update = new EventEmitter<string>();
 		this.isInEditMode = false;
 
 	}

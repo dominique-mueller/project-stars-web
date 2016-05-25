@@ -65,7 +65,7 @@ export class ColorPickerComponent {
 		this.colorPresets = List<string>();
 		this.selectedColor = null;
 		this.allowCustomColor = true;
-		this.update = new EventEmitter();
+		this.update = new EventEmitter<string>();
 		this.isOpen = false;
 
 	}
