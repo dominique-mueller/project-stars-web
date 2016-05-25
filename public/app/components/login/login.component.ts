@@ -11,6 +11,7 @@ import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { AppService } from './../../services/app';
 import { UserAuthService } from './../../services/user';
 import { UiService } from './../../services/ui';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 
 /**
@@ -58,6 +59,11 @@ export class LoginComponent implements OnActivate, OnInit {
 	private uiService: UiService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * App name
 	 */
 	private appName: string;
@@ -86,6 +92,7 @@ export class LoginComponent implements OnActivate, OnInit {
 		appService: AppService,
 		userAuthService: UserAuthService,
 		uiService: UiService,
+		notifierService: NotifierService,
 		formBuilder: FormBuilder
 	) {
 
@@ -95,6 +102,7 @@ export class LoginComponent implements OnActivate, OnInit {
 		this.appService = appService;
 		this.userAuthService = userAuthService;
 		this.uiService = uiService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.appName = this.appService.APP_NAME;
@@ -163,6 +171,9 @@ export class LoginComponent implements OnActivate, OnInit {
 					},
 					1140 // Animation takes a bit more than 1 second, so give it 100ms more than it actually needs
 				);
+
+				// Notify
+				this.notifierService.notify( 'default', 'Login unsuccessful.' );
 
 			} );
 

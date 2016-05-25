@@ -1,0 +1,33 @@
+// SHARED COMPONENT: NOTIFIER
+
+.notifier {
+	position: fixed;
+	bottom: 2rem;
+	left: 2rem;
+	height: 5.4rem;
+	border-radius: .3rem;
+	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
+	background-color: $color-tundora; // TODO: Type color or icon?
+	color: $color-white;
+	z-index: 10; // To be sure that it's on top
+	visibility: hidden;
+
+	&.is-visible {
+		visibility: visible;
+	}
+
+}
+
+// Content
+
+.notifier__message {
+	display: inline-block;
+	padding-top: 1.8rem;
+	padding-bottom: 1.8rem;
+	line-height: 1.8rem;
+}
+
+.notifier__action {
+	display: inline-block;
+	padding: 1.8rem;
+}

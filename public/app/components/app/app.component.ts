@@ -22,6 +22,8 @@ import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 import { LoginComponent } from './../login/login.component';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
 import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-confirm.component';
+import { NotifierService } from './../../shared/notifier/notifier.service';
+import { NotifierComponent } from './../../shared/notifier/notifier.component';
 
 /**
  * View component (ROOT): App
@@ -29,7 +31,8 @@ import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-con
 @Component( {
 	directives: [
 		ROUTER_DIRECTIVES,
-		DialogConfirmComponent
+		DialogConfirmComponent,
+		NotifierComponent
 	],
 	providers: [
 		FORM_PROVIDERS,
@@ -41,6 +44,7 @@ import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-con
 		UserAuthService,
 		JwtHelper,
 		DialogConfirmService,
+		NotifierService,
 		provideStore( { // Setup the redux store (provided by module)
 			bookmarks,
 			folders,
