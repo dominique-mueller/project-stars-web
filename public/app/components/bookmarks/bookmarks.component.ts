@@ -37,7 +37,8 @@ import { LabelListComponent } from './../label-list/label-list.component';
 		LabelListComponent
 	],
 	host: {
-		class: 'bookmarks'
+		class: 'bookmarks',
+		'[class.is-visible]': 'isAnimatedIn'
 	},
 	providers: [
 		BookmarkDataService,
@@ -134,6 +135,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	private openedTab: number;
 
 	/**
+	 * Animation flag, for initial loading
+	 */
+	private isAnimatedIn: boolean;
+
+	/**
 	 * Constructor
 	 */
 	constructor(
@@ -164,6 +170,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.openedFolderId = null; // Same as in the UI store
 		this.openedFolderName = '';
 		this.openedTab = 0; // Automatically show the folders tab
+		this.isAnimatedIn = false;
 
 	}
 
@@ -229,10 +236,15 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Fetch initial data from server
 		// We do this here to prevent multiple requests at the same time
-		this.folderDataService.loadFolders();
-		this.bookmarkDataService.loadBookmarks();
-		this.labelDataService.loadLabels();
-		this.userDataService.loadUser( this.userAuthService.getUserId() );
+		Promise.all( [
+			this.folderDataService.loadFolders(),
+			this.bookmarkDataService.loadBookmarks(),
+			this.labelDataService.loadLabels(),
+			this.userDataService.loadUser( this.userAuthService.getUserId() )
+		] ).then( () => {
+			console.log( 'FETCHING INITIAL DATA IS DONE.' );
+			this.isAnimatedIn = true;
+		} );
 
 		// Save subscriptions
 		this.serviceSubscriptions = [

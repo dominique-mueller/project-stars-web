@@ -19,6 +19,9 @@ import { IconComponent } from './../icon/icon.component';
 	],
 	host: {
 		class: 'notifier',
+		'[class.is-default]': 'type === \'default\'',
+		'[class.is-success]': 'type === \'success\'',
+		'[class.is-error]': 'type === \'error\'',
 		'[class.is-visible]': 'isOpen'
 	},
 	selector: 'app-notifier',
@@ -35,6 +38,11 @@ export class NotifierComponent {
 	 * Internal: Notifier visibility status
 	 */
 	private isOpen: boolean;
+
+	/**
+	 * Internal: Timeout token ID (for resetting)
+	 */
+	private timerToken: number;
 
 	/**
 	 * Internal: Type
@@ -62,6 +70,7 @@ export class NotifierComponent {
 
 		// Setup
 		this.isOpen = false;
+		this.timerToken = null;
 		this.type = 'default';
 		this.message = '';
 
@@ -74,8 +83,18 @@ export class NotifierComponent {
 	 */
 	public notify( type: string, message: string ): void {
 
-		this.openNotification( type, message );
-		// TODO: Hide old one if open
+		// Close old notification when necessary
+		if ( this.isOpen ) {
+			this.closeNotification();
+			setTimeout(
+				() => {
+					this.openNotification( type, message );
+				},
+				500 // Animation out takes 400ms, but give it some time between
+			);
+		} else {
+			this.openNotification( type, message );
+		}
 
 	}
 
@@ -90,10 +109,15 @@ export class NotifierComponent {
 		this.type = type;
 		this.message = message;
 		this.isOpen = true;
-
 		this.changeDetector.markForCheck(); // Trigger change detection
 
-		// TODO: Auto close after time
+		// Close automatically after 7s
+		this.timerToken = setTimeout(
+			() => {
+				this.closeNotification();
+			},
+			7000
+		);
 
 	}
 
@@ -102,10 +126,14 @@ export class NotifierComponent {
 	 */
 	public closeNotification(): void {
 
-		// Close notification
-		this.isOpen = false;
+		// Clear timer for old notification (if necessary)
+		if ( this.timerToken !== null ) {
+			clearTimeout( this.timerToken );
+			this.timerToken = null;
+		}
 
-		// Wait until the animation is done (TODO: Time)
+		// Close notification and wait until the animation is done
+		this.isOpen = false;
 		setTimeout(
 			() => {
 
@@ -115,7 +143,7 @@ export class NotifierComponent {
 				this.changeDetector.markForCheck(); // Trigger change detection
 
 			},
-			300
+			400 // Animation out takes 400ms
 		);
 
 	}

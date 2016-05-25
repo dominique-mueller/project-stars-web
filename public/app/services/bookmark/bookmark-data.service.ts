@@ -70,55 +70,68 @@ export class BookmarkDataService {
 
 	/**
 	 * API request: Load all bookmarks
+	 * @return {Promise<any>} Promise when done
 	 */
-	public loadBookmarks(): void {
+	public loadBookmarks(): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 
-				this.http
+					this.http
 
-					// Fetch data and parse response
-					.get( `${ this.appService.API_URL }/bookmarks.mock.json` )
-					.map( ( response: Response ) => <any> response.json() )
+						// Fetch data and parse response
+						.get( `${ this.appService.API_URL }/bookmarks.mock.json` )
+						.map( ( response: Response ) => <any> response.json() )
 
-					// Dispatch action
-					.subscribe(
-						( data: any ) => {
-							this.store.dispatch( {
-								payload: data.data,
-								type: LOAD_BOOKMARKS
-							} );
-						}
-					);
+						// Dispatch action
+						.subscribe(
+							( data: any ) => {
+								this.store.dispatch( {
+									payload: data.data,
+									type: LOAD_BOOKMARKS
+								} );
+								console.log( 'APP > Bookmark Data Service > Bookmarks successfully loaded from the API.' );
+								resolve();
+							},
+							( error: any ) => {
+								console.log( 'APP > Bookmark Data Service > Error while loading bookmarks.' );
+								console.log( error );
+								reject();
+							}
+						);
 
-			},
-			1000
-		);
+				},
+				Math.floor( Math.random() * 1001 ) + 1
+			);
+		} );
 
 		/* TODO: This is the production code
 
-		this.http
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.http
 
-			// Fetch data and parse response
-			.get( `${ this.appService.API_URL }/bookmarks` )
-			.map( ( response: Response ) => <any> response.json() )
+				// Fetch data and parse response
+				.get( `${ this.appService.API_URL }/bookmarks` )
+				.map( ( response: Response ) => <any> response.json() )
 
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
-					this.store.dispatch( {
-						payload: data.data,
-						type: LOAD_BOOKMARKS
-					} );
-				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'BOOKMARK SERVICE ERROR' );
-					console.dir( error );
-				}
-			);
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: data.data,
+							type: LOAD_BOOKMARKS
+						} );
+						console.log( 'APP > Bookmark Data Service > Bookmarks successfully loaded from the API.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Bookmark Data Service > Error while loading bookmarks.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 

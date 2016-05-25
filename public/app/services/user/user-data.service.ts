@@ -75,55 +75,68 @@ export class UserDataService {
 	/**
 	 * API request: Load the user
 	 * @param {string} userId User ID
+	 * @return {Promise<any>} Promise when done
 	 */
-	public loadUser( userId: string ): void {
+	public loadUser( userId: string ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 
-				this.authHttp
+					this.authHttp
 
-					// Fetch data and parse response
-					.get( `${ this.appService.API_URL}/user.mock.json` )
-					.map( ( response: Response ) => <any> response.json() )
+						// Fetch data and parse response
+						.get( `${ this.appService.API_URL}/user.mock.json` )
+						.map( ( response: Response ) => <any> response.json() )
 
-					// Dispatch action
-					.subscribe(
-						( data: any ) => {
-							this.store.dispatch( {
-								payload: data.data,
-								type: LOAD_USER
-							} );
-						}
-					);
+						// Dispatch action
+						.subscribe(
+							( data: any ) => {
+								this.store.dispatch( {
+									payload: data.data,
+									type: LOAD_USER
+								} );
+								console.log( 'APP > User Data Service > User successfully loaded from the API.' );
+								resolve();
+							},
+							( error: any ) => {
+								console.log( 'APP > User Data Service > Error while loading user.' );
+								console.log( error );
+								reject();
+							}
+						);
 
-			},
-			1000
-		);
+				},
+				Math.floor( Math.random() * 1001 ) + 1
+			);
+		} );
 
 		/* TODO: This is the production code
 
-		this.authHttp
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
 
-			// Fetch data and parse response
-			.get( `${ this.appService.API_URL }/users/${ this.userAuthService.getUserId() }` )
-			.map( ( response: Response ) => <any> response.json() )
+				// Fetch data and parse response
+				.get( `${ this.appService.API_URL }/users/${ this.userAuthService.getUserId() }` )
+				.map( ( response: Response ) => <any> response.json() )
 
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
-					this.store.dispatch( {
-						payload: data.data,
-						type: LOAD_USER
-					} );
-				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'USER SERVICE ERROR' );
-					console.dir( error );
-				}
-			);
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: data.data,
+							type: LOAD_USER
+						} );
+						console.log( 'APP > User Data Service > User successfully loaded from the API.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > User Data Service > Error while loading user.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 

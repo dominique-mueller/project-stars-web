@@ -76,55 +76,68 @@ export class LabelDataService {
 
 	/**
 	 * API request: Load all labels
+	 * @return {Promise<any>} Promise when done
 	 */
-	public loadLabels(): void {
+	public loadLabels(): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 
-				this.http
+					this.http
 
-					// Fetch data and parse response
-					.get( `${ this.appService.API_URL }/labels.mock.json` )
-					.map( ( response: Response ) => <any> response.json() )
+						// Fetch data and parse response
+						.get( `${ this.appService.API_URL }/labels.mock.json` )
+						.map( ( response: Response ) => <any> response.json() )
 
-					// Dispatch action
-					.subscribe(
-						( data: any ) => {
-							this.store.dispatch( {
-								payload: data.data,
-								type: LOAD_LABELS
-							} );
-						}
-					);
+						// Dispatch action
+						.subscribe(
+							( data: any ) => {
+								this.store.dispatch( {
+									payload: data.data,
+									type: LOAD_LABELS
+								} );
+								console.log( 'APP > Labels Data Service > Labels successfully loaded from the API.' );
+								resolve();
+							},
+							( error: any ) => {
+								console.log( 'APP > Label Data Service > Error while loading labels.' );
+								console.log( error );
+								reject();
+							}
+						);
 
-			},
-			1000
-		);
+				},
+				Math.floor( Math.random() * 1001 ) + 1
+			);
+		} );
 
 		/* TODO: This is the production code
 
-		this.http
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.http
 
-			// Fetch data and parse response
-			.get( `${ this.appService.API_URL }/labels` )
-			.map( ( response: Response ) => <any> response.json() )
+				// Fetch data and parse response
+				.get( `${ this.appService.API_URL }/labels` )
+				.map( ( response: Response ) => <any> response.json() )
 
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
-					this.store.dispatch( {
-						payload: data.data,
-						type: LOAD_LABELS
-					} );
-				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'LABEL SERVICE ERROR' );
-					console.dir( error );
-				}
-			);
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: data.data,
+							type: LOAD_LABELS
+						} );
+						console.log( 'APP > Labels Data Service > Labels successfully loaded from the API.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Label Data Service > Error while loading labels.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 

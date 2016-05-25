@@ -153,14 +153,19 @@ export class LoginComponent implements OnActivate, OnInit {
 
 			// Success
 			.then( ( data: any ) => {
-				console.log( 'APP > User > Login successful.' );
+				console.log( 'APP > Login Component > Login successful.' );
 				this.router.navigate( [ 'bookmarks' ] ); // Absolute
 			} )
 
 			// Error
 			.catch( ( error: any ) => {
-				console.warn( 'APP > User > Login not successful.' );
-				( <Control> this.loginForm.controls[ 'password' ] ).updateValue( '' ); // Reset password input
+				console.log( 'APP > Login Component > Login not successful.' );
+
+				// Reset password input
+				( <Control> this.loginForm.controls[ 'password' ] ).updateValue( '' );
+
+				// Notify
+				this.notifierService.notify('default', 'Login unsuccessful. Please check your e-mail and password.');
 
 				// Shake animation
 				this.isAnimatingError = true;
@@ -171,9 +176,6 @@ export class LoginComponent implements OnActivate, OnInit {
 					},
 					1140 // Animation takes a bit more than 1 second, so give it 100ms more than it actually needs
 				);
-
-				// Notify
-				this.notifierService.notify( 'default', 'Login unsuccessful.' );
 
 			} );
 

@@ -1,5 +1,17 @@
 // VIEW COMPONENT: BOOKMARKS
 
+.bookmarks {
+	opacity: 0;
+	transition: opacity $anim-speed-slow $anim-easing;
+
+	&.is-visible {
+		opacity: 1;
+	}
+
+	// TODO: Better animation here
+
+}
+
 .bookmarks__main {
 	position: absolute;
 	top: 6.4rem;

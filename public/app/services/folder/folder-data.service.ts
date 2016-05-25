@@ -77,55 +77,68 @@ export class FolderDataService {
 
 	/**
 	 * API request: Load all folders
+	 * @return {Promise<any>} Promise when done
 	 */
-	public loadFolders(): void {
+	public loadFolders(): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 
-				this.http
+					this.http
 
-					// Fetch data and parse response
-					.get( `${ this.appService.API_URL }/folders.mock.json` )
-					.map( ( response: Response ) => <any> response.json() )
+						// Fetch data and parse response
+						.get( `${ this.appService.API_URL }/folders.mock.json` )
+						.map( ( response: Response ) => <any> response.json() )
 
-					// Dispatch action
-					.subscribe(
-						( data: any ) => {
-							this.store.dispatch( {
-								payload: data.data,
-								type: LOAD_FOLDERS
-							} );
-						}
-					);
+						// Dispatch action
+						.subscribe(
+							( data: any ) => {
+								this.store.dispatch( {
+									payload: data.data,
+									type: LOAD_FOLDERS
+								} );
+								console.log( 'APP > Folder Data Service > Folders successfully loaded from the API.' );
+								resolve();
+							},
+							( error: any ) => {
+								console.log('APP > Folder Data Service > Error while loading folders.');
+								console.log( error );
+								reject();
+							}
+						);
 
-			},
-			1000
-		);
+				},
+				Math.floor( Math.random() * 1001 ) + 1
+			);
+		} );
 
 		/* TODO: This is the production code
 
-		this.http
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.http
 
-			// Fetch data and parse response
-			.get( `${ this.appService.API_URL }/folders` )
-			.map( ( response: Response ) => <any> response.json() )
+				// Fetch data and parse response
+				.get( `${ this.appService.API_URL }/folders` )
+				.map( ( response: Response ) => <any> response.json() )
 
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
-					this.store.dispatch( {
-						payload: data.data,
-						type: LOAD_FOLDERS
-					} );
-				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'FOLDER SERVICE ERROR' );
-					console.dir( error );
-				}
-			);
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: data.data,
+							type: LOAD_FOLDERS
+						} );
+						console.log( 'APP > Folder Data Service > Folders successfully loaded from the API.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log('APP > Folder Data Service > Error while loading folders.');
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 

@@ -2,18 +2,39 @@
 
 .notifier {
 	position: fixed;
-	bottom: 2rem;
+	bottom: 1.9rem;
 	left: 2rem;
-	height: 5.4rem;
+	height: 5.6rem;
 	border-radius: .3rem;
 	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
-	background-color: $color-tundora; // TODO: Type color or icon?
 	color: $color-white;
 	z-index: 10; // To be sure that it's on top
 	visibility: hidden;
+	opacity: 0;
+	transform: translate3d(calc(-100% - 2.6rem),0,0);
+	transition: opacity $anim-speed-slow $anim-easing,
+				transform $anim-speed-slow $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-slow;
 
 	&.is-visible {
 		visibility: visible;
+		opacity: 1;
+		transform: translate3d(0,0,0);
+		transition: opacity $anim-speed-slow $anim-easing,
+					transform $anim-speed-slow $anim-easing,
+					visibility $anim-speed-instant $anim-linear;
+	}
+
+	&.is-default {
+		background-color: #222;
+	}
+
+	&.is-success {
+		background-color: $color-success;
+	}
+
+	&.is-error {
+		background-color: $color-danger;
 	}
 
 }
@@ -22,12 +43,26 @@
 
 .notifier__message {
 	display: inline-block;
-	padding-top: 1.8rem;
+	padding-top: 2rem;
 	padding-bottom: 1.8rem;
+	padding-left: 2.6rem;
 	line-height: 1.8rem;
+	vertical-align: top;
 }
 
 .notifier__action {
 	display: inline-block;
-	padding: 1.8rem;
+	padding: 2rem 2.2rem 1.8rem 1.6rem;
+	vertical-align: top;
+	opacity: .4;
+	transition: opacity $anim-speed-normal $anim-easing;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.82);
+	}
+
 }
