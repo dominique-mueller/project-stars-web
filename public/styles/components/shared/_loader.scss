@@ -1,0 +1,57 @@
+// SHARED COMPONENT: LOADER
+
+.loader {
+	display: block;
+	height: 1rem;
+	width: 4.2rem;
+}
+
+.loader__dot {
+	display: inline-block;
+	height: 1rem;
+	width: 1rem;
+	margin-left: .2rem;
+	margin-right: .2rem;
+	border-radius: 50%;
+	vertical-align: top;
+}
+
+// Single dots
+
+.loader__dot-one {
+	animation: anim-loader 2s infinite;
+}
+
+.loader__dot-two {
+	animation: anim-loader 2s infinite .2s;
+}
+
+.loader__dot-three {
+	animation: anim-loader 2s infinite .4s;
+}
+
+// Animation
+
+@keyframes anim-loader {
+
+	0% {
+		transform: scale(0);
+	}
+
+	20% {
+		transform: scale(1);
+	}
+
+	40% {
+		transform: scale(1);
+	}
+
+	60% {
+		transform: scale(0);
+	}
+
+	100% {
+		transform: scale(0);
+	}
+
+}

@@ -109,7 +109,7 @@ export class FolderDataService {
 						);
 
 				},
-				Math.floor( Math.random() * 1001 ) + 1
+				Math.floor( Math.random() * 3000 ) + 1
 			);
 		} );
 

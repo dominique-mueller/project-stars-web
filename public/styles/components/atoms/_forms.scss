@@ -56,4 +56,12 @@
 
 	}
 
+	&[disabled],
+	&[disabled]:hover,
+	&[disabled]:focus,
+	&[disabled]:active {
+		opacity: .33 !important;
+		cursor: not-allowed !important;
+	}
+
 }

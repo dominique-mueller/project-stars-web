@@ -13,6 +13,7 @@ import { UserAuthService } from './../../services/user';
 import { UiService } from './../../services/ui';
 import { NotifierService } from './../../shared/notifier/notifier.service';
 import { IconComponent } from './../../shared/icon/icon.component';
+import { LoaderComponent } from './../../shared/loader/loader.component';
 
 /**
  * View component (smart): Login
@@ -21,12 +22,14 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		FORM_DIRECTIVES,
-		IconComponent
+		IconComponent,
+		LoaderComponent
 	],
 	host: {
 		class: 'login',
-		'[class.is-visible]': 'isAnimatedIn',
-		'[class.is-error]': 'isAnimatingError'
+		'[class.is-visible]': 'isAnimLoaded',
+		'[class.is-error]': 'isAnimError',
+		'[class.is-checking]': 'isAnimChecking'
 	},
 	selector: 'app-login',
 	templateUrl: './login.component.html'
@@ -76,12 +79,17 @@ export class LoginComponent implements OnActivate, OnInit {
 	/**
 	 * Animation flag, for initial loading
 	 */
-	private isAnimatedIn: boolean;
+	private isAnimLoaded: boolean;
 
 	/**
-	 * Animation flag, for unsuccessful login try
+	 * Animation flag, when login try unsuccessful
 	 */
-	private isAnimatingError: boolean;
+	private isAnimError: boolean;
+
+	/**
+	 * Animation flag, when checking login submit
+	 */
+	private isAnimChecking: boolean;
 
 	/**
 	 * Constructor
@@ -110,8 +118,9 @@ export class LoginComponent implements OnActivate, OnInit {
 			email: '',
 			password: ''
 		} );
-		this.isAnimatedIn = false;
-		this.isAnimatingError = false;
+		this.isAnimLoaded = false;
+		this.isAnimError = false;
+		this.isAnimChecking = false;
 
 	}
 
@@ -134,7 +143,7 @@ export class LoginComponent implements OnActivate, OnInit {
 	public ngOnInit(): void {
 		this.uiService.setDocumentTitle( 'Login' );
 		setTimeout( () => {
-			this.isAnimatedIn = true;
+			this.isAnimLoaded = true;
 			this.changeDetector.markForCheck(); // Trigger change detection
 		} );
 	}
@@ -144,7 +153,8 @@ export class LoginComponent implements OnActivate, OnInit {
 	 */
 	public onSubmit(): void {
 
-		// Collect form data
+		// Enable animation, collect data from the login form
+		this.isAnimChecking = true;
 		let email: string = this.loginForm.value.email;
 		let password: string = this.loginForm.value.password;
 
@@ -155,24 +165,25 @@ export class LoginComponent implements OnActivate, OnInit {
 			.then( ( data: any ) => {
 				console.log( 'APP > Login Component > Login successful.' );
 				this.router.navigate( [ 'bookmarks' ] ); // Absolute
+				this.isAnimChecking = false;
 			} )
 
 			// Error
 			.catch( ( error: any ) => {
 				console.log( 'APP > Login Component > Login not successful.' );
 
-				// Reset password input
+				// Reset password input, notify user
 				( <Control> this.loginForm.controls[ 'password' ] ).updateValue( '' );
-
-				// Notify
-				this.notifierService.notify('default', 'Login unsuccessful. Please check your e-mail and password.');
+				this.notifierService.notify( 'default', 'Login unsuccessful. Please check your e-mail and password.' );
 
 				// Shake animation
-				this.isAnimatingError = true;
+				this.isAnimChecking = false;
+				this.isAnimError = true;
+				this.changeDetector.markForCheck(); // Trigger change detection
 				setTimeout(
 					() => {
-						this.isAnimatingError = false;
-						this.changeDetector.markForCheck();
+						this.isAnimError = false;
+						this.changeDetector.markForCheck(); // Trigger change detection
 					},
 					1140 // Animation takes a bit more than 1 second, so give it 100ms more than it actually needs
 				);

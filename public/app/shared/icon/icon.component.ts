@@ -4,7 +4,7 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
- * Shared componet: Icon
+ * Shared component: Icon
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,12 +5,15 @@
 	<h1 class="login__box-name">{{ appName }}</h1>
 
 	<!-- User login form -->
-	<form [ngFormModel]="loginForm" (ngSubmit)="onSubmit()">
-		<input class="login__box-user-input login__box-user-email" id="login-email" type="email" placeholder="your e-mail" required
-			[ngFormControl]="loginForm.controls[ 'email' ]">
-		<input class="login__box-user-input login__box-user-password" id="login-password" type="password" placeholder="your password" required
-			[ngFormControl]="loginForm.controls[ 'password' ]">
-		<button class="button button-success login__box-user-button" type="submit">Login</button>
+	<form class="login__box-form" [ngFormModel]="loginForm" (ngSubmit)="onSubmit()">
+		<input class="login__box-input login__box-email" id="login-email" type="email" placeholder="your e-mail" required
+			[disabled]="isAnimChecking" [ngFormControl]="loginForm.controls[ 'email' ]">
+		<input class="login__box-input login__box-password" id="login-password" type="password" placeholder="your password" required
+			[disabled]="isAnimChecking" [ngFormControl]="loginForm.controls[ 'password' ]">
+		<button class="button button-success login__box-button" type="submit" [disabled]="isAnimChecking">
+			<app-loader class="login__box-button-loader" color="#FFF"></app-loader>
+			<span class="login__box-button-text">Login</span>
+		</button>
 	</form>
 
 </article>

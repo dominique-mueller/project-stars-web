@@ -15,12 +15,13 @@ import { BookmarkDataService, BookmarkLogicService } from './../../services/book
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
 import { UserDataService, UserAuthService } from './../../services/user';
-import { IconComponent } from './../../shared/icon/icon.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
 import { BookmarkSearchComponent } from './../bookmark-search/bookmark-search.component';
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
 import { LabelListComponent } from './../label-list/label-list.component';
+import { IconComponent } from './../../shared/icon/icon.component';
+import { LoaderComponent } from './../../shared/loader/loader.component';
 
 /**
  * View component (smart): Bookmarks
@@ -29,16 +30,17 @@ import { LabelListComponent } from './../label-list/label-list.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		ROUTER_DIRECTIVES,
-		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
 		BookmarkSearchComponent,
 		BookmarkDirectoryComponent,
-		LabelListComponent
+		LabelListComponent,
+		IconComponent,
+		LoaderComponent
 	],
 	host: {
 		class: 'bookmarks',
-		'[class.is-visible]': 'isAnimatedIn'
+		'[class.is-visible]': 'isAnimLoaded'
 	},
 	providers: [
 		BookmarkDataService,
@@ -137,7 +139,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Animation flag, for initial loading
 	 */
-	private isAnimatedIn: boolean;
+	private isAnimLoaded: boolean;
 
 	/**
 	 * Constructor
@@ -170,7 +172,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.openedFolderId = null; // Same as in the UI store
 		this.openedFolderName = '';
 		this.openedTab = 0; // Automatically show the folders tab
-		this.isAnimatedIn = false;
+		this.isAnimLoaded = false;
 
 	}
 
@@ -243,7 +245,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 			this.userDataService.loadUser( this.userAuthService.getUserId() )
 		] ).then( () => {
 			console.log( 'FETCHING INITIAL DATA IS DONE.' );
-			this.isAnimatedIn = true;
+			this.isAnimLoaded = true;
 		} );
 
 		// Save subscriptions
