@@ -145,49 +145,57 @@ export class LabelDataService {
 
 	/**
 	 * API request: Add a new label
-	 * @param {any} newLabel Data of the new label
+	 * @param  {any}          newLabel Data of the new label
+	 * @return {Promise<any>}          Promise when done
 	 */
-	public addLabel( newLabel: any ): void {
+	public addLabel( newLabel: any ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
-				newLabel.id = `LAB${ Math.floor( Math.random() * 11 ) }`;
-				this.store.dispatch( {
-					payload: {
-						data: newLabel
-					},
-					type: ADD_LABEL
-				} );
-			},
-			1000
-		);
-
-		/* TODO: This is the production code
-
-		this.http
-
-			// Send data and parse response
-			.post( `${ this.appService.API_URL }/labels`, JSON.stringify( { data: newLabel } ) )
-			.map( ( response: Response ) => <any> response.json() )
-
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
-					newLabel.id = data.data.id;
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
+					newLabel.id = `LAB${ Math.floor( Math.random() * 11 ) }`;
 					this.store.dispatch( {
 						payload: {
 							data: newLabel
 						},
 						type: ADD_LABEL
 					} );
+					console.log( 'APP > Labels Data Service > New label successfully added.' );
+					resolve();
 				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'LABEL SERVICE ERROR' );
-					console.dir( error );
-				}
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.http
+
+				// Send data and parse response
+				.post( `${ this.appService.API_URL }/labels`, JSON.stringify( { data: newLabel } ) )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						newLabel.id = data.data.id;
+						this.store.dispatch( {
+							payload: {
+								data: newLabel
+							},
+							type: ADD_LABEL
+						} );
+						console.log( 'APP > Labels Data Service > New label successfully added.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Label Data Service > Error while adding a new label.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 
@@ -195,36 +203,15 @@ export class LabelDataService {
 
 	/**
 	 * API request: Update an existing label
-	 * @param {string} labelId      Label ID
-	 * @param {any}    updatedLabel Updated label data
+	 * @param  {string}       labelId      Label ID
+	 * @param  {any}          updatedLabel Updated label data
+	 * @return {Promise<any>}              Promise when done
 	 */
-	public updateLabel( labelId: string, updatedLabel: any ): void {
+	public updateLabel( labelId: string, updatedLabel: any ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
-				this.store.dispatch( {
-					payload: {
-						data: updatedLabel,
-						id: labelId
-					},
-					type: UPDATE_LABEL
-				} );
-			},
-			1000
-		);
-
-		/* TODO: This is the production code
-
-		this.http
-
-			// Send data and parse response
-			.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( { data: updatedLabel } ) )
-			.map( ( response: Response ) => <any> response.json() )
-
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 					this.store.dispatch( {
 						payload: {
 							data: updatedLabel,
@@ -232,13 +219,42 @@ export class LabelDataService {
 						},
 						type: UPDATE_LABEL
 					} );
+					console.log( 'APP > Labels Data Service > Label successfully updated.' );
+					resolve();
 				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'LABEL SERVICE ERROR' );
-					console.dir( error );
-				}
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.http
+
+				// Send data and parse response
+				.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( { data: updatedLabel } ) )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: {
+								data: updatedLabel,
+								id: labelId
+							},
+							type: UPDATE_LABEL
+						} );
+						console.log( 'APP > Labels Data Service > Label successfully updated.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Label Data Service > Error while updating a label.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 
@@ -246,40 +262,14 @@ export class LabelDataService {
 
 	/**
 	 * API request: Delete an existing bookmark
-	 * @param {string} labelId Label ID
+	 * @param  {string}       labelId Label ID
+	 * @return {Promise<any>}         Promise when done
 	 */
-	public deleteLabel( labelId: string ): void {
+	public deleteLabel( labelId: string ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
-
-				// Delete this label
-				this.store.dispatch( {
-					payload: {
-						id: labelId
-					},
-					type: DELETE_LABEL
-				} );
-
-				// Also unassign this label from all bookmarks
-				this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
-
-			},
-			1000
-		);
-
-		/* TODO: This is the production code
-
-		this.http
-
-			// Send data and parse response
-			.delete( `${ this.appService.API_URL }/labels/${ labelId }` )
-			.map( ( response: Response ) => <any> response.json() )
-
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 
 					// Delete this label
 					this.store.dispatch( {
@@ -290,15 +280,49 @@ export class LabelDataService {
 					} );
 
 					// Also unassign this label from all bookmarks
-					this.bookmarkDataService.unassignLabelFromAllBookmarks(labelId);
+					this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
+					console.log( 'APP > Labels Data Service > Label successfully deleted.' );
+					resolve();
 
 				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'LABEL SERVICE ERROR' );
-					console.dir( error );
-				}
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.http
+
+				// Send data and parse response
+				.delete( `${ this.appService.API_URL }/labels/${ labelId }` )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+
+						// Delete this label
+						this.store.dispatch( {
+							payload: {
+								id: labelId
+							},
+							type: DELETE_LABEL
+						} );
+
+						// Also unassign this label from all bookmarks
+						this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
+						console.log( 'APP > Labels Data Service > Label successfully deleted.' );
+						resolve();
+
+					},
+					( error: any ) => {
+						console.log( 'APP > Label Data Service > Error while deleting a label.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 

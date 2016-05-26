@@ -10,6 +10,7 @@ import { Map } from 'immutable';
  */
 import { Label, LabelDataService } from './../../services/label';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { LabelAdvancedComponent } from './../../shared/label-advanced/label-advanced.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 
@@ -46,6 +47,11 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	private dialogConfirmService: DialogConfirmService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -71,12 +77,15 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	constructor(
 		changeDetector: ChangeDetectorRef,
 		labelDataService: LabelDataService,
-		dialogConfirmService: DialogConfirmService ) {
+		dialogConfirmService: DialogConfirmService,
+		notifierService: NotifierService
+	) {
 
 		// Initialize
 		this.changeDetector = changeDetector;
 		this.labelDataService = labelDataService;
 		this.dialogConfirmService = dialogConfirmService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -135,20 +144,38 @@ export class LabelListComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Update a label
-	 * @param {string} labelId Label ID
-	 * @param {any}    data    Data object
+	 * Create a label
+	 * @param {any} newLabel Data for the new label
 	 */
-	private onLabelUpdate( labelId: string, data: any ): void {
-		this.labelDataService.updateLabel( labelId, data );
+	private onLabelCreate( newLabel: any ): void {
+
+		// Try to create the label
+		this.labelDataService.addLabel( newLabel )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Label successfully created.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while creating the label.' );
+			} );
+
 	}
 
 	/**
-	 * Create a label
-	 * @param {any} data Data object
+	 * Update a label
+	 * @param {string} labelId      Label ID
+	 * @param {any}    updatedLabel Updated label data
 	 */
-	private onLabelCreate( data: any ): void {
-		this.labelDataService.addLabel( data );
+	private onLabelUpdate( labelId: string, updatedLabel: any): void {
+
+		// Try to update the label
+		this.labelDataService.updateLabel( labelId, updatedLabel )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Label successfully updated.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while updating the label.' );
+			} );
+
 	}
 
 	/**
@@ -171,7 +198,16 @@ export class LabelListComponent implements OnInit, OnDestroy {
 		this.dialogConfirmService.requestConfirmation( confirmationOptions )
 			.then( ( answer: boolean ) => {
 				if ( answer ) {
-					this.labelDataService.deleteLabel( labelId );
+
+					// Try to delete the label
+					this.labelDataService.deleteLabel( labelId )
+						.then( ( data: any ) => {
+							this.notifierService.notify( 'default', 'Label successfully deleted.' );
+						} )
+						.catch( ( error: any ) => {
+							this.notifierService.notify( 'default', 'An error occured while deleting the label.' );
+						} );
+
 				}
 			} );
 
