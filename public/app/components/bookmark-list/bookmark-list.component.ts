@@ -14,6 +14,7 @@ import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details.component';
 import { FolderDetailsComponent } from './../folder-details/folder-details.component';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
@@ -94,6 +95,11 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private labelDataService: LabelDataService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -130,7 +136,6 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Name of the currently opened folder
-	 * TODO: Maybe show breadscrumbs instead?
 	 */
 	private openedFolderName: string;
 
@@ -153,7 +158,9 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		bookmarkLogicService: BookmarkLogicService,
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
-		labelDataService: LabelDataService ) {
+		labelDataService: LabelDataService,
+		notifierService: NotifierService
+	) {
 
 		// Initialize
 		this.router = router;
@@ -164,6 +171,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.folderDataService = folderDataService;
 		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.bookmarks = List<Bookmark>();
@@ -309,10 +317,20 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * Create new bookmark
 	 * @param {any} newBookmark Bookmark data
 	 */
-	private onCreateBookmark( newBookmark: any ): void {
+	private onBookmarkCreate( newBookmark: any ): void {
+
+		// Add more data first
 		newBookmark.path = this.openedFolderId;
 		newBookmark.position = this.bookmarks.size + 1; // Just append to the bookmark list
-		this.bookmarkDataService.addBookmark( newBookmark );
+
+		// Try to create the bookmark
+		this.bookmarkDataService.addBookmark( newBookmark )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Bookmark successfully created.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while creating the bookmark.' );
+			} );
 
 	}
 
@@ -320,10 +338,21 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * Create new folder
 	 * @param {any} newFolder Folder data
 	 */
-	private onCreateFolder( newFolder: any ): void {
+	private onFolderCreate( newFolder: any ): void {
+
+		// Add more data first
 		newFolder.path = this.openedFolderId;
 		newFolder.position = this.folders.size + 1; // Just append to the folder list
-		this.folderDataService.addFolder( newFolder );
+
+		// Try to create the folder
+		this.folderDataService.addFolder( newFolder )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Folder successfully created.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while creating the folder.' );
+			} );
+
 	}
 
 }

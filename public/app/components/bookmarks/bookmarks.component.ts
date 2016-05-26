@@ -244,7 +244,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 			this.labelDataService.loadLabels(),
 			this.userDataService.loadUser( this.userAuthService.getUserId() )
 		] ).then( () => {
-			console.log( 'FETCHING INITIAL DATA IS DONE.' );
 			this.isAnimLoaded = true;
 		} );
 

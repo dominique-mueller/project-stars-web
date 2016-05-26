@@ -13,7 +13,7 @@ import { AppService } from './../app';
 /**
  * User authentication service
  * Contains functions for authenticating the user, including login, logout
- * => TODO Next steps would be: Register / sign up functionality
+ * TODO: Next steps would be: Register / sign up, forgot password, login via third party service
  */
 @Injectable()
 export class UserAuthService {
@@ -82,13 +82,11 @@ export class UserAuthService {
 	 * Logs the user in, receives a JWT and saves all authentication details to the local storage
 	 * @param  {string}       emailAddress E-Mail address
 	 * @param  {string}       password     Password
-	 * @return {Promise<any>}              Promise to tell we're done
+	 * @return {Promise<any>}              Promise when done
 	 */
 	public loginUser( emailAddress: string, password: string ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-
-			// TODO: This is only the dev text code, real code follows up
 			setTimeout(
 				() => {
 
@@ -105,17 +103,17 @@ export class UserAuthService {
 								// If the returned JWT is valid, safe it in the local storage
 								if ( tokenNotExpired( 'jwt', data.data ) && password === 'test' ) {
 									this.saveAuthenticationDetails( data.data );
+									console.log( 'APP > User Authentication Service > JWT is valid.' );
 									resolve();
 								} else {
+									console.log( 'APP > User Authentication Service > JWT is invalid.' );
 									reject();
-									// TODO: Error message ?
 								}
 
 							},
 							( error: any ) => {
-								// TODO: Proper error handling
-								console.error( 'APP > User Authentication Service, HTTP request error.' );
-								console.dir( error );
+								console.log( 'APP > User Authentication Service > Error while logging in user.' );
+								console.log( error );
 								reject();
 							}
 						);
@@ -123,7 +121,6 @@ export class UserAuthService {
 				},
 				Math.floor( Math.random() * 3000 ) + 1
 			);
-
 		} );
 
 		/* TODO: This is the production code
@@ -149,18 +146,17 @@ export class UserAuthService {
 						// If the returned JWT is valid, safe it in the local storage
 						if ( tokenNotExpired( 'jwt', data.data ) ) {
 							this.saveAuthenticationDetails( data.data );
+							console.log( 'APP > User Authentication Service > JWT is valid.' );
 							resolve();
 						} else {
+							console.log( 'APP > User Authentication Service > JWT is invalid.' );
 							reject();
-							// TODO: Proper error handling
-							console.error( 'USER SERVICE: JWT INVALID' );
 						}
 
 					},
 					( error: any ) => {
-						// TODO: Proper error handling
-						console.error( 'APP > User Authentication Service, User Login, HTTP request error.' );
-						console.dir( error );
+						console.log( 'APP > User Authentication Service > Error while logging in user.' );
+						console.log( error );
 						reject();
 					}
 				);
@@ -179,17 +175,14 @@ export class UserAuthService {
 	public logoutUser(): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-
-			// TODO: This is only the dev text code, real code follows up
 			this.deleteAuthenticationDetails();
+			console.log('APP > User Authentication Service > JWT removed.');
 			resolve();
-
 		} );
 
 		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-
 			this.authHttp
 
 				// Fetch data and parse response
@@ -200,16 +193,15 @@ export class UserAuthService {
 				.subscribe(
 					( data: any ) => {
 						this.deleteAuthenticationDetails();
+						console.log( 'APP > User Authentication Service > JWT removed.' );
 						resolve();
 					},
 					( error: any ) => {
-						// TODO: Proper error handling
-						console.error( 'APP > User Authentication Service, User, Logout, HTTP request error.' );
-						console.dir( error );
+						console.log( 'APP > User Authentication Service > Error while logging out user.' );
+						console.log( error );
 						reject();
 					}
 				);
-
 		} );
 
 		*/

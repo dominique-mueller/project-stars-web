@@ -8,12 +8,12 @@
 	<app-create-folder
 		class="bookmark-list__header-action"
 		[template]="folderTemplate"
-		(create)="onCreateFolder( $event )">
+		(create)="onFolderCreate( $event )">
 	</app-create-folder>
 	<app-create-bookmark
 		class="bookmark-list__header-action"
 		[template]="bookmarkTemplate"
-		(create)="onCreateBookmark( $event )">
+		(create)="onBookmarkCreate( $event )">
 	</app-create-bookmark>
 
 </header>

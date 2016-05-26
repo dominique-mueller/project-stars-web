@@ -2,7 +2,8 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
@@ -34,9 +35,9 @@ export class LabelDataService {
 	public labels: Observable<Map<string, Label>>;
 
 	/**
-	 * HTTP service
+	 * Authenticated HTTP service
 	 */
-	private http: Http;
+	private authHttp: AuthHttp;
 
 	/**
 	 * App service
@@ -57,14 +58,14 @@ export class LabelDataService {
 	 * Constructor
 	 */
 	constructor(
-		http: Http,
+		authHttp: AuthHttp,
 		appService: AppService,
 		store: Store<AppStore>,
 		bookmarkDataService: BookmarkDataService
 	) {
 
 		// Initialize
-		this.http = http;
+		this.authHttp = authHttp;
 		this.appService = appService;
 		this.store = store;
 		this.bookmarkDataService = bookmarkDataService;
@@ -75,7 +76,8 @@ export class LabelDataService {
 	}
 
 	/**
-	 * API request: Load all labels
+	 * Authenticated API request
+	 * Load all labels
 	 * @return {Promise<any>} Promise when done
 	 */
 	public loadLabels(): Promise<any> {
@@ -84,7 +86,7 @@ export class LabelDataService {
 			setTimeout(
 				() => {
 
-					this.http
+					this.authHttp
 
 						// Fetch data and parse response
 						.get( `${ this.appService.API_URL }/labels.mock.json` )
@@ -97,7 +99,7 @@ export class LabelDataService {
 									payload: data.data,
 									type: LOAD_LABELS
 								} );
-								console.log( 'APP > Labels Data Service > Labels successfully loaded from the API.' );
+								console.log( 'APP > Labels Data Service > Labels successfully loaded.' );
 								resolve();
 							},
 							( error: any ) => {
@@ -115,7 +117,7 @@ export class LabelDataService {
 		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			this.http
+			this.authHttp
 
 				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/labels` )
@@ -128,7 +130,7 @@ export class LabelDataService {
 							payload: data.data,
 							type: LOAD_LABELS
 						} );
-						console.log( 'APP > Labels Data Service > Labels successfully loaded from the API.' );
+						console.log( 'APP > Labels Data Service > Labels successfully loaded.' );
 						resolve();
 					},
 					( error: any ) => {
@@ -144,7 +146,8 @@ export class LabelDataService {
 	}
 
 	/**
-	 * API request: Add a new label
+	 * Authenticated API request
+	 * Add a new label
 	 * @param  {any}          newLabel Data of the new label
 	 * @return {Promise<any>}          Promise when done
 	 */
@@ -153,7 +156,7 @@ export class LabelDataService {
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			setTimeout(
 				() => {
-					newLabel.id = `LAB${ Math.floor( Math.random() * 11 ) }`;
+					newLabel.id = `LAB${ Math.floor( Math.random() * 110 ) }`;
 					this.store.dispatch( {
 						payload: {
 							data: newLabel
@@ -170,7 +173,7 @@ export class LabelDataService {
 		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			this.http
+			this.authHttp
 
 				// Send data and parse response
 				.post( `${ this.appService.API_URL }/labels`, JSON.stringify( { data: newLabel } ) )
@@ -202,7 +205,8 @@ export class LabelDataService {
 	}
 
 	/**
-	 * API request: Update an existing label
+	 * Authenticated API request
+	 * Update an existing label
 	 * @param  {string}       labelId      Label ID
 	 * @param  {any}          updatedLabel Updated label data
 	 * @return {Promise<any>}              Promise when done
@@ -229,7 +233,7 @@ export class LabelDataService {
 		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			this.http
+			this.authHttp
 
 				// Send data and parse response
 				.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( { data: updatedLabel } ) )
@@ -261,7 +265,8 @@ export class LabelDataService {
 	}
 
 	/**
-	 * API request: Delete an existing bookmark
+	 * Authenticated API request
+	 * Delete an existing bookmark
 	 * @param  {string}       labelId Label ID
 	 * @return {Promise<any>}         Promise when done
 	 */
@@ -292,7 +297,7 @@ export class LabelDataService {
 		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			this.http
+			this.authHttp
 
 				// Send data and parse response
 				.delete( `${ this.appService.API_URL }/labels/${ labelId }` )

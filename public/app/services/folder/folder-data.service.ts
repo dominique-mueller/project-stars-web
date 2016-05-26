@@ -2,7 +2,8 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
@@ -35,9 +36,9 @@ export class FolderDataService {
 	public folders: Observable<List<Folder>>;
 
 	/**
-	 * HTTP service
+	 * Authenticated HTTP service
 	 */
-	private http: Http;
+	private authHttp: AuthHttp;
 
 	/**
 	 * App Service
@@ -58,14 +59,14 @@ export class FolderDataService {
 	 * Constructor
 	 */
 	constructor(
-		http: Http,
+		authHttp: AuthHttp,
 		appService: AppService,
 		store: Store<AppStore>,
 		bookmarkDataService: BookmarkDataService
 	) {
 
 		// Initialize
-		this.http = http;
+		this.authHttp = authHttp;
 		this.appService = appService;
 		this.store = store;
 		this.bookmarkDataService = bookmarkDataService;
@@ -76,7 +77,8 @@ export class FolderDataService {
 	}
 
 	/**
-	 * API request: Load all folders
+	 * Authenticated API request
+	 * Load all folders
 	 * @return {Promise<any>} Promise when done
 	 */
 	public loadFolders(): Promise<any> {
@@ -85,7 +87,7 @@ export class FolderDataService {
 			setTimeout(
 				() => {
 
-					this.http
+					this.authHttp
 
 						// Fetch data and parse response
 						.get( `${ this.appService.API_URL }/folders.mock.json` )
@@ -98,11 +100,11 @@ export class FolderDataService {
 									payload: data.data,
 									type: LOAD_FOLDERS
 								} );
-								console.log( 'APP > Folder Data Service > Folders successfully loaded from the API.' );
+								console.log( 'APP > Folder Data Service > Folders successfully loaded.' );
 								resolve();
 							},
 							( error: any ) => {
-								console.log('APP > Folder Data Service > Error while loading folders.');
+								console.log( 'APP > Folder Data Service > Error while loading folders.' );
 								console.log( error );
 								reject();
 							}
@@ -116,7 +118,7 @@ export class FolderDataService {
 		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			this.http
+			this.authHttp
 
 				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/folders` )
@@ -129,11 +131,11 @@ export class FolderDataService {
 							payload: data.data,
 							type: LOAD_FOLDERS
 						} );
-						console.log( 'APP > Folder Data Service > Folders successfully loaded from the API.' );
+						console.log( 'APP > Folder Data Service > Folders successfully loaded.' );
 						resolve();
 					},
 					( error: any ) => {
-						console.log('APP > Folder Data Service > Error while loading folders.');
+						console.log( 'APP > Folder Data Service > Error while loading folders.' );
 						console.log( error );
 						reject();
 					}
@@ -145,87 +147,76 @@ export class FolderDataService {
 	}
 
 	/**
-	 * API request: Add a new folder
-	 * @param {any} newFolder Data of the new folder
+	 * Authenticated API request
+	 * Add a new fold
+	 * @param  {any}          newFolder Data of the new folder
+	 * @return {Promise<any>}           Promise when done
 	 */
-	public addFolder( newFolder: any ): void {
+	public addFolder( newFolder: any ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
-				newFolder.id = `FOL${ Math.floor( Math.random() * 110 ) }`;
-				this.store.dispatch( {
-					payload: {
-						data: newFolder
-					},
-					type: ADD_FOLDER
-				} );
-			},
-			1000
-		);
-
-		/* TODO: This is the production code
-
-		this.http
-
-			// Send data and parse response
-			.post( `${ this.appService.API_URL }/folders`, JSON.stringify( { data: newFolder } ) )
-			.map( ( response: Response ) => <any> response.json() )
-
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
-					newFolder.id = data.data.id;
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
+					newFolder.id = `FOL${ Math.floor( Math.random() * 110 ) }`;
 					this.store.dispatch( {
 						payload: {
 							data: newFolder
 						},
 						type: ADD_FOLDER
 					} );
+					console.log( 'APP > Folder Data Service > New folder successfully added.' );
+					resolve();
 				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'FOLDER SERVICE ERROR' );
-					console.dir( error );
-				}
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
+
+				// Send data and parse response
+				.post( `${ this.appService.API_URL }/folders`, JSON.stringify( { data: newFolder } ) )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						newFolder.id = data.data.id;
+						this.store.dispatch( {
+							payload: {
+								data: newFolder
+							},
+							type: ADD_FOLDER
+						} );
+						console.log( 'APP > Folder Data Service > New folder successfully added.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Folder Data Service > Error while adding a new folder.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 
 	}
 
 	/**
-	 * API request: Update an existing folder
-	 * @param {string} folderId      Folder ID
-	 * @param {any}    updatedFolder Updated folder data
+	 * Authenticated API request
+	 * Update an existing folder
+	 * @param  {string}       folderId      Folder ID
+	 * @param  {any}          updatedFolder Updated folder data
+	 * @return {Promise<any>}               Promise when done
 	 */
-	public updateFolder( folderId: string, updatedFolder: any ): void {
+	public updateFolder( folderId: string, updatedFolder: any ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
-				this.store.dispatch( {
-					payload: {
-						data: updatedFolder,
-						id: folderId
-					},
-					type: UPDATE_FOLDER
-				} );
-			},
-			1000
-		);
-
-		/* TODO: This is the production code
-
-		this.http
-
-			// Send data and parse response
-			.put( `${ this.appService.API_URL }/folders/${ folderId }`, JSON.stringify( { data: updatedFolder } ) )
-			.map( ( response: Response ) => <any> response.json() )
-
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 					this.store.dispatch( {
 						payload: {
 							data: updatedFolder,
@@ -233,59 +224,60 @@ export class FolderDataService {
 						},
 						type: UPDATE_FOLDER
 					} );
+					console.log( 'APP > Folder Data Service > Folder successfully updated.' );
+					resolve();
 				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'FOLDER SERVICE ERROR' );
-					console.dir( error );
-				}
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
+
+				// Send data and parse response
+				.put( `${ this.appService.API_URL }/folders/${ folderId }`, JSON.stringify( { data: updatedFolder } ) )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: {
+								data: updatedFolder,
+								id: folderId
+							},
+							type: UPDATE_FOLDER
+						} );
+						console.log( 'APP > Folder Data Service > Folder successfully updated.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Folder Data Service > Error while updating a folder.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 
 	}
 
 	/**
-	 * API request: Delete an existing folder
+	 * Authenticated API request
+	 * Delete an existing folder
 	 * Sidenote: This will also (recursively) delete all subfolders and contained bookmarks
-	 * @param {string}        folderId     Folder ID
-	 * @param {Array<string>} subfolderIds List of subfolders that also should be deleted
+	 * @param  {string}        folderId     Folder ID
+	 * @param  {Array<string>} subfolderIds List of subfolders that also should be deleted
+	 * @return {Promise<any>}               Promise when done
 	 */
-	public deleteFolder( folderId: string, subfolderIds: Array<string> ): void {
+	public deleteFolder( folderId: string, subfolderIds: Array<string> ): Promise<any> {
 
-		// TODO: This is only the dev text code, real code follows up
-		setTimeout(
-			() => {
-
-				// Delete this folder
-				this.store.dispatch( {
-					payload: {
-						id: folderId
-					},
-					type: DELETE_FOLDER
-				} );
-
-				// Also (recursively) delete all contained subfolders
-				this.deleteMultipleFolders( subfolderIds );
-
-				// Also delete all the bookmarks contained in these folders
-				this.bookmarkDataService.deleteAllBookmarksInFolders( subfolderIds );
-
-			},
-			1000
-		);
-
-		/* TODO: This is the production code
-
-		this.http
-
-			// Send data and parse response
-			.delete( `${ this.appService.API_URL }/folders/${ folderId }` )
-			.map( ( response: Response ) => <any> response.json() )
-
-			// Dispatch action
-			.subscribe(
-				( data: any ) => {
+		return new Promise<any>((resolve: Function, reject: Function) => {
+			setTimeout(
+				() => {
 
 					// Delete this folder
 					this.store.dispatch( {
@@ -301,13 +293,52 @@ export class FolderDataService {
 					// Also delete all the bookmarks contained in these folders
 					this.bookmarkDataService.deleteAllBookmarksInFolders( subfolderIds );
 
+					console.log( 'APP > Folder Data Service > Folder successfully deleted.' );
+					resolve();
+
 				},
-				( error: any ) => {
-					// TODO: Proper error handling
-					console.error( 'FOLDER SERVICE ERROR' );
-					console.dir( error );
-				}
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>((resolve: Function, reject: Function) => {
+			this.authHttp
+
+				// Send data and parse response
+				.delete( `${ this.appService.API_URL }/folders/${ folderId }` )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+
+						// Delete this folder
+						this.store.dispatch( {
+							payload: {
+								id: folderId
+							},
+							type: DELETE_FOLDER
+						} );
+
+						// Also (recursively) delete all contained subfolders
+						this.deleteMultipleFolders( subfolderIds );
+
+						// Also delete all the bookmarks contained in these folders
+						this.bookmarkDataService.deleteAllBookmarksInFolders( subfolderIds );
+
+						console.log( 'APP > Folder Data Service > Folder successfully deleted.' );
+						resolve();
+
+					},
+					( error: any ) => {
+						console.log( 'APP > Folder Data Service > Error while deleting a folder.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
 
 		*/
 

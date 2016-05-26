@@ -2,7 +2,7 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -12,7 +12,6 @@ import { Store, Action } from '@ngrx/store';
  * Internal imports
  */
 import { AppStore, AppService } from './../app';
-import { UserAuthService } from './user-auth.service';
 import { User } from './user.model';
 import {
 	LOAD_USER
@@ -21,7 +20,7 @@ import {
 /**
  * User data service
  * Contains functions for loading users
- * TODO: Create, update, delete users
+ * TODO: Next steps would be: Create, update, delete users
  */
 @Injectable()
 export class UserDataService {
@@ -47,25 +46,18 @@ export class UserDataService {
 	private store: Store<AppStore>;
 
 	/**
-	 * User authentication service
-	 */
-	private userAuthService: UserAuthService;
-
-	/**
 	 * Constructor
 	 */
 	constructor(
 		authHttp: AuthHttp,
 		appService: AppService,
-		store: Store<AppStore>,
-		userAuthService: UserAuthService
+		store: Store<AppStore>
 	) {
 
 		// Initialize
 		this.authHttp = authHttp;
 		this.appService = appService;
 		this.store = store;
-		this.userAuthService = userAuthService;
 
 		// Setup
 		this.user = <Observable<User>> store.select( 'user' ); // Select returns an observable
@@ -73,9 +65,10 @@ export class UserDataService {
 	}
 
 	/**
-	 * API request: Load the user
-	 * @param {string} userId User ID
-	 * @return {Promise<any>} Promise when done
+	 * Authenticated API request
+	 * Load the user
+	 * @param  {string}       userId User ID
+	 * @return {Promise<any>}        Promise when done
 	 */
 	public loadUser( userId: string ): Promise<any> {
 
@@ -96,7 +89,7 @@ export class UserDataService {
 									payload: data.data,
 									type: LOAD_USER
 								} );
-								console.log( 'APP > User Data Service > User successfully loaded from the API.' );
+								console.log( 'APP > User Data Service > User successfully loaded.' );
 								resolve();
 							},
 							( error: any ) => {
@@ -117,7 +110,7 @@ export class UserDataService {
 			this.authHttp
 
 				// Fetch data and parse response
-				.get( `${ this.appService.API_URL }/users/${ this.userAuthService.getUserId() }` )
+				.get( `${ this.appService.API_URL }/users/${ userId }` )
 				.map( ( response: Response ) => <any> response.json() )
 
 				// Dispatch action
@@ -127,7 +120,7 @@ export class UserDataService {
 							payload: data.data,
 							type: LOAD_USER
 						} );
-						console.log( 'APP > User Data Service > User successfully loaded from the API.' );
+						console.log( 'APP > User Data Service > User successfully loaded.' );
 						resolve();
 					},
 					( error: any ) => {

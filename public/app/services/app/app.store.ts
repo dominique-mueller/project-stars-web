@@ -13,6 +13,7 @@ import { User } from './../user';
 
 /**
  * App store interface
+ * Combines all the different parts of the store
  */
 export interface AppStore {
 	bookmarks: List<Bookmark>;

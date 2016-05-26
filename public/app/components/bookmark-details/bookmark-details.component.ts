@@ -14,6 +14,7 @@ import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../ser
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
@@ -91,6 +92,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private dialogConfirmService: DialogConfirmService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -138,7 +144,9 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService,
 		labelLogicService: LabelLogicService,
-		dialogConfirmService: DialogConfirmService) {
+		dialogConfirmService: DialogConfirmService,
+		notifierService: NotifierService
+	) {
 
 		// Initialize
 		this.router = router;
@@ -151,6 +159,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.labelDataService = labelDataService;
 		this.labelLogicService = labelLogicService;
 		this.dialogConfirmService = dialogConfirmService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -315,7 +324,16 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 			.then( ( answer: boolean ) => {
 				if ( answer ) {
 					this.onClose();
-					this.bookmarkDataService.deleteBookmark( this.bookmarkId );
+
+					// Try to delete the bookmark
+					this.bookmarkDataService.deleteBookmark( this.bookmarkId )
+						.then( ( data: any ) => {
+							this.notifierService.notify( 'default', 'Bookmark successfully deleted.' );
+						} )
+						.catch( ( error: any ) => {
+							this.notifierService.notify( 'default', 'An error occured while deleting the bookmark.' );
+						} );
+
 				}
 			} );
 
@@ -327,9 +345,20 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} newValue  New / updated value
 	 */
 	private onUpdate( attribute: string, newValue: string ): void {
+
+		// Create updated data
 		let updatedBookmark: any = {};
 		updatedBookmark[ attribute ] = newValue;
-		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark );
+
+		// Try to update the bookmark
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Bookmark successfully updated.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while updating the bookmark.' );
+			} );
+
 	}
 
 	/**
@@ -337,7 +366,15 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} labelId Label ID
 	 */
 	private assignLabel( labelId: string ): void {
-		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
+
+		// Try to update the bookmark
+		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Label successfully added to the bookmark.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while adding the label to the bookmark.' );
+			} );
 	}
 
 	/**
@@ -345,7 +382,16 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} labelId Label ID
 	 */
 	private unassignLabel( labelId: string ): void {
-		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
+
+		// Try to update the bookmark
+		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Label successfully removed from the bookmark.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while removing the label from the bookmark.' );
+			} );
+
 	}
 
 	/**
@@ -354,10 +400,21 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onMoveBookmark( parentFolderId: string ): void {
 		this.onClose();
+
+		// Create updated data
 		let updatedBookmark: any = {
 			path: parentFolderId
 		};
-		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark );
+
+		// Try to udpate the bookmark
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Bookmark successfully moved into another folder.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while moving the bookmark into another folder.' );
+			} );
+
 	}
 
 }
