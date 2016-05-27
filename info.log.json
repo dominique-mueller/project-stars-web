@@ -914,3 +914,28 @@
 {"name":"stars-web","hostname":"varicor","pid":9005,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-24T14:24:44.666Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":9175,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-24T14:26:09.446Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":9175,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-24T14:26:09.601Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":9175,"level":30,"msg":"Mongoose disconnected from database","time":"2016-05-24T14:29:07.839Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":5368,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T12:11:07.747Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":5368,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T12:11:07.905Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":6333,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T15:54:35.114Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":6333,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T15:54:35.268Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":6773,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T15:58:50.280Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":6773,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T15:58:50.431Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":6960,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T16:02:20.478Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":6960,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T16:02:20.641Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":7261,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T16:07:26.750Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":7261,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T16:07:26.906Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":7473,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T16:22:54.529Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":7473,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T16:22:54.696Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":11888,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T18:10:31.823Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":11888,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T18:10:31.987Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12057,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T18:14:51.620Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12057,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T18:14:51.779Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12168,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T18:16:58.694Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12168,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T18:16:58.850Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12279,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T18:17:20.328Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12279,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T18:17:20.588Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12371,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T18:18:23.898Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12371,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T18:18:24.062Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12494,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-05-26T18:19:44.762Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":12494,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-05-26T18:19:44.932Z","v":0}

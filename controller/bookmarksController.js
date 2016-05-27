@@ -31,6 +31,11 @@ var BookmarksController = function(req, res, authentication){
 	// this.checkIfPathRegardsToOwner = function(path){
 	// 	return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).checkIfPathRegardsToOwner(path);
 	// }
+	this.changeNumberOfContainedBookmarks = function(path, changeBy){
+		return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).changeNumberOfContainedBookmarks(path, changeBy);
+	}
+
+
 
 	this.get = function(){
 		var bookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
@@ -67,7 +72,7 @@ var BookmarksController = function(req, res, authentication){
 
 	this.post = function(){
 		//TODO Label, check if exist and regard to owner
-		var changeNumberOfContaineElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path);
+		var changeNumberOfContaineElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
 		// var checkIfPathRegardsToOwnerPromise = Folder.checkIfPathRegardsToOwner(self.reqBody.path);
 		var bookmarkPromise = Bookmark.create(self.reqBody, [changeNumberOfContaineElementsPromise]);
 		bookmarkPromise.then(function(bookmark){
@@ -85,7 +90,7 @@ var BookmarksController = function(req, res, authentication){
 	}
 
 	this.put = function(){
-		var changeNumberOfContaineElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path , 1);
+		// var changeNumberOfContaineElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
 		// var shiftFoldersPositionPromise = Folder.shiftFoldersPosition();
 		var bookmarkUpdatePromise = Bookmark.update(self.req.params.bookmark_id, self.reqBody);
 		bookmarkUpdatePromise.then(function(){

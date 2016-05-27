@@ -176,16 +176,10 @@ var BookmarksModel = function(caller, userId){
 	};
 
 	this.update = function(bookmarkId, bookmarkData, promises){
-		logger.debug('model update');
 		return new Promise(function(resolve, reject){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
-				logger.debug("Find update folder: " + bookmark._id);
-				//TODO Time update 
-				bookmark.updated = new Date();
-				logger.debug('updated time: ' + bookmark.updated);
 				if(bookmarkData.hasOwnProperty('path') || bookmarkData.hasOwnProperty('position')){
-					// logger.debug("Bookmark update Path or Position");
 					moveBookmark(bookmarkId, bookmarkData, function(err){
 						if(err){
 							reject();
@@ -196,8 +190,7 @@ var BookmarksModel = function(caller, userId){
 					});					
 				}
 				else{
-					// logger.debug("Change editables");
-					// var labelsUpdatePormise = updateBookmarkLabels(bookmarkId, bookmarkData);				
+					// var labelsUpdatePormise = updateBookmarkLabels(bookmarkId, bookmarkData);			
 					var editablesUpdatePromise = updateBookmarkEditables(bookmarkId, bookmarkData);
 					Promise.all([editablesUpdatePromise]).then(function(){
 						resolve();
@@ -206,8 +199,6 @@ var BookmarksModel = function(caller, userId){
 				}
 			})
 			.catch(reject);
-
-			// reject(new Error('Failed to upate bookmark. Invalid Input Fields'));
 		});
 	};
 

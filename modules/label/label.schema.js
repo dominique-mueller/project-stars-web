@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var label = new mongoose.Schema({
 	name: {type: String, minlength:3, maxlength: 256, required: true},
-	color: {type: String, match:/#?[A-F0-9][A-F0-9][A-F0-9](?:[A-F0-9][A-F0-9][A-F0-9])?/, default:"#FFF"},
+	color: {type: String, match:/#?[A-Fa-f0-9][A-Fa-f0-9][A-Fa-f0-9](?:[A-Fa-f0-9][A-Fa-f0-9][A-Fa-f0-9])?/, default:"#FFF"},
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
 });
 

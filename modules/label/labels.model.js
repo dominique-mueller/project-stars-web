@@ -1,7 +1,5 @@
-// var mongoose = require('mongoose');
 var Label = require('../schemaExport.js').Label;
 var logger = require('../../adapters/logger.js');
-// var errorHandler = require('../../helpers/errorHandler.js');
 
 module.exports = {
 	create: function(labelData, userId) {
@@ -10,7 +8,7 @@ module.exports = {
 			var label = new Label({
 				name: labelData.name,
 				color: labelData.color,
-				owner: userId,
+				owner: userId
 			});
 			console.log("label Object test: " + label._id + "+++"+ label.name);
 			label.save(function(err, label){

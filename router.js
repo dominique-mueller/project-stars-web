@@ -1,7 +1,7 @@
 var logger = require('./adapters/logger.js');
 var httpStatus = require('./config.js').httpStatus;
 var authentication;
-// var sync = require('synchronize');
+var helpers = require('./helpers/generalHelpers.js');
 var routerBackend = require('express').Router(), 
 	routerFrontend = require('express').Router(),
 	routerHTTPRedirect = require('express').Router();
@@ -28,17 +28,12 @@ routerBackend.use(function(req, res, next){
 
 //###### Frontend API ######
 
-// routerFrontend.get('*',function(req, res){
-// 	console.log('RICHTIGE STELLE FÜR INDEX.HTML')
-// 	res.sendFile('public/index.html', {root:__dirname});
-// 	res.end();
-// });
-
+/*
+this router will route every request to the index.html in the project root folder
+the frontend router is the last router who is checked for url matching. @see app.js 
+*/
 routerFrontend.route('*').all(function(req, res){
-	console.log('RICHTIGE STELLE FÜR INDEX.HTML');
-	console.log('URL Request Route: ' + req.url);
 	res.sendFile('index.html', {root:__dirname});
-	// res.json({"data":"RESPONSE"});
 	// res.end();
 });
 
@@ -259,11 +254,14 @@ routerBackend.route('/settings/:setting_id')
 	});
 
 
+
 routerBackend.route('/labels')
 	.get(function(req, res){
 		var result = require('./modules/label/labels.model.js').findAll(authentication.tokenUserId);
 		result.then(function(labels){
-			res.json({data:labels});
+			res.json({'data':
+				helpers.mongooseObjToFrontEndObj(labels)
+			});
 			res.end();
 		})
 		.catch(function(reason){
@@ -275,7 +273,9 @@ routerBackend.route('/labels')
 		logger.debug('CREATE LABEL userId: ' + authentication.tokenUserId)
 		var result = require('./modules/label/labels.model.js').create(JSON.parse(req.body.data), authentication.tokenUserId);
 		result.then(function(label) {
-			res.json({data:label});
+			res.json({'data':
+				helpers.mongooseObjToFrontEndObj(label)
+			});
 			res.end();
 		})
 		.catch(function() {
@@ -286,7 +286,9 @@ routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
 		var result = require('./modules/label/labels.model.js').findOne(req.params.label_id);
 		result.then(function(label){
-			res.json({data:label});
+			res.json({'data':
+				helpers.mongooseObjToFrontEndObj(label)
+			});
 			res.end();
 		})
 		.catch(function(reason){
@@ -315,6 +317,8 @@ routerBackend.route('/labels/:label_id')
 			res.status(httpStatus.INVALID_INPUT).send('{"error":"Failed to delete Label"}');
 		});
 	});
+
+
 
 
 //##### HTTP Redirect #####

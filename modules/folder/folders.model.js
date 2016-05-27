@@ -11,31 +11,6 @@ var FoldersModel = function(caller, userId){
 
 	//#### PRIVATE FUNCTIONS ####
 
-	// function createRootFolder(folder){
-	// 	return new Promise(function(resolve, reject){
-	// 		//TODO: FIX BUG change this check so no user can send a path with 'undefined'	DEPRECATED
-	// 		// if a root folder is created, there is no path, so the path's id will be the folder itself DEPRECATED
-	// 		folder.position = 0;
-	// 		// folder.path = self.userId; DEPRECATED
-	// 		folder.isRoot = true;
-	// 		resolve(folder);
-	// 	});
-	// }
-
-	// function createNormalFolder(folder){
-	// 	return new Promise(function(resolve, reject){
-	// 		var positionPromise = self.changeNumberOfContainedFolders(folder.path, 1);
-	// 		positionPromise.then(function(highestPosition){
-	// 			logger.debug('highestPosition: '+highestPosition);
-	// 			folder.position = highestPosition;
-	// 			resolve(folder);
-	// 		})
-	// 		.catch(function(err){
-	// 			logger.error("FUCKING ERROR: " + err);
-	// 			reject(err);
-	// 		});
-	// 	});
-	// }
 
 	function checkIfRootFolder(folderId){
 		return new Promise(function(resolve, reject){
@@ -130,7 +105,10 @@ var FoldersModel = function(caller, userId){
 
 	//#### Public Functions #####
 
- // 	this.checkIfPathRegardsToOwner = function(path){
+	//KEEP THESE FUNCTIONS. DUE TO FRONTEND COMPATIBILITY FOR RELEASE THEY HAD TO BE SIMPLICIFIED
+	
+
+ 	// 	this.checkIfPathRegardsToOwner = function(path){
 	// 	return new Promise(function(resolve, reject){
 	// 		//TODO !!!!
 	// 		logger.debug('checkIfPathRegardsToOwner');
@@ -172,17 +150,17 @@ var FoldersModel = function(caller, userId){
 
 	this.changeNumberOfContainedFolders = function(path, changeBy){
 		return new Promise(function(resolve, reject){
-			Folder.findById(path, function(err, folder){
+			Folder.findById(path, function(err, foundFolder){
 				try{
-					folder.numberOfContainedFolders = folder.numberOfContainedFolders + changeBy;
-					folder.save(function(err, folder){
+					foundFolder.numberOfContainedFolders = foundFolder.numberOfContainedFolders + changeBy;
+					foundFolder.save(function(err, savedFolder){
 						if(err){
 							logger.error(err);
 							reject(err);
 						}
 						else{
 							logger.debug('changeNumberOfContainedFolders resolved');
-							resolve(folder.numberOfContainedFolders);
+							resolve(savedFolder.numberOfContainedFolders);
 						}
 					});
 				}
@@ -194,17 +172,18 @@ var FoldersModel = function(caller, userId){
 	}
 	this.changeNumberOfContainedBookmarks = function(path, changeBy){
 		return new Promise(function(resolve, reject){
-			Folder.findById(path, function(err, folder){
+			Folder.findById(path, function(err, foundFolder){
+				console.log("Fucking folder: " + foundFolder._id);
 				try{
-					folder.numberOfContainedBookmarkss = folder.numberOfContainedBookmarks + changeBy;
-					folder.save(function(err, folder){
+					foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
+					foundFolder.save(function(err, savedFolder){
 						if(err){
 							logger.error(err);
 							reject(err);
 						}
 						else{
 							logger.debug('changeNumberOfContainedBookmarks resolved');
-							resolve(folder.numberOfContainedBookmarks);
+							resolve(savedFolder.numberOfContainedBookmarks);
 						}
 					});
 				}

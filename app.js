@@ -31,8 +31,8 @@ app.use('/api/v1',router.Backend);
 //for static file requests
 app.use('/build', express.static('build'));
 app.use('/node_modules', express.static('node_modules'));
-//non of the static files matches
-//return index.html
+//non of the static files matches and it is no api request
+//return index.html routerFrontend
 app.use('/', router.Frontend);
 
 redirectHTTP.use('/', router.Redirect);

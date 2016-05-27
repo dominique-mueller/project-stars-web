@@ -26,5 +26,6 @@ function alterSingleObject(obj){
 	//change the key _id to id because of convention
 	object['id'] = object['_id'];
 	delete object['_id'];
+	delete object['__v'];
 	return object;
 }
