@@ -8,12 +8,12 @@ html {
 
 body {
 	position: fixed; // No global scrollbar allowed
-	font-size: 1.4rem; // Default font size
 	width: 100%;
 	height: 100%;
 	background-color: $color-gallery;
 	color: $color-tundora;
 	font-family: "Roboto", "Open Sans", "Tahoma", "Trebuchet MS", "Helvetica", "Arial", sans-serif;
+	font-size: 1.4rem; // Default font size
 	line-height: 1;
 	overflow: hidden; // Don't allow scrolling (like ever!)
 }

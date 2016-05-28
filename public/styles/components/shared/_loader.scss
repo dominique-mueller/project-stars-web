@@ -2,16 +2,16 @@
 
 .loader {
 	display: block;
-	height: 1rem;
 	width: 4.2rem;
+	height: 1rem;
 }
 
 .loader__dot {
 	display: inline-block;
-	height: 1rem;
 	width: 1rem;
-	margin-left: .2rem;
+	height: 1rem;
 	margin-right: .2rem;
+	margin-left: .2rem;
 	border-radius: 50%;
 	vertical-align: top;
 }

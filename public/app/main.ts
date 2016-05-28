@@ -23,7 +23,7 @@ bootstrap( AppComponent, [
 			useValue: '/'
 		}
 	] )
-	.then( () => {
+	.then( ( data: any ) => {
 		console.log( 'APP > Application bootstrap successfully finished!' );
 	} )
 	.catch( ( error: any ) => {

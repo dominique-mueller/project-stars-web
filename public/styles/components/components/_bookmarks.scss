@@ -1,20 +1,24 @@
 // VIEW COMPONENT: BOOKMARKS
 
-.bookmarks.is-visible {
+.bookmarks {
 
-	.bookmarks__header,
-	.bookmarks__main {
-		opacity: 1;
-		visibility: visible;
-		transition: opacity $anim-speed-normal $anim-easing,
-					visibility $anim-speed-instant $anim-linear;
-	}
+	&.is-visible {
 
-	.bookmarks__loader {
-		visibility: hidden;
-		opacity: 0;
-		transition: opacity $anim-speed-normal $anim-easing,
-					visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+		.bookmarks__header,
+		.bookmarks__main {
+			transition: opacity $anim-speed-normal $anim-easing,
+						visibility $anim-speed-instant $anim-linear;
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.bookmarks__loader {
+			transition: opacity $anim-speed-normal $anim-easing,
+						visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+			opacity: 0;
+			visibility: hidden;
+		}
+
 	}
 
 }
@@ -23,31 +27,31 @@
 	position: absolute;
 	top: calc(50% - 2rem);
 	left: calc(50% - 2rem);
-	z-index: 1;
-	visibility: visible;
-	opacity: 1;
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear;
+	opacity: 1;
+	visibility: visible;
+	z-index: 1;
 }
 
 .bookmarks__header {
-	opacity: 0;
-	visibility: hidden;
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+	opacity: 0;
+	visibility: hidden;
 }
 
 .bookmarks__main {
+	display: flex;
 	position: absolute;
 	top: 6.4rem;
 	left: 0;
-	display: flex;
 	width: 100%;
 	height: calc(100% - 6.4rem);
-	opacity: 0;
-	visibility: hidden;
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+	opacity: 0;
+	visibility: hidden;
 }
 
 // Layout containers
@@ -56,8 +60,8 @@
 	position: relative; // For animations
 	width: 35rem; // Fixed width
 	height: 100%;
-	background-color: $color-gallery;
 	border-right: .1rem solid $color-alto;
+	background-color: $color-gallery;
 	overflow: hidden; // Don't allow scrolling produced by animations
 }
 
@@ -81,25 +85,33 @@
 		left: 0;
 		width: 50%;
 		height: .2rem;
-		background-color: $color-primary;
-		content: '';
 		transition: transform $anim-speed-normal $anim-easing;
-		will-change: transform; // Lalalala ... does is work?
+		background-color: $color-primary;
+		content: "";
+		will-change: transform; // Lalalala ... does is work? Let's hope so ...
 	}
 
-	&.is-active-first::after {
-		transform: translate3D(0,0,0);
+	&.is-active-first {
+
+		&::after {
+			transform: translate3d(0, 0, 0);
+		}
+
 	}
 
-	&.is-active-second::after {
-		transform: translate3D(100%,0,0);
+	&.is-active-second {
+
+		&::after {
+			transform: translate3d(100%, 0, 0);
+		}
+
 	}
 
 }
 
 .bookmarks__sidebar-header-tab {
-	position: relative; // Because of ::after
 	display: inline-block;
+	position: relative; // Because of ::after
 	width: 50%; // 2 equally spread tabs
 	padding-top: 2.1rem;
 	padding-bottom: .2rem;
@@ -109,34 +121,42 @@
 
 	&::after {
 		position: absolute;
-		left: 0;
 		bottom: 0;
+		left: 0;
 		width: 100%;
 		height: .2rem;
-		background-color: $color-primary;
-		content: '';
 		transition: transform $anim-speed-normal $anim-easing;
+		background-color: $color-primary;
+		content: "";
 	}
 
-	&.is-first::after {
-		transform: translate3D(100%,0,0);
+	&.is-first {
+
+		&::after {
+			transform: translate3d(100%, 0, 0);
+		}
+
 	}
 
-	&.is-second::after {
-		transform: translate3D(-100%,0,0);
+	&.is-second {
+
+		&::after {
+			transform: translate3d(-100%, 0, 0);
+		}
+
 	}
 
 	&:hover,
 	&:focus {
 
 		&::after {
-			transform: translate3D(0,0,0);
+			transform: translate3d(0, 0, 0);
 		}
 
 	}
 
 	&.is-active {
-		font-weight: bold;
+		font-weight: 700;
 	}
 
 }
@@ -156,7 +176,7 @@
 	will-change: transform; // Hm ...
 
 	&.is-active {
-		transform: translate3D(0,0,0);
+		transform: translate3d(0, 0, 0);
 		transition: transform $anim-speed-normal $anim-easing;
 	}
 
@@ -164,10 +184,10 @@
 
 .bookmarks__sidebar-content-directory {
 	padding-left: 2.5rem; // Root directory indention
-	transform: translate3D(-100%,0,0);
+	transform: translate3d(-100%, 0, 0);
 }
 
 .bookmarks__sidebar-content-labels {
 	display: block;
-	transform: translate3D(100%,0,0);
+	transform: translate3d(100%, 0, 0);
 }

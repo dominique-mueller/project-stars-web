@@ -1,5 +1,5 @@
 <!-- Dropdown trigger -->
-<button class="button" type="button" (click)="openDropdown()" #trigger>
+<button class="button has-tooltip" type="button" (click)="openDropdown()" #trigger data-tooltip="move">
 	<ng-content></ng-content>
 </button>
 
@@ -10,7 +10,8 @@
 		<!-- Dropdown header -->
 		<header class="move-into-folder__dropdown-header">
 			<h1 class="move-into-folder__dropdown-header-title">Move {{ elementType }}</h1>
-			<button class="button move-into-folder__dropdown-header-action" type="button" (click)="closeDropdown()">
+			<button class="button move-into-folder__dropdown-header-action has-tooltip"
+				type="button" (click)="closeDropdown()" data-tooltip="close">
 				<app-icon name="close" size="16" color="#444"></app-icon>
 			</button>
 		</header>

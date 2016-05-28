@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router, OnActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -65,6 +65,11 @@ import { LoaderComponent } from './../../shared/loader/loader.component';
 	} )
 ] )
 export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
+
+	/**
+	 * Change detector
+	 */
+	private changeDetector: ChangeDetectorRef;
 
 	/**
 	 * Router
@@ -145,6 +150,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 * Constructor
 	 */
 	constructor(
+		changeDetector: ChangeDetectorRef,
 		router: Router,
 		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
@@ -156,6 +162,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	) {
 
 		// Initialize
+		this.changeDetector = changeDetector;
 		this.router = router;
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
@@ -211,6 +218,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 					if ( this.openedFolderId === null ) {
 						this.onSelectFolder( this.rootFolderId );
 					}
+					this.changeDetector.markForCheck(); // Trigger change detection
 				}
 
 			}
@@ -231,6 +239,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 						this.uiService.setRootFolderId( this.rootFolderId );
 						this.onSelectFolder( this.rootFolderId );
 					}
+					this.changeDetector.markForCheck(); // Trigger change detection
 
 				}
 			}

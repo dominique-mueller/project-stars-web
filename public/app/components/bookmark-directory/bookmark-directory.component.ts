@@ -167,7 +167,6 @@ export class BookmarkDirectoryComponent implements OnInit, OnDestroy, OnChanges 
 	private onSelectFolder( folderId: string ): void {
 		if ( folderId !== this.openedFolderId ) {
 			this.selectFolder.emit( folderId );
-			// this.openedFolderId = folderId; // Need to set it here to also detect changes for children
 		}
 	}
 

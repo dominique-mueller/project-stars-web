@@ -13,11 +13,11 @@ import { Subscription } from 'rxjs/Subscription';
  * Internal imports
  */
 import { AppService } from './../../services/app';
-import { bookmarks } from './../../services/bookmark';
-import { folders } from './../../services/folder';
-import { labels } from './../../services/label';
-import { ui, UiService } from './../../services/ui';
-import { user, UserAuthService } from './../../services/user';
+import { bookmarkReducer } from './../../services/bookmark';
+import { folderReducer } from './../../services/folder';
+import { labelReducer } from './../../services/label';
+import { uiReducer, UiService } from './../../services/ui';
+import { userReducer, UserAuthService } from './../../services/user';
 import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 import { LoginComponent } from './../login/login.component';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
@@ -45,12 +45,12 @@ import { NotifierComponent } from './../../shared/notifier/notifier.component';
 		JwtHelper,
 		DialogConfirmService,
 		NotifierService,
-		provideStore( { // Setup the redux store (provided by module)
-			bookmarks,
-			folders,
-			labels,
-			ui,
-			user
+		provideStore( { // Setup the redux store as a combination of seperate reducers
+			bookmarks: bookmarkReducer,
+			folders: folderReducer,
+			labels: labelReducer,
+			ui: uiReducer,
+			user: userReducer
 		} ),
 		provide( AuthHttp, { // Setup the authenticated HTTP service (provided by module)
 			deps: [

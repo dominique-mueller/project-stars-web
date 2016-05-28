@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Reducer, Action } from '@ngrx/store';
+import { Action, ActionReducer } from '@ngrx/store';
 import { List, Map, fromJS } from 'immutable';
 
 /**
@@ -34,7 +34,8 @@ const initialFolderState: Folder = <Folder> Map<string, any>( {
 /**
  * Folder store (reducer)
  */
-export const folders: Reducer<List<Folder>> = ( state: List<Folder> = initialState, action: Action ) => {
+export const folderReducer: ActionReducer<List<Folder>> =
+	( state: List<Folder> = initialState, action: Action ) => {
 
 	switch ( action.type ) {
 

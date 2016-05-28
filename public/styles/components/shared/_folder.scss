@@ -41,7 +41,7 @@
 	top: 1.8rem;
 	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
 	width: calc(100% - 7rem);
-	font-weight: bold;
+	font-weight: 700;
 	line-height: 2.4rem; // Same as icon height
 }
 
@@ -50,8 +50,8 @@
 .folder__action {
 	padding-right: 2.5rem;
 	padding-left: 2.5rem;
-	opacity: .5;
 	transition: opacity $anim-speed-fast $anim-easing;
+	opacity: .5;
 
 	&:active {
 		transform: scale(.825);

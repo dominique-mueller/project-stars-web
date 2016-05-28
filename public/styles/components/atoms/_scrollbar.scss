@@ -11,14 +11,14 @@
 	}
 
 	::-webkit-scrollbar-thumb {
-		background-color: lighten( $color-gray, 10% );
+		background-color: lighten($color-gray, 10%);
 
 		&:hover {
 			background-color: $color-gray;
 		}
 
 		&:active {
-			background-color: darken( $color-gray, 15% );
+			background-color: darken($color-gray, 15%);
 		}
 
 	}

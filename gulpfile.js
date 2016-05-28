@@ -136,5 +136,7 @@ gulp.task( 'watch', [ 'build:dev' ], () => {
 	// Watch files
 	gulp.watch( `${ config.paths.project.styles }/**/*.scss`, [ 'sass:build--dev' ] ); // SASS files
 	gulp.watch( `${ config.paths.project.scripts }/**/*`, [ 'typescript:build--dev' ] ); // TypeScript files including HTML templates
+	gulp.watch( `${ config.paths.project.base }/index.html`, [ 'setup:index--dev' ] ); // Index file
+	gulp.watch( `${ config.paths.project.base }/*.js`, [ 'setup:config' ] ); // Configuration files
 
 } );

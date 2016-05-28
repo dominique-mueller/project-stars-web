@@ -15,14 +15,13 @@
 	"bugs": {
 		"url": "https://gitlab.dominique-mueller.de/dominique-mueller/project-stars-web/issues"
 	},
-	"main": "index.js",
+	"main": "app.js",
 	"scripts": {
 		"gulp": "gulp",
 		"typings": "typings",
 		"postinstall": "typings install"
 	},
 	"dependencies": {
-		"@ngrx/store": "1.5.x",
 		"@angular/common": "2.0.0-rc.1",
 		"@angular/compiler": "2.0.0-rc.1",
 		"@angular/core": "2.0.0-rc.1",
@@ -30,6 +29,8 @@
 		"@angular/platform-browser": "2.0.0-rc.1",
 		"@angular/platform-browser-dynamic": "2.0.0-rc.1",
 		"@angular/router": "2.0.0-rc.1",
+		"@ngrx/core": "1.0.x",
+		"@ngrx/store": "2.0.x",
 		"angular2-jwt": "0.1.x",
 		"bcryptjs": "2.3.x",
 		"body-parser": "1.15.x",
@@ -61,7 +62,7 @@
 		"gulp-htmlmin": "2.0.x",
 		"gulp-rename": "1.2.x",
 		"gulp-sass": "2.3.x",
-		"gulp-scss-lint": "0.4.x",
+		"gulp-sass-lint": "1.1.x",
 		"gulp-strip-debug": "1.1.x",
 		"gulp-svgstore": "6.0.x",
 		"gulp-tslint": "5.0.x",
@@ -74,12 +75,11 @@
 		"run-sequence": "1.2.x",
 		"tslint": "3.10.x",
 		"typedoc": "0.3.x",
-		"typescript": "1.8.x",
 		"typings": "1.0.x",
 		"webpack": "1.13.x"
 	},
 	"engines": {
-		"node": "<5"
+		"node": ">= 5.4.1 < 6"
 	},
 	"private": true
 }

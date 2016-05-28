@@ -10,7 +10,7 @@
 		'app': 			'/build',
 
 		// Libraries
-		'@ngrx/store': 	'/node_modules/@ngrx/store',
+		'@ngrx': 		'/node_modules/@ngrx',
 		'@angular': 	'/node_modules/@angular',
 		'angular2-jwt': '/node_modules/angular2-jwt',
 		'immutable': 	'/node_modules/immutable/dist',
@@ -56,6 +56,10 @@
 			defaultExtension: 'js',
 			main: 'index.js'
 		},
+		'@ngrx/core': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
 		'@ngrx/store': {
 			defaultExtension: 'js',
 			main: 'index.js'
@@ -64,12 +68,12 @@
 			defaultExtension: 'js',
 			main: 'angular2-jwt.js'
 		},
-		'rxjs': {
-			defaultExtension: 'js'
-		},
 		'immutable': {
 			defaultExtension: 'js',
 			main: 'immutable.js'
+		},
+		'rxjs': {
+			defaultExtension: 'js'
 		}
 
 	};

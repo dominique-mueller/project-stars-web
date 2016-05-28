@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Reducer, Action } from '@ngrx/store';
+import { Action, ActionReducer } from '@ngrx/store';
 import { List, Map, fromJS } from 'immutable';
 
 /**
@@ -39,7 +39,8 @@ const initialBookmarkState: Bookmark = <Bookmark> Map<string, any>( {
 /**
  * Bookmark store (reducer)
  */
-export const bookmarks: Reducer<List<Bookmark>> = ( state: List<Bookmark> = initialState, action: Action ) => {
+export const bookmarkReducer: ActionReducer<List<Bookmark>> =
+	( state: List<Bookmark> = initialState, action: Action ) => {
 
 	switch ( action.type ) {
 

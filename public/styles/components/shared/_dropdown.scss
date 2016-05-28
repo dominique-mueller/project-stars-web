@@ -13,10 +13,10 @@
 	&:hover,
 	&:active,
 	&.is-active {
-		background-color: $color-white;
-		color: $color-black;
 		transition: background-color $anim-speed-normal $anim-easing,
 					color $anim-speed-normal $anim-easing;
+		background-color: $color-white;
+		color: $color-black;
 
 		.icon > svg {
 			fill: $color-tundora;
@@ -37,7 +37,7 @@
 
 	}
 
-	&.is-active .icon {
+	&.is-active > .icon {
 		transform: rotate(180deg);
 	}
 
@@ -51,19 +51,19 @@
 	min-width: 15rem;
 	padding-top: .7rem;
 	padding-bottom: .7rem;
+	transform: translate3d(0, -.8rem, 0);
+	transition: opacity $anim-speed-normal $anim-easing,
+				transform $anim-speed-instant $anim-easing $anim-speed-normal,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
 	background-color: $color-white;
 	color: $color-tundora;
 	line-height: 1;
 	box-shadow: 0 .1rem .3rem rgba($color-black, .2);
-	transform: translate3D(0,-.8rem,0);
-	transition: opacity $anim-speed-normal $anim-easing,
-				transform $anim-speed-instant $anim-easing $anim-speed-normal,
-				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
 	opacity: 0;
 	visibility: hidden;
 
 	&.is-visible {
-		transform: translate3D(0,0,0);
+		transform: translate3d(0, 0, 0);
 		transition: opacity $anim-speed-normal $anim-easing,
 					transform $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant $anim-linear;

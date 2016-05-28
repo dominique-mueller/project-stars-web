@@ -13,7 +13,7 @@ const del = require( 'del' );
 const gulp = require( 'gulp' );
 const gutil = require( 'gulp-util' );
 const htmlMinifier = require( 'html-minifier' );
-const htmlMinifierOptions = require( './../.htmlminrc.json' );
+const htmlMinifierOptions = require( './../../.htmlminrc.json' );
 const inlineNg2Template = require( 'gulp-inline-ng2-template' );
 const stripDebug = require( 'gulp-strip-debug' );
 const typescript = require( 'gulp-typescript' );
@@ -45,7 +45,7 @@ gulp.task( 'typescript:build--dev', () => {
 
 		// Transpile TypeScript to JavaScript, depending on TS config
 		.pipe(
-			typescript( typescript.createProject( `${ config.paths.root }/tsconfig.json` ) ),
+			typescript( typescript.createProject( './tsconfig.json' ) ),
 			undefined,
 			typescript.reporter.fullReporter()
 		)
@@ -83,7 +83,7 @@ gulp.task( 'typescript:build--prod', () => {
 
 		// Transpile TypeScript to JavaScript, depending on TS config
 		.pipe(
-			typescript( typescript.createProject( `${ config.paths.root }/tsconfig.json` ) ),
+			typescript( typescript.createProject( './tsconfig.json' ) ),
 			undefined,
 			typescript.reporter.fullReporter()
 		)
@@ -116,6 +116,8 @@ gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], ( done ) => 
 				'@angular/platform-browser',
 				'@angular/platform-browser-dynamic',
 				'@angular/router',
+				'@ngrx/core',
+				'@ngrx/store',
 				'angular2-jwt',
 				'immutable',
 				'rxjs'

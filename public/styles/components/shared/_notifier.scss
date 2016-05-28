@@ -5,28 +5,28 @@
 	bottom: 1.9rem;
 	left: 2rem;
 	height: 5.6rem;
-	border-radius: .3rem;
-	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
-	color: $color-white;
-	z-index: 10; // To be sure that it's on top
-	visibility: hidden;
-	opacity: 0;
-	transform: translate3d(calc(-100% - 2.6rem),0,0);
+	transform: translate3d(calc(-100% - 2.6rem), 0, 0);
 	transition: opacity $anim-speed-slow $anim-easing,
 				transform $anim-speed-slow $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-slow;
+	border-radius: .3rem;
+	color: $color-white;
+	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
+	opacity: 0;
+	visibility: hidden;
+	z-index: 10; // To be sure that it's on top
 
 	&.is-visible {
-		visibility: visible;
-		opacity: 1;
-		transform: translate3d(0,0,0);
+		transform: translate3d(0, 0, 0);
 		transition: opacity $anim-speed-slow $anim-easing,
 					transform $anim-speed-slow $anim-easing,
 					visibility $anim-speed-instant $anim-linear;
+		opacity: 1;
+		visibility: visible;
 	}
 
 	&.is-default {
-		background-color: #222;
+		background-color: darken($color-tundora, 10%);
 	}
 
 	&.is-success {
@@ -53,9 +53,9 @@
 .notifier__action {
 	display: inline-block;
 	padding: 2rem 2.2rem 1.8rem 1.6rem;
-	vertical-align: top;
-	opacity: .4;
 	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: .4;
+	vertical-align: top;
 
 	&:hover {
 		opacity: 1;

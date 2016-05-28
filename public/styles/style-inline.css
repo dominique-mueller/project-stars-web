@@ -10,7 +10,7 @@
 	/* Stars background image, compressed version
 	   Thanks to Adrian Pelletier on unsplash.com
 	   URL: https://unsplash.com/photos/BeIvjuz6k2k */
-	background: url('/build/assets/login_background.jpg') center center;
+	background: url("/build/assets/login_background.jpg") center center;
 	background-size: 0 0;
 	/* We load the image here to trick the browser loading it very early, login will use the image without re-downloading */
 	cursor: wait;

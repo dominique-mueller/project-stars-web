@@ -1,7 +1,6 @@
 # Dependencies
 /node_modules
 /typings
-/Gemfile.lock
 
 # Frontend build
 /index.html
@@ -11,6 +10,7 @@
 /docs
 
 # Generated error logs (mostly by Node)
+*.log
 /undefinederror.json
 /undefinedinfo.json
 /info.log.json

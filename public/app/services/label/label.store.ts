@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Reducer, Action } from '@ngrx/store';
+import { Action, ActionReducer } from '@ngrx/store';
 import { Map, fromJS } from 'immutable';
 
 /**
@@ -30,7 +30,8 @@ const initialLabelState: Label = <Label> Map<string, any>( {
 /**
  * Label store (reducer)
  */
-export const labels: Reducer<Map<string, Label>> = ( state: Map<string, Label> = initialState, action: Action ) => {
+export const labelReducer: ActionReducer<Map<string, Label>> =
+	(state: Map<string, Label> = initialState, action: Action) => {
 
 	switch ( action.type ) {
 
