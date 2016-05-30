@@ -3,12 +3,12 @@
 /**
  * Import configuration
  */
-const config = require( './../gulp.config.json' );
+const gulpConfig = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
-const gulp = require( 'gulp-help' )( require( 'gulp' ) );
+const gulp 	= require( 'gulp-help' )( require( 'gulp' ) );
 const gutil = require( 'gulp-util' );
 
 /**
@@ -19,11 +19,11 @@ gulp.task( 'setup:apimock', 'TO BE REMOVED: Setup API mocks', () => {
 	gutil.log( gutil.colors.red( 'TODO: Setting up the API mock should be removed!' ) );
 	return gulp
 		.src( [
-			`${ config.paths.project.scripts }/services/bookmark/bookmarks.mock.json`,
-			`${ config.paths.project.scripts }/services/folder/folders.mock.json`,
-			`${ config.paths.project.scripts }/services/label/labels.mock.json`,
-			`${ config.paths.project.scripts }/services/user/user.mock.json`,
-			`${ config.paths.project.scripts }/services/user/jwt.mock.json`
+			`${ gulpConfig.paths.project.scripts }/services/bookmark/bookmarks.mock.json`,
+			`${ gulpConfig.paths.project.scripts }/services/folder/folders.mock.json`,
+			`${ gulpConfig.paths.project.scripts }/services/label/labels.mock.json`,
+			`${ gulpConfig.paths.project.scripts }/services/user/user.mock.json`,
+			`${ gulpConfig.paths.project.scripts }/services/user/jwt.mock.json`
 		] )
-		.pipe( gulp.dest( `${ config.paths.project.dest }/apimock` ) );
+		.pipe( gulp.dest( `${ gulpConfig.paths.project.dest }/apimock` ) );
 } );

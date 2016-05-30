@@ -55,7 +55,7 @@
 	color: $color-white;
 	line-height: 4.7rem;
 
-	&::-webkit-input-placeholder {
+	&::placeholder {
 		transition: opacity $anim-speed-fast $anim-easing;
 		color: $color-white;
 		opacity: .75;
@@ -64,7 +64,7 @@
 	&:focus {
 		background-color: rgba($color-white, .2);
 
-		&::-webkit-input-placeholder {
+		&::placeholder {
 			opacity: .3;
 		}
 

@@ -3,29 +3,30 @@
 /**
  * Import configurations
  */
-const config = require( './../gulp.config.json' );
+const gulpConfig 	= require( './../gulp.config.json' );
+const projectConfig = require( './../../config.json' );
 
 /**
  * Gulp imports
  */
-const gulp = require( 'gulp-help' )( require( 'gulp' ) );
-const gutil = require( 'gulp-util' );
-const typedoc = require( 'gulp-typedoc' );
+const gulp 		= require( 'gulp-help' )( require( 'gulp' ) );
+const gutil 	= require( 'gulp-util' );
+const typedoc 	= require( 'gulp-typedoc' );
 
 /**
  * Gulp task: Generate frontend documentation
  */
-gulp.task( 'docs:frontend', 'Generate frontend documentation', () => {
-	gutil.log( gutil.colors.yellow( `The generated frontend documentation will be found in '${ config.paths.docs.frontend }/index.html'` ) );
+gulp.task( 'docs:frontend', 'Generate the frontend documentation', () => {
+	gutil.log( gutil.colors.yellow( `The generated frontend documentation will be located in '${ gulpConfig.paths.docs.frontend }/index.html'` ) );
 	return gulp
 		.src( [
-			`${ config.paths.project.scripts }/**/*.ts`,
-			`${ config.paths.typings }/index.d.ts`
+			`${ gulpConfig.paths.project.scripts }/**/*.ts`,
+			`${ gulpConfig.paths.typings }/index.d.ts`
 		] )
 		.pipe( typedoc( {
 
 			// Output
-			out: config.paths.docs.frontend,
+			out: gulpConfig.paths.docs.frontend,
 
 			// TypeScript options
 			emitDecoratorMetadata: true,
@@ -36,13 +37,13 @@ gulp.task( 'docs:frontend', 'Generate frontend documentation', () => {
 			target: 'ES5',
 
 			// Typedoc options
-			name: 'Project Stars',
+			name: projectConfig.name,
 			theme: 'default', // Produces multiple pages
 			version: true,
-			readme: './README.md',
+			readme: './README.md', // Show on the start page
 			includeDeclarations: true,
 			excludeExternals: true,
-			ignoreCompilerErrors: true // TODO: Necessary due to TypeDoc issues
+			ignoreCompilerErrors: true // Necessary due to a TypeDoc issues
 
 		} ) );
 } );

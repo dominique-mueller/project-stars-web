@@ -3,7 +3,7 @@
 /**
  * Import configuration
  */
-const config = require( './../gulp.config.json' );
+const gulpConfig = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
@@ -15,6 +15,6 @@ const gulp = require( 'gulp-help' )( require( 'gulp' ) );
  */
 gulp.task( 'setup:assets', 'Setup static assets', () => {
 	return gulp
-		.src( `${ config.paths.assets.images }/*.jpg` )
-		.pipe( gulp.dest( config.paths.assets.dest ) );
+		.src( `${ gulpConfig.paths.assets.images }/*.jpg` )
+		.pipe( gulp.dest( gulpConfig.paths.assets.dest ) );
 } );

@@ -3,72 +3,68 @@
 /**
  * Import configurations
  */
-const config = require( './../gulp.config.json' );
-const project = require( './../../config.json' );
-const htmlMinifierOptions = require( './../../.htmlminrc.json' );
+const gulpConfig 			= require( './../gulp.config.json' );
+const projectConfig 		= require( './../../config.json' );
+const htmlMinifierOptions 	= require( './../../.htmlminrc.json' );
 
 /**
  * Gulp imports
  */
-const browserSync = require( 'browser-sync' );
-const del = require( 'del' );
-const gulp = require( 'gulp-help' )( require( 'gulp' ) );
-const gutil = require( 'gulp-util' );
-const htmlMinifier = require( 'html-minifier' );
+const browserSync 		= require( 'browser-sync' );
+const del 				= require( 'del' );
+const gulp 				= require( 'gulp-help' )( require( 'gulp' ) );
+const gutil 			= require( 'gulp-util' );
+const htmlMinifier 		= require( 'html-minifier' );
 const inlineNg2Template = require( 'gulp-inline-ng2-template' );
-const replace = require( 'gulp-replace-task' );
-const stripDebug = require( 'gulp-strip-debug' );
-const typescript = require( 'gulp-typescript' );
-const webpack = require( 'webpack' );
+const replace 			= require( 'gulp-replace-task' );
+const stripDebug 		= require( 'gulp-strip-debug' );
+const typescript 		= require( 'gulp-typescript' );
+const webpack 			= require( 'webpack' );
 
 /**
  * Gulp task: Build TypeScript (for development)
  */
-gulp.task( 'typescript:build--dev', 'Compile TypeScript into JavaScript (for development)', () => {
+gulp.task( 'typescript:build--dev', 'Compile TypeScript into JavaScript & inline HTML templates (for development)', () => {
 
 	return gulp
 
 		// We use the classic source (not the one the typescript plugin recommends) because weirdly enough performance is better
 		.src( [
-			`${ config.paths.project.scripts }/**/*.ts`,
-			`${ config.paths.typings }/index.d.ts` // Also extended definitions
+			`${ gulpConfig.paths.project.scripts }/**/*.ts`,
+			`${ gulpConfig.paths.typings }/index.d.ts` // Also extended definitions
 		] )
 
-		// Set project configuration (for frontend)
+		// Set project configuration
 		.pipe( replace( {
-			patterns: [
-				{
+			patterns: [ {
 					match: 'CONFIG_ENV', // With @@ upfront
 					replacement: 'dev'
-				},
-				{
+				}, {
 					match: 'CONFIG_API', // With @@ upfront
-					replacement: project.server.api
-				},
-				{
+					replacement: projectConfig.server.api
+				}, {
 					match: 'CONFIG_NAME', // With @@ upfront
-					replacement: project.name
-				}
-			]
+					replacement: projectConfig.name
+				} ]
 		} ) )
 
 		// Inline Angular 2 component templates first (formatting is better this way)
 		.pipe( inlineNg2Template( {
-			base: config.paths.project.scripts, // Angular 2 app folder
+			base: gulpConfig.paths.project.scripts, // Angular 2 app folder
 			indent: 0,
-			target: 'es6', // Compiled later on to ES5 anyway
+			target: 'es6', // Nearest to TypeScript, compiled later on to ES5 anyway
 			templateExtension: '.html',
 			useRelativePaths: true
 		} ) )
 
 		// Transpile TypeScript to JavaScript, depending on TS config
 		.pipe(
-			typescript( typescript.createProject( './tsconfig.json' ) ),
+			typescript( typescript.createProject( './tsconfig.json' ) ), // Absolute path
 			undefined,
 			typescript.reporter.fullReporter()
 		)
 
-		.pipe( gulp.dest( config.paths.project.dest ) )
+		.pipe( gulp.dest( gulpConfig.paths.project.dest ) )
 		.pipe( browserSync.stream( { once: true } ) );
 
 } );
@@ -76,39 +72,35 @@ gulp.task( 'typescript:build--dev', 'Compile TypeScript into JavaScript (for dev
 /**
  * Gulp task: Build TypeScript (for production)
  */
-gulp.task( 'typescript:build--prod', 'Compile TypeScript into JavaScript (for production)', () => {
+gulp.task( 'typescript:build--prod', 'Compile TypeScript into JavaScript & inline and minify HTML templates (for production)', () => {
 
 	return gulp
 
 		// We use the classic source (not the one the typescript plugin recommends) because weirdly enough performance is better
 		.src( [
-			`${ config.paths.project.scripts }/**/*.ts`,
-			`${ config.paths.typings }/index.d.ts` // Also extended definitions
+			`${ gulpConfig.paths.project.scripts }/**/*.ts`,
+			`${ gulpConfig.paths.typings }/index.d.ts` // Also extended definitions
 		] )
 
-		// Set project configuration (for frontend)
+		// Set project configuration
 		.pipe( replace( {
-			patterns: [
-				{
+			patterns: [ {
 					match: 'CONFIG_ENV', // With @@ upfront
 					replacement: 'prod'
-				},
-				{
+				}, {
 					match: 'CONFIG_API', // With @@ upfront
-					replacement: project.server.api
-				},
-				{
+					replacement: projectConfig.server.api
+				}, {
 					match: 'CONFIG_NAME', // With @@ upfront
-					replacement: project.name
-				}
-			]
+					replacement: projectConfig.name
+				} ]
 		} ) )
 
 		// Inline Angular 2 component templates first (formatting is better this way)
 		.pipe( inlineNg2Template( {
-			base: config.paths.project.scripts, // Angular 2 app folder
+			base: gulpConfig.paths.project.scripts, // Angular 2 app folder
 			indent: 0,
-			target: 'es6', // Compiled later on to ES5 anyway
+			target: 'es6', // Nearest to TypeScript, compiled later on to ES5 anyway
 			templateExtension: '.html',
 			templateProcessor: ( ext, file ) => { // Minify HTML
 				return htmlMinifier.minify( file, htmlMinifierOptions );
@@ -118,7 +110,7 @@ gulp.task( 'typescript:build--prod', 'Compile TypeScript into JavaScript (for pr
 
 		// Transpile TypeScript to JavaScript, depending on TS config
 		.pipe(
-			typescript( typescript.createProject( './tsconfig.json' ) ),
+			typescript( typescript.createProject( './tsconfig.json' ) ), // Absolute path
 			undefined,
 			typescript.reporter.fullReporter()
 		)
@@ -126,20 +118,20 @@ gulp.task( 'typescript:build--prod', 'Compile TypeScript into JavaScript (for pr
 		// Remove all debugging information (like console logs & alerts)
 		.pipe( stripDebug() )
 
-		.pipe( gulp.dest( `${ config.paths.project.dest }/temp` ) ); // Only temporary save ...
+		.pipe( gulp.dest( `${ gulpConfig.paths.project.dest }/temp` ) ); // Only temporary save ...
 
 } );
 
 /**
  * Gulp task: Bundle TypeScript (for production)
  */
-gulp.task( 'typescript:bundle--prod', 'Bundle JavaScript into packages (for production)', [ 'typescript:build--prod' ], ( done ) => {
+gulp.task( 'typescript:bundle--prod', 'Bundle all JavaScript files into 3 seperate packages (for production)', [ 'typescript:build--prod' ], ( done ) => {
 
 	webpack( {
 		entry: {
 
 			// App bundle
-			app: `${ config.paths.project.dest }/temp/main`,
+			app: `${ gulpConfig.paths.project.dest }/temp/main`,
 
 			// Vendor bundle (checks in the node_modules folder)
 			vendor: [
@@ -165,13 +157,16 @@ gulp.task( 'typescript:bundle--prod', 'Bundle JavaScript into packages (for prod
 
 		},
 		output: {
-			path: config.paths.project.dest,
+			path: gulpConfig.paths.project.dest,
 			filename: '[name].bundle.min.js'
 		},
 		resolve: {
 			extensions: [ '', '.js' ]
 		},
 		plugins: [
+
+			// Remove duplicates (mostly dependencies that exist twice)
+			new webpack.optimize.DedupePlugin(),
 
 			// Minify JavaScript (Angular 2 only allows some minifaction for now ...)
 			new webpack.optimize.UglifyJsPlugin( {
@@ -181,7 +176,7 @@ gulp.task( 'typescript:bundle--prod', 'Bundle JavaScript into packages (for prod
 					warnings: false // Hide optimization warnings
 				},
 				output: {
-					comments: false
+					comments: false // Really do remove them all
 				}
 			} ),
 
