@@ -4,7 +4,7 @@ This is the official repository for the DHBW study research project called "Proj
 
 ---
 
-**[Follow this link if you want to download, setup and run this application on your machine.](./docs/SETUP.md)**
+**[Follow this link if you want to download, setup and run this application on your machine.](docs/SETUP.md)**
 
 ---
 

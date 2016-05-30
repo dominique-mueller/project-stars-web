@@ -1,4 +1,4 @@
-[navigate back](./../SETUP.md)
+[navigate back](../SETUP.md)
 
 # Install NodeJS on Windows
 
