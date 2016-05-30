@@ -1,0 +1,46 @@
+// ATOMIC COMPONENT: TOOLTIP
+// The cheap version, no JavaScript involved at all
+// Should be replaced when a proper Angular 2 Tooltip implementation exists
+// Inspired by http://kushagragour.in/lab/hint/
+
+.has-tooltip {
+	position: relative;
+	cursor: pointer;
+	z-index: 2;
+
+	&::after {
+		position: absolute;
+		bottom: 88%; // Shift a bit down
+		left: 50%;
+		max-width: 16rem; // Setup a meximum
+		padding: .6rem 1rem .7rem;
+		transform: translate(-47.5%, .3rem); // 50% makes the thing blurry
+		transition: opacity $anim-speed-normal $anim-easing,
+					transform $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+		border-radius: .3rem;
+		background-color: $color-black;
+		color: $color-white;
+		font-size: 1.2rem;
+		line-height: 1;
+		text-align: center;
+		white-space: nowrap; // Put it into one line
+		content: attr(data-tooltip);
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	&:hover {
+
+		&::after {
+			transform: translate(-47.5%, 0); // 50% makes the thing blurry
+			transition: opacity $anim-speed-normal $anim-easing $anim-speed-normal,
+						transform $anim-speed-normal $anim-easing $anim-speed-normal,
+						visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+			opacity: 1;
+			visibility: visible;
+		}
+
+	}
+
+}

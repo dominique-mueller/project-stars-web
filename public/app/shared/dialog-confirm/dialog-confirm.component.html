@@ -7,8 +7,8 @@
 	<!-- Dialog header -->
 	<header class="dialog-confirm__box-header">
 		<h1 class="dialog-confirm__box-header-title">{{ title }}</h1>
-		<button class="button button-invisible dialog-confirm__box-header-action" type="button"
-			(click)="onClickNo()">
+		<button class="button button-invisible dialog-confirm__box-header-action has-tooltip" type="button"
+			(click)="onClickNo()" data-tooltip="close">
 			<app-icon name="close" size="18" color="#606060"></app-icon>
 		</button>
 	</header>

@@ -17,12 +17,26 @@ import { Folder } from './folder.model';
 export class FolderLogicService {
 
 	/**
-	 * Get a folder by providing its ID (pure function)
+	 * Get the root folder
 	 * @param  {List<Folder>} folders  List of folders to search in
-	 * @param  {number}       folderId Folder ID
+	 * @return {Folder}                Root folder (must exist)
+	 */
+	public getRootFolder( folders: List<Folder> ): Folder {
+
+		// Find the root folder by the isRoot attribute
+		return <Folder> folders.find( ( folder: Folder ) => {
+			return folder.get( 'isRoot' );
+		} );
+
+	}
+
+	/**
+	 * Get a folder by its ID (pure function)
+	 * @param  {List<Folder>} folders  List of folders to search in
+	 * @param  {string}       folderId Folder ID
 	 * @return {Folder}                Folder result OR null
 	 */
-	public getFolderByFolderId( folders: List<Folder>, folderId: number ): Folder {
+	public getFolderByFolderId( folders: List<Folder>, folderId: string ): Folder {
 
 		// We try to find the folder, and return null if we cannot find it
 		let result: Folder = folders.find( ( folder: Folder ) => {
@@ -33,12 +47,12 @@ export class FolderLogicService {
 	}
 
 	/**
-	 * Get all subfolders living inside a parent folder (pure function)
+	 * Get all subfolders in order which live inside a parent folder (pure function)
 	 * @param  {List<Folder>} folders  List of all folders
-	 * @param  {number}       folderId Folder ID
+	 * @param  {string}       folderId Folder ID
 	 * @return {List<Folder>}          List of subfolders in the folder
 	 */
-	public getSubfoldersByFolderId( folders: List<Folder>, folderId: number ): List<Folder> {
+	public getSubfoldersByFolderId( folders: List<Folder>, folderId: string ): List<Folder> {
 
 		// We create a new list and put only the subfolders in it (ordered)
 		return List<Folder>().withMutations( ( result: List<Folder> ) => {
@@ -52,16 +66,15 @@ export class FolderLogicService {
 	}
 
 	/**
-	 * Get all folders recursively living inside the provided folder (pure function)
+	 * Get all subfolder IDs recursively which live inside the provided folder (pure function)
 	 * @param  {List<Folder>}  folders  List of all folders
-	 * @param  {number}        folderId Folder ID
-	 * @return {Array<number>}          List of folder IDs
+	 * @param  {string}        folderId Folder ID
+	 * @return {Array<string>}          List of folder IDs
 	 */
-	public getRecursiveSubfolderIds( folders: List<Folder>, folderId: number ): Array<number> {
+	public getRecursiveSubfolderIds( folders: List<Folder>, folderId: string ): Array<string> {
 
-		// Setup
 		let addedToList: boolean = true;
-		let result: Array<number> = [ folderId ];
+		let result: Array<string> = [];
 
 		// Continue with the next round if we just added a folder to the list
 		while ( addedToList ) {
@@ -82,8 +95,25 @@ export class FolderLogicService {
 
 		}
 
-		// Done
 		return result;
+
+	}
+
+	/**
+	 * Filter folders, used instead of a pipe because intermedia ngFor variable doesn't exist (pure function)
+	 * @param  {List<Folder>} folders    List of all folders
+	 * @param  {string}       filterText Filter text
+	 * @return {List<Folder>}            List of filtered folders
+	 */
+	public filterFolders( folders: List<Folder>, filterText: string ): List<Folder> {
+
+		// Filter folders
+		// - Filter text must exist at least once in the name
+		// - Filtering is not case-sensitive
+		const optimizedFilterText: string = filterText.toLowerCase(); // Do it only once
+		return <List<Folder>> folders.filter( ( folder: Folder ) => {
+			return folder.get( 'name' ).toLowerCase().indexOf( optimizedFilterText ) > -1;
+		} );
 
 	}
 

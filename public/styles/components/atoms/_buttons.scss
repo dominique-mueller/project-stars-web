@@ -8,13 +8,19 @@
 	box-shadow: none;
 	cursor: pointer;
 
-	&[disabled],
-	&[disabled]:hover,
-	&[disabled]:focus,
-	&[disabled]:active {
-		opacity: .33 !important;
-		cursor: not-allowed !important;
+	&[disabled] {
 		transform: scale(1) !important;
+		cursor: not-allowed !important;
+		opacity: .33 !important;
+
+		&:hover,
+		&:focus,
+		&:active {
+			transform: scale(1) !important;
+			cursor: not-allowed !important;
+			opacity: .33 !important;
+		}
+
 	}
 
 	&:focus {
@@ -26,25 +32,25 @@
 // Styles
 
 .button-primary {
+	border-radius: .1rem;
 	background-color: $color-primary;
 	color: $color-white;
-	border-radius: .1rem;
 }
 
 .button-secondary {
+	border-radius: .1rem;
 	background-color: $color-gallery;
 	color: $color-gray;
-	border-radius: .1rem;
 }
 
 .button-danger {
+	border-radius: .1rem;
 	background-color: $color-danger;
 	color: $color-white;
-	border-radius: .1rem;
 }
 
 .button-success {
+	border-radius: .1rem;
 	background-color: $color-success;
 	color: $color-white;
-	border-radius: .1rem;
 }

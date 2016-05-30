@@ -40,7 +40,8 @@ redirectHTTP.use('/', router.Redirect);
 //https server. requires https for whole domain
 https.createServer({
 	key: fs.readFileSync('certs/key.pem'),
-	cert: fs.readFileSync('certs/cert.pem')
+	cert: fs.readFileSync('certs/cert.pem'),
+	passphrase: 'stars-web'
 }, app).listen(443, "localhost", function(){ //listen on https default port 443
 	var host = this.address().address;
 	var port = this.address().port;

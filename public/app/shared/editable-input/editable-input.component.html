@@ -6,7 +6,7 @@
 <!-- Actions for non-edit mode -->
 <ul class="input-editable__actions" [class.is-visible]="!isInEditMode">
 	<li class="input-editable__action">
-		<button class="button input-editable__action-button" type="button" (click)="clickOnEdit( input )">
+		<button class="button input-editable__action-button has-tooltip" type="button" (click)="clickOnEdit( input )" data-tooltip="edit">
 			<app-icon name="edit" size="14" color="#606060"></app-icon>
 		</button>
 	</li>
@@ -15,11 +15,11 @@
 <!-- Actions for edit mode -->
 <ul class="input-editable__actions" [class.is-visible]="isInEditMode">
 	<li class="input-editable__action">
-		<button class="button input-editable__action-button" type="button" (click)="clickOnSave( input.value )">
+		<button class="button input-editable__action-button has-tooltip" type="button" (click)="clickOnSave( input.value )" data-tooltip="save">
 			<app-icon name="done" size="18" color="#606060"></app-icon>
 		</button>
 	</li><li class="input-editable__action">
-		<button class="button input-editable__action-button" type="button" (click)="clickOnCancel( input )">
+		<button class="button input-editable__action-button has-tooltip" type="button" (click)="clickOnCancel( input )" data-tooltip="cancel">
 			<app-icon name="close" size="18" color="#606060"></app-icon>
 		</button>
 	</li>

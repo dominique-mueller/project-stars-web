@@ -38,13 +38,13 @@ export class MoveIntoFolderComponent {
 	 * Input Element ID
 	 */
 	@Input()
-	private elementId: number;
+	private elementId: string;
 
 	/**
 	 * Input: ID of the current folder
 	 */
 	@Input()
-	private currentPathId: number;
+	private currentPathId: string;
 
 	/**
 	 * Input: List of all folders
@@ -56,7 +56,7 @@ export class MoveIntoFolderComponent {
 	 * Output: Select event, emits new folder ID
 	 */
 	@Output()
-	private select: EventEmitter<number>;
+	private select: EventEmitter<string>;
 
 	/**
 	 * Change detector
@@ -115,7 +115,7 @@ export class MoveIntoFolderComponent {
 		this.elementId = null;
 		this.currentPathId = null;
 		this.folders = List<Folder>();
-		this.select = new EventEmitter();
+		this.select = new EventEmitter<string>();
 		this.visibleFolder = <Folder> Map<string, any>();
 		this.nextVisibleFolder = <Folder> Map<string, any>();
 		this.visibleSubfolders = List<Folder>();
@@ -180,17 +180,18 @@ export class MoveIntoFolderComponent {
 
 	/**
 	 * Switch to another folder
-	 * @param {number} folderId  Folder ID
+	 * @param {string} folder    Folder object (because we do need the isRoot as well, not only the ID)
 	 * @param {string} direction Navigation direction, 'up' or 'down'
 	 */
-	private onSwitchToFolder( folderId: number, direction: string ): void {
+	private onSwitchToFolder( folder: Folder, direction: string ): void {
 
 		// Skip if we're already in the root folder
-		if ( typeof folderId === 'undefined' ) {
+		if ( folder.get( 'isRoot' ) ) {
 			return;
 		}
 
 		// Get new current folder and all its subfolders
+		let folderId: string = direction === 'up' ? folder.get( 'path' ) : folder.get( 'id' );
 		this.nextVisibleFolder = this.folderLogicService.getFolderByFolderId( this.folders, folderId );
 		this.nextVisibleSubfolders = this.folderLogicService.getSubfoldersByFolderId( this.folders, folderId );
 

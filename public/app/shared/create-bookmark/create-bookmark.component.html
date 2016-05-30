@@ -7,14 +7,14 @@
 
 <!-- Dropdown menu -->
 <div class="create-bookmark__dropdown" [class.is-visible]="isOpen"
-	(clickOutside)="closeDropdownOnBlur( $event, trigger, titleInput, urlInput )">
+	(appClickOutside)="closeDropdownOnBlur( $event, trigger, titleInput, urlInput )">
 	<article class="create-bookmark__dropdown-content">
 
 		<!-- Dropdown header -->
 		<header class="create-bookmark__dropdown-header">
 			<h1 class="create-bookmark__dropdown-header-title">Create new bookmark</h1>
-			<button class="button create-bookmark__dropdown-header-action" type="button"
-				(click)="closeDropdown( titleInput, urlInput )">
+			<button class="button create-bookmark__dropdown-header-action has-tooltip" type="button"
+				(click)="closeDropdown( titleInput, urlInput )" data-tooltip="close">
 				<app-icon name="close" size="16" color="#444"></app-icon>
 			</button>
 		</header>

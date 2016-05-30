@@ -1,16 +1,17 @@
 <!-- Dropdown trigger -->
-<button class="button" type="button" (click)="openDropdown()" #trigger>
+<button class="button has-tooltip" type="button" (click)="openDropdown()" #trigger data-tooltip="move">
 	<ng-content></ng-content>
 </button>
 
 <!-- Dropdown menu -->
-<div class="move-into-folder__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+<div class="move-into-folder__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<article class="move-into-folder__dropdown-content">
 
 		<!-- Dropdown header -->
 		<header class="move-into-folder__dropdown-header">
 			<h1 class="move-into-folder__dropdown-header-title">Move {{ elementType }}</h1>
-			<button class="button move-into-folder__dropdown-header-action" type="button" (click)="closeDropdown()">
+			<button class="button move-into-folder__dropdown-header-action has-tooltip"
+				type="button" (click)="closeDropdown()" data-tooltip="close">
 				<app-icon name="close" size="16" color="#444"></app-icon>
 			</button>
 		</header>
@@ -19,8 +20,8 @@
 
 		<!-- Dropdown subheader showing the current folder -->
 		<button class="button move-into-folder__dropdown-subheader is-visible" type="button"
-			[class.is-root]="visibleFolder.get( 'id' ) === 0" [class.is-animating-out]="isNavigating !== ''"
-			(click)="onSwitchToFolder( visibleFolder.get( 'path' ), 'up' )">
+			[class.is-root]="visibleFolder.get( 'isRoot' )" [class.is-animating-out]="isNavigating !== ''"
+			(click)="onSwitchToFolder( visibleFolder, 'up' )">
 			<app-icon name="chevron_left" size="18" color="#606060">
 			</app-icon>
 			{{ visibleFolder.get( 'name' ) }}
@@ -28,7 +29,7 @@
 
 		<!-- Temporary dropdown subheader showing the current folder, for animation purposes -->
 		<button class="button move-into-folder__dropdown-subheader is-hidden" type="button"
-			[class.is-root]="nextVisibleFolder.get( 'id' ) === 0" [class.is-animating-in]="isNavigating !== ''">
+			[class.is-root]="nextVisibleFolder.get( 'isRoot' )" [class.is-animating-in]="isNavigating !== ''">
 			<app-icon name="chevron_left" size="18" color="#606060">
 			</app-icon>
 			{{ nextVisibleFolder.get( 'name' ) }}
@@ -43,7 +44,7 @@
 			<li class="move-into-folder__dropdown-folder" *ngFor="let subfolder of visibleSubfolders">
 				<button class="button move-into-folder__dropdown-folder-action" type="button"
 					[disabled]="elementType === 'folder' && subfolder.get( 'id' ) === elementId"
-					(click)="onSwitchToFolder( subfolder.get( 'id' ), 'down' )">
+					(click)="onSwitchToFolder( subfolder, 'down' )">
 					<app-icon name="folder" size="18" color="#606060"></app-icon>
 					<span class="move-into-folder__dropdown-folder-name">{{ subfolder.get( 'name' ) }}</span>
 					<app-icon name="chevron_right" size="18" color="#606060"></app-icon>

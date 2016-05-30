@@ -6,7 +6,7 @@
 </button>
 
 <!-- Dropdown menu -->
-<ul class="dropdown__list" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+<ul class="dropdown__list" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<li *ngFor="let item of items" [class.dropdown__divider]="item.type === 'divider'">
 		<a class="dropdown__link" *ngIf="item.type === 'link'" (click)="onSelect( item.value )">
 			{{ item.label }}

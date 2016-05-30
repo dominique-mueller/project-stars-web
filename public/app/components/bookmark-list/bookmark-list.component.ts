@@ -14,6 +14,7 @@ import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details.component';
 import { FolderDetailsComponent } from './../folder-details/folder-details.component';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
@@ -38,9 +39,6 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	host: {
 		class: 'bookmark-list'
 	},
-	providers: [
-		BookmarkLogicService
-	],
 	selector: 'app-bookmark-list',
 	templateUrl: './bookmark-list.component.html'
 } )
@@ -97,6 +95,11 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	private labelDataService: LabelDataService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -114,7 +117,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Map of labels
 	 */
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Bookmark template for a new bookmark
@@ -129,11 +132,10 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * ID of the currently opened folder
 	 */
-	private openedFolderId: number;
+	private openedFolderId: string;
 
 	/**
 	 * Name of the currently opened folder
-	 * TODO: Maybe show breadscrumbs instead?
 	 */
 	private openedFolderName: string;
 
@@ -141,7 +143,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 	 * Currently selected element details
 	 */
 	private selectedElement: {
-		id: number,
+		id: string,
 		type: string
 	};
 
@@ -156,7 +158,9 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		bookmarkLogicService: BookmarkLogicService,
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
-		labelDataService: LabelDataService ) {
+		labelDataService: LabelDataService,
+		notifierService: NotifierService
+	) {
 
 		// Initialize
 		this.router = router;
@@ -167,11 +171,12 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.folderDataService = folderDataService;
 		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.bookmarks = List<Bookmark>();
 		this.folders = List<Folder>();
-		this.labels = Map<number, Label>();
+		this.labels = Map<string, Label>();
 		this.bookmarkTemplate = <Bookmark> Map<string, any>();
 		this.folderTemplate = <Folder> Map<string, any>();
 		this.openedFolderId = null;
@@ -195,12 +200,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.resetSearch();
 
 		// Get folder ID from the route URL
-		// Pre-filter: If the ID is not a number, we navigate back to the root folder
-		if ( /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
-			this.openedFolderId = parseInt( curr.parameters[ 'id' ], 10 );
-		} else {
-			this.navigateToFolder( 0 );
-		}
+		this.openedFolderId = curr.parameters[ 'id' ];
 
 	}
 
@@ -242,7 +242,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 						this.uiService.setDocumentTitle( this.openedFolderName );
 						this.changeDetector.markForCheck(); // Trigger change detection
 					} else {
-						this.navigateToFolder( 0 );
+						this.navigateToFolder( null ); // Absolute, to the root folder
 					}
 
 				}
@@ -259,7 +259,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
@@ -291,16 +291,17 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	}
 
-	public OnActivate(): void {
-		console.log('#######');
-	}
-
 	/**
 	 * Navigate to another route
-	 * @param {number} folderId Name of the subfolder
+	 * @param {string} folderId Name of the subfolder
 	 */
-	private navigateToFolder( folderId: number ): void {
-		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
+	private navigateToFolder( folderId: string ): void {
+		if ( folderId === null ) {
+			this.uiService.unsetOpenedFolderId(); // Remove opened folder
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute, root folder
+		} else {
+			this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
+		}
 	}
 
 	/**
@@ -314,27 +315,43 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Create new bookmark
-	 * @param {any} data Bookmark data
+	 * @param {any} newBookmark Bookmark data
 	 */
-	private onCreateBookmark( data: any ): void {
+	private onBookmarkCreate( newBookmark: any ): void {
 
-		// Add additional data to bookmark before creating it
-		data.path = this.openedFolderId;
-		data.position = this.bookmarks.size + 1;
-		this.bookmarkDataService.addBookmark( data );
+		// Add more data first
+		newBookmark.path = this.openedFolderId;
+		newBookmark.position = this.bookmarks.size + 1; // Just append to the bookmark list
+
+		// Try to create the bookmark
+		this.bookmarkDataService.addBookmark( newBookmark )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Bookmark successfully created.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while creating the bookmark.' );
+			} );
 
 	}
 
 	/**
 	 * Create new folder
-	 * @param {any} data Folder data
+	 * @param {any} newFolder Folder data
 	 */
-	private onCreateFolder( data: any ): void {
+	private onFolderCreate( newFolder: any ): void {
 
-		// Add additional data to folder before creating it
-		data.path = this.openedFolderId;
-		data.position = this.folders.size + 1;
-		this.folderDataService.addFolder( data );
+		// Add more data first
+		newFolder.path = this.openedFolderId;
+		newFolder.position = this.folders.size + 1; // Just append to the folder list
+
+		// Try to create the folder
+		this.folderDataService.addFolder( newFolder )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Folder successfully created.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while creating the folder.' );
+			} );
 
 	}
 

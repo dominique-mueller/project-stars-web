@@ -4,13 +4,13 @@
 </button>
 
 <!-- Dropdown menu -->
-<div class="color-picker__dropdown" [class.is-visible]="isOpen" (clickOutside)="closeDropdownOnBlur( $event, trigger )">
+<div class="color-picker__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
 	<article class="color-picker__dropdown-content">
 
 		<!-- Dropdown header -->
 		<header class="color-picker__dropdown-header">
 			<h1 class="color-picker__dropdown-header-title">Pick a color</h1>
-			<button class="button color-picker__dropdown-header-action" type="button" (click)="closeDropdown()">
+			<button class="button color-picker__dropdown-header-action has-tooltip" type="button" (click)="closeDropdown()" data-tooltip="close">
 				<app-icon name="close" size="16" color="#444"></app-icon>
 			</button>
 		</header>

@@ -32,13 +32,13 @@ export class AssignLabelComponent {
 	 * Input: List of labels
 	 */
 	@Input()
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Output: Select event, emits label ID
 	 */
 	@Output()
-	private select: EventEmitter<number>;
+	private select: EventEmitter<string>;
 
 	/**
 	 * Internal: Dropdown visibility status
@@ -51,8 +51,8 @@ export class AssignLabelComponent {
 	constructor() {
 
 		// Setup
-		this.labels = Map<number, Label>();
-		this.select = new EventEmitter();
+		this.labels = Map<string, Label>();
+		this.select = new EventEmitter<string>();
 		this.isOpen = false;
 
 	}
@@ -87,9 +87,9 @@ export class AssignLabelComponent {
 
 	/**
 	 * Select a label
-	 * @param {number} labelId ID of the selected label
+	 * @param {string} labelId ID of the selected label
 	 */
-	private onSelectLabel( labelId: number ): void {
+	private onSelectLabel( labelId: string ): void {
 		this.select.emit( labelId );
 		this.closeDropdown();
 	}

@@ -1,0 +1,24 @@
+{
+	"paths": {
+		"root": ".",
+		"project": {
+			"base": "./public",
+			"scripts": "./public/app",
+			"styles": "./public/styles",
+			"dest": "./build"
+		},
+		"assets": {
+			"base": "./public/assets",
+			"icons": "./public/assets/icons",
+			"images": "./public/assets/images",
+			"dest": "./build/assets"
+		},
+		"docs": {
+			"base": "./docs",
+			"frontend": "./docs/frontend",
+			"backend": "./docs/backend"
+		},
+		"typings": "./typings",
+		"dependencies": "./node_modules"
+	}
+}

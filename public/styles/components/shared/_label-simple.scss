@@ -20,12 +20,12 @@
 }
 
 .label-simple__action {
-	height: 2.2rem;
 	width: 2.2rem;
-	padding: .5rem; // 2.2rem - 12px icon size / 2
+	height: 2.2rem;
 	margin-left: -1.1rem; // Because this button is optional
-	opacity: .8;
+	padding: .5rem; // 2.2rem - 12px icon size / 2
 	transition: opacity $anim-speed-fast $anim-easing;
+	opacity: .8;
 
 	&:hover,
 	&:focus {

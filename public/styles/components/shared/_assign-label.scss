@@ -13,8 +13,8 @@
 	top: 0;
 	left: 0;
 	width: 26rem; // Fixed width
-	transform-origin: 0 0; // Top left
 	transform: scale(.8);
+	transform-origin: 0 0; // Top left
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
 				transform $anim-speed-normal $anim-easing;
@@ -22,7 +22,6 @@
 	box-shadow: 0 .1rem .3rem rgba($color-black, .3);
 	opacity: 0;
 	visibility: hidden;
-	overflow: hidden;
 
 	&.is-visible {
 		transform: scale(1);
@@ -33,7 +32,7 @@
 		visibility: visible;
 
 		.assign-label__dropdown-content {
-			transform: translate3D(0,0,0);
+			transform: translate3d(0, 0, 0);
 			transition: opacity $anim-speed-normal $anim-easing $anim-speed-fast,
 						transform $anim-speed-normal $anim-easing $anim-speed-fast;
 			opacity: 1;
@@ -44,7 +43,7 @@
 }
 
 .assign-label__dropdown-content {
-	transform: translate3D(0,-.8rem,0);
+	transform: translate3d(0, -.8rem, 0);
 	transition: opacity $anim-speed-normal $anim-easing,
 				transform $anim-speed-normal $anim-easing;
 	opacity: 0;
@@ -55,16 +54,16 @@
 	height: 2.2rem;
 	padding-right: 1rem;
 	padding-left: 2.2rem;
+	transition: background-color $anim-speed-normal $anim-easing,
+				opacity $anim-speed-normal $anim-easing;
+	border: .1rem solid $color-gray;
 	border-radius: .1rem;
 	background-color: transparent;
-	border: .1rem solid $color-gray;
 	font-size: 1.1rem;
 	line-height: 2rem;
 	text-transform: uppercase;
-	vertical-align: top;
 	opacity: .75;
-	transition: background-color $anim-speed-normal $anim-easing,
-				opacity $anim-speed-normal $anim-easing;
+	vertical-align: top;
 
 	&:hover,
 	&:focus {
@@ -97,7 +96,7 @@
 .assign-label__dropdown-header-title {
 	flex: 1;
 	font-size: 1.3rem;
-	font-weight: bold;
+	font-weight: 700;
 	letter-spacing: .01rem;
 	line-height: 4rem;
 }
@@ -105,8 +104,8 @@
 .assign-label__dropdown-header-action {
 	padding-right: 1.2rem;
 	padding-left: 1.2rem;
-	opacity: .5;
 	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: .5;
 
 	&:hover,
 	&:focus {
@@ -139,9 +138,9 @@
 	position: relative;
 	width: 100%;
 	padding: 1rem 1.2rem 1rem 3.5rem;
+	transition: background-color $anim-speed-normal $anim-easing;
 	font-size: 1.3rem;
 	text-align: left;
-	transition: background-color $anim-speed-normal $anim-easing;
 
 	&:hover,
 	&:focus,

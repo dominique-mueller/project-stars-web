@@ -14,6 +14,7 @@ import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../ser
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.component';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
@@ -91,6 +92,11 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private dialogConfirmService: DialogConfirmService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -98,7 +104,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Current bookmark ID
 	 */
-	private bookmarkId: number;
+	private bookmarkId: string;
 
 	/**
 	 * Current bookmark
@@ -113,12 +119,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Map of all labels
 	 */
-	private allLabels: Map<number, Label>;
+	private allLabels: Map<string, Label>;
 
 	/**
 	 * Map of all currently unassigned labels
 	 */
-	private unassignedLabels: Map<number, Label>;
+	private unassignedLabels: Map<string, Label>;
 
 	/**
 	 * Visibility status flag (for animation purposes)
@@ -138,7 +144,9 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		folderLogicService: FolderLogicService,
 		labelDataService: LabelDataService,
 		labelLogicService: LabelLogicService,
-		dialogConfirmService: DialogConfirmService) {
+		dialogConfirmService: DialogConfirmService,
+		notifierService: NotifierService
+	) {
 
 		// Initialize
 		this.router = router;
@@ -151,14 +159,15 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.labelDataService = labelDataService;
 		this.labelLogicService = labelLogicService;
 		this.dialogConfirmService = dialogConfirmService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.serviceSubscriptions = [];
 		this.bookmarkId = null;
 		this.bookmark = null;
 		this.folders = List<Folder>();
-		this.allLabels = Map<number, Label>();
-		this.unassignedLabels = Map<number, Label>();
+		this.allLabels = Map<string, Label>();
+		this.unassignedLabels = Map<string, Label>();
 		this.isVisible = false;
 
 	}
@@ -170,18 +179,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
 		// Get bookmark ID from the route URL
-		// Pre-filter: If the ID is not a number, we navigate back
-		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
-			this.bookmarkId = parseInt( curr.parameters[ 'id' ], 10 );
-		} else {
-			this.onClose();
-		}
+		this.bookmarkId = curr.parameters[ 'id' ];
 
 	}
 
 	/**
 	 * Call this when the view gets initialized
-	 * We do NOT land here if we have been thrown out in the 'routerOnActive' function above
 	 */
 	public ngOnInit(): void {
 
@@ -227,7 +230,7 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				if ( labels.size > 0 ) {
 
 					this.allLabels = labels;
@@ -286,14 +289,19 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Animate out, navigate when animation is done
-		const folderId: number = ( this.bookmark !== null && this.bookmark.size > 0 ) ? this.bookmark.get( 'path' ) : 0;
-		this.isVisible = false;
-		setTimeout(
-			() => {
-				this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
-			},
-			275 // Needs 250, plus some (maybe unnecessary) extra time
-		);
+		if ( this.bookmark !== null && this.bookmark.size > 0 ) {
+			this.isVisible = false;
+			setTimeout(
+				() => {
+					this.router.navigate( [ 'bookmarks', 'view', this.bookmark.get( 'path' ) ] ); // Absolute
+				},
+				275 // Needs 250, plus some (maybe unnecessary) extra time
+			);
+		} else {
+			this.isVisible = false;
+			this.uiService.unsetOpenedFolderId();
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		}
 
 	}
 
@@ -316,7 +324,16 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 			.then( ( answer: boolean ) => {
 				if ( answer ) {
 					this.onClose();
-					this.bookmarkDataService.deleteBookmark( this.bookmarkId );
+
+					// Try to delete the bookmark
+					this.bookmarkDataService.deleteBookmark( this.bookmarkId )
+						.then( ( data: any ) => {
+							this.notifierService.notify( 'default', 'Bookmark successfully deleted.' );
+						} )
+						.catch( ( error: any ) => {
+							this.notifierService.notify( 'default', 'An error occured while deleting the bookmark.' );
+						} );
+
 				}
 			} );
 
@@ -328,32 +345,76 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} newValue  New / updated value
 	 */
 	private onUpdate( attribute: string, newValue: string ): void {
-		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, attribute, newValue );
+
+		// Create updated data
+		let updatedBookmark: any = {};
+		updatedBookmark[ attribute ] = newValue;
+
+		// Try to update the bookmark
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Bookmark successfully updated.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while updating the bookmark.' );
+			} );
+
 	}
 
 	/**
 	 * Assign a new label to the current bookmark
-	 * @param {number} labelId Label ID
+	 * @param {string} labelId Label ID
 	 */
-	private assignLabel( labelId: number ): void {
-		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
+	private assignLabel( labelId: string ): void {
+
+		// Try to update the bookmark
+		this.bookmarkDataService.assignLabelToBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Label successfully added to the bookmark.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while adding the label to the bookmark.' );
+			} );
 	}
 
 	/**
 	 * Unassign a label from the current bookmark
-	 * @param {number} labelId Label ID
+	 * @param {string} labelId Label ID
 	 */
-	private unassignLabel( labelId: number ): void {
-		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId );
+	private unassignLabel( labelId: string ): void {
+
+		// Try to update the bookmark
+		this.bookmarkDataService.unassignLabelFromBookmark( this.bookmarkId, this.bookmark.get( 'labels' ), labelId )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Label successfully removed from the bookmark.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while removing the label from the bookmark.' );
+			} );
+
 	}
 
 	/**
 	 * Move bookmark into another folder
-	 * @param {number} parentFolderId New parent folder ID
+	 * @param {string} parentFolderId New parent folder ID
 	 */
-	private onMoveBookmark( parentFolderId: number ): void {
+	private onMoveBookmark( parentFolderId: string ): void {
 		this.onClose();
-		this.bookmarkDataService.updateBookmarkValue( this.bookmarkId, 'path', parentFolderId );
+
+		// Create updated data
+		let updatedBookmark: any = {
+			path: parentFolderId
+		};
+
+		// Try to udpate the bookmark
+		this.bookmarkDataService.updateBookmark( this.bookmarkId, updatedBookmark )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Bookmark successfully moved into another folder.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while moving the bookmark into another folder.' );
+			} );
+
 	}
 
 }

@@ -1,8 +1,8 @@
 /**
  * External imports
  */
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router, OnActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
@@ -11,15 +11,17 @@ import { List, Map } from 'immutable';
  * Internal imports
  */
 import { UiService } from './../../services/ui';
-import { BookmarkDataService } from './../../services/bookmark';
+import { BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { UserDataService, UserAuthService } from './../../services/user';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
 import { BookmarkSearchComponent } from './../bookmark-search/bookmark-search.component';
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
 import { LabelListComponent } from './../label-list/label-list.component';
+import { IconComponent } from './../../shared/icon/icon.component';
+import { LoaderComponent } from './../../shared/loader/loader.component';
 
 /**
  * View component (smart): Bookmarks
@@ -28,22 +30,26 @@ import { LabelListComponent } from './../label-list/label-list.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		ROUTER_DIRECTIVES,
-		IconComponent,
 		HeaderComponent,
 		BookmarkListComponent,
 		BookmarkSearchComponent,
 		BookmarkDirectoryComponent,
-		LabelListComponent
+		LabelListComponent,
+		IconComponent,
+		LoaderComponent
 	],
 	host: {
-		class: 'bookmarks'
+		class: 'bookmarks',
+		'[class.is-visible]': 'isAnimLoaded'
 	},
 	providers: [
 		BookmarkDataService,
+		BookmarkLogicService,
 		FolderDataService,
 		FolderLogicService,
 		LabelDataService,
-		UiService
+		UiService,
+		UserDataService
 	],
 	selector: 'app-bookmarks',
 	templateUrl: './bookmarks.component.html'
@@ -58,7 +64,12 @@ import { LabelListComponent } from './../label-list/label-list.component';
 		path: '/search'
 	} )
 ] )
-export class BookmarksComponent implements OnInit, OnDestroy {
+export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
+
+	/**
+	 * Change detector
+	 */
+	private changeDetector: ChangeDetectorRef;
 
 	/**
 	 * Router
@@ -81,9 +92,24 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private folderDataService: FolderDataService;
 
 	/**
+	 * Folder logic service
+	 */
+	private folderLogicService: FolderLogicService;
+
+	/**
 	 * Label data service
 	 */
 	private labelDataService: LabelDataService;
+
+	/**
+	 * User data service
+	 */
+	private userDataService: UserDataService;
+
+	/**
+	 * User authentication service
+	 */
+	private userAuthService: UserAuthService;
 
 	/**
 	 * List containing all service subscriptions
@@ -96,9 +122,14 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private folders: List<Folder>;
 
 	/**
+	 * ID of the root folder
+	 */
+	private rootFolderId: string;
+
+	/**
 	 * ID of the currently opened folder
 	 */
-	private openedFolderId: number;
+	private openedFolderId: string;
 
 	/**
 	 * Name of the currently opened folder
@@ -111,30 +142,58 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	private openedTab: number;
 
 	/**
+	 * Animation flag, for initial loading
+	 */
+	private isAnimLoaded: boolean;
+
+	/**
 	 * Constructor
 	 */
 	constructor(
+		changeDetector: ChangeDetectorRef,
 		router: Router,
 		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
-		labelDataService: LabelDataService
-		) {
+		labelDataService: LabelDataService,
+		userDataService: UserDataService,
+		userAuthService: UserAuthService
+	) {
 
 		// Initialize
+		this.changeDetector = changeDetector;
 		this.router = router;
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
 		this.folderDataService = folderDataService;
+		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
+		this.userDataService = userDataService;
+		this.userAuthService = userAuthService;
 
 		// Setup
 		this.serviceSubscriptions = [];
 		this.folders = List<Folder>();
-		this.openedFolderId = null;
+		this.rootFolderId = null; // Explicitely set to null
+		this.openedFolderId = null; // Same as in the UI store
 		this.openedFolderName = '';
-		this.openedTab = 0;
+		this.openedTab = 0; // Automatically show the folders tab
+		this.isAnimLoaded = false;
+
+	}
+
+	/**
+	 * Call this when the router gets activated
+	 * This function only handles stuff that has to do with routing
+	 */
+	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
+
+		// This route and all its subroutes are only available if the user is logged in
+		// Else we redirect to the login page
+		if ( !this.userAuthService.isUserLoggedIn() ) {
+			this.router.navigate( [ 'login' ] ); // Absolute
+		}
 
 	}
 
@@ -143,6 +202,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	 */
 	public ngOnInit(): void {
 
+		// Set title
 		this.uiService.setDocumentTitle( 'Bookmarks' );
 
 		// Get informed when the opened folder changes so that we can update the directory view
@@ -153,6 +213,12 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
+
+					// We select the root folder when the opened folder gets unselected
+					if ( this.openedFolderId === null ) {
+						this.onSelectFolder( this.rootFolderId );
+					}
+					this.changeDetector.markForCheck(); // Trigger change detection
 				}
 
 			}
@@ -161,15 +227,34 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		// Get folders from their services
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				this.folders = folders;
+				if ( folders.size > 0 ) {
+
+					// Set all folders
+					this.folders = folders;
+
+					// Find the root folder
+					// If not yet done - this is only relevant for the first visit, to get into some folder (the root here)
+					if ( this.rootFolderId === null ) {
+						this.rootFolderId = this.folderLogicService.getRootFolder( folders ).get( 'id' );
+						this.uiService.setRootFolderId( this.rootFolderId );
+						this.onSelectFolder( this.rootFolderId );
+					}
+					this.changeDetector.markForCheck(); // Trigger change detection
+
+				}
 			}
 		);
 
 		// Fetch initial data from server
-		// We do this in the bookmarks component in order to prevent multiple requests at the same time
-		this.folderDataService.loadFolders();
-		this.bookmarkDataService.loadBookmarks();
-		this.labelDataService.loadLabels();
+		// We do this here to prevent multiple requests at the same time
+		Promise.all( [
+			this.folderDataService.loadFolders(),
+			this.bookmarkDataService.loadBookmarks(),
+			this.labelDataService.loadLabels(),
+			this.userDataService.loadUser( this.userAuthService.getUserId() )
+		] ).then( () => {
+			this.isAnimLoaded = true;
+		} );
 
 		// Save subscriptions
 		this.serviceSubscriptions = [
@@ -192,10 +277,21 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Navigate to a folder (event comes from the directory)
-	 * @param {number} folderId ID of the folder we want to navigate to
+	 * Tabs: Switch to a tab
+	 * @param {number} tabId Number of the tab we want to show
 	 */
-	private onSelectFolder( folderId: number ): void {
+	private onClickOnTab( tabId: number ): void {
+		this.openedTab = tabId;
+	}
+
+	/**
+	 * Navigate to a folder when selecting one in the bookmarks directory
+	 * @param {string} folderId Folder ID
+	 */
+	private onSelectFolder( folderId: string ): void {
+
+		// Set the opened folder RIGHT NOW - otherwise the directory just says 'well ... nope'
+		this.openedFolderId = folderId;
 
 		// Update UI state
 		// This should notify other components, like the bookmark list one
@@ -204,14 +300,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		// Navigate to folder (relative)
 		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 
-	}
-
-	/**
-	 * Open / switch to tab
-	 * @param {number} tabId Number of the tab we want to show
-	 */
-	private onClickOnTab( tabId: number ): void {
-		this.openedTab = tabId;
 	}
 
 	/**
@@ -226,6 +314,28 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 		} else {
 			this.router.navigate( [ 'bookmarks', 'search', searchParameters ] ); // Absolute, matrix search parameters
 		}
+
+	}
+
+	/**
+	 * Log out request, coming from header
+	 */
+	private onLogout(): void {
+
+		// Try to log the user out, then navigate to the login page
+		this.userAuthService.logoutUser()
+
+			// Success
+			.then( ( data: any ) => {
+				console.log( 'APP > Logout successful.' );
+				this.router.navigate( [ 'login' ] ); // Absolute
+			} )
+
+			// Error
+			.catch( ( error: any ) => {
+				console.warn( 'APP > Logout not completely successful, only client-side.' );
+				this.router.navigate( [ 'login' ] ); // Absolute
+			} );
 
 	}
 

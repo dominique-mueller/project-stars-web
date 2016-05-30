@@ -17,6 +17,8 @@ ul {
 }
 
 // Reset the search input box sizing
-input[type="search"] {
-	box-sizing: inherit;
+input {
+	&[type="search"] {
+		box-sizing: inherit;
+	}
 }
