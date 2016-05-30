@@ -4,6 +4,8 @@
 
 We use **NodeJS** for different purposes. First, our entire backend is written completely in NodeJS. Second, our dependency management and automated build processes (with Gulp) both depend on NodeJS. Therefore an installation of NodeJS is required, no matter what you're planning to do.
 
+> Tip: You can use **[NVM](https://github.com/coreybutler/nvm-windows)** when working with multiple NodeJS versions.
+
 <br>
 
 ### Step 1: Download and install NodeJS

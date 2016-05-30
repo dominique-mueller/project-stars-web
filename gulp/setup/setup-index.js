@@ -10,7 +10,6 @@ const config = require( './../config.json' );
  */
 const browserSync = require( 'browser-sync' );
 const gulp = require( 'gulp' );
-const gutil = require( 'gulp-util' );
 const htmlmin = require( 'gulp-htmlmin' );
 const htmlminOptions = require( './../../.htmlminrc.json' );
 const inject = require( 'gulp-inject' );
@@ -22,8 +21,6 @@ const svgstore = require( 'gulp-svgstore' );
  * Gulp task: Setup index file (for development)
  */
 gulp.task( 'setup:index--dev', () => {
-
-	gutil.log( '> Setting up index file (DEV) ...' );
 
 	// First up, get all SVG icons, prefix them and save them temporarily
 	let tempSvgStore = gulp
@@ -108,8 +105,6 @@ gulp.task( 'setup:index--dev', () => {
  * Gulp task: Setup index file (for production)
  */
 gulp.task( 'setup:index--prod', () => {
-
-	gutil.log( '> Setting up index file (PROD) ...' );
 
 	// First up, get all SVG icons, prefix them and save them temporarily
 	let tempSvgStore = gulp

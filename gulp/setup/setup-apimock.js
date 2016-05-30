@@ -16,9 +16,7 @@ const gutil = require( 'gulp-util' );
  * TODO: Remove me when merging frontend with backend is finally done
  */
 gulp.task( 'setup:apimock', () => {
-
-	gutil.log( '> Setting up fake API mocks ...' );
-
+	gutil.log( '> TODO: Setting up the fake API should be removed!' );
 	return gulp
 		.src( [
 			`${ config.paths.project.scripts }/services/bookmark/bookmarks.mock.json`,
@@ -28,5 +26,4 @@ gulp.task( 'setup:apimock', () => {
 			`${ config.paths.project.scripts }/services/user/jwt.mock.json`
 		] )
 		.pipe( gulp.dest( `${ config.paths.project.dest }/apimock` ) );
-
 } );

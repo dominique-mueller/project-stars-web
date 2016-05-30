@@ -9,16 +9,12 @@ const config = require( './../config.json' );
  * Gulp imports
  */
 const gulp = require( 'gulp' );
-const gutil = require( 'gulp-util' );
 const typedoc = require( 'gulp-typedoc' );
 
 /**
  * Gulp task: Generate frontend documentation
  */
 gulp.task( 'docs:frontend', () => {
-
-	gutil.log( '> Generating frontend docs ...' );
-
 	return gulp
 		.src( [
 			`${ config.paths.project.scripts }/**/*.ts`,
@@ -44,8 +40,7 @@ gulp.task( 'docs:frontend', () => {
 			readme: './README.md',
 			includeDeclarations: true,
 			excludeExternals: true,
-			ignoreCompilerErrors: true // TODO: Change to false when working properly
+			ignoreCompilerErrors: true // TODO: Necessary due to TypeDoc issues
 
 		} ) );
-
 } );

@@ -24,8 +24,6 @@ const webpack = require( 'webpack' );
  */
 gulp.task( 'typescript:build--dev', () => {
 
-	gutil.log( '> Building TypeScript files (DEV) ...' );
-
 	return gulp
 
 		// We use the classic source (not the one the typescript plugin recommends) because weirdly enough performance is better
@@ -52,14 +50,13 @@ gulp.task( 'typescript:build--dev', () => {
 
 		.pipe( gulp.dest( config.paths.project.dest ) )
 		.pipe( browserSync.stream( { once: true } ) );
+
 } );
 
 /**
  * Gulp task: Build TypeScript (for production)
  */
 gulp.task( 'typescript:build--prod', () => {
-
-	gutil.log( '> Building TypeScript files (PROD) ...' );
 
 	return gulp
 
@@ -99,8 +96,6 @@ gulp.task( 'typescript:build--prod', () => {
  * Gulp task: Bundle TypeScript (for production)
  */
 gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], ( done ) => {
-
-	gutil.log( '> Bundling JavaScript files (PROD) ...' );
 
 	webpack( {
 		entry: {
