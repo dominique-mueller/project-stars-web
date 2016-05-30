@@ -7,7 +7,8 @@
 /build
 
 # Documentation build
-/docs
+/docs/frontend
+/docs/backend
 
 # Generated error logs (mostly by Node)
 *.log

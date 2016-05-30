@@ -15,10 +15,13 @@ const gutil = require( 'gulp-util' );
 /**
  * Gulp task: Clean documentation folder
  */
-gulp.task( 'docs:clean:docs', () => {
+gulp.task( 'env:clean:docs', () => {
 
 	gutil.log( '> Cleaning documentation files ...' );
 
-	return del( `${ config.paths.docs.base }/**/*` );
+	return del( [
+		`${ config.paths.docs.frontend }/**/*`,
+		`${ config.paths.docs.backend }/**/*`
+		] );
 
 } );

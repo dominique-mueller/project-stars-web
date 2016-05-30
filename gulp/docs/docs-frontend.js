@@ -25,17 +25,27 @@ gulp.task( 'docs:frontend', () => {
 			`${ config.paths.typings }/index.d.ts`
 		] )
 		.pipe( typedoc( {
+
+			// Output
 			out: config.paths.docs.frontend,
-			name: 'Project Stars',
-			module: 'commonjs',
-			target: 'es5',
-			includeDeclarations: true,
+
+			// TypeScript options
+			emitDecoratorMetadata: true,
 			experimentalDecorators: true,
-			ignoreCompilerErrors: true, // TODO: Change to false when working properly
-			excludeExternals: true,
+			module: 'commonjs',
 			moduleResolution: 'node',
+			noImplicitAny: true,
+			target: 'ES5',
+
+			// Typedoc options
+			name: 'Project Stars',
+			theme: 'default',
 			version: true,
-			theme: 'minimal'
+			readme: './README.md',
+			includeDeclarations: true,
+			excludeExternals: true,
+			ignoreCompilerErrors: true // TODO: Change to false when working properly
+
 		} ) );
 
 } );

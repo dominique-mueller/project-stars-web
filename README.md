@@ -1,6 +1,10 @@
 # Welcome to "Project stars"!
 
-This is a DHBW study project.
+This is the official repository for the DHBW study research project called "Project Stars". This repository contains both the backend and frontend source code.
+
+---
+
+**[Follow this link if you want to download, setup and run this application on your machine.](./docs/SETUP.md)**
 
 ---
 
@@ -10,7 +14,3 @@ This is a DHBW study project.
 
 **Project organizer:**
 - Ramon Bisswanger
-
----
-
-For the project documentation, please visit the [GitLab Wiki](https://gitlab.com/dominique-mueller/project-stars-web/wikis/home).
