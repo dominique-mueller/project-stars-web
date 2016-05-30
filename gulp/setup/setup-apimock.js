@@ -3,20 +3,20 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const gutil = require( 'gulp-util' );
 
 /**
  * Gulp task: Setup temp API mock data
  * TODO: Remove me when merging frontend with backend is finally done
  */
-gulp.task( 'setup:apimock', () => {
-	gutil.log( '> TODO: Setting up the fake API should be removed!' );
+gulp.task( 'setup:apimock', 'TO BE REMOVED: Setup API mocks', () => {
+	gutil.log( gutil.colors.red( 'TODO: Setting up the API mock should be removed!' ) );
 	return gulp
 		.src( [
 			`${ config.paths.project.scripts }/services/bookmark/bookmarks.mock.json`,

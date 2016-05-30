@@ -1,20 +1,22 @@
 'use strict';
 
 /**
- * Import configuration
+ * Import configurations
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
+const project = require( './../../config.json' );
+const htmlMinifierOptions = require( './../../.htmlminrc.json' );
 
 /**
  * Gulp imports
  */
 const browserSync = require( 'browser-sync' );
 const del = require( 'del' );
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const gutil = require( 'gulp-util' );
 const htmlMinifier = require( 'html-minifier' );
-const htmlMinifierOptions = require( './../../.htmlminrc.json' );
 const inlineNg2Template = require( 'gulp-inline-ng2-template' );
+const replace = require( 'gulp-replace-task' );
 const stripDebug = require( 'gulp-strip-debug' );
 const typescript = require( 'gulp-typescript' );
 const webpack = require( 'webpack' );
@@ -22,7 +24,7 @@ const webpack = require( 'webpack' );
 /**
  * Gulp task: Build TypeScript (for development)
  */
-gulp.task( 'typescript:build--dev', () => {
+gulp.task( 'typescript:build--dev', 'Compile TypeScript into JavaScript (for development)', () => {
 
 	return gulp
 
@@ -31,6 +33,24 @@ gulp.task( 'typescript:build--dev', () => {
 			`${ config.paths.project.scripts }/**/*.ts`,
 			`${ config.paths.typings }/index.d.ts` // Also extended definitions
 		] )
+
+		// Set project configuration (for frontend)
+		.pipe( replace( {
+			patterns: [
+				{
+					match: 'CONFIG_ENV', // With @@ upfront
+					replacement: 'dev'
+				},
+				{
+					match: 'CONFIG_API', // With @@ upfront
+					replacement: project.server.api
+				},
+				{
+					match: 'CONFIG_NAME', // With @@ upfront
+					replacement: project.name
+				}
+			]
+		} ) )
 
 		// Inline Angular 2 component templates first (formatting is better this way)
 		.pipe( inlineNg2Template( {
@@ -56,7 +76,7 @@ gulp.task( 'typescript:build--dev', () => {
 /**
  * Gulp task: Build TypeScript (for production)
  */
-gulp.task( 'typescript:build--prod', () => {
+gulp.task( 'typescript:build--prod', 'Compile TypeScript into JavaScript (for production)', () => {
 
 	return gulp
 
@@ -65,6 +85,24 @@ gulp.task( 'typescript:build--prod', () => {
 			`${ config.paths.project.scripts }/**/*.ts`,
 			`${ config.paths.typings }/index.d.ts` // Also extended definitions
 		] )
+
+		// Set project configuration (for frontend)
+		.pipe( replace( {
+			patterns: [
+				{
+					match: 'CONFIG_ENV', // With @@ upfront
+					replacement: 'prod'
+				},
+				{
+					match: 'CONFIG_API', // With @@ upfront
+					replacement: project.server.api
+				},
+				{
+					match: 'CONFIG_NAME', // With @@ upfront
+					replacement: project.name
+				}
+			]
+		} ) )
 
 		// Inline Angular 2 component templates first (formatting is better this way)
 		.pipe( inlineNg2Template( {
@@ -95,7 +133,7 @@ gulp.task( 'typescript:build--prod', () => {
 /**
  * Gulp task: Bundle TypeScript (for production)
  */
-gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], ( done ) => {
+gulp.task( 'typescript:bundle--prod', 'Bundle JavaScript into packages (for production)', [ 'typescript:build--prod' ], ( done ) => {
 
 	webpack( {
 		entry: {
@@ -135,11 +173,15 @@ gulp.task( 'typescript:bundle--prod', [ 'typescript:build--prod' ], ( done ) => 
 		},
 		plugins: [
 
-			// Minify JavaScript
+			// Minify JavaScript (Angular 2 only allows some minifaction for now ...)
 			new webpack.optimize.UglifyJsPlugin( {
-				mangle: false, // Necessary for Angular 2 for now
+				mangle: false, // Else we get errors, especially zone.js seems to break
 				compress: {
-					warnings: false // Just hide them ... please ...
+					screw_ie8 : true, // SCREW YOU IE ... no one likes you ...
+					warnings: false // Hide optimization warnings
+				},
+				output: {
+					comments: false
 				}
 			} ),
 

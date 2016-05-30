@@ -3,18 +3,18 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const sassLint = require( 'gulp-sass-lint' );
 
 /**
  * Gulp task: Lint all SASS files
  */
-gulp.task( 'sass:lint', () => {
+gulp.task( 'sass:lint', 'Lint SASS', () => {
 	return gulp
 		.src( `${ config.paths.project.styles }/**/*.scss` )
 		.pipe( sassLint( {

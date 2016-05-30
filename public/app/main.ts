@@ -11,7 +11,10 @@ import { Title } from '@angular/platform-browser';
  */
 import { AppComponent } from './components/app/app.component';
 
-// TODO: Set this depending on env file? => enableProdMode();
+// Set the environment (dev / prod)
+if ( '@@CONFIG_ENV' === 'prod' ) { // Will be replaced by the Gulp build process
+	enableProdMode();
+}
 
 /**
  * Bootstrap the application for the browser

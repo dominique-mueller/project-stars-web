@@ -33,8 +33,8 @@ export class AppService {
 	constructor() {
 
 		// Setup
-		this.APP_NAME = 'Project Stars';
-		this.API_URL = 'http://localhost:3000/build/apimock'; // TODO: Update
+		this.APP_NAME = '@@CONFIG_NAME'; // Will be replaced by the Gulp build process
+		this.API_URL = '@@CONFIG_API'; // Will be replaced by the Gulp build process
 		this.COLOR_PRESETS = List( [
 			'#9E9E9E',
 			'#F44336',

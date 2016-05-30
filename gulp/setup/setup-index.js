@@ -3,13 +3,13 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
 const browserSync = require( 'browser-sync' );
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const htmlmin = require( 'gulp-htmlmin' );
 const htmlminOptions = require( './../../.htmlminrc.json' );
 const inject = require( 'gulp-inject' );
@@ -20,7 +20,7 @@ const svgstore = require( 'gulp-svgstore' );
 /**
  * Gulp task: Setup index file (for development)
  */
-gulp.task( 'setup:index--dev', () => {
+gulp.task( 'setup:index--dev', 'Setup index file (for development)', () => {
 
 	// First up, get all SVG icons, prefix them and save them temporarily
 	let tempSvgStore = gulp
@@ -69,7 +69,7 @@ gulp.task( 'setup:index--dev', () => {
 			], { read: false } ),
 			{
 				transform: ( path, file ) => {
-					return `<script src="${ path }"></script>`;
+					return `<script src="${ path }" defer></script>`;
 				}
 			}
 		) )
@@ -104,7 +104,7 @@ gulp.task( 'setup:index--dev', () => {
 /**
  * Gulp task: Setup index file (for production)
  */
-gulp.task( 'setup:index--prod', () => {
+gulp.task( 'setup:index--prod', 'Setup index file (for production)', () => {
 
 	// First up, get all SVG icons, prefix them and save them temporarily
 	let tempSvgStore = gulp
@@ -151,15 +151,14 @@ gulp.task( 'setup:index--prod', () => {
 			], { read: false } ),
 			{
 				transform: ( path, file ) => {
-					return `<script src="${ path }"></script>`;
+					return `<script src="${ path }" defer></script>`;
 				}
 			}
 		) )
 
-		// Inject configuration files, with original path and inline argument (at this moment for TypeKit and SystemJS)
+		// Inject configuration files, with original path and inline argument (at this moment for TypeKit)
 		.pipe( inject(
 			gulp.src( [
-				`${ config.paths.project.base }/systemjs.config.js`,
 				`${ config.paths.project.base }/typekit.config.js`
 			], { read: false } ), {
 				starttag: '<!-- inject:js:inline -->', // Special annotation for this, else it would override the injections from above

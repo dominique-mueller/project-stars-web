@@ -3,17 +3,17 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 
 /**
  * Gulp task: Setup configuration files (at the moment for TypeKit and SystemJS)
  */
-gulp.task( 'setup:config', () => {
+gulp.task( 'setup:config', 'Setup configuration files', () => {
 	return gulp
 		.src( [
 			`${ config.paths.project.base }/systemjs.config.js`,

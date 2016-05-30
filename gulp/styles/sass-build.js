@@ -3,7 +3,7 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
@@ -11,14 +11,14 @@ const config = require( './../config.json' );
 const autoprefixer = require( 'gulp-autoprefixer' );
 const browserSync = require( 'browser-sync' );
 const cssmin = require( 'gulp-cssmin' );
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const rename = require( 'gulp-rename' );
 const sass = require( 'gulp-sass' );
 
 /**
  * Gulp task: Build all SASS files into one CSS file (for development)
  */
-gulp.task( 'sass:build--dev', () => {
+gulp.task( 'sass:build--dev', 'Compile SASS into CSS (for development)', () => {
 	return gulp
 		.src( `${ config.paths.project.styles }/style.scss` )
 		.pipe(
@@ -37,7 +37,7 @@ gulp.task( 'sass:build--dev', () => {
 /**
  * Gulp task: Build all SASS files into one CSS file (for production)
  */
-gulp.task( 'sass:build--prod', () => {
+gulp.task( 'sass:build--prod', 'Compile SASS into CSS (for development)', () => {
 	return gulp
 		.src( `${ config.paths.project.styles }/style.scss` )
 		.pipe(

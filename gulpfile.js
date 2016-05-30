@@ -3,13 +3,13 @@
 /**
  * Import configuration
  */
-const config = require( './gulp/config.json' );
+const config = require( './gulp/gulp.config.json' );
 
 /**
  * Gulp imports
  */
 const browserSync = require( 'browser-sync' );
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const gutil = require( 'gulp-util' );
 const historyApiFallback = require( 'connect-history-api-fallback' );
 const runSequence = require( 'run-sequence' );
@@ -34,82 +34,48 @@ const cssBuild = require( './gulp/styles/css-build.js' );
  * Gulp task: Build application - for development
  * TODO: Remove apimock
  */
-gulp.task( 'build:dev', ( done ) => {
-
-	gutil.log( gutil.colors.blue( '>>> Starting BUILD for DEVELOPMENT ...' ) );
-
+gulp.task( 'build:dev', '### BUILD FOR DEVELOPMENT', ( done ) => {
+	gutil.log( gutil.colors.green( 'Running build process for development environment ...' ) );
 	runSequence(
-
-		// Step 1: Clean build folder & files
 		[ 'env:clean:build' ],
-
-		// Step 2: Copy assets, setup config, build CSS & SASS & TypeScript
 		[ 'setup:assets', 'setup:config', 'setup:apimock', 'css:build--dev', 'sass:build--dev', 'typescript:build--dev' ],
-
-		// Step 3: Setup index file
 		[ 'setup:index--dev' ],
-
 		done
-
 	);
-
 } );
 
 /**
  * Gulp task: Build application - for production
  * TODO: Remove apimock
  */
-gulp.task( 'build:prod', ( done ) => {
-
-	gutil.log( gutil.colors.blue( '>>> Starting BUILD for PRODUCTION ...' ) );
-
+gulp.task( 'build:prod', '### BUILD FOR PRODUCTION', ( done ) => {
+	gutil.log( gutil.colors.green( 'Running build process for production environment ...' ) );
 	runSequence(
-
-		// Step 1: Clean build folder & files
 		[ 'env:clean:build' ],
-
-		// Step 2: Copy assets, lint as well as build CSS & SASS & TypeScript
 		[ 'setup:assets', 'sass:lint', 'typescript:lint', 'css:build--prod', 'sass:build--prod', 'typescript:bundle--prod' ],
-
-		// Step 3: Setup index file
 		[ 'setup:index--prod' ],
-
-		// Step 4: Clean temporary build files
 		[ 'env:clean:tempbuild' ],
-
 		done
-
 	);
-
 } );
 
 /**
  * Gulp task: Build documentations
  */
-gulp.task( 'build:docs', ( done ) => {
-
-	gutil.log( gutil.colors.blue( '>>> Starting BUILD for DOCUMENTATION ...' ) );
-
+gulp.task( 'build:docs', '### GENERATE DOCUMENTATION', ( done ) => {
+	gutil.log( gutil.colors.green( 'Generating documentation ...' ) );
 	runSequence(
-
-		// Step 1: Clean docs folder
 		[ 'env:clean:docs' ],
-
-		// Step 2: Build frontend docs
 		[ 'docs:frontend' ],
-
 		done
-
 	);
-
 } );
 
 /**
- * Gulp task: Browser sync watcher - FOR DEVELOPMENT ONLY
+ * Gulp task: BrowserSync watcher - FOR DEVELOPMENT ONLY
  */
-gulp.task( 'watch', [ 'build:dev' ], () => {
-
-	gutil.log( gutil.colors.blue( '>>> Starting DEV ENVIRONMENT watcher ...' ) );
+gulp.task( 'watch', '### START BROWSERSYNC WATCHER', [ 'build:dev' ], () => {
+	gutil.log( gutil.colors.green( 'Setting up BrowserSync watcher ...' ) );
 
 	// Initialize browsersync
 	browserSync.init( {

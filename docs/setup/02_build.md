@@ -4,6 +4,8 @@
 
 The frontend works on top of modern technologies which are not yet supported 100% by all browser. Furthermore, it is written in several languages that need a compilation / transpilation process so that they can be understood by browsers. Therefore, we use Gulp to create automated build processes.
 
+> You can run `npm run gulp help` to get an overview over all existing Gulp tasks.
+
 <br>
 
 ### Build for development

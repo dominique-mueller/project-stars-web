@@ -3,7 +3,7 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
@@ -11,13 +11,13 @@ const config = require( './../config.json' );
 const autoprefixer = require( 'gulp-autoprefixer' );
 const browserSync = require( 'browser-sync' );
 const cssmin = require( 'gulp-cssmin' );
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 const rename = require( 'gulp-rename' );
 
 /**
  * Gulp task: Build inline CSS file (for development)
  */
-gulp.task( 'css:build--dev', () => {
+gulp.task( 'css:build--dev', 'Optimize inline CSS (for development)', () => {
 	return gulp
 		.src( `${ config.paths.project.styles }/style-inline.css` )
 		.pipe( autoprefixer() ) // Autoprefix CSS
@@ -28,7 +28,7 @@ gulp.task( 'css:build--dev', () => {
 /**
  * Gulp task: Build inline CSS file (for production)
  */
-gulp.task( 'css:build--prod', () => {
+gulp.task( 'css:build--prod', 'Optimize inline CSS (for production)', () => {
 	return gulp
 		.src( `${ config.paths.project.styles }/style-inline.css` )
 		.pipe( autoprefixer() ) // Autoprefix CSS

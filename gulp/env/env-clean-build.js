@@ -3,18 +3,18 @@
 /**
  * Import configuration
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
 const del = require( 'del' );
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
 
 /**
  * Gulp task: Clean build folder
  */
-gulp.task( 'env:clean:build', () => {
+gulp.task( 'env:clean:build', 'Clean build folder', () => {
 	return del( [
 		`${ config.paths.project.dest }`,
 		`${ config.paths.root }/index.html`
@@ -24,6 +24,6 @@ gulp.task( 'env:clean:build', () => {
 /**
  * Gulp task: Clean temporary JS builds
  */
-gulp.task( 'env:clean:tempbuild', () => {
+gulp.task( 'env:clean:tempbuild', 'Clean temporary build folder', () => {
 	return del( `${ config.paths.project.dest }/temp` );
 } );

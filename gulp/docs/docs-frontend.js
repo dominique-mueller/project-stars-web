@@ -3,18 +3,20 @@
 /**
  * Import configurations
  */
-const config = require( './../config.json' );
+const config = require( './../gulp.config.json' );
 
 /**
  * Gulp imports
  */
-const gulp = require( 'gulp' );
+const gulp = require( 'gulp-help' )( require( 'gulp' ) );
+const gutil = require( 'gulp-util' );
 const typedoc = require( 'gulp-typedoc' );
 
 /**
  * Gulp task: Generate frontend documentation
  */
-gulp.task( 'docs:frontend', () => {
+gulp.task( 'docs:frontend', 'Generate frontend documentation', () => {
+	gutil.log( gutil.colors.yellow( `The generated frontend documentation will be found in '${ config.paths.docs.frontend }/index.html'` ) );
 	return gulp
 		.src( [
 			`${ config.paths.project.scripts }/**/*.ts`,
@@ -35,7 +37,7 @@ gulp.task( 'docs:frontend', () => {
 
 			// Typedoc options
 			name: 'Project Stars',
-			theme: 'default',
+			theme: 'default', // Produces multiple pages
 			version: true,
 			readme: './README.md',
 			includeDeclarations: true,
