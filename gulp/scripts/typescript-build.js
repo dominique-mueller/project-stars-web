@@ -102,8 +102,9 @@ gulp.task( 'typescript:build--prod', 'Compile TypeScript into JavaScript & inlin
 			indent: 0,
 			target: 'es6', // Nearest to TypeScript, compiled later on to ES5 anyway
 			templateExtension: '.html',
-			templateProcessor: ( ext, file ) => { // Minify HTML
-				return htmlMinifier.minify( file, htmlMinifierOptions );
+			templateProcessor: ( ext, file, done ) => { // Minify HTML
+				let minifiedFile = htmlMinifier.minify( file, htmlMinifierOptions );
+				done( null, minifiedFile );
 			},
 			useRelativePaths: true
 		} ) )
