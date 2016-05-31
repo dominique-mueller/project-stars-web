@@ -1,10 +1,10 @@
 <!-- Dropdown trigger -->
-<button class="button assign-label__dropdown-trigger" type="button" (click)="openDropdown()" #trigger>
+<button class="button assign-label__dropdown-trigger" type="button" (click)="openDropdown()" #triggerElem>
 	<ng-content></ng-content>
 </button>
 
 <!-- Dropdown menu -->
-<div class="assign-label__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, trigger )">
+<div class="assign-label__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, triggerElem )">
 	<article class="assign-label__dropdown-content">
 
 		<!-- Dropdown header -->

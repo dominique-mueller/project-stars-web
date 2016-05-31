@@ -21,6 +21,7 @@
 	background-color: $color-white;
 	box-shadow: 0 .1rem .3rem rgba($color-black, .3);
 	opacity: 0;
+	z-index: 2;
 	visibility: hidden;
 
 	&.is-visible {

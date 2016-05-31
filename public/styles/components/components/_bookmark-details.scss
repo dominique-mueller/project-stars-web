@@ -11,7 +11,7 @@
 	background-color: rgba($color-white, .75);
 	opacity: 0;
 	visibility: hidden;
-	z-index: 2;
+	z-index: 3;
 
 	&.is-visible {
 		transition: opacity $anim-speed-normal $anim-easing,
@@ -34,7 +34,7 @@
 	background-color: $color-white;
 	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
 	visibility: hidden;
-	z-index: 2;
+	z-index: 3;
 	overflow-x: hidden;
 	overflow-y: auto;
 	will-change: transform, visibility; // Does it work? Who knows ...

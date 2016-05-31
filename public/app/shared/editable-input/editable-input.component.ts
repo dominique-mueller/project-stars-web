@@ -91,34 +91,31 @@ export class EditableInputComponent {
 
 	/**
 	 * Click on edit
-	 * @param {HTMLInputElement} input Input element reference
+	 * @param {HTMLInputElement} inputElem Input element reference
 	 */
-	private clickOnEdit( input: HTMLInputElement ): void {
+	private clickOnEdit( inputElem: HTMLInputElement ): void {
 		this.isInEditMode = true;
-		input.focus();
+		inputElem.focus();
 	}
 
 	/**
 	 * Click on cancel
-	 * @param {HTMLInputElement} input Input element reference
+	 * @param {HTMLInputElement} inputElem Input element reference
 	 */
-	private clickOnCancel( input: HTMLInputElement ): void {
-		input.value = this.value;
+	private clickOnCancel( inputElem: HTMLInputElement ): void {
+		inputElem.value = this.value;
 		this.isInEditMode = false;
 	}
 
 	/**
-	 * Click on save
+	 * When clicking on save, emit the save event and disable edit mode
 	 * @param {string} value Input value
 	 */
 	private clickOnSave( value: string ): void {
-
-		// Emit update (only if something has actually changed)
 		if ( value !== this.value ) {
 			this.update.emit( value );
 		}
 		this.isInEditMode = false;
-
 	}
 
 }

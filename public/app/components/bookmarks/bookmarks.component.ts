@@ -221,6 +221,14 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 					this.changeDetector.markForCheck(); // Trigger change detection
 				}
 
+				// If the root folder changed and the opened folder is still not set, then set and navigate to the root folder
+				if ( uiState.get( 'rootFolderId' ) !== this.rootFolderId ) {
+					if ( this.openedFolderId === null ) {
+						this.rootFolderId = uiState.get( 'rootFolderId' );
+						this.onSelectFolder( this.rootFolderId );
+					}
+				}
+
 			}
 		);
 
@@ -233,11 +241,10 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 					this.folders = folders;
 
 					// Find the root folder
-					// If not yet done - this is only relevant for the first visit, to get into some folder (the root here)
+					// If not yet done - this is only relevant for the first visit
 					if ( this.rootFolderId === null ) {
-						this.rootFolderId = this.folderLogicService.getRootFolder( folders ).get( 'id' );
-						this.uiService.setRootFolderId( this.rootFolderId );
-						this.onSelectFolder( this.rootFolderId );
+						let rootFolderId: string = this.folderLogicService.getRootFolder( folders ).get( 'id' );
+						this.uiService.setRootFolderId( rootFolderId );
 					}
 					this.changeDetector.markForCheck(); // Trigger change detection
 

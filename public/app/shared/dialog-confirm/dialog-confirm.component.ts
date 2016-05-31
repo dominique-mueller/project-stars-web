@@ -18,7 +18,9 @@ import { IconComponent } from './../icon/icon.component';
 		IconComponent
 	],
 	host: {
-		class: 'dialog-confirm'
+		class: 'dialog-confirm',
+		'(keyup.esc)': 'onCancel()',
+		'(keyup.enter)': 'onConfirm()'
 	},
 	selector: 'app-dialog-confirm',
 	templateUrl: './dialog-confirm.component.html'
@@ -152,17 +154,17 @@ export class DialogConfirmComponent {
 	}
 
 	/**
-	 * Click on yes
+	 * Confirm the confirmation request (by clicking yes)
 	 */
-	private onClickYes(): void {
+	private onConfirm(): void {
 		this.closeDialog();
 		this.resolve( true );
 	}
 
 	/**
-	 * Click on no
+	 * Cancel the confirmation request (by clicking no)
 	 */
-	private onClickNo(): void {
+	private onCancel(): void {
 		this.closeDialog();
 		this.resolve( false );
 	}
