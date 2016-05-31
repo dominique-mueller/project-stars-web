@@ -36,6 +36,18 @@ gulp.task( 'setup:index--dev', 'Setup index file (for development)', () => {
 	return gulp
 		.src( `${ gulpConfig.paths.project.base }/index.html` )
 
+		// Inject favicon
+		.pipe( inject(
+			gulp.src( `${ gulpConfig.paths.assets.dest }/favicon.png`, {
+				read: false
+			} ), {
+				starttag: '<!-- inject:favicon -->', // Special annotation for this one
+				transform: ( path, file ) => {
+					return `<link rel="icon" type="image/png" href="${ path }">`;
+				}
+			}
+		) )
+
 		// Inject stylesheet link
 		.pipe( inject(
 			gulp.src( `${ gulpConfig.paths.project.dest }/style.css`, {
@@ -119,6 +131,18 @@ gulp.task( 'setup:index--prod', 'Setup index file (for production)', () => {
 	// Then process the index file
 	return gulp
 		.src( `${ gulpConfig.paths.project.base }/index.html` )
+
+		// Inject favicon
+		.pipe( inject(
+			gulp.src( `${ gulpConfig.paths.assets.dest }/favicon.png`, {
+				read: false
+			} ), {
+				starttag: '<!-- inject:favicon -->', // Special annotation for this one
+				transform: ( path, file ) => {
+					return `<link rel="icon" type="image/png" href="${ path }">`;
+				}
+			}
+		) )
 
 		// Inject stylesheet link
 		.pipe( inject(

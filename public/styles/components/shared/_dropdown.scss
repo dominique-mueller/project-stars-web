@@ -1,10 +1,10 @@
 // SHARED COMPONENT: DROPDOWN
 
-.dropdown__button {
+.dropdown__trigger {
 	position: relative;
 	width: 100%;
-	padding-right: 4.8rem;
-	padding-left: 2.6rem;
+	padding-right: 5rem;
+	padding-left: 2.8rem;
 	transition: background-color $anim-speed-normal $anim-easing,
 				color $anim-speed-normal $anim-easing;
 	white-space: nowrap;
@@ -80,14 +80,25 @@
 }
 
 .dropdown__link {
+	position: relative;
 	display: block;
-	padding: 1rem 2.4rem;
+	padding: 1.2rem 2.6rem 1.2rem 5.4rem;
 	transition: background-color $anim-speed-normal $anim-easing;
 	cursor: pointer; // Because a href does not exist
 
-	&:hover,
-	&:active {
+	&:hover {
 		background-color: $color-gallery;
+	}
+
+	&:active {
+		background-color: $color-alto;
+		transition: none;
+	}
+
+	.icon {
+		position: absolute;
+		top: 1rem;
+		left: 2.6rem;
 	}
 
 }

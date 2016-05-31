@@ -2,18 +2,19 @@
  * External imports
  */
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { List } from 'immutable';
 
 /**
  * Internal imports
  */
-import { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
+import { DropdownItem } from './dropdown-item.model';
 import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
 
 /**
  * Exports
  */
-export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
+export { DropdownItem } from './dropdown-item.model';
 
 /**
  * Shared component: Dropdown
@@ -33,19 +34,19 @@ export { DropdownItem, DropdownLink, DropdownDivider } from './dropdown.model';
 export class DropdownComponent {
 
 	/**
-	 * Input: List of dropdown items
+	 * Input: List of dropdown all items
 	 */
 	@Input()
-	private items: DropdownItem[];
+	private items: List<DropdownItem>;
 
 	/**
 	 * Output: Select event, emits item value
 	 */
 	@Output()
-	private select: EventEmitter<any>;
+	private select: EventEmitter<string>;
 
 	/**
-	 * Intenral: Dropdown visibility status
+	 * Internal: Dropdown visibility status
 	 */
 	private isOpen: boolean;
 
@@ -55,8 +56,8 @@ export class DropdownComponent {
 	constructor() {
 
 		// Setup
-		this.items = [];
-		this.select = new EventEmitter();
+		this.items = List<DropdownItem>();
+		this.select = new EventEmitter<string>();
 		this.isOpen = false;
 
 	}
@@ -93,8 +94,8 @@ export class DropdownComponent {
 	 * Select a dropdown item
 	 * @param {string} value Value of the selected dropdown item
 	 */
-	private onSelect(value: string): void {
-		this.select.emit(value);
+	private onSelect( value: string ): void {
+		this.select.emit( value );
 		this.closeDropdown();
 	}
 

@@ -7,7 +7,7 @@ import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/co
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
@@ -15,9 +15,9 @@ import { Map } from 'immutable';
 import { AppService } from './../../services/app';
 import { UiService } from './../../services/ui';
 import { UserDataService, User } from './../../services/user';
+import { DropdownComponent, DropdownItem } from './../../shared/dropdown/dropdown.component';
 import { IconComponent } from './../../shared/icon/icon.component';
-import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
-	from './../../shared/dropdown/dropdown.component';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 
 /**
  * View component (smart): Header
@@ -68,6 +68,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	private uiService: UiService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -90,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	/**
 	 * List of dropdown items
 	 */
-	private dropdownItems: DropdownItem[];
+	private dropdownItems: List<DropdownItem>;
 
 	/**
 	 * Full user name
@@ -105,13 +110,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		appService: AppService,
 		uiService: UiService,
 		userDataService: UserDataService,
-		formBuilder: FormBuilder ) {
+		notifierService: NotifierService,
+		formBuilder: FormBuilder
+	) {
 
 		// Initialize
 		this.changeDetector = changeDetector;
 		this.appService = appService;
 		this.uiService = uiService;
 		this.userDataService = userDataService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.changeSearch = new EventEmitter();
@@ -125,17 +133,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		} );
 
 		// Setup dropdown values
-		// TODO: Change to Map or List?
-		this.dropdownItems = [
-			new DropdownLink( 'settings', 'Settings' ),
-			new DropdownLink( 'apps', 'Apps' ),
-			new DropdownDivider(),
-			new DropdownLink( 'help', 'Help' ),
-			new DropdownLink( 'feedback', 'Feedback' ),
-			new DropdownLink( 'about', 'About this app' ),
-			new DropdownDivider(),
-			new DropdownLink( 'logout', 'Logout' )
-		];
+		this.dropdownItems = List<DropdownItem>( [
+			<DropdownItem> Map<string, any>( {
+				icon: 'settings', label: 'Settings', type: 'link', value: 'settings'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'download', label: 'Apps', type: 'link', value: 'apps'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				type: 'divider'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'help', label: 'Help', type: 'link', value: 'help'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'heart', label: 'Feedback', type: 'link', value: 'feedback'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'info', label: 'About', type: 'link', value: 'about'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				type: 'divider'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'exit', label: 'Logout', type: 'link', value: 'logout'
+			} )
+		] );
 
 	}
 
@@ -248,6 +271,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 				break;
 
 			default:
+				this.notifierService.notify( 'default', '(BETA) This functionality is not yet available in this beta version.' );
 				break;
 
 		}

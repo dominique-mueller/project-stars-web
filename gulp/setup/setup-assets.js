@@ -15,6 +15,9 @@ const gulp = require( 'gulp-help' )( require( 'gulp' ) );
  */
 gulp.task( 'setup:assets', 'Setup static assets', () => {
 	return gulp
-		.src( `${ gulpConfig.paths.assets.images }/*.jpg` )
+		.src( [
+			`${ gulpConfig.paths.assets.images }/*.jpg`,
+			`${ gulpConfig.paths.assets.base }/favicon.png`
+			] )
 		.pipe( gulp.dest( gulpConfig.paths.assets.dest ) );
 } );
