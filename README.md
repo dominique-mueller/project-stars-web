@@ -1,4 +1,4 @@
-# Welcome to "Project stars"!
+# Welcome to "Project Stars"!
 
 This is the official repository for our DHBW study research project called "Project Stars". It contains both the backend and frontend source code.
 
