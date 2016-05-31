@@ -1,7 +1,8 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators } from '@angular/common';
 import { Map } from 'immutable';
 
 /**
@@ -17,19 +18,21 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
+		FORM_DIRECTIVES,
 		IconComponent,
 		ClickOutsideDirective
 	],
 	host: {
-		class: 'create-bookmark'
+		class: 'create-bookmark',
+		'(keyup.esc)': 'closeDropdown()'
 	},
 	selector: 'app-create-bookmark',
 	templateUrl: './create-bookmark.component.html'
 } )
-export class CreateBookmarkComponent {
+export class CreateBookmarkComponent implements OnInit {
 
 	/**
-	 * Input: Bookmark template
+	 * Input: Basic tempalte for a new bookmark
 	 */
 	@Input()
 	private template: Bookmark;
@@ -41,84 +44,100 @@ export class CreateBookmarkComponent {
 	private create: EventEmitter<any>;
 
 	/**
-	 * Internal: Dropdown visibility status
+	 * Internal: Form builder
+	 */
+	private formBuilder: FormBuilder;
+
+	/**
+	 * Internal: Dropdown visibility status flag
 	 */
 	private isOpen: boolean;
 
 	/**
+	 * Form for creating a new bookmark
+	 */
+	private createBookmarkForm: ControlGroup;
+
+	/**
 	 * Constructor
 	 */
-	constructor() {
+	constructor(
+		formBuilder: FormBuilder
+	) {
+
+		// Initialize
+		this.formBuilder = formBuilder;
 
 		// Setup
 		this.template = <Bookmark> Map<string, any>();
-		this.create = new EventEmitter();
+		this.create = new EventEmitter<any>();
 		this.isOpen = false;
+		this.createBookmarkForm = null;
+
+	}
+
+	/**
+	 * Call this when the view gets initialized
+	 */
+	public ngOnInit(): void {
+
+		// Set initial form values depending on the provided template
+		this.createBookmarkForm = this.formBuilder.group( {
+			title: [ this.template.get( 'title' ), Validators.required ],
+			url: [ this.template.get( 'url' ), Validators.required] // TODO: Add custom URL validator?
+		} );
 
 	}
 
 	/**
 	 * Open dropdown menu
-	 * @param {HTMLInputElement} titleInput Title input field
+	 * @param {HTMLInputElement} firstInputElem First input field
 	 */
-	private openDropdown( titleInput: HTMLInputElement ): void {
+	private openDropdown( firstInputElem: HTMLInputElement ): void {
 		this.isOpen = true;
-		setTimeout( () => { // Otherwhise the focus doesn't get set (probably because it's still on the button)
-			titleInput.focus();
+		setTimeout( () => { // Otherwhise the focus doesn't get set
+			firstInputElem.focus();
 		} );
 	}
 
 	/**
-	 * Close dropdown menu
-	 * @param {HTMLInputElement} titleInput Title input field
-	 * @param {HTMLInputElement} urlInput   URL input field
+	 * Close dropdown menu, then reset all form values
 	 */
-	private closeDropdown( titleInput: HTMLInputElement, urlInput: HTMLInputElement ): void {
+	private closeDropdown(): void {
 		this.isOpen = false;
-
-		// Reset input values
-		titleInput.value = this.template.get( 'title' );
-		urlInput.value = this.template.get( 'url' );
-
+		setTimeout(
+			() => {
+				( <Control> this.createBookmarkForm.controls[ 'title' ] ).updateValue( this.template.get( 'title' ) );
+				( <Control> this.createBookmarkForm.controls[ 'url' ] ).updateValue( this.template.get( 'url' ) );
+			},
+			300
+		);
 	}
 
 	/**
-	 * Close dropdown when blurring the dropdown
-	 * @param {any}              $event     Event (probably mouse event)
-	 * @param {HTMLElement}      trigger    Trigger HTML element
-	 * @param {HTMLInputElement} titleInput Title input field
-	 * @param {HTMLInputElement} urlInput   URL input field
+	 * Close dropdown bridge for only closing when the trigger wasn't used to open the dropdown
+	 * @param {any}         $event      Event (probably mouse event)
+	 * @param {HTMLElement} triggerElem Trigger HTML element
 	 */
-	private closeDropdownOnBlur(
-		$event: any,
-		trigger: HTMLElement,
-		titleInput: HTMLInputElement,
-		urlInput: HTMLInputElement ): void {
-
-		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
-		if ( $event.path.indexOf( trigger ) === -1 ) {
-			this.closeDropdown( titleInput, urlInput );
+	private closeDropdownOnBlur( $event: any, triggerElem: HTMLElement ): void {
+		if ( $event.path.indexOf( triggerElem ) === -1 ) {
+			this.closeDropdown( );
 		}
-
 	}
 
 	/**
-	 * Click on the create button
-	 * @param {HTMLInputElement} titleInput Title input field
-	 * @param {HTMLInputElement} urlInput   URL input field
+	 * Submit the form and emit an event for creating a new bookmark
 	 */
-	private onClickOnCreate( titleInput: HTMLInputElement, urlInput: HTMLInputElement ): void {
+	private onSubmit(): void {
 
 		// Construct data
-		let data: any = this.template.toJS();
-		data.title = titleInput.value;
-		data.url = urlInput.value;
+		let newBookmark: any = this.template.toJS();
+		newBookmark.title = this.createBookmarkForm.value.title;
+		newBookmark.url = this.createBookmarkForm.value.url;
 
-		// Emit create event
-		this.create.emit( data );
-
-		// Then close dropdown
-		this.closeDropdown( titleInput, urlInput );
+		// Emit event and close dropdown
+		this.create.emit( newBookmark );
+		this.closeDropdown();
 
 	}
 

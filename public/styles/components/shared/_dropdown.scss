@@ -8,7 +8,7 @@
 	transition: background-color $anim-speed-normal $anim-easing,
 				color $anim-speed-normal $anim-easing;
 	white-space: nowrap;
-	z-index: 1;
+	z-index: 4;
 
 	&:hover,
 	&:active,

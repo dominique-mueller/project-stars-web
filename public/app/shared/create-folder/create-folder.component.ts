@@ -1,7 +1,8 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators } from '@angular/common';
 import { Map } from 'immutable';
 
 /**
@@ -17,19 +18,21 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
+		FORM_DIRECTIVES,
 		IconComponent,
 		ClickOutsideDirective
 	],
 	host: {
-		class: 'create-bookmark'
+		class: 'create-bookmark',
+		'(keyup.esc)': 'closeDropdown()'
 	},
 	selector: 'app-create-folder',
 	templateUrl: './create-folder.component.html'
 } )
-export class CreateFolderComponent {
+export class CreateFolderComponent implements OnInit {
 
 	/**
-	 * Input: Folder template
+	 * Input: Basic template for a new folder
 	 */
 	@Input()
 	private template: Folder;
@@ -41,78 +44,97 @@ export class CreateFolderComponent {
 	private create: EventEmitter<any>;
 
 	/**
-	 * Internal: Dropdown visibility status
+	 * Internal: Form builder reference
+	 */
+	private formBuilder: FormBuilder;
+
+	/**
+	 * Internal: Dropdown visibility status flag
 	 */
 	private isOpen: boolean;
 
 	/**
+	 * Form for creating a new folder
+	 */
+	private createFolderForm: ControlGroup;
+
+	/**
 	 * Constructor
 	 */
-	constructor() {
+	constructor(
+		formBuilder: FormBuilder
+	) {
+
+		// Initialize
+		this.formBuilder = formBuilder;
 
 		// Setup
 		this.template = <Folder> Map<string, any>();
-		this.create = new EventEmitter();
+		this.create = new EventEmitter<any>();
 		this.isOpen = false;
+		this.createFolderForm = null;
+
+	}
+
+	/**
+	 * Call this when the view gets initialized
+	 */
+	public ngOnInit(): void {
+
+		// Set initial form values depending on the provided template
+		this.createFolderForm = this.formBuilder.group( {
+			name: [ this.template.get( 'name' ), Validators.required ]
+		} );
 
 	}
 
 	/**
 	 * Open dropdown menu
-	 * @param {HTMLInputElement} nameInput Name input field
+	 * @param {HTMLInputElement} firstInputElem First input field
 	 */
-	private openDropdown( nameInput: HTMLInputElement ): void {
+	private openDropdown( firstInputElem: HTMLInputElement ): void {
 		this.isOpen = true;
-		setTimeout( () => { // Otherwhise the focus doesn't get set (probably because it's still on the button)
-			nameInput.focus();
+		setTimeout( () => { // Otherwhise the focus doesn't get set
+			firstInputElem.focus();
 		} );
 	}
 
 	/**
-	 * Close dropdown menu
-	 * @param {HTMLInputElement} nameInput Name input field
+	 * Close dropdown menu, then reset all form values
 	 */
-	private closeDropdown( nameInput: HTMLInputElement ): void {
+	private closeDropdown(): void {
 		this.isOpen = false;
-
-		// Reset input value
-		nameInput.value = this.template.get( 'name' );
-
+		setTimeout(
+			() => {
+				( <Control> this.createFolderForm.controls[ 'name' ] ).updateValue( this.template.get( 'name' ) );
+			},
+			300
+		);
 	}
 
 	/**
-	 * Close dropdown when blurring the dropdown
-	 * @param {any}              $event    Event (probably mouse event)
-	 * @param {HTMLElement}      trigger   Trigger HTML element
-	 * @param {HTMLInputElement} nameInput Name input field
+	 * Close dropdown bridge for only closing when the trigger wasn't used to open the dropdown
+	 * @param {any}         $event      Event (probably mouse event)
+	 * @param {HTMLElement} triggerElem Trigger HTML element
 	 */
-	private closeDropdownOnBlur(
-		$event: any,
-		trigger: HTMLElement,
-		nameInput: HTMLInputElement ): void {
-
-		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
-		if ( $event.path.indexOf( trigger ) === -1 ) {
-			this.closeDropdown( nameInput );
+	private closeDropdownOnBlur( $event: any, triggerElem: HTMLElement ): void {
+		if ( $event.path.indexOf( triggerElem ) === -1 ) {
+			this.closeDropdown();
 		}
-
 	}
 
 	/**
-	 * Click on the create button
-	 * @param {HTMLInputElement} nameInput Name input field
+	 * Submit the form and emit an event for creating a new folder
 	 */
-	private onClickOnCreate( nameInput: HTMLInputElement ): void {
+	private onSubmit(): void {
 
 		// Construct data
-		let data: any = this.template.toJS();
-		data.name = nameInput.value;
+		let newFolder: any = this.template.toJS();
+		newFolder.name = this.createFolderForm.value.name;
 
-		// Emit create event
-		this.create.emit( data );
-
-		// Then close dropdown
-		this.closeDropdown( nameInput );
+		// Emit event and close dropdown
+		this.create.emit( newFolder );
+		this.closeDropdown();
 
 	}
 
