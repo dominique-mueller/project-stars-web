@@ -153,6 +153,12 @@ export class LoginComponent implements OnActivate, OnInit {
 	 */
 	public onSubmit(): void {
 
+		// Skip of the login form is empty
+		if ( this.loginForm.value.email.length === 0 || this.loginForm.value.password.lenth === 0 ) {
+			this.notifierService.notify( 'default', 'Please enter your e-mail address and password.' );
+			return;
+		}
+
 		// Try to authenticate the user, the login and navigate to the bookmarks view
 		this.isAnimChecking = true;
 		this.userAuthService.loginUser( this.loginForm.value.email, this.loginForm.value.password )
