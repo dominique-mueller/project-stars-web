@@ -1,0 +1,214 @@
+// VIEW COMPONENT: LOGIN
+
+.login { // The whole page
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	transition: opacity $anim-speed-slow $anim-easing;
+
+	// Stars background image, compressed version
+	// Thanks to Adrian Pelletier on unsplash.com
+	// URL: https://unsplash.com/photos/BeIvjuz6k2k
+	background: url("./assets/login_background.jpg") center center;
+	background-size: cover;
+
+	opacity: 0;
+
+	&::after { // Colored semi-transparent overlay
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: darken($color-primary, 10%); // Slightly darker than normal
+		content: "";
+		opacity: .82;
+	}
+
+	&.is-visible {
+		opacity: 1;
+
+		.login__box-email,
+		.login__box-password {
+			opacity: 1;
+			transform: translateY(0);
+
+			&:focus,
+			&:active,
+			&.ng-dirty {
+				background-color: $color-white;
+			}
+
+		}
+
+		.login__box-button {
+			opacity: 1;
+			transform: translateY(0);
+
+			&:hover {
+				background-color: lighten($color-success, 3%);
+			}
+
+			&:active {
+				background-color: darken($color-success, 5%);
+			}
+
+		}
+
+	}
+
+	&.is-error {
+
+		.login__box-email {
+			animation: shake 1s ease-out;
+		}
+
+		.login__box-password {
+			animation: shake 1s ease-out .02s;
+		}
+
+		.login__box-button {
+			animation: shake 1s ease-out .04s;
+		}
+
+	}
+
+	&.is-checking {
+
+		.login__box-form {
+			opacity: .5;
+		}
+
+		.login__box-input {
+			cursor: not-allowed;
+		}
+
+		.login__box-button {
+			&[disabled],
+			&[disabled]:hover,
+			&[disabled]:focus,
+			&[disabled]:active {
+				opacity: 1 !important;
+				background-color: $color-success;
+			}
+		}
+
+		.login__box-button-text {
+			opacity: 0;
+		}
+
+		.login__box-button-loader {
+			opacity: 1;
+		}
+
+	}
+
+}
+
+.login__box {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	width: 31rem; // Fixed width
+	padding-bottom: 7rem; // Slighly shifted to the top
+	transform: translate3d(-50%, -50%, 0);
+	z-index: 1; // Above the colored overlay
+}
+
+// Login: Product
+
+.login__box-logo {
+	display: block;
+	width: 6.4rem;
+	height: 6.4rem;
+	margin-right: calc(50% - 3.2rem);
+	margin-left: calc(50% - 3.2rem);
+}
+
+.login__box-name {
+	margin-top: 1rem;
+	margin-bottom: 4.6rem;
+	color: $color-white;
+	font-size: 2.4rem;
+	letter-spacing: .02rem;
+	text-align: center;
+}
+
+// Login: User
+
+.login__box-form {
+	opacity: 1;
+	transition: opacity $anim-speed-normal $anim-easing;
+}
+
+.login__box-input {
+	margin-bottom: 1rem;
+	padding: 1.5rem 1.8rem 1.4rem;
+	border-radius: .2rem;
+	background-color: $color-alto;
+	line-height: 1.6rem;
+}
+
+.login__box-email {
+	transform: translateY(2rem);
+	transition: opacity .8s $anim-easing,
+				transform .8s $anim-easing,
+				background-color $anim-speed-fast $anim-easing;
+	opacity: 0;
+}
+
+.login__box-password {
+	transform: translateY(2.6rem);
+	transition: opacity .8s $anim-easing .05s,
+				transform .8s $anim-easing .05s,
+				background-color $anim-speed-fast $anim-easing;
+	opacity: 0;
+}
+
+.login__box-button {
+	position: relative;
+	width: 100%;
+	padding-top: 1.5rem;
+	padding-bottom: 1.4rem;
+	border-radius: .2rem;
+	font-size: 1.3rem;
+	line-height: 1.5rem;
+	letter-spacing: .02rem;
+	transform: translateY(3.2rem);
+	opacity: 0;
+	transition: opacity .8s $anim-easing .1s,
+				transform .8s $anim-easing .1s,
+				background-color $anim-speed-fast $anim-easing;
+}
+
+.login__box-button-loader {
+	position: absolute;
+	top: 1.8rem;
+	left: calc(50% - 2.2rem);
+	opacity: 0;
+	transition: opacity $anim-speed-normal $anim-easing;
+}
+
+.login__box-button-text {
+	opacity: 1;
+	transition: opacity $anim-speed-normal $anim-easing;
+}
+
+// Shake animation, occurs when login was not successful
+
+@keyframes shake {
+
+	0%, 100% {
+		transform: translate3d(0, 0, 0);
+	}
+
+	10%, 30%, 50%, 70%, 90% {
+		transform: translate3d(-.8rem, 0, 0);
+	}
+
+	20%, 40%, 60%, 80% {
+		transform: translate3d(.8rem, 0, 0);
+	}
+
+}

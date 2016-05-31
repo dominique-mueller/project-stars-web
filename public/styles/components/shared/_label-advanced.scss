@@ -1,0 +1,130 @@
+// COMPONENTS: LABEL ADVANCED
+
+.label-advanced {
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 4.3rem;
+	transition: background-color $anim-speed-normal $anim-easing;
+
+	&:hover,
+	&:focus {
+		background-color: $color-alto;
+
+		.label-advanced__action {
+			opacity: 1;
+		}
+
+	}
+
+	&.is-edited {
+		background-color: $color-white;
+
+		.label-advanced__action {
+			opacity: 1;
+		}
+
+	}
+
+}
+
+// Icons
+
+.label-advanced__icon {
+	position: absolute;
+	top: 1.2rem;
+	left: 2.3rem;
+	transition: opacity $anim-speed-fast $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+	opacity: 0;
+	visibility: hidden;
+
+	&.is-visible {
+		transition: opacity $anim-speed-fast $anim-easing $anim-speed-fast,
+					visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+		opacity: 1;
+		visibility: visible;
+	}
+
+}
+
+// Input / Text
+
+.label-advanced__input {
+	position: absolute;
+	top: .3rem;
+	left: 5rem;
+	width: calc(100% - 12.8rem); // 5 start + 1.8 end + 2x 3 buttons
+	transition: opacity $anim-speed-fast $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+	opacity: 0;
+	visibility: hidden;
+
+	&.is-visible {
+		transition: opacity $anim-speed-fast $anim-easing $anim-speed-fast,
+					visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+		opacity: 1;
+		visibility: visible;
+	}
+
+}
+
+.label-advanced__overlay {
+	position: absolute; // To be all over the place & clickable
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding-top: 1.4rem;
+	padding-left: 5rem;
+	transition: opacity $anim-speed-fast $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+	color: $color-scorpion;
+	font-weight: 500;
+	cursor: pointer;
+	opacity: 0;
+	visibility: hidden;
+
+	&.is-visible {
+		transition: opacity $anim-speed-fast $anim-easing $anim-speed-fast,
+					visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+		opacity: 1;
+		visibility: visible;
+	}
+
+}
+
+// Actions
+
+.label-advanced__actions {
+	position: absolute;
+	top: 0;
+	right: 1.8rem;
+	height: 4.3rem;
+	transition: opacity $anim-speed-fast $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+	line-height: 4.3rem;
+	opacity: 0;
+	visibility: hidden;
+
+	&.is-visible {
+		transition: opacity $anim-speed-fast $anim-easing $anim-speed-fast,
+					visibility $anim-speed-instant $anim-linear $anim-speed-fast;
+		opacity: 1;
+		visibility: visible;
+	}
+
+}
+
+.label-advanced__action {
+	display: inline-block;
+	height: 100%;
+	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: .5;
+}
+
+.label-advanced__action-button {
+	height: 4.3rem;
+	padding-right: .7rem;
+	padding-left: .7rem;
+}

@@ -1,0 +1,32 @@
+<!-- Background overlay / backdrop -->
+<div class="dialog-confirm__overlay" [class.is-visible]="isOpen" (click)="onCancel()"></div>
+
+<!-- Dialog -->
+<article class="dialog-confirm__box is-{{ type }}" [class.is-visible]="isOpen">
+
+	<!-- Dialog header -->
+	<header class="dialog-confirm__box-header">
+		<h1 class="dialog-confirm__box-header-title">{{ title }}</h1>
+		<button class="button button-invisible dialog-confirm__box-header-action has-tooltip" type="button"
+			(click)="onCancel()" data-tooltip="close">
+			<app-icon name="close" size="18" color="#606060"></app-icon>
+		</button>
+	</header>
+
+	<!-- Dialog content -->
+	<p class="dialog-confirm__box-main">
+		{{ message }}
+	</p>
+
+	<!-- Dialog footer -->
+	<footer class="dialog-confirm__box-footer">
+		<button class="button button-secondary dialog-confirm__box-footer-action does-no" type="button"
+			(click)="onCancel()">
+			{{ noText }}
+		</button><button class="button button-{{ type }} dialog-confirm__box-footer-action does-yes" type="button"
+			(click)="onConfirm()">
+			{{ yesText }}
+		</button>
+	</footer>
+
+</article>

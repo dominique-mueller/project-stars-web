@@ -1,5 +1,6 @@
-# Supported browsers
+# Browsers that we support
 
-> 5%
-Last 5 versions
+> 10%
+Last 10 versions
 Firefox ESR
+not ie <= 10 # Not sorry

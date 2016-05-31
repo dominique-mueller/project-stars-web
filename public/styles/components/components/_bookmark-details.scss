@@ -1,0 +1,154 @@
+// VIEW COMPONENT: BOOKMARK & FOLDER DETAILS
+
+.bookmark-details__overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant linear $anim-speed-normal;
+	background-color: rgba($color-white, .75);
+	opacity: 0;
+	visibility: hidden;
+	z-index: 3;
+
+	&.is-visible {
+		transition: opacity $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant linear;
+		opacity: 1;
+		visibility: visible;
+	}
+
+}
+
+.bookmark-details__panel {
+	position: fixed;
+	top: 6.4rem; // Header bar height
+	right: 0;
+	width: 50rem; // Fixed width
+	height: calc(100% - 6.4rem);
+	transform: translate3d(100%, 0, 0);
+	transition: transform $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant linear $anim-speed-normal;
+	background-color: $color-white;
+	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
+	visibility: hidden;
+	z-index: 3;
+	overflow-x: hidden;
+	overflow-y: auto;
+	will-change: transform, visibility; // Does it work? Who knows ...
+
+	&.is-visible {
+		transform: translate3d(0, 0, 0);
+		transition: transform $anim-speed-normal $anim-easing,
+					visibility $anim-speed-instant linear;
+		visibility: visible;
+	}
+
+}
+
+// Header
+
+.bookmark-details__panel-header {
+	display: flex;
+	width: 100%;
+	height: 6.4rem;
+	padding: 1.7rem 1.8rem 1.5rem 2.5rem;
+	background-color: $color-tundora;
+	color: $color-white;
+}
+
+.bookmark-details__panel-header-title {
+	flex: 1;
+	font-size: 1.6rem;
+	font-weight: normal;
+	letter-spacing: .02rem;
+	line-height: 3.2rem;
+}
+
+.bookmark-details__panel-header-action {
+	transition: opacity $anim-speed-fast $anim-easing;
+	opacity: 1;
+
+	&:hover,
+	&:focus {
+		opacity: .8;
+	}
+
+	&:active {
+		transform: scale(.75);
+	}
+
+	&.does-delete,
+	&.does-open {
+		padding: .9rem 1.4rem;
+	}
+
+	&.does-close {
+		padding: .7rem 1.1rem;
+	}
+
+}
+
+.bookmark-details__panel-header-action-move {
+
+	> .button {
+		padding: .9rem 1.4rem;
+		transition: opacity $anim-speed-fast $anim-easing;
+		opacity: 1;
+
+		&:hover,
+		&:focus {
+			opacity: .8;
+		}
+
+		&:active {
+			transform: scale(.75);
+		}
+
+	}
+
+	> .move-bookmark__dropdown {
+		top: 1.4rem;
+	}
+
+}
+
+// Content
+
+.bookmark-details__panel-content {
+	padding-top: 3rem;
+	padding-bottom: 1.6rem;
+}
+
+.bookmark-details__panel-section {
+	margin-right: 2.5rem;
+	margin-left: 2.5rem;
+
+	+ .bookmark-details__panel-section {
+		margin-top: 3.2rem;
+	}
+
+}
+
+// Special content: Labels
+
+.bookmark-details__panel-label {
+	display: inline-block;
+	margin-right: .4rem;
+}
+
+.bookmark-details__panel-label-title { // Similar to form label
+	margin-bottom: 1rem;
+	margin-left: 2.5rem;
+	color: $color-gray;
+	font-size: 1.2rem;
+	font-weight: 500;
+	letter-spacing: .01rem; // Because of the small text
+	line-height: 1.4rem;
+}
+
+.bookmark-details__panel-label-assign {
+	margin-top: .5rem;
+}

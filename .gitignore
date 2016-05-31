@@ -1,14 +1,28 @@
 # Dependencies
-node_modules
-typings
-Gemfile.lock
+/node_modules
+/typings
 
-# Build folders
-build
+# Frontend build
+/index.html
+/build
 
-# Generated error logs
-undefinederror.json
-undefinedinfo.json
+# Documentation build
+/docs/frontend
+/docs/backend
+
+# Generated error logs (mostly by Node)
+*.log
+/undefinederror.json
+/undefinedinfo.json
+/info.log.json
+/error.log.json
+/npm-debug.log
 
 # Editor settings
-*.sublime-workspace
+/*.sublime-workspace
+/stars-web.sublime*
+
+# Development files (in all folders)
+*.todo
+*.old
+*.temp

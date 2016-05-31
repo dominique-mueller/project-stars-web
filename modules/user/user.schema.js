@@ -6,8 +6,15 @@ var user = new mongoose.Schema({
 	lastName: {type: String, required: true},
 	emailAddress: {type: String, match: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i, unique: true, required: true},
 	password: {type: String, required: true},
+	admin: {type: Boolean, default: false},
 	profileImage: String,
 	registered: {type: Date, default: Date.now},
+	accountActivation: {
+		token: {type: String, required: true},
+		tempPassword: {type: String, required: true}, //used for password reset or when an admin created an account
+		activationState: {type: Boolean, default: false},
+		deletionDate: {type: Date}
+	},
 	connectedSocialServices:{
 		facebook:{
 			name: String
@@ -17,6 +24,9 @@ var user = new mongoose.Schema({
 		dropbox:{
 			name: String
 		}
+	},
+	settings:{
+		storage:[]
 	}
 });
 

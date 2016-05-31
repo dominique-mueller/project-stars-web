@@ -1,0 +1,193 @@
+// VIEW COMPONENT: BOOKMARKS
+
+.bookmarks {
+
+	&.is-visible {
+
+		.bookmarks__header,
+		.bookmarks__main {
+			transition: opacity $anim-speed-normal $anim-easing,
+						visibility $anim-speed-instant $anim-linear;
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.bookmarks__loader {
+			transition: opacity $anim-speed-normal $anim-easing,
+						visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+			opacity: 0;
+			visibility: hidden;
+		}
+
+	}
+
+}
+
+.bookmarks__loader {
+	position: absolute;
+	top: calc(50% - 2rem);
+	left: calc(50% - 2rem);
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear;
+	opacity: 1;
+	visibility: visible;
+	z-index: 1;
+}
+
+.bookmarks__header {
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+	opacity: 0;
+	visibility: hidden;
+}
+
+.bookmarks__main {
+	display: flex;
+	position: absolute;
+	top: 6.4rem;
+	left: 0;
+	width: 100%;
+	height: calc(100% - 6.4rem);
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-normal;
+	opacity: 0;
+	visibility: hidden;
+}
+
+// Layout containers
+
+.bookmarks__sidebar {
+	position: relative; // For animations
+	width: 35rem; // Fixed width
+	height: 100%;
+	border-right: .1rem solid $color-alto;
+	background-color: $color-gallery;
+	overflow: hidden; // Don't allow scrolling produced by animations
+}
+
+.bookmarks__content {
+	flex: 1;
+	height: 100%;
+	background-color: $color-white;
+}
+
+// Sidebar: Header with tabs
+
+.bookmarks__sidebar-header {
+	position: relative; // Because of ::after
+	width: 100%;
+	height: 7.2rem; // Fixed height
+	border-bottom: .1rem solid $color-alto;
+
+	&::after {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 50%;
+		height: .2rem;
+		transition: transform $anim-speed-normal $anim-easing;
+		background-color: $color-primary;
+		content: "";
+		will-change: transform; // Lalalala ... does is work? Let's hope so ...
+	}
+
+	&.is-active-first {
+
+		&::after {
+			transform: translate3d(0, 0, 0);
+		}
+
+	}
+
+	&.is-active-second {
+
+		&::after {
+			transform: translate3d(100%, 0, 0);
+		}
+
+	}
+
+}
+
+.bookmarks__sidebar-header-tab {
+	display: inline-block;
+	position: relative; // Because of ::after
+	width: 50%; // 2 equally spread tabs
+	padding-top: 2.1rem;
+	padding-bottom: .2rem;
+	line-height: 4.8rem;
+	overflow: hidden; // Hide overlapping ::after element
+	will-change: transform; // DO YOUR JOB ... please ...
+
+	&::after {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: .2rem;
+		transition: transform $anim-speed-normal $anim-easing;
+		background-color: $color-primary;
+		content: "";
+	}
+
+	&.is-first {
+
+		&::after {
+			transform: translate3d(100%, 0, 0);
+		}
+
+	}
+
+	&.is-second {
+
+		&::after {
+			transform: translate3d(-100%, 0, 0);
+		}
+
+	}
+
+	&:hover,
+	&:focus {
+
+		&::after {
+			transform: translate3d(0, 0, 0);
+		}
+
+	}
+
+	&.is-active {
+		font-weight: 700;
+	}
+
+}
+
+// Sidebar: Content
+
+.bookmarks__sidebar-content {
+	position: absolute; // To allow animation
+	top: 7.2rem;
+	left: 0;
+	width: 35rem;
+	height: calc(100% - 7.2rem); // Show scrollbar if necessary
+	padding-top: 1.8rem;
+	padding-bottom: 1.8rem;
+	transition: transform $anim-speed-normal $anim-easing;
+	overflow-y: auto;
+	will-change: transform; // Hm ...
+
+	&.is-active {
+		transform: translate3d(0, 0, 0);
+		transition: transform $anim-speed-normal $anim-easing;
+	}
+
+}
+
+.bookmarks__sidebar-content-directory {
+	padding-left: 2.5rem; // Root directory indention
+	transform: translate3d(-100%, 0, 0);
+}
+
+.bookmarks__sidebar-content-labels {
+	display: block;
+	transform: translate3d(100%, 0, 0);
+}

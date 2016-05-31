@@ -1,0 +1,68 @@
+// SHARED COMPONENT: NOTIFIER
+
+.notifier {
+	position: fixed;
+	bottom: 1.9rem;
+	left: 2rem;
+	height: 5.6rem;
+	transform: translate3d(calc(-100% - 2.6rem), 0, 0);
+	transition: opacity $anim-speed-slow $anim-easing,
+				transform $anim-speed-slow $anim-easing,
+				visibility $anim-speed-instant $anim-linear $anim-speed-slow;
+	border-radius: .3rem;
+	color: $color-white;
+	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
+	opacity: 0;
+	visibility: hidden;
+	z-index: 10; // To be sure that it's on top
+
+	&.is-visible {
+		transform: translate3d(0, 0, 0);
+		transition: opacity $anim-speed-slow $anim-easing,
+					transform $anim-speed-slow $anim-easing,
+					visibility $anim-speed-instant $anim-linear;
+		opacity: 1;
+		visibility: visible;
+	}
+
+	&.is-default {
+		background-color: darken($color-tundora, 10%);
+	}
+
+	&.is-success {
+		background-color: $color-success;
+	}
+
+	&.is-error {
+		background-color: $color-danger;
+	}
+
+}
+
+// Content
+
+.notifier__message {
+	display: inline-block;
+	padding-top: 2rem;
+	padding-bottom: 1.8rem;
+	padding-left: 2.6rem;
+	line-height: 1.8rem;
+	vertical-align: top;
+}
+
+.notifier__action {
+	display: inline-block;
+	padding: 2rem 2.2rem 1.8rem 1.6rem;
+	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: .4;
+	vertical-align: top;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.82);
+	}
+
+}

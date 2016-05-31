@@ -1,0 +1,24 @@
+// GENERIC: NORMALIZE
+
+// Remove all margins
+h1,
+h2,
+h3,
+p,
+ul {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+// Remove any list styles
+ul {
+	padding-left: 0;
+	list-style: none;
+}
+
+// Reset the search input box sizing
+input {
+	&[type="search"] {
+		box-sizing: inherit;
+	}
+}

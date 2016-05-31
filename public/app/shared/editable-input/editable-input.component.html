@@ -1,0 +1,26 @@
+<!-- Form elements -->
+<input class="form-input input-editable__input" [id]="name" [type]="type" [placeholder]="placeholder"
+	[value]="value" [readonly]="!isInEditMode" #inputElem>
+<label class="form-label" [attr.for]="name">{{ label }}</label>
+
+<!-- Actions for non-edit mode -->
+<ul class="input-editable__actions" [class.is-visible]="!isInEditMode">
+	<li class="input-editable__action">
+		<button class="button input-editable__action-button has-tooltip" type="button" (click)="clickOnEdit( inputElem )" data-tooltip="edit">
+			<app-icon name="edit" size="14" color="#606060"></app-icon>
+		</button>
+	</li>
+</ul>
+
+<!-- Actions for edit mode -->
+<ul class="input-editable__actions" [class.is-visible]="isInEditMode">
+	<li class="input-editable__action">
+		<button class="button input-editable__action-button has-tooltip" type="button" (click)="clickOnSave( inputElem.value )" data-tooltip="save">
+			<app-icon name="done" size="18" color="#606060"></app-icon>
+		</button>
+	</li><li class="input-editable__action">
+		<button class="button input-editable__action-button has-tooltip" type="button" (click)="clickOnCancel( inputElem )" data-tooltip="cancel">
+			<app-icon name="close" size="18" color="#606060"></app-icon>
+		</button>
+	</li>
+</ul>

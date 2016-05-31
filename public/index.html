@@ -1,22 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Project Stars</title>
+	<title>Loading ...</title>
 
-	<link rel="stylesheet" href="style.min.css">
+	<!-- Inject favicon -->
+	<!-- inject:favicon -->
+	<!-- endinject -->
+
+	<!-- Inject inline CSS file -->
+	<!-- inject:css:inline -->
+	<!-- endinject -->
+
+	<!-- Inject CSS file -->
+	<!-- inject:css -->
+	<!-- endinject -->
+
+	<!-- Inject polyfills and libraries -->
+	<!-- inject:js -->
+	<!-- endinject -->
+
+	<!-- Inject TypeKit and SystemJS configuration -->
+	<!-- inject:js:inline -->
+	<!-- endinject -->
 
 </head>
 <body>
 
-	<app>Loading ...</app>
+<div class="svgstore">
 
-	<!-- Load all JavaScript files -->
-	<script src="angular2-polyfills.js"></script>
-	<script src="app.min.js"></script>
+	<!-- Inject SVG -->
+	<!-- inject:svg -->
+	<!-- endinject -->
+
+</div>
+
+<!-- App container for Angular 2 -->
+<app>
+
+	<!-- Temporary loading spinner while downloading and bootstrapping the application -->
+	<div class="inline__background">
+		<div class="inline__loading-box">
+			<div class="inline__loading-spinner inline__loading-spinner-one">
+			</div><div class="inline__loading-spinner inline__loading-spinner-two">
+			</div><div class="inline__loading-spinner inline__loading-spinner-three">
+			</div>
+		</div>
+	</div>
+
+</app>
 
 </body>
 </html>

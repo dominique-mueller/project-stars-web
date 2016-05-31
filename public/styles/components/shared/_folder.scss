@@ -1,0 +1,60 @@
+// SHARED COMPONENT: FOLDER
+
+.folder {
+	display: flex;
+	width: 100%;
+	transition: background-color $anim-speed-fast $anim-easing;
+	background-color: $color-white;
+
+	&:hover,
+	&:focus,
+	&.is-selected {
+		background-color: $color-gallery;
+
+		.folder__action {
+			opacity: 1;
+		}
+
+	}
+
+}
+
+// Content
+
+.folder__link {
+	position: relative;
+	flex: 1;
+	height: 6rem; // Fixed height
+	cursor: pointer; // Necessary because link does not have an href here
+}
+
+.folder__favicon {
+	position: absolute;
+	top: 1.8rem;
+	left: 3rem;
+	width: 2.4rem;
+	height: 2.4rem;
+}
+
+.folder__name {
+	position: absolute;
+	top: 1.8rem;
+	left: 7rem; // 3 from left + 2.4 from icon + space between icon + text
+	width: calc(100% - 7rem);
+	font-weight: 700;
+	line-height: 2.4rem; // Same as icon height
+}
+
+// Action
+
+.folder__action {
+	padding-right: 2.5rem;
+	padding-left: 2.5rem;
+	transition: opacity $anim-speed-fast $anim-easing;
+	opacity: .5;
+
+	&:active {
+		transform: scale(.825);
+	}
+
+}

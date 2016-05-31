@@ -1,0 +1,7 @@
+<!-- Inline label -->
+<span class="label-simple__name">{{ label?.get( 'name' ) }}</span>
+
+<!-- Action -->
+<button class="button label-simple__action has-tooltip" type="button" *ngIf="isRemovable" (click)="clickOnRemove()" data-tooltip="remove">
+	<app-icon name="close" size="12" color="#FFF"></app-icon>
+</button>

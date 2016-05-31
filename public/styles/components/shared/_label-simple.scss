@@ -1,0 +1,39 @@
+// SHARED COMPONENT: LABEL SIMPLE
+
+.label-simple {
+	display: block;
+	height: 2.2rem;
+	border-radius: .1rem;
+	background-color: $color-scorpion; // Fallback color
+}
+
+// Content
+
+.label-simple__name {
+	padding-right: 1.1rem;
+	padding-left: 1.1rem;
+	color: $color-white;
+	font-size: 1.1rem;
+	letter-spacing: .02rem; // For better readability
+	line-height: 2.2rem;
+	vertical-align: top;
+}
+
+.label-simple__action {
+	width: 2.2rem;
+	height: 2.2rem;
+	margin-left: -1.1rem; // Because this button is optional
+	padding: .5rem; // 2.2rem - 12px icon size / 2
+	transition: opacity $anim-speed-fast $anim-easing;
+	opacity: .8;
+
+	&:hover,
+	&:focus {
+		opacity: 1;
+	}
+
+	&:active {
+		transform: scale(.75);
+	}
+
+}

@@ -3,18 +3,26 @@
 	[
 		{
 			"path": ".",
-			"folder_exclude_patterns": ["build"]
+			"folder_exclude_patterns": [ "node_modules" ]
 		}
 	],
 	"build_systems":
 	[
 		{
-			"name": "Gulp Build Dev Task",
+			"name": "Gulp - Build Dev Task",
 			"shell_cmd": "gulp build:dev"
 		},
 		{
-			"name": "Gulp Build Prod Task",
+			"name": "Gulp - Build Prod Task",
 			"shell_cmd": "gulp build:prod"
+		},
+		{
+			"name": "Gulp - Build Docs Task",
+			"shell_cmd": "gulp build:docs"
+		},
+		{
+			"name": "Gulp - Watcher",
+			"shell_cmd": "gulp watch"
 		}
 	]
 }

@@ -1,0 +1,29 @@
+<!-- Dropdown trigger -->
+<button class="button assign-label__dropdown-trigger" type="button" (click)="openDropdown()" #triggerElem>
+	<ng-content></ng-content>
+</button>
+
+<!-- Dropdown menu -->
+<div class="assign-label__dropdown" [class.is-visible]="isOpen" (appClickOutside)="closeDropdownOnBlur( $event, triggerElem )">
+	<article class="assign-label__dropdown-content">
+
+		<!-- Dropdown header -->
+		<header class="assign-label__dropdown-header">
+			<h1 class="assign-label__dropdown-header-title">Assign label</h1>
+			<button class="button assign-label__dropdown-header-action has-tooltip" type="button" (click)="closeDropdown()" data-tooltip="close">
+				<app-icon name="close" size="16" color="#444"></app-icon>
+			</button>
+		</header>
+
+		<!-- Dropdown content -->
+		<ul class="assign-label__dropdown-list">
+			<li class="assign-label__dropdown-item" *ngFor="let label of labels.toList()">
+				<button class="button assign-label__dropdown-label" type="button" (click)="onSelectLabel( label.get( 'id' ) )">
+					<app-icon name="label" size="14" [color]="label.get( 'color' )"></app-icon>
+					{{ label.get( 'name' ) }}
+				</button>
+			</li>
+		</ul>
+
+	</article>
+</div>

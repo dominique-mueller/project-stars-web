@@ -1,0 +1,15 @@
+// GENERIC: SVG
+
+svg {
+	float: left; // To fix height issues of parent containers
+}
+
+// Hide the element containing all our svg icons in a elegant way
+
+.svgstore {
+	position: absolute;
+	width: 0;
+	height: 0;
+	margin-left: -100%;
+	visibility: hidden;
+}

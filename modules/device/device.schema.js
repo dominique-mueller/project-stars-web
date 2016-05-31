@@ -6,6 +6,10 @@ var device = new mongoose.Schema({
 	type: {type: String},
 	firstConnect: {type: Date, default: Date.now},
 	lastUse: {type: Date, default: Date.now},
+	session:{
+		active:{type:Boolean, default:false},
+		jwt:{type:String}
+	},
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
 });
 

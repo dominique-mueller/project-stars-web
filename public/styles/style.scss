@@ -1,1 +1,54 @@
-// To BE CONTINUED ...
+// STYLES
+// * The architecture is inspired by the ITCSS concept by Harry Roberts
+// * Naming convention is based on BEM - but without the M
+// * Instead of the M, states are named after SMACSS
+
+// LAYER 01: SETTINGS
+@import "settings/colors";
+@import "settings/animations";
+
+// LAYER 03: GENERIC
+@import "../../node_modules/normalize.css/normalize"; // Default normalize.css library
+@import "generic/normalize";
+@import "generic/boxsizing";
+@import "generic/svg";
+
+// LAYER 04: BASE
+@import "base/forms";
+@import "base/headings";
+@import "base/hyperlinks";
+@import "base/line";
+@import "base/selection";
+@import "base/site";
+
+// LAYER 06: ATOMIC COMPONENTS
+@import "components/atoms/buttons";
+@import "components/atoms/forms";
+@import "components/atoms/scrollbar";
+@import "components/atoms/tooltip";
+
+// LAYER 06: SHARED COMPONENTS
+@import "components/shared/assign-label";
+@import "components/shared/bookmark";
+@import "components/shared/color-picker";
+@import "components/shared/create-bookmark";
+@import "components/shared/dialog-confirm";
+@import "components/shared/dropdown";
+@import "components/shared/editable-input";
+@import "components/shared/folder";
+@import "components/shared/icon";
+@import "components/shared/label-advanced";
+@import "components/shared/label-simple";
+@import "components/shared/loader";
+@import "components/shared/move-into-folder";
+@import "components/shared/notifier";
+
+// LAYER 06: COMPONENTS (VIEWS)
+@import "components/components/bookmark-details";
+@import "components/components/bookmark-directory";
+@import "components/components/bookmark-list";
+@import "components/components/bookmark-search";
+@import "components/components/bookmarks";
+@import "components/components/header";
+@import "components/components/label-list";
+@import "components/components/login";

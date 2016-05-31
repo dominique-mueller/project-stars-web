@@ -1,0 +1,56 @@
+// ATOMIC COMPONENT: BUTTONS
+
+.button {
+	padding: 0;
+	border: none;
+	background: none;
+	color: inherit;
+	box-shadow: none;
+	cursor: pointer;
+
+	&[disabled] {
+		transform: scale(1) !important;
+		cursor: not-allowed !important;
+		opacity: .33 !important;
+
+		&:hover,
+		&:focus,
+		&:active {
+			transform: scale(1) !important;
+			cursor: not-allowed !important;
+			opacity: .33 !important;
+		}
+
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+}
+
+// Styles
+
+.button-primary {
+	border-radius: .1rem;
+	background-color: $color-primary;
+	color: $color-white;
+}
+
+.button-secondary {
+	border-radius: .1rem;
+	background-color: $color-gallery;
+	color: $color-gray;
+}
+
+.button-danger {
+	border-radius: .1rem;
+	background-color: $color-danger;
+	color: $color-white;
+}
+
+.button-success {
+	border-radius: .1rem;
+	background-color: $color-success;
+	color: $color-white;
+}

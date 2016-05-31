@@ -1,0 +1,42 @@
+{
+	"data": [
+		{
+			"id": "FOL0",
+			"name": "Bookmarks",
+			"description": "All of my bookmarks",
+			"position": 1,
+			"isRoot": true
+		},
+		{
+			"id": "FOL1",
+			"name": "Searching",
+			"description": "Search engines and sites",
+			"path": "FOL0",
+			"position": 2,
+			"isRoot": false
+		},
+		{
+			"id": "FOL2",
+			"name": "Favourites",
+			"description": "Best sites I know",
+			"path": "FOL0",
+			"position": 1,
+			"isRoot": false
+		},
+		{
+			"id": "FOL3",
+			"name": "News",
+			"path": "FOL2",
+			"position": 2,
+			"isRoot": false
+		},
+		{
+			"id": "FOL4",
+			"name": "Social",
+			"description": "Social Media Websites",
+			"path": "FOL2",
+			"position": 1,
+			"isRoot": false
+		}
+	]
+}
