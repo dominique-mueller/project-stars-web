@@ -5,7 +5,7 @@
 	<h1 class="login__box-name">{{ appName }}</h1>
 
 	<!-- User login form -->
-	<form class="login__box-form" [ngFormModel]="loginForm" (ngSubmit)="onSubmit()">
+	<form class="login__box-form" [ngFormModel]="loginForm" (ngSubmit)="onSubmit()" novalidate>
 		<input class="login__box-input login__box-email" id="login-email" type="email" placeholder="your e-mail" required
 			[disabled]="isAnimChecking" [ngFormControl]="loginForm.controls[ 'email' ]">
 		<input class="login__box-input login__box-password" id="login-password" type="password" placeholder="your password" required

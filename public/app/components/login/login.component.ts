@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
+import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators } from '@angular/common';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
 /**
@@ -115,8 +115,8 @@ export class LoginComponent implements OnActivate, OnInit {
 		// Setup
 		this.appName = this.appService.APP_NAME;
 		this.loginForm = formBuilder.group( {
-			email: '',
-			password: ''
+			email: [ '', Validators.required ],
+			password: [ '', Validators.required ]
 		} );
 		this.isAnimLoaded = false;
 		this.isAnimError = false;
@@ -153,24 +153,18 @@ export class LoginComponent implements OnActivate, OnInit {
 	 */
 	public onSubmit(): void {
 
-		// Enable animation, collect data from the login form
-		this.isAnimChecking = true;
-		let email: string = this.loginForm.value.email;
-		let password: string = this.loginForm.value.password;
-
 		// Try to authenticate the user, the login and navigate to the bookmarks view
-		this.userAuthService.loginUser( email, password )
+		this.isAnimChecking = true;
+		this.userAuthService.loginUser( this.loginForm.value.email, this.loginForm.value.password )
 
 			// Success
 			.then( ( data: any ) => {
-				console.log( 'APP > Login Component > Login successful.' );
 				this.router.navigate( [ 'bookmarks' ] ); // Absolute
 				this.isAnimChecking = false;
 			} )
 
 			// Error
 			.catch( ( error: any ) => {
-				console.log( 'APP > Login Component > Login not successful.' );
 
 				// Reset password input, notify user
 				( <Control> this.loginForm.controls[ 'password' ] ).updateValue( '' );
