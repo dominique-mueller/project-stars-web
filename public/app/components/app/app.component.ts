@@ -85,8 +85,13 @@ import { NotifierComponent } from './../../shared/notifier/notifier.component';
 	new Route( {
 		component: BookmarksComponent,
 		path: '/bookmarks'
+	} ),
+	// Hacky 'otherwhise' functionality, redirects to bookmarks over login
+	// We do this because of issues occuring when redirecting directly to the bookmarks route
+	new Route( {
+		component: LoginComponent,
+		path: '*'
 	} )
-	// TODO: Settings route, Register route ...
 ] )
 export class AppComponent implements OnInit {
 

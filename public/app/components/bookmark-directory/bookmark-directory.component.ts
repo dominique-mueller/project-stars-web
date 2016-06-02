@@ -149,10 +149,8 @@ export class BookmarkDirectoryComponent implements OnInit, OnDestroy, OnChanges 
 	} ): void {
 
 		// Get / update the subfolders of this (the current) directory layer
-		// But only do this when the folders actually exist and changed
-		if ( changes.hasOwnProperty( 'folders' )
-			&& typeof changes.folders.currentValue !== 'undefined'
-			&& changes.folders.currentValue.size > 0 ) {
+		// But only do this when the folders actually changed (skip the initial change)
+		if ( changes.hasOwnProperty( 'folders' ) && changes.folders.currentValue.size > 0 ) {
 			this.subfolders = this.folderLogicService
 				.getSubfoldersByFolderId( changes.folders.currentValue, this.parentFolderId );
 		}

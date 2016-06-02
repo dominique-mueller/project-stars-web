@@ -2,7 +2,7 @@
  * External imports
  */
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators } from '@angular/common';
+import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators, Location } from '@angular/common';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
 /**
@@ -45,6 +45,11 @@ export class LoginComponent implements OnActivate, OnInit {
 	 * Router
 	 */
 	private router: Router;
+
+	/**
+	 * Location
+	 */
+	private location: Location;
 
 	/**
 	 * App service
@@ -97,6 +102,7 @@ export class LoginComponent implements OnActivate, OnInit {
 	constructor(
 		changeDetector: ChangeDetectorRef,
 		router: Router,
+		location: Location,
 		appService: AppService,
 		userAuthService: UserAuthService,
 		uiService: UiService,
@@ -107,6 +113,7 @@ export class LoginComponent implements OnActivate, OnInit {
 		// Initialize
 		this.changeDetector = changeDetector;
 		this.router = router;
+		this.location = location;
 		this.appService = appService;
 		this.userAuthService = userAuthService;
 		this.uiService = uiService;
@@ -132,6 +139,11 @@ export class LoginComponent implements OnActivate, OnInit {
 
 		// Redirect into the application when the user is actually (and corretly) logged in
 		if ( this.userAuthService.isUserLoggedIn() ) {
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		}
+
+		// 'Otherwise' fallback for the app component, redirects instantly to the bookmarks route
+		if ( this.location.path() !== '/login' ) {
 			this.router.navigate( [ 'bookmarks' ] ); // Absolute
 		}
 

@@ -15,6 +15,7 @@ import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../ser
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
 import { NotifierService } from './../../shared/notifier/notifier.service';
+import { LoginComponent } from './../login/login.component';
 import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details.component';
 import { FolderDetailsComponent } from './../folder-details/folder-details.component';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
@@ -50,6 +51,12 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	new Route( {
 		component: FolderDetailsComponent,
 		path: '/folder/:id'
+	} ),
+	// Hacky 'otherwhise' functionality, redirects to bookmarks over login
+	// We do this because of issues occuring when redirecting directly to the bookmarks route
+	new Route( {
+		component: LoginComponent,
+		path: '*'
 	} )
 ] )
 export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {

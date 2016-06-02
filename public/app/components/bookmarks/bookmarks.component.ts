@@ -15,6 +15,7 @@ import { BookmarkDataService, BookmarkLogicService } from './../../services/book
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
 import { UserDataService, UserAuthService } from './../../services/user';
+import { LoginComponent } from './../login/login.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
 import { BookmarkSearchComponent } from './../bookmark-search/bookmark-search.component';
@@ -62,6 +63,12 @@ import { LoaderComponent } from './../../shared/loader/loader.component';
 	new Route( {
 		component: BookmarkSearchComponent,
 		path: '/search'
+	} ),
+	// Hacky 'otherwhise' functionality, redirects to bookmarks over login
+	// We do this because of issues occuring when redirecting directly to the bookmarks route
+	new Route( {
+		component: LoginComponent,
+		path: '*'
 	} )
 ] )
 export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
@@ -213,8 +220,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
-
-					// We select the root folder when the opened folder gets unselected
 					if ( this.openedFolderId === null ) {
 						this.onSelectFolder( this.rootFolderId );
 					}
@@ -223,10 +228,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 				// If the root folder changed and the opened folder is still not set, then set and navigate to the root folder
 				if ( uiState.get( 'rootFolderId' ) !== this.rootFolderId ) {
+					this.rootFolderId = uiState.get( 'rootFolderId' );
 					if ( this.openedFolderId === null ) {
-						this.rootFolderId = uiState.get( 'rootFolderId' );
 						this.onSelectFolder( this.rootFolderId );
 					}
+					this.changeDetector.markForCheck(); // Trigger change detection
 				}
 
 			}
@@ -246,7 +252,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 						let rootFolderId: string = this.folderLogicService.getRootFolder( folders ).get( 'id' );
 						this.uiService.setRootFolderId( rootFolderId );
 					}
-					this.changeDetector.markForCheck(); // Trigger change detection
+					// this.changeDetector.markForCheck(); // Trigger change detection
 
 				}
 			}
@@ -329,18 +335,21 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onLogout(): void {
 
+		// Remove UI state
+		this.uiService.unsetSelectedElement();
+		this.uiService.unsetOpenedFolderId();
+		this.uiService.resetSearch();
+
 		// Try to log the user out, then navigate to the login page
 		this.userAuthService.logoutUser()
 
 			// Success
 			.then( ( data: any ) => {
-				console.log( 'APP > Logout successful.' );
 				this.router.navigate( [ 'login' ] ); // Absolute
 			} )
 
 			// Error
 			.catch( ( error: any ) => {
-				console.warn( 'APP > Logout not completely successful, only client-side.' );
 				this.router.navigate( [ 'login' ] ); // Absolute
 			} );
 
