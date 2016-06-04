@@ -103,22 +103,37 @@ var BookmarksController = function(req, res, authentication){
 		.catch(respondeWithError("Failed to create bookmark"));
 	}
 
+
+
+
+	function manageNumberOfContainedBookmarks(getOldBookmarkPromise){
+		var promiseList = new Array();
+		getOldBookmarkPromise.then(function(oldBookmark){
+			console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH: ' + oldBookmark);
+			
+			if(self.reqBody.hasOwnProperty('path')){
+				promiseList.push(Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
+				promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
+			}
+			// else{
+				// promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, 1)); //because new bookmark is created	
+			// }
+		})
+		.catch(function(){console.log("CATCH OF bookmark controller put");});
+
+		return promiseList;
+	}
+
 	this.put = function(){
 		var result;
 		var promiseList = new Array();
 		// var update = Bookmark.update(self.req.params.bookmark_id, self.reqBody, function(oldBookmark){
 		var getOldBookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
 		if(self.reqBody.hasOwnProperty('path') || self.reqBody.hasOwnProperty('position')){
-			getOldBookmarkPromise.then(function(oldBookmark){
-				console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH: ' + oldBookmark);
-				promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
-			})
-			.catch(function(){console.log("CATCH OF bookmark controller put");});
-			promiseList.push(Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
+			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
 			promiseList.push(Bookmark.updateMoveBookmarksFolderOrPosition(self.req.params.bookmark_id, self.reqBody));
 		}
 		else{
-			console.log('KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
 			promiseList.push(Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody));
 		}
 		Promise.all(promiseList).then(function(){

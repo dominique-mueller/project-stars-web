@@ -1123,3 +1123,21 @@
 {"name":"stars-web","hostname":"varicor","pid":12960,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T18:44:14.380Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":12960,"level":30,"msg":"Can't find any sub Bookmarks. PathId: 5753208d79f3769231d0b3da","time":"2016-06-04T18:44:21.207Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":12960,"level":30,"msg":"Can't find any sub Bookmarks. PathId: 575320e879f3769231d0b3dc","time":"2016-06-04T18:44:21.306Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":14903,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T19:54:55.190Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":14903,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T19:54:55.429Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":14903,"level":50,"msg":"respondeWithError: Failed to update bookmark :: TypeError: Cannot read property 'numberOfContainedBookmarks' of null","time":"2016-06-04T20:19:24.589Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":15620,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T20:43:28.734Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":15620,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T20:43:28.969Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":15620,"level":50,"msg":"respondeWithError: Failed to update bookmark :: VersionError: No matching document found.","time":"2016-06-04T20:43:49.252Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16010,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T21:10:35.822Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16010,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T21:10:36.054Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16010,"level":50,"msg":"respondeWithError: Failed to update bookmark :: VersionError: No matching document found.","time":"2016-06-04T21:14:50.690Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16372,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T21:32:37.938Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16372,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T21:32:38.171Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16372,"level":50,"msg":"An error occured in bookamarks.model.update when trying to find the bookmark:TypeError: Cannot read property 'title' of null","time":"2016-06-04T21:33:37.666Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16497,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T21:36:02.389Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16497,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T21:36:02.653Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16570,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T21:36:12.113Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16570,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T21:36:12.352Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16625,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-04T21:36:25.554Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":16625,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-04T21:36:25.783Z","v":0}

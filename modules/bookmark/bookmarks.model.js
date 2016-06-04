@@ -114,7 +114,7 @@ var BookmarksModel = function(userId){
 	};
 
 	//Find bookmark which shall be updated and return possible update functions + found bookmark
-	this.update = function(bookmarkId, bookmarkData, callback){
+	// this.update = function(bookmarkId, bookmarkData, callback){
 		// var bookmarkPromise = self.findOne(bookmarkId);
 		// bookmarkUpdateResult.oldBookmarkPromise.then(function(bookmark){
 		// 	callback(bookmark);
@@ -148,7 +148,7 @@ var BookmarksModel = function(userId){
 		// 	})
 		// 	.catch(reject);
 		// });
-	};
+	// };
 
 
 	this.updateBookmarkEditables = function(bookmarkId, bookmarkData){
@@ -206,7 +206,10 @@ var BookmarksModel = function(userId){
 				var deleteBookmarkPromise = self.delete(bookmarkId);
 				deleteBookmarkPromise.then(function(){
 					var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1);
-					var createBookmarkPromise = Bookmark.create(bookmark);
+					object = JSON.parse(JSON.stringify(bookmark));
+					delete object['_id'];
+					delete object['__v'];
+					var createBookmarkPromise = Bookmark.create(object);
 					Promise.all([shiftBookmarksPromise, createBookmarkPromise])
 					.then(function(){
 						logger.debug('moving bookmark was successful');
