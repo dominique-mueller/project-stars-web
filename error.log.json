@@ -92,3 +92,5 @@
 {"name":"stars-web","hostname":"varicor","pid":15620,"level":50,"msg":"respondeWithError: Failed to update bookmark :: VersionError: No matching document found.","time":"2016-06-04T20:43:49.252Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":16010,"level":50,"msg":"respondeWithError: Failed to update bookmark :: VersionError: No matching document found.","time":"2016-06-04T21:14:50.690Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":16372,"level":50,"msg":"An error occured in bookamarks.model.update when trying to find the bookmark:TypeError: Cannot read property 'title' of null","time":"2016-06-04T21:33:37.666Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":18136,"level":50,"msg":"respondeWithError: could not delete the folder :: ReferenceError: resolve is not defined","time":"2016-06-04T22:24:55.674Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":18332,"level":50,"msg":"respondeWithError: could not delete the folder :: ReferenceError: resolve is not defined","time":"2016-06-04T22:32:40.016Z","v":0}

@@ -8,9 +8,9 @@ var FoldersController = function(req, res, authentication){
 	this.authentication = authentication;
 	this.Folder = require('../modules/folder/folders.model.js');
 	//TODO remove the first parameter from the Folder.model. 
-	this.Folder = new Folder(this, authentication.tokenUserId);
+	this.Folder = new Folder(authentication.tokenUserId);
 	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
-	this.Bookmark = new Bookmark(this, authentication.tokenUserId);
+	this.Bookmark = new Bookmark(authentication.tokenUserId);
 	this.req = req;
 	this.res = res;
 	this.reqBody;
@@ -94,9 +94,9 @@ var FoldersController = function(req, res, authentication){
 	//#### PUBLIC FUNCTIONS ####
 	
 	//TODO see this.Folder initialization 
-	this.shiftBookmarksPosition = function(path, startPosition, shift){
-		return require('../modules/bookmark/bookmarks.model.js')(self, self.authentication.tokenUserId).shiftBookmarksPosition(path, startPosition, shift);	
-	}
+	// this.shiftBookmarksPosition = function(path, startPosition, shift){
+	// 	return require('../modules/bookmark/bookmarks.model.js')(self, self.authentication.tokenUserId).shiftBookmarksPosition(path, startPosition, shift);	
+	// }
 
 	this.get = function(){
 		var folderPromise = Folder.findOne(self.req.params.folder_id);
@@ -146,6 +146,7 @@ var FoldersController = function(req, res, authentication){
 		var deleteSubFolderPromise = deleteSubFolders(self.req.params.folder_id);
 		var deleteSubBookmarksPromise = deleteSubBookmarks(self.req.params.folder_id);
 		Promise.all([deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
+			logger.debug("just the deletion of the actual folder has to be done");
 			var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
 			deleteFolderPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();

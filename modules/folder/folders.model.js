@@ -4,7 +4,7 @@ var Folder = require('../schemaExport.js').Folder;
 var logger = require('../../adapters/logger.js');
 
 
-var FoldersModel = function(caller, userId){
+var FoldersModel = function(userId){
 
 	var self; //@see: adapters/authentication.js 
 	this.userId;
@@ -47,10 +47,22 @@ var FoldersModel = function(caller, userId){
 				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
 				var changeNumberOfContainedFoldersPromise = self.changeNumberOfContainedFolders(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
-				// var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
-				var createFolderPromise = Folder.create(folder);
+				//_id and __v are managed by mongodb. when a 'new' document is created, these two fields must not already exist
+				object = JSON.parse(JSON.stringify(bookmark)); 
+				delete object['_id'];
+				delete object['__v'];
+				var createFolderPromise = new Promise(function(resolve, reject){
+					Bookmark.create(object, function(err, newFolder){
+						if(err){
+							reject();
+						}
+						else{
+							resolve(newFolder);
+						}
+					});
+				});
 				Promise.all([changeNumberOfContainedFoldersPromise, shiftFoldersPromise, createFolderPromise])
-				.then(function(){
+				.then(function(results){
 					callback(null);	//null means there is no error
 				})
 				.catch(callback);
@@ -84,9 +96,7 @@ var FoldersModel = function(caller, userId){
 	function updateAffectedElements(folder){
 		return new Promise(function(resolve, reject){
 			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
-			// var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
 			var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
-			// Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie]).then(function(resolveArray){
 			Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
 				logger.debug('all updateAffectedElements resolve');
 				resolve();
@@ -168,7 +178,6 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 	this.changeNumberOfContainedBookmarks = function(path, changeBy){
-		console.log("Fucking folder: " + path);
 		return new Promise(function(resolve, reject){
 			Folder.findById(path, function(err, foundFolder){
 				try{

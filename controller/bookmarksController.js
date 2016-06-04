@@ -9,7 +9,7 @@ var BookmarksController = function(req, res, authentication){
 	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
 	this.Bookmark = new Bookmark(authentication.tokenUserId);
 	this.Folder = require('../modules/folder/folders.model.js');
-	this.Folder = new Folder(this, self.authentication.tokenUserId);
+	this.Folder = new Folder(self.authentication.tokenUserId);
 	this.req = req;
 	this.res = res;
 	this.reqBody;
@@ -31,27 +31,21 @@ var BookmarksController = function(req, res, authentication){
 		}
 	}
 
+	function manageNumberOfContainedBookmarks(getOldBookmarkPromise){
+		var promiseList = new Array();
+		getOldBookmarkPromise.then(function(oldBookmark){
+			if(self.reqBody.hasOwnProperty('path')){
+				promiseList.push(Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
+				promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
+			}
+		})
+		.catch(function(){console.log("CATCH OF bookmark controller put");});
+
+		return promiseList;
+	}
+	
+
 	//#### PUBLIC FUNCTIONS ####
-
-	// @DEPRECATED
-	// this.shiftFoldersPosition = function(path, startPosition, shift){
-	// 	logger.debug('Controler shiftFoldersPosition');
-	// 	return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).shiftFoldersPosition(path, startPosition, shift);	
-	// }
-	// @DEPRECATED
-	// this.changeNumberOfContainedElements = function(path, changeBy){
-	// 	return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).changeNumberOfContainedElements(path, changeBy);
-	// }
-	// @DEPRECATED
-	// this.checkIfPathRegardsToOwner = function(path){
-	// 	return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).checkIfPathRegardsToOwner(path);
-	// }
-	// @DEPRECATED
-	// this.changeNumberOfContainedBookmarks = function(path, changeBy){
-	// 	return require('../modules/folder/folders.model.js')(self, authentication.tokenUserId).changeNumberOfContainedBookmarks(path, changeBy);
-	// }
-
-
 
 	this.get = function(){
 		var bookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
@@ -103,58 +97,28 @@ var BookmarksController = function(req, res, authentication){
 		.catch(respondeWithError("Failed to create bookmark"));
 	}
 
-
-
-
-	function manageNumberOfContainedBookmarks(getOldBookmarkPromise){
-		var promiseList = new Array();
-		getOldBookmarkPromise.then(function(oldBookmark){
-			console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH: ' + oldBookmark);
-			
-			if(self.reqBody.hasOwnProperty('path')){
-				promiseList.push(Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
-				promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
-			}
-			// else{
-				// promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, 1)); //because new bookmark is created	
-			// }
-		})
-		.catch(function(){console.log("CATCH OF bookmark controller put");});
-
-		return promiseList;
-	}
-
 	this.put = function(){
-		var result;
 		var promiseList = new Array();
 		// var update = Bookmark.update(self.req.params.bookmark_id, self.reqBody, function(oldBookmark){
 		var getOldBookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
 		if(self.reqBody.hasOwnProperty('path') || self.reqBody.hasOwnProperty('position')){
-			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
 			promiseList.push(Bookmark.updateMoveBookmarksFolderOrPosition(self.req.params.bookmark_id, self.reqBody));
+			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
+			Promise.all(promiseList).then(function(results){
+				self.res.status(httpStatus.OK)
+				.json({'data':
+					helpers.mongooseObjToFrontEndObj(results[0]);
+				});
+			})
+			.catch(respondeWithError("Failed to update bookmark"));
 		}
 		else{
-			promiseList.push(Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody));
+			var updateBookmarkEditablesPromise = Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);
+			updateBookmarkEditablesPromise.then(function(){
+				self.res.status(httpStatus.NO_CONTENT).end();
+			})
+			.catch(respondeWithError("Failed to update bookmark"));
 		}
-		Promise.all(promiseList).then(function(){
-			self.res.status(httpStatus.NO_CONTENT).end();
-		})
-		.catch(respondeWithError("Failed to update bookmark"));
-		
-	
-
-
-		// var changeNumberOfContainedElementsPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
-		// var shiftFoldersPositionPromise = Folder.shiftFoldersPosition();
-		// var bookmarkUpdatePromise = Bookmark.update(self.req.params.bookmark_id, self.reqBody);
-		// bookmarkUpdatePromise.then(function(){
-		// 	self.res.status(httpStatus.NO_CONTENT).end();
-		// })
-		// .catch(function(err){
-		// 	self.res.status(httpStatus.BAD_REQUEST)
-		// 		.json({'error':err}
-		// 	);
-		// });
 	}
 
 	this.delete = function(){

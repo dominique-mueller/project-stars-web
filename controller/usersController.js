@@ -27,6 +27,14 @@ var UsersController = function(req, res, authentication){
 
 	//#### PRIVATE FUNCTIONS ####
 
+	function respondeWithError(message){
+		return function(err){
+			logger.error("respondeWithError: "  + message + " :: " + err);
+			self.res.status(httpStatus.BAD_REQUEST)
+			.json({'error':message});
+		}
+	}
+
 	function getOne(userId){
 		logger.debug('getOne!!');
 		var userPromise = self.User.findOne(userId);
@@ -38,10 +46,7 @@ var UsersController = function(req, res, authentication){
 		 		}
 		 	);
 		})
-		.catch(function(err){
-			logger.error(err);
-			self.res.status(httpStatus.BAD_REQUEST).json({'error':err});
-		});
+		.catch(respondeWithError('could not find the requested user'));
 	}
 	
 	function deactivate(){
@@ -81,12 +86,7 @@ var UsersController = function(req, res, authentication){
 					self.res.end();
 					createRootFolder(newUser._id);
 				})
-				.catch(function(err){
-					logger.error(err);
-					//TODO: check for unique (email address not unique) error.
-					self.res.status(httpStatus.BAD_REQUEST)
-					.json({'error':err});
-				});
+				.catch(respondeWithError('failed to register'));
 			},
 
 			asAdmin: function(newPassword){
@@ -102,12 +102,7 @@ var UsersController = function(req, res, authentication){
 					});
 					createRootFolder(newUser._id);
 				})
-				.catch(function(err){
-					logger.error(err);
-					self.res.status(httpStatus.BAD_REQUEST)
-						.json({'error':err}
-					);
-				});
+				.catch(respondeWithError('failed to create new user account'));
 				//TODO send mail with password and activation link to given e-mail address
 			}
 		}
@@ -174,10 +169,7 @@ var UsersController = function(req, res, authentication){
 			allUserPromise.then(function(users){
 				self.res.status(httpStatus.OK).json({'data':users});
 			})
-			.catch(function(err){
-				logger.error(err);
-				self.res.status(httpStatus.BAD_REQUEST).send('Sorry, something went wrong');
-			});
+			.catch(respondeWithError('Sorry, something went wrong'));
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN)
@@ -215,13 +207,7 @@ var UsersController = function(req, res, authentication){
 		userUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
-		.catch(function(err){
-			logger.error(err);
-			self.res.status(httpStatus.BAD_REQUEST)
-				.json({error:err}
-			);
-			self.res.end();
-		});
+		.catch(respondeWithError('failed to update user'));
 	};
 
 	this.delete = function(){

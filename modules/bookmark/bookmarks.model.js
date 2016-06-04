@@ -206,14 +206,24 @@ var BookmarksModel = function(userId){
 				var deleteBookmarkPromise = self.delete(bookmarkId);
 				deleteBookmarkPromise.then(function(){
 					var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1);
+					//_id and __v are managed by mongodb. when a 'new' document is created, these two fields must not already exist
 					object = JSON.parse(JSON.stringify(bookmark));
 					delete object['_id'];
 					delete object['__v'];
-					var createBookmarkPromise = Bookmark.create(object);
-					Promise.all([shiftBookmarksPromise, createBookmarkPromise])
-					.then(function(){
+					var createBookmarkPromise = new Promise(function(resolve, reject){
+						Bookmark.create(object, function(err, newBookmark){
+							if(err){
+								reject();
+							}
+							else{
+								resolve(newBookmark);
+							}
+						});
+					});
+					Promise.all([createBookmarkPromise, shiftBookmarksPromise])
+					.then(function(results){
 						logger.debug('moving bookmark was successful');
-						resolve();
+						resolve(results[0]);
 					})
 					.catch(reject);
 				}) 
