@@ -2,7 +2,7 @@ var Bookmark = require('../schemaExport.js').Bookmark;
 var logger = require('../../adapters/logger.js');
 
 
-var BookmarksModel = function(caller, userId){
+var BookmarksModel = function(userId){
 
 	var self; //@see: adapters/authentication.js 
 	this.userId;
@@ -27,38 +27,6 @@ var BookmarksModel = function(caller, userId){
 		return bookmarks.sort(function(a, b){
 			return a.position - b.position;
 		});
-	}
-
-	function moveBookmark(bookmarkId, bookmarkData, callback){
-		var bookmarkPromise = self.findOne(bookmarkId);
-		bookmarkPromise.then(function(bookmark){
-			logger.debug('model moveBookmark: ' + bookmark.title);
-			if(bookmarkData.hasOwnProperty('path')){
-				bookmark.path = bookmarkData.path;
-				logger.debug('set new path');
-			}
-			if(bookmarkData.hasOwnProperty('position')){
-				bookmark.position = bookmarkData.position;
-				logger.debug('set new position');
-			}
-
-			var deleteBookmarkPromise = self.delete(bookmarkId);
-			deleteBookmarkPromise.then(function(){
-				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedElements(bookmark.path, 1);
-				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1);
-				// var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position -1, 1);
-				var createBookmarkPromise = Bookmark.create(bookmark);
-				// Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, shiftFoldersPromise, createBookmarkPromise])
-				Promise.all([changeNumberOfContainedElementsPromise, shiftBookmarksPromise, createBookmarkPromise])
-				.then(function(){
-					logger.debug('moving bookmark was successful');
-					callback();
-				})
-				.catch(callback);
-			}) 
-			.catch(callback);
-		})
-		.catch(callback);
 	}
 
 	function updateBookmarkLabels(bookmarkId, bookmarkData){
@@ -93,34 +61,6 @@ var BookmarksModel = function(caller, userId){
 		});		
 	}
 
-	function updateBookmarkEditables(bookmarkId, bookmarkData){
-		return new Promise(function(resolve, reject){
-			var data = new Object();
-			if(bookmarkData.hasOwnProperty('title')){
-				data['title'] = bookmarkData.title;
-			}
-			if(bookmarkData.hasOwnProperty('url')){
-				data['url'] = bookmarkData.url;
-			}
-			if(bookmarkData.hasOwnProperty('description')){
-				data['description'] = bookmarkData.description;
-			}
-			if(bookmarkData.hasOwnProperty('favicon')){
-				data['favicon'] = bookmarkData.favicon;
-			}
-			if(bookmarkData.hasOwnProperty('labels')){
-				data['labels'] = bookmarkData.labels;
-			}
-			Bookmark.findByIdAndUpdate(bookmarkId, data, {new:true}, function(err){
-				if(err){
-					reject(err);
-				}
-				else{
-					resolve();
-				}
-			});
-		});
-	}
 
 	//#### Public Functions ####
 
@@ -150,84 +90,156 @@ var BookmarksModel = function(caller, userId){
 	};
 
 
-	this.create = function(bookmarkData, promises){
+	this.create = function(bookmarkData, position){
 		return new Promise(function(resolve, reject){
 			bookmarkData['owner'] = self.userId;
-			// var checkIfPathRegardsToOwnerPromise = caller.checkIfPathRegardsToOwner(bookmarkData.path);
-			// var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedBookmarks(bookmarkData.path, 1);
-			Promise.all(promises).then(function(results){
-				logger.debug('Model create Bookmark: ' + bookmarkData);
-				logger.debug('ALL RESULTS: ' + results[0]);
-				bookmarkData['position'] = results[0];
-				var bookmark = new Bookmark(bookmarkData);
-				bookmark.save(function(err, bookmark){
-					if(err){
-						logger.debug('Reject Bookmark creation');
-						reject(err);
-					}
-					else{
-						logger.debug('Resolve bookmark creation');
-						resolve(bookmark);
-					}
-				});
-			})
-			.catch(reject);
+			// Promise.all(promises).then(function(results){
+				// logger.debug('Model create Bookmark: ' + bookmarkData);
+				// logger.debug('ALL RESULTS: ' + position);
+			bookmarkData['position'] = position;
+			var bookmark = new Bookmark(bookmarkData);
+			bookmark.save(function(err, bookmark){
+				if(err){
+					logger.debug('Reject Bookmark creation');
+					reject(err);
+				}
+				else{
+					logger.debug('Resolve bookmark creation');
+					resolve(bookmark);
+				}
+			});
+			// })
+			// .catch(reject);
 		});
 	};
 
-	this.update = function(bookmarkId, bookmarkData, promises){
+	//Find bookmark which shall be updated and return possible update functions + found bookmark
+	this.update = function(bookmarkId, bookmarkData, callback){
+		// var bookmarkPromise = self.findOne(bookmarkId);
+		// bookmarkUpdateResult.oldBookmarkPromise.then(function(bookmark){
+		// 	callback(bookmark);
+		// })
+		// .catch(function(err){
+		// 	logger.error('An error occured in bookamarks.model.update when trying to find the bookmark:' + err);
+		// });
+		
+
+		// return new Promise(function(resolve, reject){
+		// 	var bookmarkPromise = self.findOne(bookmarkId);
+		// 	bookmarkPromise.then(function(bookmark){
+		// 		if(bookmarkData.hasOwnProperty('path') || bookmarkData.hasOwnProperty('position')){
+		// 			moveBookmark(bookmarkId, bookmarkData, function(err){
+		// 				if(err){
+		// 					reject();
+		// 				}
+		// 				else{
+		// 					resolve();
+		// 				}
+		// 			});					
+		// 		}
+		// 		else{
+		// 			// var labelsUpdatePormise = updateBookmarkLabels(bookmarkId, bookmarkData);			
+		// 			var editablesUpdatePromise = updateBookmarkEditables(bookmarkId, bookmarkData);
+		// 			Promise.all([editablesUpdatePromise]).then(function(){
+		// 				resolve();
+		// 			})
+		// 			.catch(reject);
+		// 		}
+		// 	})
+		// 	.catch(reject);
+		// });
+	};
+
+
+	this.updateBookmarkEditables = function(bookmarkId, bookmarkData){
+		return new Promise(function(resolve, reject){
+			//That cumbersome because of error prevention at bookmark save
+			//JS would create a new Filed instead of rejecting non existing keys -> invalid bookmark schema
+			var bookmarkPromise = self.findOne(bookmarkId);
+			bookmarkPromise.then(function(bookmark){
+				logger.debug("UPDATE THIS BOOKMARK: " + bookmark);
+				if(bookmarkData.hasOwnProperty('title')){
+					bookmark['title'] = bookmarkData.title;
+				}
+				if(bookmarkData.hasOwnProperty('url')){
+					bookmark['url'] = bookmarkData.url;
+				}
+				if(bookmarkData.hasOwnProperty('description')){
+					bookmark['description'] = bookmarkData.description;
+				}
+				if(bookmarkData.hasOwnProperty('favicon')){
+					bookmark['favicon'] = bookmarkData.favicon;
+				}
+				if(bookmarkData.hasOwnProperty('labels')){
+					bookmark['labels'] = bookmarkData.labels;
+				}
+				bookmark.save(function(err){
+					if(err){
+						reject(err);
+					}
+					else{
+						resolve();
+					}
+				});
+
+			})
+			.catch(function(err){
+				logger.error('An error occured in bookmarks.model.update when trying to find the bookmark:' + err);
+			});
+		});
+	}
+
+	this.updateMoveBookmarksFolderOrPosition = function(bookmarkId, bookmarkData){
 		return new Promise(function(resolve, reject){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
-				if(bookmarkData.hasOwnProperty('path') || bookmarkData.hasOwnProperty('position')){
-					moveBookmark(bookmarkId, bookmarkData, function(err){
-						if(err){
-							reject();
-						}
-						else{
-							resolve();
-						}
-					});					
+				logger.debug('model moveBookmark: ' + bookmark.title);
+				if(bookmarkData.hasOwnProperty('path')){
+					bookmark.path = bookmarkData.path;
+					logger.debug('set new path');
 				}
-				else{
-					// var labelsUpdatePormise = updateBookmarkLabels(bookmarkId, bookmarkData);			
-					var editablesUpdatePromise = updateBookmarkEditables(bookmarkId, bookmarkData);
-					Promise.all([editablesUpdatePromise]).then(function(){
+				if(bookmarkData.hasOwnProperty('position')){
+					bookmark.position = bookmarkData.position;
+					logger.debug('set new position');
+				}
+
+				var deleteBookmarkPromise = self.delete(bookmarkId);
+				deleteBookmarkPromise.then(function(){
+					var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1);
+					var createBookmarkPromise = Bookmark.create(bookmark);
+					Promise.all([shiftBookmarksPromise, createBookmarkPromise])
+					.then(function(){
+						logger.debug('moving bookmark was successful');
 						resolve();
 					})
 					.catch(reject);
-				}
+				}) 
+				.catch(reject);
 			})
-			.catch(reject);
+			.catch(function(err){
+				logger.error('An error occured in bookamarks.model.update when trying to find the bookmark:' + err);
+			});
 		});
-	};
+	} 
 
 	this.delete = function(bookmarkId){
 		logger.debug('model bookmark delete: ' + bookmarkId);
 		return new Promise(function(resolve, reject){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
-				// var shiftFoldersPromise = caller.shiftFoldersPosition(bookmark.path, bookmark.position, -1);
 				var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1);
-				var changeNumberOfContainedElementsPromise = caller.changeNumberOfContainedBookmarks(bookmark.path, -1);
-				Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromise])
-				.then(function(results){
-					// logger.debug('In the all Promise');
+				shiftBookmarksPromise.then(function(){
 					Bookmark.findByIdAndRemove(bookmarkId, function(err){
 						if(err){
 							logger.debug('Promise all error');
 							reject(err);
 						}
 						else{
-							logger.debug('deletion was successful');
-							resolve();
+							resolve(bookmark);
 						}
 					});
 				})
-				.catch(function(){
-					reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
-					//TODO Rollback of successful actions
-				});
+				.catch(reject);
 			})
 			.catch(reject);
 		});
@@ -235,7 +247,7 @@ var BookmarksModel = function(caller, userId){
 
 	this.findOne = function(bookmarkId){
 		return new Promise(function(resolve, reject){
-			Bookmark.findOne({_id:bookmarkId, owner:self.userId}, function(err, bookmark){
+			Bookmark.findOne({_id: bookmarkId, owner: self.userId}, function(err, bookmark){
 				if(err){
 					reject(err);
 				} 
@@ -248,7 +260,6 @@ var BookmarksModel = function(caller, userId){
 
 	this.findAll = function(path){
 		return new Promise(function(resolve, reject){
-			// Folder.find({owner:self.userId},{sort:[['position', 'desc']]}, function(err, folders){
 			var contrains = {
 				owner: self.userId
 			};

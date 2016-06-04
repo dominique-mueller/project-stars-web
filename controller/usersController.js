@@ -5,9 +5,25 @@ var helpers = require('../helpers/generalHelpers.js');
 
 var UsersController = function(req, res, authentication){
 	
-	var self; //@see: adapters/authentication.js 
+	var self = this; //@see: adapters/authentication.js 
+	this.authentication = authentication;
 	this.User = require('../modules/user/users.model.js');
-	this.req, this.res, this.authentication, this.reqBody;
+	this.req = req;
+	this.res = res;
+	this.reqBody;
+
+
+	//CONSTRUCTOR
+	if(req.method != 'GET'){
+		this.reqBody = JSON.parse(req.body.data);
+	}
+	if(req.method == 'POST'){
+		this.User = new User(this, null);
+	}
+	else{
+		this.User = new User(this, authentication.tokenUserId)
+	}
+
 
 	//#### PRIVATE FUNCTIONS ####
 
@@ -52,7 +68,6 @@ var UsersController = function(req, res, authentication){
 		
 		return {
 			register: function(){
-				logger.debug("!!!!!!!!!!!!!!!!!!!!!!!! "+mongooseUserObject.firstName);
 				mongooseUserObject['password'] = self.authentication.convertRawPassword(newUserData.password);
 				userCreatePromise = self.User.create(mongooseUserObject);
 				userCreatePromise.then(function(newUser){
@@ -70,19 +85,21 @@ var UsersController = function(req, res, authentication){
 					logger.error(err);
 					//TODO: check for unique (email address not unique) error.
 					self.res.status(httpStatus.BAD_REQUEST)
-						.json({'error':err}
-					);
+					.json({'error':err});
 				});
 			},
 
-			asAdmin: function(){
+			asAdmin: function(newPassword){
 				mongooseUserObject['password'] = newPassword['hash'];
 				mongooseUserObject['admin'] = newUserData.admin;
 
 				userCreatePromise = self.User.create(mongooseUserObject);
 				userCreatePromise.then(function(newUser){
-					self.res.status(httpStatus.OK).json({'data':{'emailAddress':newUserData.emailAddress,'password':newPassword['password']}});
-					self.res.end();
+					self.res.status(httpStatus.OK)
+					.json({'data':{
+						'emailAddress':newUserData.emailAddress,
+						'password':newPassword['password']}
+					});
 					createRootFolder(newUser._id);
 				})
 				.catch(function(err){
@@ -147,8 +164,7 @@ var UsersController = function(req, res, authentication){
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN)
-				.json({'error':'Only admins have access to this ressource'}
-			);
+			.json({'error':'Only admins have access to this ressource'});
 		}
 	};
 
@@ -156,8 +172,7 @@ var UsersController = function(req, res, authentication){
 		if(self.authentication.isAdmin){
 			allUserPromise = self.User.findAll();
 			allUserPromise.then(function(users){
-				self.res.status(httpStatus.OK).json(users);
-				self.res.end();
+				self.res.status(httpStatus.OK).json({'data':users});
 			})
 			.catch(function(err){
 				logger.error(err);
@@ -166,16 +181,14 @@ var UsersController = function(req, res, authentication){
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN)
-				.json({'error': 'Only admins have access to this ressource'}
-			);
-			self.res.end();
+			.json({'error': 'Only admins have access to this ressource'});
 		}
 	};
 
 	this.post = function(){
 		var userCreate = new createUser(self.reqBody);
 		if(self.authentication.isAdmin){	
-			userCreate.asAdmin();
+			userCreate.asAdmin(authentication.generatePassword());
 		}
 		else{
 			logger.debug("call register");
@@ -227,26 +240,11 @@ var UsersController = function(req, res, authentication){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		}
 		else{
-			self.res.status(httpStatus.FORBIDDEN)
-				.json({'error': 'Only admins have access to this ressource'}
-			);
+			self.res.status(httpStatus.FORBIEDDEN)
+			.json({'error': 'Only admins have access to this ressource'});
 		}
 	};
 
-	//CONSTRUCTOR
-	self = this;
-	this.req = req;
-	this.res = res;
-	this.authentication = authentication;
-	if(req.method != 'GET'){
-		this.reqBody = JSON.parse(req.body.data);
-	}
-	if(req.method == 'POST'){
-		this.User = new User(this, null);
-	}
-	else{
-		this.User = new User(this, authentication.tokenUserId)
-	}
 
 	return this;
 }

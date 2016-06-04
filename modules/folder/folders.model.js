@@ -49,9 +49,9 @@ var FoldersModel = function(caller, userId){
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
 				// var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
 				var createFolderPromise = Folder.create(folder);
-				Promise.all([changeNumberOfContainedFoldersPromise, shiftBookmarksPromise, shiftFoldersPromise, createFolderPromise])
+				Promise.all([changeNumberOfContainedFoldersPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(){
-					callback(null);
+					callback(null);	//null means there is no error
 				})
 				.catch(callback);
 			})
@@ -61,7 +61,6 @@ var FoldersModel = function(caller, userId){
 	}
 
 	function saveFolderAndReturnPromise(element){
-		//TODO: move this function to an adapter
 		return new Promise(function(resolve, reject){
 			element.save(function(err){
 				if(err){
@@ -75,7 +74,6 @@ var FoldersModel = function(caller, userId){
 	}
 
 	function sortFoldersAfterPositionASC(folders){
-		//TODO: move this function to an adapter
 		return folders.sort(function(a, b){
 			return a.position - b.position;
 		});
@@ -84,7 +82,6 @@ var FoldersModel = function(caller, userId){
 	//This function will change the position of all other element in the folder 
 	//and decrement the numberOfContainedElements from path folder
 	function updateAffectedElements(folder){
-		//TODO: move this function to an adapter
 		return new Promise(function(resolve, reject){
 			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
 			// var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
@@ -171,9 +168,9 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 	this.changeNumberOfContainedBookmarks = function(path, changeBy){
+		console.log("Fucking folder: " + path);
 		return new Promise(function(resolve, reject){
 			Folder.findById(path, function(err, foundFolder){
-				console.log("Fucking folder: " + foundFolder._id);
 				try{
 					foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
 					foundFolder.save(function(err, savedFolder){
@@ -182,7 +179,7 @@ var FoldersModel = function(caller, userId){
 							reject(err);
 						}
 						else{
-							logger.debug('changeNumberOfContainedBookmarks resolved');
+							logger.debug('changeNumberOfContainedBookmarks resolved + ' + changeBy);
 							resolve(savedFolder.numberOfContainedBookmarks);
 						}
 					});

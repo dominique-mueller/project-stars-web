@@ -1,7 +1,5 @@
 //@see: https://github.com/scotch-io/node-token-authentication/blob/master/server.js
 var jwt = require('jsonwebtoken');
-// var scrypt = require('scrypt');
-// var scryptParameters = scrypt.paramsSync(0.1);
 var bcrypt = require('bcryptjs');
 var logger = require('./logger');
 var secret = require('../config.js').authentication.secret;
@@ -67,7 +65,7 @@ function Authentication(){
 						userId: user._id,
 						admin: user.admin
 						//TODO device._id
-					}, secret,{expiresIn: '365d'}));	
+					}, secret,{expiresIn: '365d'})); //the expires time is set in days (d == day)
 				}
 			});	
 		});
@@ -99,7 +97,7 @@ function Authentication(){
 	*/
 	this.convertRawPassword = function(password){
 		try{
-			var salt = bcrypt.genSaltSync(10);
+			var salt = bcrypt.genSaltSync(10);	//Magic number. See bcrypt api doc
 			var hash = bcrypt.hashSync(password, salt);
 			logger.debug('CONVERTED PASSWORD:: ' + hash);
 			return hash;
@@ -116,10 +114,11 @@ function Authentication(){
 		The password is the plain newly generated password. The hash is the hashed new password.
 	*/
 	this.generatePassword = function(){
+		const passwordLength = 16;
 		var password = '',
 			hash = '',
 			charSet = '0987654321poiuztrewqlkjhgfdsamnbvcxyQWERTZUIOPASDFGHJKLYXCVBNM-+/\!?#*§$%&-+/\!?#*§$%&';
-		for(i = 0; i < 16; i++){
+		for(i = 0; i < passwordLength; i++){
 			password += charSet[Math.floor(Math.random() * charSet.length)]; 
 		}
 		hash = convertRawPassword(password, password);

@@ -10,9 +10,9 @@ THE RIGTHS FOR EXISTENCE OF THIS FILE IS BASED ON SIMPLE TESTS ABOUT LANGUAGE SP
 
 //{"firstName":"Tim", "lastName":"Timer","emailAddress":"tim.timer@stars-web.de", "password":"stars-web-1"}
 
-require('es6-promise').polyfill();
+// require('es6-promise').polyfill();
 var auth = require('./adapters/authentication.js');
-var User = require('./modules/user/users.model.js').User;
+var User = require('./modules/schemaExport.js').User;
 
 
 
@@ -56,7 +56,7 @@ var User = require('./modules/user/users.model.js').User;
 // MyClass.prototype.publicFunction = function(){
 // 	console.log('I am here in the public function');
 // 	console.log('publicAttribute: ' + this.publicAttribute);
-// 	//console.log('privateAttribute: ' + privateAttrbute);
+// 	// console.log('privateAttribute: ' + privateAttrbute);
 // 	// privateFunction();
 // 	this.thisPrivateFunction();
 // }
@@ -68,7 +68,9 @@ var User = require('./modules/user/users.model.js').User;
 
 // console.log('myClass pub Attr:' + myClass.publicAttribute);
 // console.log('myClass priv Attr: ' + myClass.privateAttribute);
-
+// console.log("");
+// console.log("Test static prototype calls");
+// MyClass.publicFunction();
 
 
 
@@ -81,20 +83,19 @@ var User = require('./modules/user/users.model.js').User;
 
 
 var jwt = require('jsonwebtoken');
-var scrypt = require('scrypt');
-var scryptParameters = scrypt.paramsSync(0.1);
+var bcrypt = require('bcryptjs');
 var secret = require('./config.js').authentication.secret;
-var sync = require('synchronize');
 
-// var token =  jwt.sign({
-	// userId: new User()._id,
+var token =  jwt.sign({
+	userId: new User()._id,
 	// userId:'56f12f02c6ab44a50e881151',
-// 	admin: true,
-// }, secret,{expiresIn: '365d'});
+	admin: true
+}, secret,{expiresIn: '365d'});
 
-// var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NmYxMmYwMmM2YWI0NGE1MGU4ODExNTEiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDU4NjQ2Nzg2LCJleHAiOjE0NjY0MjI3ODZ9.JlmMUO9e5_ozs-1O7lXQSdZINfFhRFxygs7K2e8XLLw';
 
-// console.log('Token: ' + token);
+// var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1NzUyZGFjYTNmYjU0YzgzMWRiM2I3OWIiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNDY1MDQ3NzU0LCJleHAiOjE0OTY1ODM3NTR9.cCiI5-prQjG1epVafvcdSbrPazYXXdqnGwAJE9FFjpc';
+
+console.log('Token: ' + token);
 
 // var getDecodePromise = function (){
 // 	return new Promise(function(resolve, reject){

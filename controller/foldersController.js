@@ -4,16 +4,33 @@ var helpers = require('../helpers/generalHelpers.js');
 
 var FoldersController = function(req, res, authentication){
 
-	var self; //@see: adapters/authentication.js 
+	var self = this; //@see: adapters/authentication.js 
+	this.authentication = authentication;
 	this.Folder = require('../modules/folder/folders.model.js');
 	//TODO remove the first parameter from the Folder.model. 
-	//All Promises will be passed as an array to the called function so there won't be a need of a bidirectional communication anymore
 	this.Folder = new Folder(this, authentication.tokenUserId);
 	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
 	this.Bookmark = new Bookmark(this, authentication.tokenUserId);
-	this.req, this.res, this.authentication, this.reqBody;
+	this.req = req;
+	this.res = res;
+	this.reqBody;
+
+
+	//CONSTRUCTOR
+	if(req.method != 'GET' && req.method != 'DELETE'){
+		this.reqBody = JSON.parse(req.body.data);
+	}	
+
 
 	//#### PRIVATE FUNCTIONS ####
+
+	function respondeWithError(message){
+		return function(err){
+			logger.error("respondeWithError: "  + message + " :: " + err);
+			self.res.status(httpStatus.BAD_REQUEST)
+			.json({'error':message});
+		}
+	}
 
 	function deleteSubFolders(pathId){
 		logger.debug('deleteSubFolders: ' + pathId);
@@ -23,43 +40,52 @@ var FoldersController = function(req, res, authentication){
 				var deletePromises = new Array();
 				for(var i = 0; i < folders.length; i++){
 					logger.debug('Delete Subfolder with the Id:' + folders[i]._id);
-					deletePromises.push(self.recursiveDelete(folders[i]._id));
+					deletePromises.push(recursiveDelete(folders[i]._id));
 				}
 				Promise.all(deletePromises).then(function(){
 					resolve();
 				})
 				.catch(reject);
 			})
-			.catch(reject);
+			.catch(function(){
+				logger.info("Can't find any sub Folder. PathId: " + pathId);
+				resolve();
+			});
 		});	
 	}
 
 	function deleteSubBookmarks(pathId){
 		logger.debug('deleteSubBookmarks: ' + pathId);
 		return new Promise(function(ersolve, reject){
-			var findSubBookmarksPromise = require('../modules/bookmark/bookmarks.model.js')(self, authentication.tokenUserId).findAll(pathId);
+			var findSubBookmarksPromise = Bookmark.findAll(pathId);
 			findSubBookmarksPromise.then(function(bookmarks){
 				var deletePromises = new Array();
 				for(var i = 0; i < bookmarks.length; i++){
 					logger.debug('Delete Subbookmark with the Id:' + bookmarks[i]._id);
-					deletePromises.push(require('../modules/bookmark/bookmarks.model.js')(self, authentication.tokenUserId).delete(bookmarks[i]._id));
+					deletePromises.push(Bookmark.delete(bookmarks[i]._id));
 				}
 				Promise.all(deletePromises).then(function(){
 					resolve();
 				})
 				.catch(reject);
 			})
-			.catch(reject);
+			.catch(function(){
+				logger.info("Can't find any sub Bookmarks. PathId: " + pathId);
+				resolve();
+			});
 		});
 	}
 
 	function recursiveDelete(folderId){
-		var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
 		var deleteSubFolderPromise = deleteSubFolders(folderId);
 		var deleteSubBookmarksPromise = deleteSubBookmarks(folderId);
 		return new Promise(function(resolve, reject){
-			Promise.all([deleteFolderPromise, deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
-				resolve();
+			Promise.all([deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
+				var deleteFolderPromise = Folder.delete(folderId);
+				deleteFolderPromise.then(function(){
+					resolve();
+				})
+				.catch(reject);
 			})
 			.catch(reject);
 		});
@@ -81,11 +107,7 @@ var FoldersController = function(req, res, authentication){
 				}
 			);
 		})
-		.catch(function(err){
-			res.status(httpStatus.BAD_REQUEST)
-				.json({error:err}
-			);
-		});
+		.catch(respondeWithError(''));
 	};
 
 	this.getAll = function(){
@@ -97,10 +119,7 @@ var FoldersController = function(req, res, authentication){
 				}
 			);
 		})
-		.catch(function(err){
-			logger.error(err);
-			self.req.status(httpStatus.BAD_REQUEST).end();
-		});
+		.catch(respondeWithError(''));
 	};
 
 	this.post = function(){
@@ -108,14 +127,11 @@ var FoldersController = function(req, res, authentication){
 		var folderCreatePromise = Folder.create(self.reqBody);
 		folderCreatePromise.then(function(folder){
 			self.res.status(httpStatus.OK)
-				.json({data:folder}
-			);
+			.json({'data':
+				helpers.mongooseObjToFrontEndObj(folder)
+			});
 		})
-		.catch(function(err){
-			self.res.status(httpStatus.BAD_REQUEST)
-				.json({'error':err}
-			);
-		});
+		.catch(respondeWithError('could not create the folder'));
 	};
 
 	this.put = function(){
@@ -123,38 +139,22 @@ var FoldersController = function(req, res, authentication){
 		folderUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
-		.catch(function(err){
-			self.res.status(httpStatus.BAD_REQUEST)
-				.json({'error':err}
-			);
-		});
+		.catch(respondeWithError('could not update the folder'));
 	};
 
 	this.delete = function(folderId){
-		var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
 		var deleteSubFolderPromise = deleteSubFolders(self.req.params.folder_id);
 		var deleteSubBookmarksPromise = deleteSubBookmarks(self.req.params.folder_id);
-		Promise.all([deleteFolderPromise, deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
-			self.res.status(httpStatus.NO_CONTENT).end();
+		Promise.all([deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
+			var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
+			deleteFolderPromise.then(function(){
+				self.res.status(httpStatus.NO_CONTENT).end();
+			})
+			.catch(respondeWithError('UNKNOWN BUT DANGEROUS ERROR'));
 		})
-		.catch(function(err){
-			self.res.status(httpStatus.BAD_REQUEST)
-				.json({'error':err}
-			);	
-		});	
+		.catch(respondeWithError('could not delete the folder'));	
 	};
 
-
-
-	//CONSTRUCTOR
-	self = this;
-
-	this.req = req;
-	this.res = res;
-	this.authentication = authentication;
-	if(req.method != 'GET' && req.method != 'DELETE'){
-		this.reqBody = JSON.parse(req.body.data);
-	}	
 
 	return this;
 }
