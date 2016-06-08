@@ -23,14 +23,6 @@ var BookmarksController = function(req, res, authentication){
 
 	//#### PRIVATE FUNCTIONS ####
 
-	function respondeWithError(message){
-		return function(err){
-			logger.error("respondeWithError: "  + message + " :: " + err);
-			self.res.status(httpStatus.BAD_REQUEST)
-			.json({'error':message});
-		}
-	}
-
 	function manageNumberOfContainedBookmarks(getOldBookmarkPromise){
 		var promiseList = new Array();
 		getOldBookmarkPromise.then(function(oldBookmark){
@@ -92,9 +84,9 @@ var BookmarksController = function(req, res, authentication){
 					}
 				);
 			})
-			.catch(respondeWithError("Failed to create bookmark"));
+			.catch(helpers.respondeWithError("Failed to create bookmark"));
 		})
-		.catch(respondeWithError("Failed to create bookmark"));
+		.catch(helpers.respondeWithError("Failed to create bookmark"));
 	}
 
 	this.put = function(){
@@ -110,14 +102,14 @@ var BookmarksController = function(req, res, authentication){
 				// 	helpers.mongooseObjToFrontEndObj(results[0])
 				// });
 			})
-			.catch(respondeWithError("Failed to update bookmark"));
+			.catch(helpers.respondeWithError("Failed to update bookmark"));
 		}
 		else{
 			var updateBookmarkEditablesPromise = Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);
 			updateBookmarkEditablesPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
-			.catch(respondeWithError("Failed to update bookmark"));
+			.catch(helpers.respondeWithError("Failed to update bookmark"));
 		}
 	}
 
@@ -130,10 +122,10 @@ var BookmarksController = function(req, res, authentication){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
 			//Todo rollback
-			.catch(respondeWithError('Failed to dekrement number of contained bookmarks in path folder'));	
+			.catch(helpers.respondeWithError('Failed to dekrement number of contained bookmarks in path folder'));	
 		})
 		//Todo rollback
-		.catch(respondeWithError('Failed to delete bookmark with id ' + self.req.params.bookmark_id));
+		.catch(helpers.respondeWithError('Failed to delete bookmark with id ' + self.req.params.bookmark_id));
 	}
 
 	return this;

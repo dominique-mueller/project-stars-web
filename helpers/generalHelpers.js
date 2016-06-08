@@ -1,9 +1,8 @@
+var logger = require('../adapters/logger.js');
+var httpStatus = require('../config.js').httpStatus;
+
 
 module.exports = {
-
-
-	
-	
 	mongooseObjToFrontEndObj: function(object){
 		var modifiedObject;
 		if(Array.isArray(object)){
@@ -16,6 +15,14 @@ module.exports = {
 			modifiedObject = alterSingleObject(object);
 		}
 		return modifiedObject;
+	},
+
+	respondeWithError: function (message){
+		return function(err){
+			logger.error("respondeWithError: "  + message + " :: " + err);
+			self.res.status(httpStatus.BAD_REQUEST)
+			.json({'error':message});
+		}
 	}
 
 }

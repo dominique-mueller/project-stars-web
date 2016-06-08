@@ -23,14 +23,6 @@ var FoldersController = function(req, res, authentication){
 
 	//#### PRIVATE FUNCTIONS ####
 
-	function respondeWithError(message){
-		return function(err){
-			logger.error("respondeWithError: "  + message + " :: " + err);
-			self.res.status(httpStatus.BAD_REQUEST)
-			.json({'error':message});
-		}
-	}
-
 	function deleteSubFolders(pathId){
 		logger.debug('deleteSubFolders: ' + pathId);
 		return new Promise(function(resolve, reject){
@@ -91,11 +83,6 @@ var FoldersController = function(req, res, authentication){
 	}
 
 	//#### PUBLIC FUNCTIONS ####
-	
-	//TODO see this.Folder initialization 
-	// this.shiftBookmarksPosition = function(path, startPosition, shift){
-	// 	return require('../modules/bookmark/bookmarks.model.js')(self, self.authentication.tokenUserId).shiftBookmarksPosition(path, startPosition, shift);	
-	// }
 
 	this.get = function(){
 		var folderPromise = Folder.findOne(self.req.params.folder_id);
@@ -106,7 +93,7 @@ var FoldersController = function(req, res, authentication){
 				}
 			);
 		})
-		.catch(respondeWithError(''));
+		.catch(helpers.respondeWithError(''));
 	};
 
 
@@ -119,7 +106,7 @@ var FoldersController = function(req, res, authentication){
 				}
 			);
 		})
-		.catch(respondeWithError(''));
+		.catch(helpers.respondeWithError(''));
 	};
 
 
@@ -132,7 +119,7 @@ var FoldersController = function(req, res, authentication){
 				helpers.mongooseObjToFrontEndObj(folder)
 			});
 		})
-		.catch(respondeWithError('could not create the folder'));
+		.catch(helpers.respondeWithError('could not create the folder'));
 	};
 
 
@@ -149,7 +136,7 @@ var FoldersController = function(req, res, authentication){
 		folderUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
-		.catch(respondeWithError('could not update the folder'));
+		.catch(helpers.respondeWithError('could not update the folder'));
 	};
 
 
@@ -162,9 +149,9 @@ var FoldersController = function(req, res, authentication){
 			deleteFolderPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
-			.catch(respondeWithError('UNKNOWN BUT DANGEROUS ERROR'));
+			.catch(helpers.respondeWithError('UNKNOWN BUT DANGEROUS ERROR'));
 		})
-		.catch(respondeWithError('could not delete the folder'));	
+		.catch(helpers.respondeWithError('could not delete the folder'));	
 	};
 
 

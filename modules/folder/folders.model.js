@@ -30,8 +30,8 @@ var FoldersModel = function(userId){
 		}); 
 	}
 
-
-	function saveFolderAndReturnPromise(element){
+	//TODO: create model prototype and pull this function to the prototype
+	function saveAndReturnPromise(element){
 		return new Promise(function(resolve, reject){
 			element.save(function(err){
 				if(err){
@@ -44,36 +44,18 @@ var FoldersModel = function(userId){
 		});
 	}
 
+	//TODO: create model prototype and pull this function to the prototype
 	function sortFoldersAfterPositionASC(folders){
 		return folders.sort(function(a, b){
 			return a.position - b.position;
 		});
 	}
 
-	//This function will change the position of all other element in the folder 
-	//and decrement the numberOfContainedElements from path folder
-	// function updateAffectedElements(folder){
-	// 	return new Promise(function(resolve, reject){
-	// 		var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
-	// 		var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
-	// 		Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
-	// 			logger.debug('all updateAffectedElements resolve');
-	// 			resolve();
-	// 		})
-	// 		.catch(function(){
-	// 			logger.error('something went wrong with updateAffectedElements');
-	// 			reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
-	// 			//TODO Rollback of successful actions
-	// 		});
-	// 	});
-	// }
-
 
 	//#### Public Functions #####
 
 	//KEEP THESE FUNCTIONS. DUE TO FRONTEND COMPATIBILITY FOR RELEASE THEY HAD TO BE SIMPLICIFIED
 	
-
  	// 	this.checkIfPathRegardsToOwner = function(path){
 	// 	return new Promise(function(resolve, reject){
 	// 		//TODO !!!!
@@ -137,29 +119,6 @@ var FoldersModel = function(userId){
 		});
 	}
 
-	// this.changeNumberOfContainedBookmarks = function(path, changeBy){
-	// 	return new Promise(function(resolve, reject){
-	// 		Folder.findById(path, function(err, foundFolder){
-	// 			try{
-	// 				foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
-	// 				foundFolder.save(function(err, savedFolder){
-	// 					if(err){
-	// 						logger.error(err);
-	// 						reject(err);
-	// 					}
-	// 					else{
-	// 						logger.debug('changeNumberOfContainedBookmarks resolved + ' + changeBy);
-	// 						resolve(savedFolder.numberOfContainedBookmarks);
-	// 					}
-	// 				});
-	// 			}
-	// 			catch(err){
-	// 				reject(err);
-	// 			}
-	// 		});
-	// 	});
-	// }
-
 
 	//The startPosition won't be affected, 
 	// so if you plan to shift folders to get an empty position you have set the startPosition to <planedFreePosition> - 1 
@@ -176,7 +135,7 @@ var FoldersModel = function(userId){
 					if(folderArray[i].position > startPosition){
 						// logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
 						folderArray[i].position = folderArray[i].position + shift;
-						savePromiseArray.push(saveFolderAndReturnPromise(folderArray[i]));
+						savePromiseArray.push(saveAndReturnPromise(folderArray[i]));
 					}
 				}
 				Promise.all(savePromiseArray).then(function(){
@@ -262,7 +221,7 @@ var FoldersModel = function(userId){
 						promiseList.push(self.shiftFoldersPosition(folder.path, folder.position -1, 1));
 
 						Promise.all(promiseList).then(function(){
-							saveFolderAndReturnPromise(folder).then(function(){
+							saveAndReturnPromise(folder).then(function(){
 								resolve();
 							})
 							.catch(reject)
