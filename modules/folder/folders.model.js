@@ -209,6 +209,10 @@ var FoldersModel = function(userId){
 					var folderPromise = self.findOne(folderId);
 					folderPromise.then(function(folder){
 						
+						if(folder.name !== '.'){
+							reject(new Error("Root folder can not be manipulated"));
+						}
+
 						if(folderData.hasOwnProperty('path')){ //if a path is in the update data, there has also to be a position
 							promiseList.push(self.shiftFoldersPosition(folder.path, folder.position, -1));
 							promiseList.push(self.changeNumberOfContainedFolders(folder.path, -1));
