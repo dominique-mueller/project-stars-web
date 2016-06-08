@@ -162,10 +162,10 @@ var BookmarksModel = function(userId){
 					bookmark.path = bookmarkData.path;
 					logger.debug('set new path');
 				}
-				if(bookmarkData.hasOwnProperty('position')){
-					bookmark.position = bookmarkData.position;
-					logger.debug('set new position');
-				}
+				// if(bookmarkData.hasOwnProperty('position')){
+				bookmark.position = bookmarkData.position;
+					// logger.debug('set new position');
+				// }
 
 				promiseList.push(self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1));
 				Promise.all(promiseList).then(function(results){
@@ -220,6 +220,7 @@ var BookmarksModel = function(userId){
 		});
 	};
 
+	//@param path: if path is given, this function will only search for bookmarks within this path
 	this.findAll = function(path){
 		return new Promise(function(resolve, reject){
 			var contrains = {

@@ -137,7 +137,15 @@ var FoldersController = function(req, res, authentication){
 
 
 	this.put = function(){
-		var folderUpdatePromise = Folder.update(self.req.params.folder_id, self.reqBody);
+		var folderUpdatePromise;
+		var folderUpdate = Folder.update(self.req.params.folder_id, self.reqBody);
+		if(self.reqBody.hasOwnProperty('name')){
+			folderUpdatePromise = folderUpdate.updateFolderEditables();
+		}
+		else{
+			folderUpdatePromise = folderUpdate.updateMoveFolderPathOrPosition();
+		}
+
 		folderUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})

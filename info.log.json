@@ -1172,3 +1172,21 @@
 {"name":"stars-web","hostname":"varicor","pid":6898,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T14:54:28.114Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":7008,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T14:57:58.013Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":7008,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T14:57:58.275Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8132,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T15:57:19.792Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8132,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T15:57:20.024Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8214,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T15:58:17.839Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8214,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T15:58:18.085Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8313,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T16:00:54.051Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8313,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T16:00:54.290Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8373,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T16:01:14.530Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8373,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T16:01:14.762Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8501,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T16:03:39.413Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8501,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T16:03:39.647Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8645,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T16:07:49.456Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8645,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T16:07:49.717Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8738,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T16:08:13.409Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8738,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T16:08:13.644Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8738,"level":50,"msg":"respondeWithError: could not update the folder :: ValidationError: Path `name` is required.","time":"2016-06-08T16:08:16.554Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":8738,"level":50,"msg":"respondeWithError: could not update the folder :: ReferenceError: saveAndReturnPromise is not defined","time":"2016-06-08T17:28:34.495Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":9294,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T17:30:26.184Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":9294,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T17:30:26.418Z","v":0}

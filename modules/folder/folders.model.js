@@ -30,57 +30,6 @@ var FoldersModel = function(userId){
 		}); 
 	}
 
-	function moveFolder(folderId, folderData, callback){
-		//TODO: move this function to an adapter
-		var folderPromise = self.findOne(folderId);
-		folderPromise.then(function(folder){
-			if(folderData.hasOwnProperty('path')){
-				folder.path = folderData.path;
-			}
-			if(folderData.hasOwnProperty('position')){
-				folder.position = folderData.position;
-			}
-
-			// var deleteFolderPromise = self.delete(folderId);
-			// deleteFolderPromise.then(function(){
-				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
-				var changeNumberOfContainedFoldersPromise = self.changeNumberOfContainedFolders(folder.path, +1);
-				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
-				//_id and __v are managed by mongodb. when a 'new' document is created, these two fields must not already exist
-				// object = JSON.parse(JSON.stringify(bookmark)); 
-				// delete object['_id'];
-				// delete object['__v'];
-				// var createFolderPromise = new Promise(function(resolve, reject){
-				// 	Bookmark.create(object, function(err, newFolder){
-				// 		if(err){
-				// 			reject();
-				// 		}
-				// 		else{
-				// 			resolve(newFolder);
-				// 		}
-				// 	});
-				// });
-
-				folder.save(function(err, newFolder){
-					if(err){
-						reject();
-					}
-					else{
-						resolve(newFolder);
-					}
-				});
-
-
-				Promise.all([changeNumberOfContainedFoldersPromise, shiftFoldersPromise, createFolderPromise])
-				.then(function(results){
-					callback(null);	//null means there is no error
-				})
-				.catch(callback);
-			// })
-			// .catch(callback);
-		})
-		.catch(callback);	
-	}
 
 	function saveFolderAndReturnPromise(element){
 		return new Promise(function(resolve, reject){
@@ -103,21 +52,21 @@ var FoldersModel = function(userId){
 
 	//This function will change the position of all other element in the folder 
 	//and decrement the numberOfContainedElements from path folder
-	function updateAffectedElements(folder){
-		return new Promise(function(resolve, reject){
-			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
-			var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
-			Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
-				logger.debug('all updateAffectedElements resolve');
-				resolve();
-			})
-			.catch(function(){
-				logger.error('something went wrong with updateAffectedElements');
-				reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
-				//TODO Rollback of successful actions
-			});
-		});
-	}
+	// function updateAffectedElements(folder){
+	// 	return new Promise(function(resolve, reject){
+	// 		var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+	// 		var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
+	// 		Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
+	// 			logger.debug('all updateAffectedElements resolve');
+	// 			resolve();
+	// 		})
+	// 		.catch(function(){
+	// 			logger.error('something went wrong with updateAffectedElements');
+	// 			reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
+	// 			//TODO Rollback of successful actions
+	// 		});
+	// 	});
+	// }
 
 
 	//#### Public Functions #####
@@ -176,7 +125,7 @@ var FoldersModel = function(userId){
 							reject(err);
 						}
 						else{
-							logger.debug('changeNumberOfContainedFolders resolved');
+							// logger.debug('changeNumberOfContainedFolders resolved');
 							resolve(savedFolder.numberOfContainedFolders);
 						}
 					});
@@ -187,28 +136,29 @@ var FoldersModel = function(userId){
 			});
 		});
 	}
-	this.changeNumberOfContainedBookmarks = function(path, changeBy){
-		return new Promise(function(resolve, reject){
-			Folder.findById(path, function(err, foundFolder){
-				try{
-					foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
-					foundFolder.save(function(err, savedFolder){
-						if(err){
-							logger.error(err);
-							reject(err);
-						}
-						else{
-							logger.debug('changeNumberOfContainedBookmarks resolved + ' + changeBy);
-							resolve(savedFolder.numberOfContainedBookmarks);
-						}
-					});
-				}
-				catch(err){
-					reject(err);
-				}
-			});
-		});
-	}
+
+	// this.changeNumberOfContainedBookmarks = function(path, changeBy){
+	// 	return new Promise(function(resolve, reject){
+	// 		Folder.findById(path, function(err, foundFolder){
+	// 			try{
+	// 				foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
+	// 				foundFolder.save(function(err, savedFolder){
+	// 					if(err){
+	// 						logger.error(err);
+	// 						reject(err);
+	// 					}
+	// 					else{
+	// 						logger.debug('changeNumberOfContainedBookmarks resolved + ' + changeBy);
+	// 						resolve(savedFolder.numberOfContainedBookmarks);
+	// 					}
+	// 				});
+	// 			}
+	// 			catch(err){
+	// 				reject(err);
+	// 			}
+	// 		});
+	// 	});
+	// }
 
 
 	//The startPosition won't be affected, 
@@ -240,25 +190,6 @@ var FoldersModel = function(userId){
 		});
 	};
 
-	this.findAll = function(path){
-		return new Promise(function(resolve, reject){
-			// Folder.find({owner:self.userId},{sort:[['position', 'desc']]}, function(err, folders){
-			var contrains = {
-				owner: self.userId
-			};
-			if(path){
-				contrains['path'] = path;
-			}
-			Folder.find(contrains, function(err, folders){
-				if(err){
-					reject(err);
-				}
-				else{
-					resolve(folders);
-				}
-			});
-		});
-	}; 
 
 	this.create = function(folderData){
 		return new Promise(function(resolve, reject){	
@@ -267,11 +198,10 @@ var FoldersModel = function(userId){
 				owner: self.userId,
 				path: folderData.path
 			});
-			var folderPromise;
 
 			var positionPromise = self.changeNumberOfContainedFolders(folder.path, 1);
 			positionPromise.then(function(highestPosition){
-				logger.debug('highestPosition: '+highestPosition);
+				// logger.debug('highestPosition: '+highestPosition);
 				folder.position = highestPosition;
 				folder.save(function(err, folder){
 					if(err){
@@ -288,6 +218,7 @@ var FoldersModel = function(userId){
 			});
 		});
 	};
+
 
 	this.createRootFolder = function(){
 		return new Promise(function(resolve, reject){
@@ -307,33 +238,60 @@ var FoldersModel = function(userId){
 				}
 			});
 		});
-	}
+	};
+
 
 	this.update = function(folderId, folderData){
-		return new Promise(function(resolve, reject){
-		if(folderData.hasOwnProperty('name')){
-			Folder.findByIdAndUpdate(folderId, {"name":folderData.name}, {new:true}, function(err){
-				if(err){
-					reject(err);
-				}
-				else{
-					resolve();
-				}
-			});
-		}
-		else{
-			moveFolder(folderId, folderData, function(err){
-				if(err){
-					logger.error(err);
-					reject();
-				}
-				else{
-					resolve();
-				}
-			});
-		}
-		});
+		return {
+			updateMoveFolderPathOrPosition: function(){
+				logger.debug("updateMoveFolderPathOrPosition");
+				return new Promise(function(resolve, reject){
+					var promiseList = new Array();
+					var folderPromise = self.findOne(folderId);
+					folderPromise.then(function(folder){
+						
+						if(folderData.hasOwnProperty('path')){ //if a path is in the update data, there has also to be a position
+							promiseList.push(self.shiftFoldersPosition(folder.path, folder.position, -1));
+							promiseList.push(self.changeNumberOfContainedFolders(folder.path, -1));
+							folder.path = folderData.path;
+							promiseList.push(self.changeNumberOfContainedFolders(folder.path, 1));
+							logger.debug("folder path will be changed");
+						}
+
+						folder.position = folderData.position;
+						promiseList.push(self.shiftFoldersPosition(folder.path, folder.position -1, 1));
+
+						Promise.all(promiseList).then(function(){
+							saveFolderAndReturnPromise(folder).then(function(){
+								resolve();
+							})
+							.catch(reject)
+						})
+						.catch(reject);
+
+					})
+					.catch(reject);			
+	
+				});
+			},
+
+			updateFolderEditables: function(){
+				logger.debug("updateFolderEditables");
+
+				return new Promise(function(resolve, reject){
+					Folder.findByIdAndUpdate(folderId, {"name":folderData.name}, {new:true}, function(err){
+						if(err){
+							reject(err);
+						}
+						else{
+							resolve();
+						}
+					});
+				});
+			}
+		};
 	};
+
 	
 	this.delete = function(folderId){
 		return new Promise(function(resolve, reject){
@@ -367,6 +325,28 @@ var FoldersModel = function(userId){
 			.catch(reject);
 		});
 	};
+
+	//@param path: if path is given this function will only search for folders within this path
+	this.findAll = function(path){
+		return new Promise(function(resolve, reject){
+			// Folder.find({owner:self.userId},{sort:[['position', 'desc']]}, function(err, folders){
+			var contrains = {
+				owner: self.userId
+			};
+			if(path){
+				contrains['path'] = path;
+			}
+			Folder.find(contrains, function(err, folders){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(folders);
+				}
+			});
+		});
+	}; 
+
 
 	this.findOne = function(folderId){
 		return new Promise(function(resolve, reject){
