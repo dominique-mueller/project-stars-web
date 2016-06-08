@@ -41,32 +41,43 @@ var FoldersModel = function(userId){
 				folder.position = folderData.position;
 			}
 
-			var deleteFolderPromise = self.delete(folderId);
-			deleteFolderPromise.then(function(){
+			// var deleteFolderPromise = self.delete(folderId);
+			// deleteFolderPromise.then(function(){
 				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
 				var changeNumberOfContainedFoldersPromise = self.changeNumberOfContainedFolders(folder.path, +1);
 				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
 				//_id and __v are managed by mongodb. when a 'new' document is created, these two fields must not already exist
-				object = JSON.parse(JSON.stringify(bookmark)); 
-				delete object['_id'];
-				delete object['__v'];
-				var createFolderPromise = new Promise(function(resolve, reject){
-					Bookmark.create(object, function(err, newFolder){
-						if(err){
-							reject();
-						}
-						else{
-							resolve(newFolder);
-						}
-					});
+				// object = JSON.parse(JSON.stringify(bookmark)); 
+				// delete object['_id'];
+				// delete object['__v'];
+				// var createFolderPromise = new Promise(function(resolve, reject){
+				// 	Bookmark.create(object, function(err, newFolder){
+				// 		if(err){
+				// 			reject();
+				// 		}
+				// 		else{
+				// 			resolve(newFolder);
+				// 		}
+				// 	});
+				// });
+
+				folder.save(function(err, newFolder){
+					if(err){
+						reject();
+					}
+					else{
+						resolve(newFolder);
+					}
 				});
+
+
 				Promise.all([changeNumberOfContainedFoldersPromise, shiftFoldersPromise, createFolderPromise])
 				.then(function(results){
 					callback(null);	//null means there is no error
 				})
 				.catch(callback);
-			})
-			.catch(callback);
+			// })
+			// .catch(callback);
 		})
 		.catch(callback);	
 	}
@@ -331,9 +342,9 @@ var FoldersModel = function(userId){
 				// logger.debug('folderPromise');
 				if(folder.name !== '.'){
 					// logger.debug('non root folder');
-					var updateAffectedElementsPromise = updateAffectedElements(folder);
-					updateAffectedElementsPromise.then(function(){
-						logger.debug('updateAffectedElementsPromise fullfiled');
+					var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+					var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
+					Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
 						Folder.findByIdAndRemove(folderId, function(err){
 							if(err){
 								reject(err);
@@ -343,7 +354,11 @@ var FoldersModel = function(userId){
 							}
 						});
 					})
-					.catch(reject);
+					.catch(function(){
+						logger.error('something went wrong with updateAffectedElements');
+						reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
+						//TODO Rollback of successful actions
+					});
 				}
 				else{
 					reject(new Error('The root folder can not be deleted'));

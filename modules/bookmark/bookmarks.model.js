@@ -93,9 +93,6 @@ var BookmarksModel = function(userId){
 	this.create = function(bookmarkData, position){
 		return new Promise(function(resolve, reject){
 			bookmarkData['owner'] = self.userId;
-			// Promise.all(promises).then(function(results){
-				// logger.debug('Model create Bookmark: ' + bookmarkData);
-				// logger.debug('ALL RESULTS: ' + position);
 			bookmarkData['position'] = position;
 			var bookmark = new Bookmark(bookmarkData);
 			bookmark.save(function(err, bookmark){
@@ -112,43 +109,6 @@ var BookmarksModel = function(userId){
 			// .catch(reject);
 		});
 	};
-
-	//Find bookmark which shall be updated and return possible update functions + found bookmark
-	// this.update = function(bookmarkId, bookmarkData, callback){
-		// var bookmarkPromise = self.findOne(bookmarkId);
-		// bookmarkUpdateResult.oldBookmarkPromise.then(function(bookmark){
-		// 	callback(bookmark);
-		// })
-		// .catch(function(err){
-		// 	logger.error('An error occured in bookamarks.model.update when trying to find the bookmark:' + err);
-		// });
-		
-
-		// return new Promise(function(resolve, reject){
-		// 	var bookmarkPromise = self.findOne(bookmarkId);
-		// 	bookmarkPromise.then(function(bookmark){
-		// 		if(bookmarkData.hasOwnProperty('path') || bookmarkData.hasOwnProperty('position')){
-		// 			moveBookmark(bookmarkId, bookmarkData, function(err){
-		// 				if(err){
-		// 					reject();
-		// 				}
-		// 				else{
-		// 					resolve();
-		// 				}
-		// 			});					
-		// 		}
-		// 		else{
-		// 			// var labelsUpdatePormise = updateBookmarkLabels(bookmarkId, bookmarkData);			
-		// 			var editablesUpdatePromise = updateBookmarkEditables(bookmarkId, bookmarkData);
-		// 			Promise.all([editablesUpdatePromise]).then(function(){
-		// 				resolve();
-		// 			})
-		// 			.catch(reject);
-		// 		}
-		// 	})
-		// 	.catch(reject);
-		// });
-	// };
 
 
 	this.updateBookmarkEditables = function(bookmarkId, bookmarkData){
@@ -187,14 +147,18 @@ var BookmarksModel = function(userId){
 				logger.error('An error occured in bookmarks.model.update when trying to find the bookmark:' + err);
 			});
 		});
-	}
+	};
+
 
 	this.updateMoveBookmarksFolderOrPosition = function(bookmarkId, bookmarkData){
 		return new Promise(function(resolve, reject){
+			var promiseList = new Array();
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
 				logger.debug('model moveBookmark: ' + bookmark.title);
+				
 				if(bookmarkData.hasOwnProperty('path')){
+					promiseList.push(self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1));
 					bookmark.path = bookmarkData.path;
 					logger.debug('set new path');
 				}
@@ -203,27 +167,11 @@ var BookmarksModel = function(userId){
 					logger.debug('set new position');
 				}
 
-				var deleteBookmarkPromise = self.delete(bookmarkId);
-				deleteBookmarkPromise.then(function(){
-					var shiftBookmarksPromise = self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1);
-					//_id and __v are managed by mongodb. when a 'new' document is created, these two fields must not already exist
-					object = JSON.parse(JSON.stringify(bookmark));
-					delete object['_id'];
-					delete object['__v'];
-					var createBookmarkPromise = new Promise(function(resolve, reject){
-						Bookmark.create(object, function(err, newBookmark){
-							if(err){
-								reject();
-							}
-							else{
-								resolve(newBookmark);
-							}
-						});
-					});
-					Promise.all([createBookmarkPromise, shiftBookmarksPromise])
-					.then(function(results){
-						logger.debug('moving bookmark was successful');
-						resolve(results[0]);
+				promiseList.push(self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1));
+				Promise.all(promiseList).then(function(results){
+					logger.debug('moving bookmark was successful');
+					saveAndReturnPromise(bookmark).then(function(){
+						resolve();
 					})
 					.catch(reject);
 				}) 
@@ -233,7 +181,8 @@ var BookmarksModel = function(userId){
 				logger.error('An error occured in bookamarks.model.update when trying to find the bookmark:' + err);
 			});
 		});
-	} 
+	};
+
 
 	this.delete = function(bookmarkId){
 		logger.debug('model bookmark delete: ' + bookmarkId);

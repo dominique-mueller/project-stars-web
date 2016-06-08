@@ -7,7 +7,6 @@ var FoldersController = function(req, res, authentication){
 	var self = this; //@see: adapters/authentication.js 
 	this.authentication = authentication;
 	this.Folder = require('../modules/folder/folders.model.js');
-	//TODO remove the first parameter from the Folder.model. 
 	this.Folder = new Folder(authentication.tokenUserId);
 	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
 	this.Bookmark = new Bookmark(authentication.tokenUserId);
@@ -110,6 +109,7 @@ var FoldersController = function(req, res, authentication){
 		.catch(respondeWithError(''));
 	};
 
+
 	this.getAll = function(){
 		var folderPromise = Folder.findAll(null);
 		folderPromise.then(function(folders){
@@ -121,6 +121,7 @@ var FoldersController = function(req, res, authentication){
 		})
 		.catch(respondeWithError(''));
 	};
+
 
 	this.post = function(){
 		//TODO: use isRoot field instead of owner == path for the root folder
@@ -134,6 +135,7 @@ var FoldersController = function(req, res, authentication){
 		.catch(respondeWithError('could not create the folder'));
 	};
 
+
 	this.put = function(){
 		var folderUpdatePromise = Folder.update(self.req.params.folder_id, self.reqBody);
 		folderUpdatePromise.then(function(){
@@ -141,6 +143,7 @@ var FoldersController = function(req, res, authentication){
 		})
 		.catch(respondeWithError('could not update the folder'));
 	};
+
 
 	this.delete = function(folderId){
 		var deleteSubFolderPromise = deleteSubFolders(self.req.params.folder_id);

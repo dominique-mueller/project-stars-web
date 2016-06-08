@@ -104,11 +104,11 @@ var BookmarksController = function(req, res, authentication){
 		if(self.reqBody.hasOwnProperty('path') || self.reqBody.hasOwnProperty('position')){
 			promiseList.push(Bookmark.updateMoveBookmarksFolderOrPosition(self.req.params.bookmark_id, self.reqBody));
 			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
-			Promise.all(promiseList).then(function(results){
-				self.res.status(httpStatus.OK)
-				.json({'data':
-					helpers.mongooseObjToFrontEndObj(results[0])
-				});
+			Promise.all(promiseList).then(function(){
+				self.res.status(httpStatus.NO_CONTENT).end();
+				// .json({'data':
+				// 	helpers.mongooseObjToFrontEndObj(results[0])
+				// });
 			})
 			.catch(respondeWithError("Failed to update bookmark"));
 		}
