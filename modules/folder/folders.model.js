@@ -19,7 +19,6 @@ var FoldersModel = function(userId){
 					reject(err);
 				}
 				else{
-					// if(folder.name !== '.'){
 					if(folder.isRoot){
 						resolve(folder);
 					}

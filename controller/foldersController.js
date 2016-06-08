@@ -56,7 +56,7 @@ var FoldersController = function(req, res, authentication){
 
 	function deleteSubBookmarks(pathId){
 		logger.debug('deleteSubBookmarks: ' + pathId);
-		return new Promise(function(ersolve, reject){
+		return new Promise(function(resolve, reject){
 			var findSubBookmarksPromise = Bookmark.findAll(pathId);
 			findSubBookmarksPromise.then(function(bookmarks){
 				var deletePromises = new Array();

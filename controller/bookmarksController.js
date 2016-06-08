@@ -107,7 +107,7 @@ var BookmarksController = function(req, res, authentication){
 			Promise.all(promiseList).then(function(results){
 				self.res.status(httpStatus.OK)
 				.json({'data':
-					helpers.mongooseObjToFrontEndObj(results[0]);
+					helpers.mongooseObjToFrontEndObj(results[0])
 				});
 			})
 			.catch(respondeWithError("Failed to update bookmark"));
