@@ -119,25 +119,6 @@ export class FolderDataService {
 	public addFolder( newFolder: any ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					newFolder.id = `FOL${ Math.floor( Math.random() * 110 ) }`;
-					this.store.dispatch( {
-						payload: {
-							data: newFolder
-						},
-						type: ADD_FOLDER
-					} );
-					console.log( 'APP > Folder Data Service > New folder successfully added.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Send data and parse response
@@ -165,8 +146,6 @@ export class FolderDataService {
 				);
 		} );
 
-		*/
-
 	}
 
 	/**
@@ -177,25 +156,6 @@ export class FolderDataService {
 	 * @return {Promise<any>}               Promise when done
 	 */
 	public updateFolder( folderId: string, updatedFolder: any ): Promise<any> {
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					this.store.dispatch( {
-						payload: {
-							data: updatedFolder,
-							id: folderId
-						},
-						type: UPDATE_FOLDER
-					} );
-					console.log( 'APP > Folder Data Service > Folder successfully updated.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
@@ -225,8 +185,6 @@ export class FolderDataService {
 				);
 		} );
 
-		*/
-
 	}
 
 	/**
@@ -238,34 +196,6 @@ export class FolderDataService {
 	 * @return {Promise<any>}               Promise when done
 	 */
 	public deleteFolder( folderId: string, subfolderIds: Array<string> ): Promise<any> {
-
-		return new Promise<any>((resolve: Function, reject: Function) => {
-			setTimeout(
-				() => {
-
-					// Delete this folder
-					this.store.dispatch( {
-						payload: {
-							id: folderId
-						},
-						type: DELETE_FOLDER
-					} );
-
-					// Also (recursively) delete all contained subfolders
-					this.deleteMultipleFolders( subfolderIds );
-
-					// Also delete all the bookmarks contained in these folders
-					this.bookmarkDataService.deleteAllBookmarksInFolders( subfolderIds );
-
-					console.log( 'APP > Folder Data Service > Folder successfully deleted.' );
-					resolve();
-
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
 
 		return new Promise<any>((resolve: Function, reject: Function) => {
 			this.authHttp
@@ -303,8 +233,6 @@ export class FolderDataService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 
