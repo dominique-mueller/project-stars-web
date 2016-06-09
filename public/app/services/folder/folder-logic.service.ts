@@ -57,7 +57,7 @@ export class FolderLogicService {
 		// We create a new list and put only the subfolders in it (ordered)
 		return List<Folder>().withMutations( ( result: List<Folder> ) => {
 			folders.forEach( ( folder: Folder ) => {
-				if ( folder.get( 'path' ) === folderId ) {
+				if ( folder.get( 'path' ) === folderId && !folder.get( 'isRoot' ) ) { // Skip root folder (no longer recursive)
 					result.set( folder.get( 'position' ) - 1, folder );
 				}
 			} );
