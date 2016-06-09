@@ -35,7 +35,7 @@ var UsersController = function(req, res, authentication){
 		userPromise.then(function(user){
 		 	logger.debug('userPromise then');
 		 	self.res.status(httpStatus.OK)
-		 		.json({'data':
+		 		.json({"data":
 		 			helpers.mongooseObjToFrontEndObj(user)
 		 		}
 		 	);
@@ -144,7 +144,9 @@ var UsersController = function(req, res, authentication){
 	//#### PUBLIC FUNCTIONS ####
 
 	this.get = function(){
-		if(self.req.params.user_id == 'tokenUserId'){
+		logger.debug("get a god damn user" + self.req.params.user_id);
+		if(self.req.params.user_id == self.authentication.tokenUserId){
+			logger.debug("Get One User:" + self.authentication.tokenUserId);
 			getOne(self.authentication.tokenUserId);
 		}
 		else if(authentication.isAdmin){
