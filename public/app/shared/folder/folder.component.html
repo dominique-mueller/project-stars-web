@@ -1,11 +1,11 @@
 <!-- Link -->
-<a class="folder__link" (click)="onClickOnFolder( folder.get( 'id' ) )">
+<a class="folder__link" (click)="onClickOnFolder( folder?.get( 'id' ) )">
 	<app-icon class="folder__favicon" name="folder" size="24" color="#606060"></app-icon>
-	<p class="folder__name">{{ folder.get( 'name' ) }}</p>
+	<p class="folder__name">{{ folder?.get( 'name' ) }}</p>
 </a>
 
 <!-- Details button -->
 <button class="button folder__action has-tooltip" type="button"
-	(click)="onClickOnDetails( folder.get( 'id' ) )" data-tooltip="details">
+	(click)="onClickOnDetails( folder?.get( 'id' ) )" data-tooltip="details">
 	<app-icon name="info" size="20" color="#606060"></app-icon>
 </button>

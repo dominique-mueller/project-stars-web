@@ -118,25 +118,6 @@ export class LabelDataService {
 	public addLabel( newLabel: any ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					newLabel.id = `LAB${ Math.floor( Math.random() * 110 ) }`;
-					this.store.dispatch( {
-						payload: {
-							data: newLabel
-						},
-						type: ADD_LABEL
-					} );
-					console.log( 'APP > Labels Data Service > New label successfully added.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Send data and parse response
@@ -164,8 +145,6 @@ export class LabelDataService {
 				);
 		} );
 
-		*/
-
 	}
 
 	/**
@@ -176,25 +155,6 @@ export class LabelDataService {
 	 * @return {Promise<any>}              Promise when done
 	 */
 	public updateLabel( labelId: string, updatedLabel: any ): Promise<any> {
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					this.store.dispatch( {
-						payload: {
-							data: updatedLabel,
-							id: labelId
-						},
-						type: UPDATE_LABEL
-					} );
-					console.log( 'APP > Labels Data Service > Label successfully updated.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
@@ -224,8 +184,6 @@ export class LabelDataService {
 				);
 		} );
 
-		*/
-
 	}
 
 	/**
@@ -235,30 +193,6 @@ export class LabelDataService {
 	 * @return {Promise<any>}         Promise when done
 	 */
 	public deleteLabel( labelId: string ): Promise<any> {
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-
-					// Delete this label
-					this.store.dispatch( {
-						payload: {
-							id: labelId
-						},
-						type: DELETE_LABEL
-					} );
-
-					// Also unassign this label from all bookmarks
-					this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
-					console.log( 'APP > Labels Data Service > Label successfully deleted.' );
-					resolve();
-
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
@@ -292,8 +226,6 @@ export class LabelDataService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 

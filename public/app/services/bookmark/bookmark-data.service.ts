@@ -112,25 +112,6 @@ export class BookmarkDataService {
 	public addBookmark( newBookmark: any ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					newBookmark.id = `BOK${ Math.floor( Math.random() * 110 ) }`;
-					this.store.dispatch( {
-						payload: {
-							data: newBookmark
-						},
-						type: ADD_BOOKMARK
-					} );
-					console.log( 'APP > Bookmark Data Service > New bookmark successfully added.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Send data and parse response
@@ -158,8 +139,6 @@ export class BookmarkDataService {
 				);
 		} );
 
-		*/
-
 	}
 
 	/**
@@ -170,25 +149,6 @@ export class BookmarkDataService {
 	 * @return {Promise<any>}                 Promise when done
 	 */
 	public updateBookmark( bookmarkId: string, updatedBookmark: any ): Promise<any> {
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					this.store.dispatch( {
-						payload: {
-							data: updatedBookmark,
-							id: bookmarkId
-						},
-						type: UPDATE_BOOKMARK
-					} );
-					console.log( 'APP > Bookmark Data Service > Bookmark successfully updated.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
@@ -217,8 +177,6 @@ export class BookmarkDataService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 
@@ -287,24 +245,6 @@ export class BookmarkDataService {
 	public deleteBookmark( bookmarkId: string ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-					this.store.dispatch( {
-						payload: {
-							id: bookmarkId
-						},
-						type: DELETE_BOOKMARK
-					} );
-					console.log( 'APP > Bookmark Data Service > Bookmark successfully deleted.' );
-					resolve();
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Send data and parse response
@@ -321,7 +261,7 @@ export class BookmarkDataService {
 							type: DELETE_BOOKMARK
 						} );
 						console.log( 'APP > Bookmark Data Service > Bookmark successfully deleted.' );
-						resolve()
+						resolve();
 					},
 					( error: any ) => {
 						console.log( 'APP > Bookmark Data Service > Error while deleting a bookmark.' );
@@ -330,8 +270,6 @@ export class BookmarkDataService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 

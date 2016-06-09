@@ -94,8 +94,8 @@ export class UserAuthService {
 				password: password
 			};
 
-			// Set request type explicitely
-			const options = new RequestOptions( {
+			// Set request type explicitely (because its only set for authenticated HTTP requests)
+			const options: RequestOptions = new RequestOptions( {
 				headers: new Headers( {
 					'Content-Type': 'application/json'
 				} )
