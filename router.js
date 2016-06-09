@@ -5,7 +5,7 @@ var helpers = require('./helpers/generalHelpers.js');
 var routerBackend = require('express').Router(), 
 	routerFrontend = require('express').Router(),
 	routerHTTPRedirect = require('express').Router();
-var usersController, bookmarksController;
+var usersController, bookmarksController, foldersController;
 
 
 // middleware to use for all requests
@@ -22,7 +22,8 @@ routerHTTPRedirect.use(function(req, res, next) {
 routerBackend.use(function(req, res, next){
 	//a new Authentication object has to be created here, because it only is for this request
 	logger.debug("REQUEST: " + req.body.data);
-	authentication = require('./adapters/authentication.js')();
+	var a = require('./adapters/authentication.js');
+	authentication = new a();
 	next();
 });
 
@@ -80,7 +81,8 @@ routerBackend.route('/authenticate/newEMailAddress')
 	});
 
 routerBackend.use('/users', function(req, res, next){
-	usersController = require('./controller/usersController.js')(req, res, authentication);
+	var u = require('./controller/usersController.js');
+	usersController = new u(req, res, authentication);
 	next();
 });
 routerBackend.route('/users/register')
@@ -150,7 +152,8 @@ routerBackend.route('/users/:user_id')
 	});
 
 routerBackend.use('/bookmarks', function(req, res, next){
-	bookmarksController = require('./controller/bookmarksController.js')(req, res, authentication);
+	var b = require('./controller/bookmarksController.js');
+	bookmarksController = new b(req, res, authentication);
 	next();
 });
 routerBackend.route('/bookmarks')
@@ -183,7 +186,8 @@ routerBackend.route('/bookmarks/folders')
 // 	});
 
 routerBackend.use('/folders', function(req, res, next){
-	foldersController = require('./controller/foldersController.js')(req, res, authentication);
+	var f = require('./controller/foldersController.js');
+	foldersController = new f(req, res, authentication);
 	next();
 });
 routerBackend.route('/folders')

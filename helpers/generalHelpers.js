@@ -29,7 +29,8 @@ module.exports = {
 
 function alterSingleObject(obj){
 	//remove version field from object. It isn't needed anywhere
-	object = JSON.parse(JSON.stringify(obj));
+	var object = JSON.parse(JSON.stringify(obj));
+	// var object = JSON.parse(JSON.stringify(obj));
 	//change the key _id to id because of convention
 	object['id'] = object['_id'];
 	delete object['_id'];

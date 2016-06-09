@@ -7,7 +7,8 @@ var UsersController = function(req, res, authentication){
 	
 	var self = this; //@see: adapters/authentication.js 
 	this.authentication = authentication;
-	this.User = require('../modules/user/users.model.js');
+	var u = require('../modules/user/users.model.js');
+	this.User;
 	this.req = req;
 	this.res = res;
 	this.reqBody;
@@ -18,10 +19,10 @@ var UsersController = function(req, res, authentication){
 		this.reqBody = JSON.parse(req.body.data);
 	}
 	if(req.method == 'POST'){
-		this.User = new User(this, null);
+		self.User = new u(this, null);
 	}
 	else{
-		this.User = new User(this, authentication.tokenUserId)
+		self.User = new u(this, authentication.tokenUserId)
 	}
 
 
