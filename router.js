@@ -5,7 +5,7 @@ var helpers = require('./helpers/generalHelpers.js');
 var routerBackend = require('express').Router(), 
 	routerFrontend = require('express').Router(),
 	routerHTTPRedirect = require('express').Router();
-var usersController, bookmarksController, foldersController;
+var usersController, bookmarksController, foldersController, labelsController;
 
 
 // middleware to use for all requests
@@ -260,6 +260,11 @@ routerBackend.route('/settings/:setting_id')
 	});
 
 
+routerBackend.use('/labels', function(req, res, next){
+	var l = require('./controller/labelsController.js');
+	labelsController = new l(req, res, authentication);
+	next();
+});
 
 routerBackend.route('/labels')
 	.get(function(req, res){

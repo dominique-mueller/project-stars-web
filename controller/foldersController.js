@@ -140,7 +140,7 @@ var FoldersController = function(req, res, authentication){
 	};
 
 
-	this.delete = function(folderId){
+	this.delete = function(){
 		var deleteSubFolderPromise = deleteSubFolders(self.req.params.folder_id);
 		var deleteSubBookmarksPromise = deleteSubBookmarks(self.req.params.folder_id);
 		Promise.all([deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
