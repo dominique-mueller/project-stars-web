@@ -252,7 +252,7 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 						let rootFolderId: string = this.folderLogicService.getRootFolder( folders ).get( 'id' );
 						this.uiService.setRootFolderId( rootFolderId );
 					}
-					// this.changeDetector.markForCheck(); // Trigger change detection
+					this.changeDetector.markForCheck(); // Trigger change detection
 
 				}
 			}

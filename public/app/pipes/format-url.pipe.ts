@@ -14,10 +14,15 @@ export class FormatUrlPipe implements PipeTransform {
 
 	/**
 	 * Pipe transform
-	 * @param  {string}        value Bookmark URL
-	 * @return {string}              Formatted bookmark URL
+	 * @param  {string} value Bookmark URL
+	 * @return {string}       Formatted bookmark URL
 	 */
 	public transform( value: string ): string {
+
+		// Skip of data are not here yet
+		if ( typeof value === 'undefined' ) {
+			return value;
+		}
 
 		// Create parser
 		let parser: HTMLAnchorElement = document.createElement( 'a' );
