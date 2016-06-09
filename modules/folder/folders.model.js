@@ -209,7 +209,7 @@ var FoldersModel = function(userId){
 					var folderPromise = self.findOne(folderId);
 					folderPromise.then(function(folder){
 						
-						if(folder.name !== '.'){
+						if(folder.isRoot){
 							reject(new Error("Root folder can not be manipulated"));
 						}
 
@@ -261,7 +261,7 @@ var FoldersModel = function(userId){
 			var folderPromise = self.findOne(folderId);
 			folderPromise.then(function(folder){
 				// logger.debug('folderPromise');
-				if(folder.name !== '.'){
+				if(!folder.isRoot){
 					// logger.debug('non root folder');
 					var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
 					var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);

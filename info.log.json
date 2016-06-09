@@ -1190,3 +1190,9 @@
 {"name":"stars-web","hostname":"varicor","pid":8738,"level":50,"msg":"respondeWithError: could not update the folder :: ReferenceError: saveAndReturnPromise is not defined","time":"2016-06-08T17:28:34.495Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":9294,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-08T17:30:26.184Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":9294,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-08T17:30:26.418Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3047,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-09T12:07:13.692Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3047,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-09T12:07:13.925Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3047,"level":50,"msg":"respondeWithError: could not update the folder :: Error: Root folder can not be manipulated","time":"2016-06-09T12:14:57.014Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3047,"level":50,"msg":"respondeWithError: could not update the folder :: Error: Root folder can not be manipulated","time":"2016-06-09T12:15:41.210Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3943,"level":30,"msg":"Server is listening at http://127.0.0.1:443","time":"2016-06-09T12:17:36.019Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3943,"level":30,"msg":"Mongoose connected to mongodb://devAdmin:stars-web@localhost/dev","time":"2016-06-09T12:17:36.252Z","v":0}

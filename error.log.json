@@ -102,3 +102,5 @@
 {"name":"stars-web","hostname":"varicor","pid":6024,"level":50,"msg":"respondeWithError: could not update the folder :: undefined","time":"2016-06-08T14:18:10.927Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":8738,"level":50,"msg":"respondeWithError: could not update the folder :: ValidationError: Path `name` is required.","time":"2016-06-08T16:08:16.554Z","v":0}
 {"name":"stars-web","hostname":"varicor","pid":8738,"level":50,"msg":"respondeWithError: could not update the folder :: ReferenceError: saveAndReturnPromise is not defined","time":"2016-06-08T17:28:34.495Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3047,"level":50,"msg":"respondeWithError: could not update the folder :: Error: Root folder can not be manipulated","time":"2016-06-09T12:14:57.014Z","v":0}
+{"name":"stars-web","hostname":"varicor","pid":3047,"level":50,"msg":"respondeWithError: could not update the folder :: Error: Root folder can not be manipulated","time":"2016-06-09T12:15:41.210Z","v":0}
