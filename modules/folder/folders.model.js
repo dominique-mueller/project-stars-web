@@ -1,5 +1,3 @@
-
-// require('es6-promise').polyfill();
 var Folder = require('../schemaExport.js').Folder;
 var logger = require('../../adapters/logger.js');
 

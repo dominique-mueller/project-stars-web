@@ -6,10 +6,10 @@ var BookmarksController = function(req, res, authentication){
 
 	var self = this; //@see: adapters/authentication.js 
 	this.authentication = authentication;
-	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
-	this.Bookmark = new Bookmark(authentication.tokenUserId);
-	this.Folder = require('../modules/folder/folders.model.js');
-	this.Folder = new Folder(self.authentication.tokenUserId);
+	var b = require('../modules/bookmark/bookmarks.model.js');
+	this.Bookmark = new b(authentication.tokenUserId);
+	var f = require('../modules/folder/folders.model.js');
+	this.Folder = new f(self.authentication.tokenUserId);
 	this.req = req;
 	this.res = res;
 	this.reqBody;
@@ -27,8 +27,8 @@ var BookmarksController = function(req, res, authentication){
 		var promiseList = new Array();
 		getOldBookmarkPromise.then(function(oldBookmark){
 			if(self.reqBody.hasOwnProperty('path')){
-				promiseList.push(Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
-				promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
+				promiseList.push(self.Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
+				promiseList.push(self.Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
 			}
 		})
 		.catch(helpers.respondeWithError('failed bookmarksController manageNumberOfContainedBookmarks'));
@@ -40,7 +40,7 @@ var BookmarksController = function(req, res, authentication){
 	//#### PUBLIC FUNCTIONS ####
 
 	this.get = function(){
-		var bookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
+		var bookmarkPromise = self.Bookmark.findOne(self.req.params.bookmark_id);
 		bookmarkPromise.then(function(bookmark){
 			res.status(httpStatus.OK)
 			.json({'data':
@@ -55,7 +55,7 @@ var BookmarksController = function(req, res, authentication){
 	}
 
 	this.getAll = function(){
-		var bookmarkPromise = Bookmark.findAll();
+		var bookmarkPromise = self.Bookmark.findAll();
 		bookmarkPromise.then(function(bookmarks){
 			logger.debug("bookmarsController getAll successful");
 			self.res.status(httpStatus.OK)
@@ -76,9 +76,9 @@ var BookmarksController = function(req, res, authentication){
 		//TODO Label, check if exist and regard to owner
 		//TODO checkIfPathRegardsToOwner: Not yet implemented
 		// var checkIfPathRegardsToOwnerPromise = Folder.checkIfPathRegardsToOwner(self.reqBody.path);
-		var getPositionPromise = Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
+		var getPositionPromise = self.Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
 		getPositionPromise.then(function(position){
-			var bookmarkCreatePromise = Bookmark.create(self.reqBody, position);
+			var bookmarkCreatePromise = self.Bookmark.create(self.reqBody, position);
 			bookmarkCreatePromise.then(function(bookmark){
 				self.res.status(httpStatus.OK)
 				.json({'data':
@@ -94,9 +94,9 @@ var BookmarksController = function(req, res, authentication){
 	this.put = function(){
 		var promiseList = new Array();
 		// var update = Bookmark.update(self.req.params.bookmark_id, self.reqBody, function(oldBookmark){
-		var getOldBookmarkPromise = Bookmark.findOne(self.req.params.bookmark_id);
+		var getOldBookmarkPromise = self.Bookmark.findOne(self.req.params.bookmark_id);
 		if(self.reqBody.hasOwnProperty('path') || self.reqBody.hasOwnProperty('position')){
-			promiseList.push(Bookmark.updateMoveBookmarksFolderOrPosition(self.req.params.bookmark_id, self.reqBody));
+			promiseList.push(self.Bookmark.updateMoveBookmarksFolderOrPosition(self.req.params.bookmark_id, self.reqBody));
 			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
 			Promise.all(promiseList).then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
@@ -104,7 +104,7 @@ var BookmarksController = function(req, res, authentication){
 			.catch(helpers.respondeWithError("Failed to update bookmark"));
 		}
 		else{
-			var updateBookmarkEditablesPromise = Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);
+			var updateBookmarkEditablesPromise = self.Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);
 			updateBookmarkEditablesPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
@@ -114,9 +114,9 @@ var BookmarksController = function(req, res, authentication){
 
 	this.delete = function(){
 		// var shiftFoldersPromise = shiftFoldersPosition(bookmark.path, bookmark.position, -1);
-		var deletePromise = Bookmark.delete(self.req.params.bookmark_id);
+		var deletePromise = self.Bookmark.delete(self.req.params.bookmark_id);
 		deletePromise.then(function(bookmark){
-			var changeNumberOfContainedElementsPromise = Folder.changeNumberOfContainedBookmarks(bookmark.path, -1);
+			var changeNumberOfContainedElementsPromise = self.Folder.changeNumberOfContainedBookmarks(bookmark.path, -1);
 			changeNumberOfContainedElementsPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})

@@ -6,10 +6,10 @@ var FoldersController = function(req, res, authentication){
 
 	var self = this; //@see: adapters/authentication.js 
 	this.authentication = authentication;
-	this.Folder = require('../modules/folder/folders.model.js');
-	this.Folder = new Folder(authentication.tokenUserId);
-	this.Bookmark = require('../modules/bookmark/bookmarks.model.js');
-	this.Bookmark = new Bookmark(authentication.tokenUserId);
+	var f = require('../modules/folder/folders.model.js');
+	this.Folder = new f(authentication.tokenUserId);
+	var b = require('../modules/bookmark/bookmarks.model.js');
+	this.Bookmark = new b(authentication.tokenUserId);
 	this.req = req;
 	this.res = res;
 	this.reqBody;
@@ -48,12 +48,12 @@ var FoldersController = function(req, res, authentication){
 	function deleteSubBookmarks(pathId){
 		logger.debug('deleteSubBookmarks: ' + pathId);
 		return new Promise(function(resolve, reject){
-			var findSubBookmarksPromise = Bookmark.findAll(pathId);
+			var findSubBookmarksPromise = self.Bookmark.findAll(pathId);
 			findSubBookmarksPromise.then(function(bookmarks){
 				var deletePromises = new Array();
 				for(var i = 0; i < bookmarks.length; i++){
 					logger.debug('Delete Subbookmark with the Id:' + bookmarks[i]._id);
-					deletePromises.push(Bookmark.delete(bookmarks[i]._id));
+					deletePromises.push(self.Bookmark.delete(bookmarks[i]._id));
 				}
 				Promise.all(deletePromises).then(function(){
 					resolve();
@@ -72,7 +72,7 @@ var FoldersController = function(req, res, authentication){
 		var deleteSubBookmarksPromise = deleteSubBookmarks(folderId);
 		return new Promise(function(resolve, reject){
 			Promise.all([deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
-				var deleteFolderPromise = Folder.delete(folderId);
+				var deleteFolderPromise = self.Folder.delete(folderId);
 				deleteFolderPromise.then(function(){
 					resolve();
 				})
@@ -85,7 +85,7 @@ var FoldersController = function(req, res, authentication){
 	//#### PUBLIC FUNCTIONS ####
 
 	this.get = function(){
-		var folderPromise = Folder.findOne(self.req.params.folder_id);
+		var folderPromise = self.Folder.findOne(self.req.params.folder_id);
 		folderPromise.then(function(folder){
 			res.status(httpStatus.OK)
 				.json({'data':
@@ -98,7 +98,7 @@ var FoldersController = function(req, res, authentication){
 
 
 	this.getAll = function(){
-		var folderPromise = Folder.findAll(null);
+		var folderPromise = self.Folder.findAll(null);
 		folderPromise.then(function(folders){
 			self.res.status(httpStatus.OK)
 				.json({'data':
@@ -112,7 +112,7 @@ var FoldersController = function(req, res, authentication){
 
 	this.post = function(){
 		//TODO: use isRoot field instead of owner == path for the root folder
-		var folderCreatePromise = Folder.create(self.reqBody);
+		var folderCreatePromise = self.Folder.create(self.reqBody);
 		folderCreatePromise.then(function(folder){
 			self.res.status(httpStatus.OK)
 			.json({'data':
@@ -125,7 +125,7 @@ var FoldersController = function(req, res, authentication){
 
 	this.put = function(){
 		var folderUpdatePromise;
-		var folderUpdate = Folder.update(self.req.params.folder_id, self.reqBody);
+		var folderUpdate = self.Folder.update(self.req.params.folder_id, self.reqBody);
 		if(self.reqBody.hasOwnProperty('name')){
 			folderUpdatePromise = folderUpdate.updateFolderEditables();
 		}
@@ -145,7 +145,7 @@ var FoldersController = function(req, res, authentication){
 		var deleteSubBookmarksPromise = deleteSubBookmarks(self.req.params.folder_id);
 		Promise.all([deleteSubFolderPromise, deleteSubBookmarksPromise]).then(function(){
 			logger.debug("just the deletion of the actual folder has to be done");
-			var deleteFolderPromise = Folder.delete(self.req.params.folder_id);
+			var deleteFolderPromise = self.Folder.delete(self.req.params.folder_id);
 			deleteFolderPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
