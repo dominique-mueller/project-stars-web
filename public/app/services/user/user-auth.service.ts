@@ -2,7 +2,7 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 /**
@@ -87,45 +87,6 @@ export class UserAuthService {
 	public loginUser( emailAddress: string, password: string ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-
-					this.http
-
-						// Fetch data and parse response
-						.get( `${ this.appService.API_URL}/jwt.mock.json` )
-						.map( ( response: Response ) => <any> response.json() )
-
-						// Save authentication information
-						.subscribe(
-							( data: any ) => {
-
-								// If the returned JWT is valid, safe it in the local storage
-								if ( tokenNotExpired( 'jwt', data.data ) && password === 'test' ) {
-									this.saveAuthenticationDetails( data.data );
-									console.log( 'APP > User Authentication Service > JWT is valid.' );
-									resolve();
-								} else {
-									console.log( 'APP > User Authentication Service > JWT is invalid.' );
-									reject();
-								}
-
-							},
-							( error: any ) => {
-								console.log( 'APP > User Authentication Service > Error while logging in user.' );
-								console.log( error );
-								reject();
-							}
-						);
-
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
 			// Prepare data
 			const authenticationData: any = {
@@ -133,10 +94,17 @@ export class UserAuthService {
 				password: password
 			};
 
+			// Set request type explicitely
+			const options = new RequestOptions( {
+				headers: new Headers( {
+					'Content-Type': 'application/json'
+				} )
+			} );
+
 			this.http
 
 				// Fetch data and parse response
-				.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authenticationData } ) )
+				.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authenticationData } ), options )
 				.map( ( response: Response ) => <any> response.json() )
 
 				// Save authentication information
@@ -163,8 +131,6 @@ export class UserAuthService {
 
 		} );
 
-		*/
-
 	}
 
 	/**
@@ -173,14 +139,6 @@ export class UserAuthService {
 	 * @return {Promise<any>} Promise to tell we're done
 	 */
 	public logoutUser(): Promise<any> {
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			this.deleteAuthenticationDetails();
-			console.log('APP > User Authentication Service > JWT removed.');
-			resolve();
-		} );
-
-		/* TODO: This is the production code
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
@@ -203,8 +161,6 @@ export class UserAuthService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 

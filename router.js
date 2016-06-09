@@ -21,6 +21,7 @@ routerHTTPRedirect.use(function(req, res, next) {
 
 routerBackend.use(function(req, res, next){
 	//a new Authentication object has to be created here, because it only is for this request
+	logger.debug("REQUEST: " + req.body.data);
 	authentication = require('./adapters/authentication.js')();
 	next();
 });
@@ -42,8 +43,9 @@ routerFrontend.route('*').all(function(req, res){
 
 routerBackend.route('/authenticate/login')
 	.post(function(req, res){
-		logger.debug('LOGIN::');
-		var result = authentication.login(JSON.parse(req.body.data));
+		logger.debug('LOGIN:: ' + req);
+		var result = authentication.login(req.body.data);
+		// var result = authentication.login(JSON.parse(req.body.data));
 		result.then(function(token){
 			logger.debug('resolve JWT::' + token);
 			res.status(httpStatus.OK).json({data:token});

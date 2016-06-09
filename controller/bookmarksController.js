@@ -31,7 +31,7 @@ var BookmarksController = function(req, res, authentication){
 				promiseList.push(Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
 			}
 		})
-		.catch(function(){console.log("CATCH OF bookmark controller put");});
+		.catch(helpers.respondeWithError('failed bookmarksController manageNumberOfContainedBookmarks'));
 
 		return promiseList;
 	}
@@ -98,9 +98,6 @@ var BookmarksController = function(req, res, authentication){
 			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
 			Promise.all(promiseList).then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
-				// .json({'data':
-				// 	helpers.mongooseObjToFrontEndObj(results[0])
-				// });
 			})
 			.catch(helpers.respondeWithError("Failed to update bookmark"));
 		}
