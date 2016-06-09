@@ -12,6 +12,7 @@ import { List } from 'immutable';
 import { UiService } from './../../services/ui';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 import { IconComponent } from './../../shared/icon/icon.component';
 import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
 import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-into-folder.component';
@@ -62,6 +63,11 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	private dialogConfirmService: DialogConfirmService;
 
 	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
+
+	/**
 	 * List containing all service subscriptions
 	 */
 	private serviceSubscriptions: Array<Subscription>;
@@ -69,7 +75,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	/**
 	 * Current folder ID
 	 */
-	private folderId: number;
+	private folderId: string;
 
 	/**
 	 * Current folder
@@ -95,7 +101,9 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		uiService: UiService,
 		folderDataService: FolderDataService,
 		folderLogicService: FolderLogicService,
-		dialogConfirmService: DialogConfirmService ) {
+		dialogConfirmService: DialogConfirmService,
+		notifierService: NotifierService
+	) {
 
 		// Initialize services
 		this.router = router;
@@ -104,6 +112,7 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.folderDataService = folderDataService;
 		this.folderLogicService = folderLogicService;
 		this.dialogConfirmService = dialogConfirmService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.serviceSubscriptions = [];
@@ -121,18 +130,12 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	public routerOnActivate( curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree ): void {
 
 		// Get folder ID from the route URL
-		// Pre-filter: If the ID is not a number, we navigate back
-		if ( curr.parameters.hasOwnProperty( 'id' ) && /^\d+$/.test( curr.parameters[ 'id' ] ) ) {
-			this.folderId = parseInt( curr.parameters[ 'id' ], 10 );
-		} else {
-			this.onClose();
-		}
+		this.folderId = curr.parameters[ 'id' ];
 
 	}
 
 	/**
 	 * Call this when the view gets initialized
-	 * We do NOT land here if we have been thrown out in the 'routerOnActive' function above
 	 */
 	public ngOnInit(): void {
 
@@ -205,14 +208,19 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.uiService.unsetSelectedElement();
 
 		// Animate out, navigate when animation is done
-		const folderId: number = ( this.folder !== null && this.folder.size > 0 ) ? this.folder.get( 'path' ) : 0;
-		this.isVisible = false;
-		setTimeout(
-			() => {
-				this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
-			},
-			275 // Needs 250, plus some (maybe unnecessary) extra time
-		);
+		if ( this.folder !== null && this.folder.size > 0 ) {
+			this.isVisible = false;
+			setTimeout(
+				() => {
+					this.router.navigate( [ 'bookmarks', 'view', this.folder.get( 'path' ) ] ); // Absolute
+				},
+				275 // Needs 250, plus some (maybe unnecessary) extra time
+			);
+		} else {
+			this.isVisible = false;
+			this.uiService.unsetOpenedFolderId();
+			this.router.navigate( [ 'bookmarks' ] ); // Absolute
+		}
 
 	}
 
@@ -235,15 +243,20 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 		this.dialogConfirmService.requestConfirmation( confirmationOptions )
 			.then( ( answer: boolean ) => {
 				if ( answer ) {
-
 					this.onClose();
 
 					// Get all subfolders of the folder we want to delete
-					let foldersToDelete: Array<number> =
+					let foldersToDelete: Array<string> =
 						this.folderLogicService.getRecursiveSubfolderIds( this.allFolders, this.folderId );
 
-					// Delete folder with all its subfolders, and bookmarks contained in them
-					this.folderDataService.deleteFolder( this.folderId, foldersToDelete );
+					// Try to delete the folder with all its subfolders, and bookmarks contained in them
+					this.folderDataService.deleteFolder( this.folderId, foldersToDelete )
+						.then( ( data: any ) => {
+							this.notifierService.notify( 'default', 'Folder successfully deleted.' );
+						} )
+						.catch( ( error: any ) => {
+							this.notifierService.notify( 'default', 'An error occured while deleting the folder.' );
+						} );
 
 				}
 			} );
@@ -256,16 +269,43 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 	 * @param {string} newValue  New / updated value
 	 */
 	private onUpdate( attribute: string, newValue: string ): void {
-		this.folderDataService.updateFolderValue( this.folderId, attribute, newValue );
+
+		// Create updated data
+		let updatedFolder: any = {};
+		updatedFolder[ attribute ] = newValue;
+
+		// Try to update the folder
+		this.folderDataService.updateFolder( this.folderId, updatedFolder )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Folder successfully updated.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while updating the folder.' );
+			} );
+
 	}
 
 	/**
 	 * Move folder into another folder
-	 * @param {number} parentFolderId New parent folder ID
+	 * @param {string} parentFolderId New parent folder ID
 	 */
-	private onMoveFolder( parentFolderId: number ): void {
+	private onMoveFolder( parentFolderId: string ): void {
 		this.onClose();
-		this.folderDataService.updateFolderValue( this.folderId, 'path', parentFolderId );
+
+		// Create updated data
+		let updatedFolder: any = {
+			path: parentFolderId
+		};
+
+		// Try to update the folder
+		this.folderDataService.updateFolder( this.folderId, updatedFolder )
+			.then( ( data: any ) => {
+				this.notifierService.notify( 'default', 'Folder successfully moved into another folder.' );
+			} )
+			.catch( ( error: any ) => {
+				this.notifierService.notify( 'default', 'An error occured while moving the folder into another folder.' );
+			} );
+
 	}
 
 }

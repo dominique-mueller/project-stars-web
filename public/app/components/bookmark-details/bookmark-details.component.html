@@ -7,7 +7,8 @@
 	<!-- Panel header -->
 	<header class="bookmark-details__panel-header">
 		<h1 class="bookmark-details__panel-header-title">Bookmark Details</h1>
-		<a class="button bookmark-details__panel-header-action does-open" [href]="bookmark?.get( 'url' )" target="_blank" rel="noreferrer noopener">
+		<a class="button bookmark-details__panel-header-action does-open has-tooltip"
+			[href]="bookmark?.get( 'url' )" target="_blank" rel="noreferrer noopener" data-tooltip="visit">
 			<app-icon name="launch" size="16" color="#FFF"></app-icon>
 		</a>
 		<app-move-into-folder
@@ -19,10 +20,10 @@
 			(select)="onMoveBookmark( $event )">
 			<app-icon name="folder_move" size="16" color="#FFF"></app-icon>
 		</app-move-into-folder>
-		<button class="button bookmark-details__panel-header-action does-delete" type="button" (click)="onDelete()">
+		<button class="button bookmark-details__panel-header-action does-delete has-tooltip" type="button" (click)="onDelete()" data-tooltip="delete">
 			<app-icon name="delete" size="16" color="#FFF"></app-icon>
 		</button>
-		<button class="button bookmark-details__panel-header-action does-close" type="button" (click)="onClose()">
+		<button class="button bookmark-details__panel-header-action does-close has-tooltip" type="button" (click)="onClose()" data-tooltip="close">
 			<app-icon name="close" size="20" color="#FFF"></app-icon>
 		</button>
 	</header>
@@ -66,6 +67,7 @@
 						*ngIf="unassignedLabels.size > 0"
 						[labels]="unassignedLabels"
 						(select)="assignLabel( $event )">
+						<app-icon name="add" size="14" color="#444"></app-icon>Label
 					</app-assign-label>
 				</li>
 			</ul>
@@ -80,7 +82,7 @@
 					<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
 					<label class="form-label" for="bookmark-created">Created on</label>
 				</li>
-				<li class="form-component bookmark-details__panel-section">
+				<li class="form-component bookmark-details__panel-section" *ngIf="bookmark?.get( 'updated' )">
 					<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
 					<label class="form-label" for="bookmark-updated">Last updated on</label>
 				</li>

@@ -43,13 +43,13 @@ export class BookmarkComponent {
 	 * Input: Map of all labels
 	 */
 	@Input()
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Output: Click on details event, emits the bookmark ID
 	 */
 	@Output()
-	private clickOnDetails: EventEmitter<number>;
+	private clickOnDetails: EventEmitter<string>;
 
 	/**
 	 * Constructor
@@ -58,16 +58,16 @@ export class BookmarkComponent {
 
 		// Setup
 		this.bookmark = <Bookmark> Map<string, any>();
-		this.labels = Map<number, Label>();
-		this.clickOnDetails = new EventEmitter();
+		this.labels = Map<string, Label>();
+		this.clickOnDetails = new EventEmitter<string>();
 
 	}
 
 	/**
 	 * Show bookmark details panel
-	 * @param {number} bookmarkId Id of the selected bookmark
+	 * @param {string} bookmarkId Id of the selected bookmark
 	 */
-	private onClickDetails( bookmarkId: number ): void {
+	private onClickDetails( bookmarkId: string ): void {
 		this.clickOnDetails.emit( bookmarkId );
 	}
 

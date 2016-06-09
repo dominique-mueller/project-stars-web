@@ -1,5 +1,19 @@
 // VIEW COMPONENT: LABEL LIST
 
+.label-list__empty {
+	padding-top: 5rem;
+	padding-bottom: 5rem;
+	color: $color-gray;
+	line-height: 1.5;
+	text-align: center;
+
+	> .icon {
+		display: inline-block;
+		margin-bottom: 1rem;
+	}
+
+}
+
 .label-list__divider {
 	margin-top: 1.7rem;
 	margin-bottom: 1.7rem;

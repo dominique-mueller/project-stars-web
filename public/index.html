@@ -1,52 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Project Stars</title>
+	<title>Loading ...</title>
 
-	<link rel="stylesheet" href="/build/style.min.css">
+	<!-- Inject favicon -->
+	<!-- inject:favicon -->
+	<!-- endinject -->
 
-	<!-- Step 1: Load polyfills for older browsers -->
-	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
+	<!-- Inject inline CSS file -->
+	<!-- inject:css:inline -->
+	<!-- endinject -->
 
-	<!-- Step 2: Load libraries -->
-	<script src="/node_modules/zone.js/dist/zone.js"></script>
-	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
-	<script src="/node_modules/systemjs/dist/system.src.js"></script>
+	<!-- Inject CSS file -->
+	<!-- inject:css -->
+	<!-- endinject -->
 
-	<!-- Step 3: Configure and run systemjs to load modules -->
-	<script src="/build/systemjs.config.js"></script>
-	<script>
-		System.import( 'app' ).catch( function( error ) {
-			console.error( error );
-		} );
-	</script>
+	<!-- Inject polyfills and libraries -->
+	<!-- inject:js -->
+	<!-- endinject -->
 
-	<!-- Load web fonts from Adobe TypeKit -->
-	<!-- TODO: Optimize number of loaded font styles -->
-	<script>
-		(function(d) {
-			var config = {
-				kitId: 'qnt7pjj',
-				scriptTimeout: 3000,
-				async: true
-			},
-			h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-		})(document);
-	</script>
+	<!-- Inject TypeKit and SystemJS configuration -->
+	<!-- inject:js:inline -->
+	<!-- endinject -->
 
 </head>
 <body>
 
-	<div class="svgstore">
-		<!-- inject:svg -->
-		<!-- endinject -->
+<div class="svgstore">
+
+	<!-- Inject SVG -->
+	<!-- inject:svg -->
+	<!-- endinject -->
+
+</div>
+
+<!-- App container for Angular 2 -->
+<app>
+
+	<!-- Temporary loading spinner while downloading and bootstrapping the application -->
+	<div class="inline__background">
+		<div class="inline__loading-box">
+			<div class="inline__loading-spinner inline__loading-spinner-one">
+			</div><div class="inline__loading-spinner inline__loading-spinner-two">
+			</div><div class="inline__loading-spinner inline__loading-spinner-three">
+			</div>
+		</div>
 	</div>
 
-	<app>Loading ...</app>
+</app>
 
 </body>
 </html>

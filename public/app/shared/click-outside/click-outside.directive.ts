@@ -11,7 +11,7 @@ import { Directive, Output, EventEmitter } from '@angular/core';
 		'(click)': 'trackEvent( $event )',
 		'(document:click)': 'compareEvent( $event )'
 	},
-	selector: '[clickOutside]'
+	selector: '[appClickOutside]'
 } )
 export class ClickOutsideDirective {
 
@@ -20,7 +20,7 @@ export class ClickOutsideDirective {
 	 * Sidenote: Attribute selector and output event are the same here
 	 */
 	@Output()
-	private clickOutside: EventEmitter<MouseEvent>;
+	private appClickOutside: EventEmitter<MouseEvent>;
 
 	/**
 	 * Internal: Local event, contains the last internal click event
@@ -33,7 +33,7 @@ export class ClickOutsideDirective {
 	constructor() {
 
 		// Setup
-		this.clickOutside = new EventEmitter();
+		this.appClickOutside = new EventEmitter<MouseEvent>();
 		this.localEvent = null;
 
 	}
@@ -57,7 +57,7 @@ export class ClickOutsideDirective {
 
 		// Skip if the event catched on the document root is the same we tracked locally
 		if ( event !== this.localEvent ) {
-			this.clickOutside.emit( event );
+			this.appClickOutside.emit( event );
 		}
 
 		// Reset local event

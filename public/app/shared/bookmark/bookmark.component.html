@@ -10,10 +10,10 @@
 			</li>
 		</ul>
 	</div>
-	<p class="bookmark__url" [innerHTML]="bookmark.get( 'url' ) | formatUrl"></p>
+	<p class="bookmark__url" [innerHTML]="bookmark.get( 'url' ) | appFormatUrl"></p>
 </a>
 
 <!-- Details button -->
-<button class="button bookmark__action" type="button" (click)="onClickDetails( bookmark.get( 'id' ) )">
+<button class="button bookmark__action has-tooltip" type="button" (click)="onClickDetails( bookmark.get( 'id' ) )" data-tooltip="details">
 	<app-icon name="info" size="20" color="#606060"></app-icon>
 </button>

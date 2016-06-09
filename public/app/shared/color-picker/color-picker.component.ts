@@ -20,7 +20,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 		ClickOutsideDirective
 	],
 	host: {
-		class: 'color-picker'
+		class: 'color-picker',
+		'(keyup.esc)': 'closeDropdown()'
 	},
 	selector: 'app-color-picker',
 	templateUrl: './color-picker.component.html'
@@ -62,10 +63,10 @@ export class ColorPickerComponent {
 	constructor() {
 
 		// Setup
-		this.colorPresets = List( [] );
+		this.colorPresets = List<string>();
 		this.selectedColor = null;
 		this.allowCustomColor = true;
-		this.update = new EventEmitter();
+		this.update = new EventEmitter<string>();
 		this.isOpen = false;
 
 	}
@@ -85,31 +86,28 @@ export class ColorPickerComponent {
 	}
 
 	/**
-	 * Close dropdown when blurring the dropdown
-	 * @param {any}         $event  Event (probably mouse event)
-	 * @param {HTMLElement} trigger Trigger HTML element
+	 * Close dropdown menu bridge (when clicking outside)
+	 * @param {any}         $event      Event (probably mouse event)
+	 * @param {HTMLElement} triggerElem Trigger HTML element
 	 */
-	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
+	private closeDropdownOnBlur( $event: any, triggerElem: HTMLElement ): void {
 
 		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
-		if ( $event.path.indexOf( trigger ) === -1 ) {
+		if ( $event.path.indexOf( triggerElem ) === -1 ) {
 			this.closeDropdown();
 		}
 
 	}
 
 	/**
-	 * Call this when selecting a color
+	 * When selecting a color, emit an update event and close the dropdown
 	 * @param {string} color Color (HEX value)
 	 */
 	private onSelectColor( color: string ): void {
-
-		// Emit event only if the color actually changed
 		if ( this.selectedColor !== color ) {
 			this.update.emit( color );
 		}
 		this.closeDropdown();
-
 	}
 
 }

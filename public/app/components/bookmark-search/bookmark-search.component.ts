@@ -10,11 +10,9 @@ import { List, Map } from 'immutable';
  * Internal imports
  */
 import { UiService } from './../../services/ui';
-import { Bookmark, BookmarkDataService } from './../../services/bookmark';
-import { Folder, FolderDataService } from './../../services/folder';
+import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
+import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
-import { FilterBookmarksPipe } from './../../pipes/filter-bookmarks.pipe';
-import { FilterFoldersPipe } from './../../pipes/filter-folders.pipe';
 import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
 import { FolderComponent } from './../../shared/folder/folder.component';
 
@@ -30,10 +28,6 @@ import { FolderComponent } from './../../shared/folder/folder.component';
 	host: {
 		class: 'bookmark-search'
 	},
-	pipes: [
-		FilterBookmarksPipe,
-		FilterFoldersPipe
-	],
 	selector: 'app-bookmark-search',
 	templateUrl: './bookmark-search.component.html'
 } )
@@ -60,9 +54,19 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 	private bookmarkDataService: BookmarkDataService;
 
 	/**
+	 * Bookmark logic service
+	 */
+	private bookmarkLogicService: BookmarkLogicService;
+
+	/**
 	 * Folder data service
 	 */
 	private folderDataService: FolderDataService;
+
+	/**
+	 * Folder logic service
+	 */
+	private folderLogicService: FolderLogicService;
 
 	/**
 	 * Label data service
@@ -75,19 +79,19 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 	private serviceSubscriptions: Array<Subscription>;
 
 	/**
-	 * List of bookmarks
+	 * List of filtered bookmarks
 	 */
-	private bookmarks: List<Bookmark>;
+	private filteredBookmarks: List<Bookmark>;
 
 	/**
-	 * List of folders
+	 * List of filtered folders
 	 */
-	private folders: List<Folder>;
+	private filteredFolders: List<Folder>;
 
 	/**
 	 * Map of labels
 	 */
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Search: Text
@@ -102,22 +106,27 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 		changeDetector: ChangeDetectorRef,
 		uiService: UiService,
 		bookmarkDataService: BookmarkDataService,
+		bookmarkLogicService: BookmarkLogicService,
 		folderDataService: FolderDataService,
-		labelDataService: LabelDataService ) {
+		folderLogicService: FolderLogicService,
+		labelDataService: LabelDataService
+	) {
 
 		// Initialize
 		this.router = router;
 		this.changeDetector = changeDetector;
 		this.uiService = uiService;
 		this.bookmarkDataService = bookmarkDataService;
+		this.bookmarkLogicService = bookmarkLogicService;
 		this.folderDataService = folderDataService;
+		this.folderLogicService = folderLogicService;
 		this.labelDataService = labelDataService;
 
 		// Setup
 		this.serviceSubscriptions = [];
-		this.bookmarks = List<Bookmark>();
-		this.folders = List<Folder>();
-		this.labels = Map<number, Label>();
+		this.filteredBookmarks = List<Bookmark>();
+		this.filteredFolders = List<Folder>();
+		this.labels = Map<string, Label>();
 		this.searchText = '';
 
 	}
@@ -148,7 +157,7 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 		// Get folders from its service
 		const folderDataServiceSubscription: Subscription = this.folderDataService.folders.subscribe(
 			( folders: List<Folder> ) => {
-				this.folders = folders;
+				this.filteredFolders = this.folderLogicService.filterFolders( folders, this.searchText );
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
@@ -156,14 +165,14 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 		// Get bookmarks from its service
 		const bookmarkDataServiceSubscription: Subscription = this.bookmarkDataService.bookmarks.subscribe(
 			( bookmarks: List<Bookmark> ) => {
-				this.bookmarks = bookmarks;
+				this.filteredBookmarks = this.bookmarkLogicService.filterBookmarks( bookmarks, this.searchText );
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
 		);
 
 		// Get labels from its service
 		const labelDataServiceSubscription: Subscription = this.labelDataService.labels.subscribe(
-			( labels: Map<number, Label> ) => {
+			( labels: Map<string, Label> ) => {
 				this.labels = labels;
 				this.changeDetector.markForCheck(); // Trigger change detection
 			}
@@ -192,19 +201,19 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Navigate to a folder when selecting (clicking on) it
-	 * @param {number} folderId Folder ID
+	 * @param {string} folderId Folder ID
 	 */
-	private onSelectFolder( folderId: number ): void {
+	private onSelectFolder( folderId: string ): void {
 		this.router.navigate( [ 'bookmarks', 'view', folderId ] ); // Absolute
 	}
 
 	/**
 	 * Navigate to a details panel when clicking on the details button
 	 * @param {string} elementType    Element type
-	 * @param {number} elementId      Element ID
-	 * @param {number} parentFolderId ID of the parent folder
+	 * @param {string} elementId      Element ID
+	 * @param {string} parentFolderId ID of the parent folder
 	 */
-	private onClickOnDetails( elementType: string, elementId: number, parentFolderId: number ): void {
+	private onClickOnDetails( elementType: string, elementId: string, parentFolderId: string ): void {
 		this.router.navigate( [ 'bookmarks', 'view', parentFolderId, elementType, elementId ] ); // Absolute
 	}
 

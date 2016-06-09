@@ -21,7 +21,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 		ClickOutsideDirective
 	],
 	host: {
-		class: 'assign-label scrollbar-small'
+		class: 'assign-label scrollbar-small',
+		'(keyup.esc)': 'closeDropdown()'
 	},
 	selector: 'app-assign-label',
 	templateUrl: './assign-label.component.html'
@@ -32,16 +33,16 @@ export class AssignLabelComponent {
 	 * Input: List of labels
 	 */
 	@Input()
-	private labels: Map<number, Label>;
+	private labels: Map<string, Label>;
 
 	/**
 	 * Output: Select event, emits label ID
 	 */
 	@Output()
-	private select: EventEmitter<number>;
+	private select: EventEmitter<string>;
 
 	/**
-	 * Internal: Dropdown visibility status
+	 * Internal: Dropdown visibility status flag
 	 */
 	private isOpen: boolean;
 
@@ -51,8 +52,8 @@ export class AssignLabelComponent {
 	constructor() {
 
 		// Setup
-		this.labels = Map<number, Label>();
-		this.select = new EventEmitter();
+		this.labels = Map<string, Label>();
+		this.select = new EventEmitter<string>();
 		this.isOpen = false;
 
 	}
@@ -72,24 +73,21 @@ export class AssignLabelComponent {
 	}
 
 	/**
-	 * Close dropdown when blurring the dropdown
-	 * @param {any}         $event  Event (probably mouse event)
-	 * @param {HTMLElement} trigger Trigger HTML element
+	 * Close dropdown menu bridge (when clicking outside)
+	 * @param {any}         $event      Event (probably mouse event)
+	 * @param {HTMLElement} triggerElem Trigger HTML element
 	 */
-	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
-
-		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
-		if ( $event.path.indexOf( trigger ) === -1 ) {
+	private closeDropdownOnBlur( $event: any, triggerElem: HTMLElement ): void {
+		if ( $event.path.indexOf( triggerElem ) === -1 ) {
 			this.closeDropdown();
 		}
-
 	}
 
 	/**
-	 * Select a label
-	 * @param {number} labelId ID of the selected label
+	 * When selecting a label, emit the select event and close the dropdown
+	 * @param {string} labelId ID of the selected label
 	 */
-	private onSelectLabel( labelId: number ): void {
+	private onSelectLabel( labelId: string ): void {
 		this.select.emit( labelId );
 		this.closeDropdown();
 	}

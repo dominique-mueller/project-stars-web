@@ -2,7 +2,7 @@
 
 .create-bookmark {
 	position: relative;
-	z-index: 2; // To overlap upcoming content
+	z-index: 3; // To overlap upcoming content
 }
 
 // Dropdown
@@ -12,8 +12,8 @@
 	top: 0;
 	right: 0;
 	width: 35rem; // Fixed width
-	transform-origin: 100% 0; // Top right
 	transform: scale(.8);
+	transform-origin: 100% 0; // Top right
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
 				transform $anim-speed-normal $anim-easing;
@@ -21,7 +21,6 @@
 	box-shadow: 0 .1rem .3rem rgba($color-black, .3);
 	opacity: 0;
 	visibility: hidden;
-	overflow: hidden;
 
 	&.is-visible {
 		transform: scale(1);
@@ -52,13 +51,13 @@
 .create-bookmark__dropdown-trigger {
 	height: 3.3rem;
 	padding: .7rem 1.6rem .6rem 3.5rem;
-	color: $color-tundora;
-	font-weight: bold;
-	line-height: 2rem; // Same as icon height
-	letter-spacing: .01rem;
-	opacity: .75;
 	transition: background-color $anim-speed-normal $anim-easing,
 				opacity $anim-speed-normal $anim-easing;
+	color: $color-tundora;
+	font-weight: 700;
+	letter-spacing: .01rem;
+	line-height: 2rem; // Same as icon height
+	opacity: .75;
 
 	&:hover,
 	&:focus,
@@ -91,7 +90,7 @@
 .create-bookmark__dropdown-header-title {
 	flex: 1;
 	font-size: 1.3rem;
-	font-weight: bold;
+	font-weight: 700;
 	letter-spacing: .01rem;
 	line-height: 4rem;
 }
@@ -99,8 +98,8 @@
 .create-bookmark__dropdown-header-action {
 	padding-right: 1.2rem;
 	padding-left: 1.2rem;
-	opacity: .5;
 	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: .5;
 
 	&:hover,
 	&:focus {
@@ -135,12 +134,12 @@
 .create-bookmark__dropdown-footer-action {
 	height: 3.1rem; // Font size + paddings
 	padding-top: .9rem;
-	padding-bottom: .9rem;
 	padding-right: 1.6rem;
+	padding-bottom: .9rem;
 	padding-left: 1.5rem;
+	transition: opacity $anim-speed-normal $anim-easing;
 	font-size: 1.3rem;
 	opacity: 1;
-	transition: opacity $anim-speed-normal $anim-easing;
 
 	&:hover,
 	&:focus {

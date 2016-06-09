@@ -1,21 +1,23 @@
 /**
  * External imports
  */
-import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy,
+	ChangeDetectorRef } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control } from '@angular/common';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 /**
  * Internal imports
  */
 import { AppService } from './../../services/app';
 import { UiService } from './../../services/ui';
+import { UserDataService, User } from './../../services/user';
+import { DropdownComponent, DropdownItem } from './../../shared/dropdown/dropdown.component';
 import { IconComponent } from './../../shared/icon/icon.component';
-import { DropdownComponent, DropdownItem, DropdownLink, DropdownDivider }
-	from './../../shared/dropdown/dropdown.component';
+import { NotifierService } from './../../shared/notifier/notifier.service';
 
 /**
  * View component (smart): Header
@@ -40,14 +42,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	private changeSearch: EventEmitter<any>;
 
 	/**
+	 * Output: Logout event, emitting nothing
+	 */
+	@Output()
+	private logout: EventEmitter<any>;
+
+	/**
+	 * Change detector
+	 */
+	private changeDetector: ChangeDetectorRef;
+
+	/**
 	 * App service
 	 */
 	private appService: AppService;
 
 	/**
+	 * User data service
+	 */
+	private userDataService: UserDataService;
+
+	/**
 	 * UI service
 	 */
 	private uiService: UiService;
+
+	/**
+	 * Notifier service
+	 */
+	private notifierService: NotifierService;
 
 	/**
 	 * List containing all service subscriptions
@@ -62,7 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	/**
 	 * App name
 	 */
-	private app: string;
+	private appName: string;
 
 	/**
 	 * Flag for temporarily disabling the change search event emitting
@@ -72,43 +95,70 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	/**
 	 * List of dropdown items
 	 */
-	private dropdownItems: DropdownItem[];
+	private dropdownItems: List<DropdownItem>;
 
-	// TODO: Put them into user service
-	private name: string = 'Niklas Agethen';
+	/**
+	 * Full user name
+	 */
+	private userName: string;
 
 	/**
 	 * Constructor
 	 */
 	constructor(
+		changeDetector: ChangeDetectorRef,
 		appService: AppService,
 		uiService: UiService,
-		formBuilder: FormBuilder ) {
+		userDataService: UserDataService,
+		notifierService: NotifierService,
+		formBuilder: FormBuilder
+	) {
 
 		// Initialize
+		this.changeDetector = changeDetector;
 		this.appService = appService;
 		this.uiService = uiService;
+		this.userDataService = userDataService;
+		this.notifierService = notifierService;
 
 		// Setup
 		this.changeSearch = new EventEmitter();
-		this.isChangeSearchDisabled = true; // Also skip the first initial one
-		this.app = appService.APP_NAME;
+		this.logout = new EventEmitter();
+		this.isChangeSearchDisabled = false;
+		this.appName = appService.APP_NAME;
+		this.userName = 'User';
+		this.serviceSubscriptions = [];
 		this.searchForm = formBuilder.group( {
 			text: ''
 		} );
 
-		// Setup dropdown values - TODO: Maybe extract to somewhere? App service?
-		// TODO: Map / List
-		this.dropdownItems = [
-			new DropdownLink( 'settings', 'Settings' ),
-			new DropdownLink( 'apps', 'Apps' ),
-			new DropdownDivider(),
-			new DropdownLink( 'help', 'Help' ),
-			new DropdownLink( 'feedback', 'Feedback' ),
-			new DropdownLink( 'about', 'About this app' ),
-			new DropdownDivider(),
-			new DropdownLink( 'logout', 'Logout' )
-		];
+		// Setup dropdown values
+		this.dropdownItems = List<DropdownItem>( [
+			<DropdownItem> Map<string, any>( {
+				icon: 'settings', label: 'Settings', type: 'link', value: 'settings'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'download', label: 'Apps', type: 'link', value: 'apps'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				type: 'divider'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'help', label: 'Help', type: 'link', value: 'help'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'heart', label: 'Feedback', type: 'link', value: 'feedback'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'info', label: 'About', type: 'link', value: 'about'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				type: 'divider'
+			} ),
+			<DropdownItem> Map<string, any>( {
+				icon: 'exit', label: 'Logout', type: 'link', value: 'logout'
+			} )
+		] );
 
 	}
 
@@ -156,10 +206,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 		);
 
+		// Get notified when the user changes
+		const userDataServiceSubscription: Subscription = this.userDataService.user.subscribe(
+			( user: User ) => {
+
+				// Save full user name
+				if ( user.get( 'firstName' ) !== null && user.get( 'lastName' ) !== null ) {
+					this.userName = `${ user.get( 'firstName' ) } ${ user.get( 'lastName' ) }`;
+					this.changeDetector.markForCheck(); // Trigger change detection
+				}
+
+			}
+		);
+
 		// Save subscriptions
 		this.serviceSubscriptions = [
 			searchFormSubscription,
-			uiServiceSubscription
+			uiServiceSubscription,
+			userDataServiceSubscription
 		];
 
 	}
@@ -194,11 +258,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Dropdown event handler
+	 * Select an entry in the user dropdown menu
 	 * @param {string} value Value of the dropdown item
 	 */
-	private log( value: string ): void {
-		console.log( value ); // TODO: Redirect to route and stuff
+	private onDropdownSelect( value: string ): void {
+
+		switch ( value ) {
+
+			// Logout
+			case 'logout':
+				this.logout.emit( null );
+				break;
+
+			default:
+				this.notifierService.notify( 'default', '(BETA) This functionality is not yet available in this beta version.' );
+				break;
+
+		}
+
 	}
 
 }

@@ -1,13 +1,11 @@
 // STYLES
-// * The architecture is inspiredby the ITCSS concept
-// * All components are designed after the OOCSS principles
-// * States are named after SMACSS
+// * The architecture is inspired by the ITCSS concept by Harry Roberts
+// * Naming convention is based on BEM - but without the M
+// * Instead of the M, states are named after SMACSS
 
 // LAYER 01: SETTINGS
 @import "settings/colors";
 @import "settings/animations";
-
-// LAYER 02: TOOLS (emmpty for now)
 
 // LAYER 03: GENERIC
 @import "../../node_modules/normalize.css/normalize"; // Default normalize.css library
@@ -23,14 +21,11 @@
 @import "base/selection";
 @import "base/site";
 
-// LAYER 05: OBJECTS (empty for now)
-
-// LAYER 06: COMPONENTS (with subsections)
-
 // LAYER 06: ATOMIC COMPONENTS
 @import "components/atoms/buttons";
 @import "components/atoms/forms";
 @import "components/atoms/scrollbar";
+@import "components/atoms/tooltip";
 
 // LAYER 06: SHARED COMPONENTS
 @import "components/shared/assign-label";
@@ -44,7 +39,9 @@
 @import "components/shared/icon";
 @import "components/shared/label-advanced";
 @import "components/shared/label-simple";
+@import "components/shared/loader";
 @import "components/shared/move-into-folder";
+@import "components/shared/notifier";
 
 // LAYER 06: COMPONENTS (VIEWS)
 @import "components/components/bookmark-details";
@@ -54,3 +51,4 @@
 @import "components/components/bookmarks";
 @import "components/components/header";
 @import "components/components/label-list";
+@import "components/components/login";

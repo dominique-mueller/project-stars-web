@@ -1,0 +1,11 @@
+{
+	"name": "Project Stars",
+	"server": {
+		"host": "http://localhost:3000",
+		"api": "http://localhost:3000/build/apimock"
+	},
+	"database": {
+		"url": "mongodb://localhost/",
+		"database": "dev"
+	}
+}

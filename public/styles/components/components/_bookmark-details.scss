@@ -4,20 +4,20 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 2;
-	height: 100%;
 	width: 100%;
+	height: 100%;
+	transition: opacity $anim-speed-normal $anim-easing,
+				visibility $anim-speed-instant linear $anim-speed-normal;
 	background-color: rgba($color-white, .75);
 	opacity: 0;
 	visibility: hidden;
-	transition: opacity $anim-speed-normal $anim-easing,
-				visibility $anim-speed-instant linear $anim-speed-normal;
+	z-index: 3;
 
 	&.is-visible {
-		opacity: 1;
-		visibility: visible;
 		transition: opacity $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant linear;
+		opacity: 1;
+		visibility: visible;
 	}
 
 }
@@ -26,24 +26,24 @@
 	position: fixed;
 	top: 6.4rem; // Header bar height
 	right: 0;
-	z-index: 2;
-	overflow-y: auto;
-	overflow-x: hidden;
-	height: calc(100% - 6.4rem);
 	width: 50rem; // Fixed width
-	background-color: $color-white;
-	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
-	transform: translate3D(100%,0,0);
-	visibility: hidden;
+	height: calc(100% - 6.4rem);
+	transform: translate3d(100%, 0, 0);
 	transition: transform $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant linear $anim-speed-normal;
+	background-color: $color-white;
+	box-shadow: 0 .1rem .5rem rgba($color-black, .2);
+	visibility: hidden;
+	z-index: 3;
+	overflow-x: hidden;
+	overflow-y: auto;
 	will-change: transform, visibility; // Does it work? Who knows ...
 
 	&.is-visible {
-		visibility: visible;
-		transform: translate3D(0,0,0);
+		transform: translate3d(0, 0, 0);
 		transition: transform $anim-speed-normal $anim-easing,
 					visibility $anim-speed-instant linear;
+		visibility: visible;
 	}
 
 }
@@ -53,10 +53,8 @@
 .bookmark-details__panel-header {
 	display: flex;
 	width: 100%;
-	padding-right: 1.8rem;
-	padding-left: 2.5rem;
-	padding-top: .2rem;
-	height: 6rem;
+	height: 6.4rem;
+	padding: 1.7rem 1.8rem 1.5rem 2.5rem;
 	background-color: $color-tundora;
 	color: $color-white;
 }
@@ -66,12 +64,12 @@
 	font-size: 1.6rem;
 	font-weight: normal;
 	letter-spacing: .02rem;
-	line-height: 5.8rem;
+	line-height: 3.2rem;
 }
 
 .bookmark-details__panel-header-action {
-	opacity: 1;
 	transition: opacity $anim-speed-fast $anim-easing;
+	opacity: 1;
 
 	&:hover,
 	&:focus {
@@ -84,11 +82,11 @@
 
 	&.does-delete,
 	&.does-open {
-		padding: 2.2rem 1.4rem;
+		padding: .9rem 1.4rem;
 	}
 
 	&.does-close {
-		padding: 2rem 1.1rem;
+		padding: .7rem 1.1rem;
 	}
 
 }
@@ -96,9 +94,9 @@
 .bookmark-details__panel-header-action-move {
 
 	> .button {
-		padding: 2.2rem 1.4rem;
-		opacity: 1;
+		padding: .9rem 1.4rem;
 		transition: opacity $anim-speed-fast $anim-easing;
+		opacity: 1;
 
 		&:hover,
 		&:focus {
@@ -142,13 +140,13 @@
 }
 
 .bookmark-details__panel-label-title { // Similar to form label
+	margin-bottom: 1rem;
+	margin-left: 2.5rem;
 	color: $color-gray;
 	font-size: 1.2rem;
 	font-weight: 500;
-	line-height: 1.4rem;
-	margin-bottom: 1rem;
-	margin-left: 2.5rem;
 	letter-spacing: .01rem; // Because of the small text
+	line-height: 1.4rem;
 }
 
 .bookmark-details__panel-label-assign {

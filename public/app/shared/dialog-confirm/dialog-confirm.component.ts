@@ -1,7 +1,7 @@
 /**
  * External imports
  */
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 /**
  * Internal imports
@@ -10,7 +10,7 @@ import { DialogConfirmService } from './dialog-confirm.service';
 import { IconComponent } from './../icon/icon.component';
 
 /**
- * Share component: Dialog confirm
+ * Shared component: Dialog confirm
  */
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,7 +18,9 @@ import { IconComponent } from './../icon/icon.component';
 		IconComponent
 	],
 	host: {
-		class: 'dialog-confirm'
+		class: 'dialog-confirm',
+		'(keyup.esc)': 'onCancel()',
+		'(keyup.enter)': 'onConfirm()'
 	},
 	selector: 'app-dialog-confirm',
 	templateUrl: './dialog-confirm.component.html'
@@ -70,7 +72,8 @@ export class DialogConfirmComponent {
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
-		dialogConfirmService: DialogConfirmService ) {
+		dialogConfirmService: DialogConfirmService
+	) {
 
 		// Initialize
 		this.changeDetector = changeDetector;
@@ -97,7 +100,7 @@ export class DialogConfirmComponent {
 	public requestConfirmation( options: any ): Promise<boolean> {
 
 		// Setup content and open dialog
-		this.openDialog(options);
+		this.openDialog( options );
 
 		// Create and return the promise
 		return new Promise<boolean>( ( resolve: Function ) => {
@@ -151,17 +154,17 @@ export class DialogConfirmComponent {
 	}
 
 	/**
-	 * Click on yes
+	 * Confirm the confirmation request (by clicking yes)
 	 */
-	private onClickYes(): void {
+	private onConfirm(): void {
 		this.closeDialog();
 		this.resolve( true );
 	}
 
 	/**
-	 * Click on no
+	 * Cancel the confirmation request (by clicking no)
 	 */
-	private onClickNo(): void {
+	private onCancel(): void {
 		this.closeDialog();
 		this.resolve( false );
 	}

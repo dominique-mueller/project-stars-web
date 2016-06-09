@@ -98,9 +98,9 @@ export class LabelAdvancedComponent {
 		this.label = null;
 		this.editable = false;
 		this.creatable = false;
-		this.changeEditMode = new EventEmitter();
-		this.update = new EventEmitter();
-		this.delete = new EventEmitter();
+		this.changeEditMode = new EventEmitter<boolean>();
+		this.update = new EventEmitter<any>();
+		this.delete = new EventEmitter<any>();
 		this.isInEditMode = false;
 		this.labelColorPreview = '';
 		this.labelColorPresets = appService.COLOR_PRESETS;

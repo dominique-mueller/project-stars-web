@@ -13,9 +13,8 @@
 	top: 0;
 	left: 0;
 	width: 18.4rem; // 3.2 per color x 5 + 2x padding
-	z-index: 3;
-	transform-origin: 0 0;
 	transform: scale(.8);
+	transform-origin: 0 0;
 	transition: opacity $anim-speed-normal $anim-easing,
 				visibility $anim-speed-instant $anim-linear $anim-speed-normal,
 				transform $anim-speed-normal $anim-easing;
@@ -23,7 +22,7 @@
 	box-shadow: 0 .1rem .3rem rgba($color-black, .3);
 	opacity: 0;
 	visibility: hidden;
-	overflow: hidden;
+	z-index: 3;
 
 	&.is-visible {
 		transform: scale(1);
@@ -34,7 +33,7 @@
 		visibility: visible;
 
 		> .color-picker__dropdown-content {
-			transform: translate3D(0,0,0);
+			transform: translate3d(0, 0, 0);
 			transition: opacity $anim-speed-normal $anim-easing $anim-speed-fast,
 						transform $anim-speed-normal $anim-easing $anim-speed-fast;
 			opacity: 1;
@@ -44,7 +43,7 @@
 }
 
 .color-picker__dropdown-content {
-	transform: translate3D(0,-.8rem,0);
+	transform: translate3d(0, -.8rem, 0);
 	transition: opacity $anim-speed-normal $anim-easing,
 				transform $anim-speed-normal $anim-easing;
 	opacity: 0;
@@ -63,7 +62,7 @@
 .color-picker__dropdown-header-title {
 	flex: 1;
 	font-size: 1.3rem;
-	font-weight: bold;
+	font-weight: 700;
 	letter-spacing: .01rem;
 	line-height: 4rem;
 }
@@ -71,8 +70,8 @@
 .color-picker__dropdown-header-action {
 	padding-right: 1.2rem;
 	padding-left: 1.2rem;
-	opacity: .5;
 	transition: opacity $anim-speed-normal $anim-easing;
+	opacity: .5;
 
 	&:hover,
 	&:focus {
@@ -92,8 +91,8 @@
 }
 
 .color-picker__dropdown-item {
-	position: relative;
 	display: inline-block;
+	position: relative;
 	width: 3.2rem;
 	height: 3.2rem;
 	margin-top: -.1rem; // Just looks nicer
@@ -105,10 +104,10 @@
 	height: 3.2rem;
 	padding-right: .6rem;
 	padding-left: .6rem;
-	border-radius: 50%;
 	transform: scale(.825);
 	transition: opacity $anim-speed-fast $anim-easing,
 				transform $anim-speed-fast $anim-easing;
+	border-radius: 50%;
 
 	&:hover,
 	&:focus {
@@ -117,8 +116,8 @@
 
 	&:active {
 		transform: scale(.92);
-		opacity: .75;
 		transition: none;
+		opacity: .75;
 	}
 
 }
@@ -129,12 +128,12 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 1;
 	width: 3.2rem;
 	height: 3.2rem;
 	border-radius: 50%; // Same hitbox
-	opacity: 0; // Do not show the actual input field at all
 	cursor: pointer;
+	opacity: 0; // Do not show the actual input field at all
+	z-index: 1;
 
 	&:hover,
 	&:focus {
@@ -147,16 +146,16 @@
 	&:active {
 		+ .color-picker__dropdown-picker-icon {
 			transform: scale(.92);
-			opacity: .75;
 			transition: none;
+			opacity: .75;
 		}
 	}
 
 }
 
 .color-picker__dropdown-picker-icon {
-	background-color: $color-alto;
-	opacity: .5;
 	padding-top: .6rem;
 	padding-bottom: .6rem;
+	background-color: $color-alto;
+	opacity: .5;
 }

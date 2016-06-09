@@ -2,7 +2,8 @@
  * External imports
  */
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
+import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
@@ -35,14 +36,9 @@ export class BookmarkDataService {
 	public bookmarks: Observable<List<Bookmark>>;
 
 	/**
-	 * Status flag representing the current fetching status
+	 * Authenticated HTTP service
 	 */
-	public isFetching: boolean;
-
-	/**
-	 * Http service
-	 */
-	private http: Http;
+	private authHttp: AuthHttp;
 
 	/**
 	 * App service
@@ -57,129 +53,330 @@ export class BookmarkDataService {
 	/**
 	 * Constructor
 	 */
-	constructor( http: Http, appService: AppService, store: Store<AppStore> ) {
+	constructor(
+		authHttp: AuthHttp,
+		appService: AppService,
+		store: Store<AppStore>
+	) {
 
-		// Initialize services
-		this.http = http;
+		// Initialize
+		this.authHttp = authHttp;
 		this.appService = appService;
 		this.store = store;
 
 		// Setup
-		this.bookmarks = store.select( 'bookmarks' ); // Select returns an observable
-		this.isFetching = false;
+		this.bookmarks = <Observable<List<Bookmark>>> store.select( 'bookmarks' ); // Select returns an observable
 
 	}
 
 	/**
-	 * Load all bookmarks from the server
+	 * Authenticated API request
+	 * Load all bookmarks
+	 * @return {Promise<any>} Promise when done
 	 */
-	public loadBookmarks(): void {
+	public loadBookmarks(): Promise<any> {
 
-		// Fetch data from server
-		this.isFetching = true;
-		this.http.get( `${ this.appService.API_URL }/bookmarks.mock.json` ) // TODO: Change to REST API
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
 
-			// Convert data
-			.map( ( response: Response ) => <Array<any>> response.json().data )
+					this.authHttp
 
-			// Create action
-			.map( ( payload: Array<any> ) => ( { type: LOAD_BOOKMARKS, payload } ) )
+						// Fetch data and parse response
+						.get( `${ this.appService.API_URL }/bookmarks.mock.json` )
+						.map( ( response: Response ) => <any> response.json() )
 
-			// Dispatch action
-			.subscribe(
-				( action: Action ) => {
-					this.isFetching = false;
-					this.store.dispatch( action );
-				}
+						// Dispatch action
+						.subscribe(
+							( data: any ) => {
+								this.store.dispatch( {
+									payload: data.data,
+									type: LOAD_BOOKMARKS
+								} );
+								console.log( 'APP > Bookmark Data Service > Bookmarks successfully loaded.' );
+								resolve();
+							},
+							( error: any ) => {
+								console.log( 'APP > Bookmark Data Service > Error while loading bookmarks.' );
+								console.log( error );
+								reject();
+							}
+						);
+
+				},
+				Math.floor( Math.random() * 3000 ) + 1
 			);
+		} );
 
-			// TODO: Error handling
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
+
+				// Fetch data and parse response
+				.get( `${ this.appService.API_URL }/bookmarks` )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: data.data,
+							type: LOAD_BOOKMARKS
+						} );
+						console.log( 'APP > Bookmark Data Service > Bookmarks successfully loaded.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Bookmark Data Service > Error while loading bookmarks.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
+
+		*/
 
 	}
 
 	/**
+	 * Authenticated API request
 	 * Add a new bookmark
-	 * @param {any} data Data
+	 * @param  {any}          newBookmark Data of the new bookmark
+	 * @return {Promise<any>}             Promise when done
 	 */
-	public addBookmark( data: any ): void {
+	public addBookmark( newBookmark: any ): Promise<any> {
 
-		// TODO: API CALL, gets also created?
-		let apiCallResultId: number = 30;
-		data.id = apiCallResultId;
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
+					newBookmark.id = `BOK${ Math.floor( Math.random() * 110 ) }`;
+					this.store.dispatch( {
+						payload: {
+							data: newBookmark
+						},
+						type: ADD_BOOKMARK
+					} );
+					console.log( 'APP > Bookmark Data Service > New bookmark successfully added.' );
+					resolve();
+				},
+				Math.floor( Math.random() * 3000 ) + 1
+			);
+		} );
 
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				data: data,
-				id: apiCallResultId
-			},
-			type: ADD_BOOKMARK
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
+
+				// Send data and parse response
+				.post( `${ this.appService.API_URL }/bookmarks`, JSON.stringify( { data: newBookmark } ) )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						newBookmark.id = data.data.id; // TODO: Set also the favicon?
+						this.store.dispatch( {
+							payload: {
+								data: newBookmark
+							},
+							type: ADD_BOOKMARK
+						} );
+						console.log( 'APP > Bookmark Data Service > New bookmark successfully added.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Bookmark Data Service > Error while adding a new bookmark.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
+
+		*/
+
+	}
+
+	/**
+	 * Authenticated API requst
+	 * Update an existing bookmark
+	 * @param  {string}       bookmarkId      Bookmark ID
+	 * @param  {any}          updatedBookmark Updated bookmark data
+	 * @return {Promise<any>}                 Promise when done
+	 */
+	public updateBookmark( bookmarkId: string, updatedBookmark: any ): Promise<any> {
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
+					this.store.dispatch( {
+						payload: {
+							data: updatedBookmark,
+							id: bookmarkId
+						},
+						type: UPDATE_BOOKMARK
+					} );
+					console.log( 'APP > Bookmark Data Service > Bookmark successfully updated.' );
+					resolve();
+				},
+				Math.floor( Math.random() * 3000 ) + 1
+			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
+
+				// Send data and parse response
+				.put( `${ this.appService.API_URL }/bookmarks/${ bookmarkId }`, JSON.stringify( { data: updatedBookmark } ) )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: {
+								data: updatedBookmark,
+								id: bookmarkId
+							},
+							type: UPDATE_BOOKMARK
+						} );
+						console.log( 'APP > Bookmark Data Service > Bookmark successfully updated.' );
+						resolve();
+					},
+					( error: any ) => {
+						console.log( 'APP > Bookmark Data Service > Error while updating a bookmark.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
+
+		*/
+
+	}
+
+	/**
+	 * Pre authenticated API request
+	 * Assign a new label to an existing bookmark (helper function for updating a bookmark)
+	 * @param  {string}       bookmarkId      Bookmark ID
+	 * @param  {List<string>} currentLabelIds List of currently assigned labels
+	 * @param  {string}       newLabelId      ID of the new label
+	 * @return {Promise<any>}                 Promise when done
+	 */
+	public assignLabelToBookmark(
+		bookmarkId: string,
+		currentLabelIds: List<string>,
+		newLabelId: string ): Promise<any> {
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			let updatedLabelIds: any = {
+				labels: currentLabelIds.push( newLabelId )
+			};
+			this.updateBookmark( bookmarkId, updatedLabelIds )
+				.then( ( data: any ) => {
+					resolve( data );
+				} )
+				.catch( ( error: any ) => {
+					reject( error );
+				} );
 		} );
 
 	}
 
 	/**
-	 * Update one value of a bookmark
-	 * @param {number}        bookmarkId Bookmark ID
-	 * @param {string}        attribute  Attribute
-	 * @param {string|number} newValue   New / updated value
+	 * Pre authenticated API request
+	 * Unassign a label from an existing bookmark (helper function for updating a bookmark)
+	 * @param {string}        bookmarkId      Bookmark ID
+	 * @param {List<string>}  currentLabelIds List of currently assigned labels
+	 * @param {string}        oldLabelId      ID of the label to be removed
+	 * @return {Promise<any>}                 Promise when done
 	 */
-	public updateBookmarkValue( bookmarkId: number, attribute: string, newValue: string|number ): void {
-		let data: any = {};
-		data[ attribute ] = newValue;
-		this.updateBookmark( bookmarkId, data );
-	}
+	public unassignLabelFromBookmark(
+		bookmarkId: string,
+		currentLabelIds: List<string>,
+		oldLabelId: string ): Promise<any> {
 
-	/**
-	 * Assign one new label to a bookmark
-	 * @param {number}       bookmarkId    Bookmark ID
-	 * @param {List<number>} currentLabels List of currently assigned labels
-	 * @param {number}       labelId       ID of the new label
-	 */
-	public assignLabelToBookmark( bookmarkId: number, currentLabels: List<number>, labelId: number ): void {
-		let data: any = {
-			labels: currentLabels.push( labelId )
-		};
-		this.updateBookmark( bookmarkId, data );
-	}
-
-	/**
-	 * Unassign one label from a bookmark
-	 * @param {number}       bookmarkId    Bookmark ID
-	 * @param {List<number>} currentLabels List of currently assigned labels
-	 * @param {number}       labelId       ID fo the label to be unassigned / removed
-	 */
-	public unassignLabelFromBookmark( bookmarkId: number, currentLabels: List<number>, labelId: number ): void {
-		let data: any = {
-			labels: currentLabels.filter( ( currentLabelId: number ) => currentLabelId !== labelId )
-		};
-		this.updateBookmark( bookmarkId, data );
-	}
-
-	/**
-	 * Delete one bookmark
-	 * @param {number} bookmarkId Bookmark ID
-	 */
-	public deleteBookmark( bookmarkId: number ): void {
-
-		// TODO: API CALL
-
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				id: bookmarkId
-			},
-			type: DELETE_BOOKMARK
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			let updatedLabelIds: any = {
+				labels: currentLabelIds.filterNot( ( currentLabelId: string ) => currentLabelId === oldLabelId )
+			};
+			this.updateBookmark( bookmarkId, updatedLabelIds )
+				.then( ( data: any ) => {
+					resolve( data );
+				} )
+				.catch( ( error: any ) => {
+					reject( error );
+				} );
 		} );
+
+	}
+
+	/**
+	 * Authenticated API request
+	 * Delete an existing bookmark
+	 * @param  {string}       bookmarkId Bookmark ID
+	 * @return {Promise<any>}            Promise when done
+	 */
+	public deleteBookmark( bookmarkId: string ): Promise<any> {
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			setTimeout(
+				() => {
+					this.store.dispatch( {
+						payload: {
+							id: bookmarkId
+						},
+						type: DELETE_BOOKMARK
+					} );
+					console.log( 'APP > Bookmark Data Service > Bookmark successfully deleted.' );
+					resolve();
+				},
+				Math.floor( Math.random() * 3000 ) + 1
+			);
+		} );
+
+		/* TODO: This is the production code
+
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+			this.authHttp
+
+				// Send data and parse response
+				.delete( `${ this.appService.API_URL }/bookmarks/${ bookmarkId }` )
+				.map( ( response: Response ) => <any> response.json() )
+
+				// Dispatch action
+				.subscribe(
+					( data: any ) => {
+						this.store.dispatch( {
+							payload: {
+								id: bookmarkId
+							},
+							type: DELETE_BOOKMARK
+						} );
+						console.log( 'APP > Bookmark Data Service > Bookmark successfully deleted.' );
+						resolve()
+					},
+					( error: any ) => {
+						console.log( 'APP > Bookmark Data Service > Error while deleting a bookmark.' );
+						console.log( error );
+						reject();
+					}
+				);
+		} );
+
+		*/
 
 	}
 
 	/**
 	 * Delete all bookmarks within provided folder IDs
-	 * Sidenote: Used in combination with deleting a folder, no API call here
-	 * @param {Array<number>} folderids List of folder IDs
+	 * Sidenote: Used in combination with deleting a folder (no API call here)
+	 * @param {Array<string>} folderIds List of folder IDs
 	 */
-	public deleteAllBookmarksInFolders( folderIds: Array<number> ): void {
+	public deleteAllBookmarksInFolders( folderIds: Array<string> ): void {
 
 		// Dispatch action
 		this.store.dispatch( {
@@ -193,10 +390,10 @@ export class BookmarkDataService {
 
 	/**
 	 * Unassign a label from all bookmarks this label is currently assigned to
-	 * Sidenote: Used in combination with deleting a label, no API call here
-	 * @param {number} labelId Label ID
+	 * Sidenote: Used in combination with deleting a label (no API call here)
+	 * @param {string} labelId Label ID
 	 */
-	public unassignLabelFromAllBookmarks( labelId: number ): void {
+	public unassignLabelFromAllBookmarks( labelId: string ): void {
 
 		// Dispatch action
 		this.store.dispatch( {
@@ -209,33 +406,14 @@ export class BookmarkDataService {
 	}
 
 	/**
-	 * Update bookmark
-	 * @param {number} bookmarkId Bookmark ID
-	 * @param {any]    data       Data
-	 */
-	public updateBookmark( bookmarkId: number, data: any ): void {
-
-		// TODO: API CALL
-
-		// Dispatch action
-		this.store.dispatch( {
-			payload: {
-				data: data,
-				id: bookmarkId
-			},
-			type: UPDATE_BOOKMARK
-		} );
-
-	}
-
-	/**
-	 * Get bookmark template (for creating a new bookmark)
+	 * Get bookmark template, used when creating a new bookmark
 	 * @return {Bookmark} Bookmark template
 	 */
 	public getBookmarkTemplate(): Bookmark {
 		return <Bookmark> Map<string, any>( {
 			description: '',
-			labels: List<number>(),
+			id: null,
+			labels: List<string>(),
 			path: null,
 			position: null,
 			title: 'Unnamed bookmark',

@@ -2,16 +2,14 @@
 	"compilerOptions": {
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"module": "system",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"removeComments": true,
 		"sourceMap": false,
-		"target": "es5"
+		"target": "ES5"
 	},
 	"exclude": [
-		"node_modules",
-		"typings/main",
-		"typings/main.d.ts"
+		"node_modules"
 	]
 }

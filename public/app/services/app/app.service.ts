@@ -6,6 +6,7 @@ import { List } from 'immutable';
 
 /**
  * App service
+ * Contains all app constants
  */
 @Injectable()
 export class AppService {
@@ -32,8 +33,8 @@ export class AppService {
 	constructor() {
 
 		// Setup
-		this.APP_NAME = 'Project Stars';
-		this.API_URL = 'https://localhost/build/apimock';
+		this.APP_NAME = '@@CONFIG_NAME'; // Will be replaced by the Gulp build process
+		this.API_URL = '@@CONFIG_API'; // Will be replaced by the Gulp build process
 		this.COLOR_PRESETS = List( [
 			'#9E9E9E',
 			'#F44336',
