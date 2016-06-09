@@ -84,40 +84,6 @@ export class FolderDataService {
 	public loadFolders(): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-
-					this.authHttp
-
-						// Fetch data and parse response
-						.get( `${ this.appService.API_URL }/folders.mock.json` )
-						.map( ( response: Response ) => <any> response.json() )
-
-						// Dispatch action
-						.subscribe(
-							( data: any ) => {
-								this.store.dispatch( {
-									payload: data.data,
-									type: LOAD_FOLDERS
-								} );
-								console.log( 'APP > Folder Data Service > Folders successfully loaded.' );
-								resolve();
-							},
-							( error: any ) => {
-								console.log( 'APP > Folder Data Service > Error while loading folders.' );
-								console.log( error );
-								reject();
-							}
-						);
-
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Fetch data and parse response
@@ -141,8 +107,6 @@ export class FolderDataService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 

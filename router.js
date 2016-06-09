@@ -94,7 +94,7 @@ routerBackend.use(function(req, res, next) {
 	//if the Authorization is set in the request header and this token is vaild (our token & not expired)
     var message = null;
     if(req.headers.authorization){
-    	authentication.setToken(req.headers.authorization, function(err){
+    	authentication.setToken(req.headers.authorization.split(" ")[1], function(err){ //split because of authorization header prefix
     		if(err){ //Everything in this if body is error handling and redirecting
     			logger.debug('authentication failed. Error: ' + err);
     			if(err.name == 'TokenExpiredError'){

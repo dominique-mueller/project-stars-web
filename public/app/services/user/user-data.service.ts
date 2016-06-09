@@ -73,40 +73,6 @@ export class UserDataService {
 	public loadUser( userId: string ): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-
-					this.authHttp
-
-						// Fetch data and parse response
-						.get( `${ this.appService.API_URL}/user.mock.json` )
-						.map( ( response: Response ) => <any> response.json() )
-
-						// Dispatch action
-						.subscribe(
-							( data: any ) => {
-								this.store.dispatch( {
-									payload: data.data,
-									type: LOAD_USER
-								} );
-								console.log( 'APP > User Data Service > User successfully loaded.' );
-								resolve();
-							},
-							( error: any ) => {
-								console.log( 'APP > User Data Service > Error while loading user.' );
-								console.log( error );
-								reject();
-							}
-						);
-
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Fetch data and parse response
@@ -130,8 +96,6 @@ export class UserDataService {
 					}
 				);
 		} );
-
-		*/
 
 	}
 
