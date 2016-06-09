@@ -57,6 +57,7 @@ var BookmarksController = function(req, res, authentication){
 	this.getAll = function(){
 		var bookmarkPromise = Bookmark.findAll();
 		bookmarkPromise.then(function(bookmarks){
+			logger.debug("bookmarsController getAll successful");
 			self.res.status(httpStatus.OK)
 			.json({'data':
 					helpers.mongooseObjToFrontEndObj(bookmarks)
@@ -64,6 +65,7 @@ var BookmarksController = function(req, res, authentication){
 			);
 		})
 		.catch(function(err){
+			logger.debug("FUCK THIS SHITTY ERROR");
 			logger.error(err);
 			self.res.status(httpStatus.BAD_REQUEST)
 			.json({'error': 'Failed to get bookmarks.'});
