@@ -242,17 +242,19 @@ var BookmarksModel = function(userId){
 
 
 	this.removeLabelFromBookmarks = function(labelId){
-		return new Promsie(function(resolve, reject){
+		return new Promise(function(resolve, reject){
 			var promiseList = new Array();
-			var bookmarkPromise = self.Bookmark.findAll().then(function(bookmarks){
-				for(var i = 0; i < bookmark.length; i++){
-					var labelIndex = bookmarks[i].indexOf(labelId);
+			var bookmarksPromise = self.findAll()
+			bookmarksPromise.then(function(bookmarks){
+				for(var i = 0; i < bookmarks.length; i++){
+					var labelIndex = bookmarks[i].labels.indexOf(labelId);
 					if(labelIndex > -1){
-						bookmarks[i].splice(labelIndex, 1);
+						bookmarks[i].labels.splice(labelIndex, 1);
 						promiseList.push(saveAndReturnPromise(bookmarks[i]));
 					}
 				}
 				Promise.all(promiseList).then(function(){
+					logger.debug('Bookmark Model: removeLabelFromBookmarks successful');
 					resolve();
 				})
 				.catch(reject);
