@@ -50,8 +50,8 @@ dbpath=C:\mongodb\data
 logpath=C:\mongodb\mongo.log
 </pre>
 
-You're now able to start the MongoDB server by openening up your command line and run (update parameters if necessary):
+<br>
 
-<pre>
-	mongod --config "C:\mongodb\mongo.config"
-</pre>
+### Step 4: Install MongoDB GUI (optional)
+
+You can recommend [Admin Mongo](https://github.com/mrvautin/adminMongo) if you want to use and manage the MongoDB via a graphical UI.

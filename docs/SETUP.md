@@ -30,8 +30,6 @@ It's time. It's finally time to get our application running. Follow the instruct
 
 ### Step 3: Run the app
 
-It's simple. It's easy. Simply run `node app` in the project root folder and visit the localhost to see the application.
+Try it out!
 
-**Note:**
-
-You can't register (yet), you can only login. Existing username-password combinations are: TODO.
+* [Run the application](/setup/03_run.md)
