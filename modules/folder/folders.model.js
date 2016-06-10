@@ -105,8 +105,31 @@ var FoldersModel = function(userId){
 							reject(err);
 						}
 						else{
-							// logger.debug('changeNumberOfContainedFolders resolved');
+							logger.debug('changeNumberOfContainedFolders resolved');
 							resolve(savedFolder.numberOfContainedFolders);
+						}
+					});
+				}
+				catch(err){
+					reject(err);
+				}
+			});
+		});
+	}
+
+	this.changeNumberOfContainedBookmarks = function(path, changeBy){
+		return new Promise(function(resolve, reject){
+			Folder.findById(path, function(err, foundFolder){
+				try{
+					foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
+					foundFolder.save(function(err, savedFolder){
+						if(err){
+							logger.error(err);
+							reject(err);
+						}
+						else{
+							logger.debug('changeNumberOfContainedBookmarks resolved + ' + changeBy);
+							resolve(savedFolder.numberOfContainedBookmarks);
 						}
 					});
 				}

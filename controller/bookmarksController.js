@@ -77,6 +77,7 @@ var BookmarksController = function(req, res, authentication){
 		//TODO Label, check if exist and regard to owner
 		//TODO checkIfPathRegardsToOwner: Not yet implemented
 		// var checkIfPathRegardsToOwnerPromise = Folder.checkIfPathRegardsToOwner(self.reqBody.path);
+		logger.debug("Parent folder: " + self.reqBody.path);
 		var getPositionPromise = self.Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
 		getPositionPromise.then(function(position){
 			var bookmarkCreatePromise = self.Bookmark.create(self.reqBody, position);
