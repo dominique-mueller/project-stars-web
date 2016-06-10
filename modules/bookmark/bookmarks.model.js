@@ -116,7 +116,7 @@ var BookmarksModel = function(userId){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
 				logger.debug("UPDATE THIS BOOKMARK: " + bookmark);
-				// bookmark.updated = Date();
+				bookmark.updated = Date();
 
 				if(bookmarkData.hasOwnProperty('title')){
 					bookmark['title'] = bookmarkData.title;
