@@ -6,14 +6,15 @@ var DevicesController = function(req, res, authentication){
 
 	var self = this; //@see: adapters/authentication.js 
 	this.authentication = authentication
-	this.Device = require('../modules/device/devices.model.js');
-	this.Device = new Device(authentication.tokenUserId);
+	var d = require('../modules/device/devices.model.js');
+	this.Device = new d(authentication.tokenUserId);
 	this.req = req, this.res = res, this.reqBody;
 	
 
 	//CONSTRUCTOR
 	if(req.method != 'GET' && req.method != 'DELETE'){
-		this.reqBody = JSON.parse(req.body.data);
+		// this.reqBody = JSON.parse(req.body.data);
+		this.reqBody = req.body.data;
 	}	
 
 

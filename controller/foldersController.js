@@ -17,7 +17,8 @@ var FoldersController = function(req, res, authentication){
 
 	//CONSTRUCTOR
 	if(req.method != 'GET' && req.method != 'DELETE'){
-		this.reqBody = JSON.parse(req.body.data);
+		// this.reqBody = JSON.parse(req.body.data);
+		this.reqBody = req.body.data;
 	}	
 
 
@@ -93,7 +94,7 @@ var FoldersController = function(req, res, authentication){
 				}
 			);
 		})
-		.catch(helpers.respondeWithError(''));
+		.catch(helpers.respondWithError(''));
 	};
 
 
@@ -106,7 +107,7 @@ var FoldersController = function(req, res, authentication){
 				}
 			);
 		})
-		.catch(helpers.respondeWithError(''));
+		.catch(helpers.respondWithError(''));
 	};
 
 
@@ -119,7 +120,7 @@ var FoldersController = function(req, res, authentication){
 				helpers.mongooseObjToFrontEndObj(folder)
 			});
 		})
-		.catch(helpers.respondeWithError('could not create the folder'));
+		.catch(helpers.respondWithError('could not create the folder'));
 	};
 
 
@@ -136,7 +137,7 @@ var FoldersController = function(req, res, authentication){
 		folderUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
-		.catch(helpers.respondeWithError('could not update the folder'));
+		.catch(helpers.respondWithError('could not update the folder'));
 	};
 
 
@@ -149,9 +150,9 @@ var FoldersController = function(req, res, authentication){
 			deleteFolderPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
-			.catch(helpers.respondeWithError('UNKNOWN BUT DANGEROUS ERROR'));
+			.catch(helpers.respondWithError('UNKNOWN BUT DANGEROUS ERROR'));
 		})
-		.catch(helpers.respondeWithError('could not delete the folder'));	
+		.catch(helpers.respondWithError('could not delete the folder'));	
 	};
 
 

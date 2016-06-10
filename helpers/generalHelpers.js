@@ -17,7 +17,7 @@ module.exports = {
 		return modifiedObject;
 	},
 
-	respondeWithError: function (message){
+	respondWithError: function (message){
 		return function(err){
 			logger.error("respondeWithError: "  + message + " :: " + err);
 			self.res.status(httpStatus.BAD_REQUEST)

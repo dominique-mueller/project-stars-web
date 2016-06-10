@@ -268,65 +268,23 @@ routerBackend.use('/labels', function(req, res, next){
 
 routerBackend.route('/labels')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findAll(authentication.tokenUserId);
-		result.then(function(labels){
-			res.json({'data':
-				helpers.mongooseObjToFrontEndObj(labels)
-			});
-			res.end();
-		})
-		.catch(function(reason){
-			res.send('{"error":"Failed to get Labels"}');
-		});
+		labelsController.getAll();
 	})
 
 	.post(function(req, res){
-		logger.debug('CREATE LABEL userId: ' + authentication.tokenUserId)
-		var result = require('./modules/label/labels.model.js').create(JSON.parse(req.body.data), authentication.tokenUserId);
-		result.then(function(label) {
-			res.json({'data':
-				helpers.mongooseObjToFrontEndObj(label)
-			});
-			res.end();
-		})
-		.catch(function() {
-			res.send('{"error":"Failed to create Label"}');
-		});
+		labelsController.post();
 	});
 routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findOne(req.params.label_id);
-		result.then(function(label){
-			res.json({'data':
-				helpers.mongooseObjToFrontEndObj(label)
-			});
-			res.end();
-		})
-		.catch(function(reason){
-			res.send('{"error":"Failed to get Label"}');
-		});
-		// res.send('Label GET id: ' + req.params.label_id);
+		labelsController.get();
 	})
 
 	.put(function(req, res){
-		var result = require('./modules/label/labels.model.js').update(req.params.label_id, JSON.parse(req.body.data));
-		result.then(function(){
-			res.status(httpStatus.NO_CONTENT);
-			res.end();
-		})
-		.catch(function(reason){
-			res.send('{"error":"Failed to update Label"}');
-		});
+		labelsController.put();
 	})
 
 	.delete(function(req, res){
-		var result = require('./modules/label/labels.model.js').delete(req.params.label_id);
-		result.then(function(msg){
-			res.status(httpStatus.NO_CONTENT).end();
-		})
-		.catch(function(reason){
-			res.status(httpStatus.INVALID_INPUT).send('{"error":"Failed to delete Label"}');
-		});
+		labelsController.delete();
 	});
 
 

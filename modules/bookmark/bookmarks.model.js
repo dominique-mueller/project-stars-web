@@ -241,6 +241,28 @@ var BookmarksModel = function(userId){
 	}; 
 
 
+	this.removeLabelFromBookmarks = function(labelId){
+		return new Promsie(function(resolve, reject){
+			var promiseList = new Array();
+			var bookmarkPromise = self.Bookmark.findAll().then(function(bookmarks){
+				for(var i = 0; i < bookmark.length; i++){
+					var labelIndex = bookmarks[i].indexOf(labelId);
+					if(labelIndex > -1){
+						bookmarks[i].splice(labelIndex, 1);
+						promiseList.push(saveAndReturnPromise(bookmarks[i]));
+					}
+				}
+				Promise.all(promiseList).then(function(){
+					resolve();
+				})
+				.catch(reject);
+			})
+			.catch(reject);
+		});
+	}
+
+
+
 	self = this;
 	this.userId = userId;
 

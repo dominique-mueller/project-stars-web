@@ -15,7 +15,6 @@ function LabelsModel(userId){
 				color: labelData.color,
 				owner: self.userId
 			});
-			console.log("label Object test: " + label._id + "+++"+ label.name);
 			label.save(function(err, label){
 				if(err){
 					logger.debug('failed to create label');

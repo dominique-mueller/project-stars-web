@@ -17,7 +17,8 @@ var BookmarksController = function(req, res, authentication){
 
 	//CONSTRUCTOR
 	if(req.method != 'GET' && req.method != 'DELETE'){
-		this.reqBody = JSON.parse(req.body.data);
+		// this.reqBody = JSON.parse(req.body.data);
+		this.reqBody = req.body.data;
 	}	
 
 
@@ -31,7 +32,7 @@ var BookmarksController = function(req, res, authentication){
 				promiseList.push(self.Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
 			}
 		})
-		.catch(helpers.respondeWithError('failed bookmarksController manageNumberOfContainedBookmarks'));
+		.catch(helpers.respondWithError('failed bookmarksController manageNumberOfContainedBookmarks'));
 
 		return promiseList;
 	}
@@ -86,9 +87,9 @@ var BookmarksController = function(req, res, authentication){
 					}
 				);
 			})
-			.catch(helpers.respondeWithError("Failed to create bookmark"));
+			.catch(helpers.respondWithError("Failed to create bookmark"));
 		})
-		.catch(helpers.respondeWithError("Failed to create bookmark"));
+		.catch(helpers.respondWithError("Failed to create bookmark"));
 	}
 
 	this.put = function(){
@@ -101,14 +102,14 @@ var BookmarksController = function(req, res, authentication){
 			Promise.all(promiseList).then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
-			.catch(helpers.respondeWithError("Failed to update bookmark"));
+			.catch(helpers.respondWithError("Failed to update bookmark"));
 		}
 		else{
 			var updateBookmarkEditablesPromise = self.Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);
 			updateBookmarkEditablesPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
-			.catch(helpers.respondeWithError("Failed to update bookmark"));
+			.catch(helpers.respondWithError("Failed to update bookmark"));
 		}
 	}
 
@@ -121,10 +122,10 @@ var BookmarksController = function(req, res, authentication){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
 			//Todo rollback
-			.catch(helpers.respondeWithError('Failed to dekrement number of contained bookmarks in path folder'));	
+			.catch(helpers.respondWithError('Failed to dekrement number of contained bookmarks in path folder'));	
 		})
 		//Todo rollback
-		.catch(helpers.respondeWithError('Failed to delete bookmark with id ' + self.req.params.bookmark_id));
+		.catch(helpers.respondWithError('Failed to delete bookmark with id ' + self.req.params.bookmark_id));
 	}
 
 	return this;

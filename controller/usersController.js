@@ -16,7 +16,8 @@ var UsersController = function(req, res, authentication){
 
 	//CONSTRUCTOR
 	if(req.method != 'GET'){
-		this.reqBody = JSON.parse(req.body.data);
+		// this.reqBody = JSON.parse(req.body.data);
+		this.reqBody = req.body.data;
 	}
 	if(req.method == 'POST'){
 		self.User = new u(this, null);
@@ -41,7 +42,7 @@ var UsersController = function(req, res, authentication){
 		 		}
 		 	);
 		})
-		.catch(helpers.respondeWithError('could not find the requested user'));
+		.catch(helpers.respondWithError('could not find the requested user'));
 	}
 	
 	function deactivate(){
@@ -81,7 +82,7 @@ var UsersController = function(req, res, authentication){
 					self.res.end();
 					createRootFolder(newUser._id);
 				})
-				.catch(helpers.respondeWithError('failed to register'));
+				.catch(helpers.respondWithError('failed to register'));
 			},
 
 			asAdmin: function(newPassword){
@@ -97,7 +98,7 @@ var UsersController = function(req, res, authentication){
 					});
 					createRootFolder(newUser._id);
 				})
-				.catch(helpers.respondeWithError('failed to create new user account'));
+				.catch(helpers.respondWithError('failed to create new user account'));
 				//TODO send mail with password and activation link to given e-mail address
 			}
 		}
@@ -166,7 +167,7 @@ var UsersController = function(req, res, authentication){
 			allUserPromise.then(function(users){
 				self.res.status(httpStatus.OK).json({'data':users});
 			})
-			.catch(helpers.respondeWithError('Sorry, something went wrong'));
+			.catch(helpers.respondWithError('Sorry, something went wrong'));
 		}
 		else{
 			self.res.status(httpStatus.FORBIDDEN)
@@ -204,7 +205,7 @@ var UsersController = function(req, res, authentication){
 		userUpdatePromise.then(function(){
 			self.res.status(httpStatus.NO_CONTENT).end();
 		})
-		.catch(helpers.respondeWithError('failed to update user'));
+		.catch(helpers.respondWithError('failed to update user'));
 	};
 
 	this.delete = function(){
