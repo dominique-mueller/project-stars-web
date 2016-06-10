@@ -27,7 +27,7 @@ var FoldersController = function(req, res, authentication){
 	function deleteSubFolders(pathId){
 		logger.debug('deleteSubFolders: ' + pathId);
 		return new Promise(function(resolve, reject){
-			var findSubFolderPromise = Folder.findAll(pathId);
+			var findSubFolderPromise = self.Folder.findAll(pathId);
 			findSubFolderPromise.then(function(folders){
 				var deletePromises = new Array();
 				for(var i = 0; i < folders.length; i++){
@@ -57,6 +57,7 @@ var FoldersController = function(req, res, authentication){
 					deletePromises.push(self.Bookmark.delete(bookmarks[i]._id));
 				}
 				Promise.all(deletePromises).then(function(){
+					logger.debug('DGFHJRFVGBJH');
 					resolve();
 				})
 				.catch(reject);
