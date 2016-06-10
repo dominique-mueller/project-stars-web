@@ -52,7 +52,7 @@
 					<input class="form-input" id="folder-created" type="text" [value]="folder?.get( 'created' ) | date" readonly>
 					<label class="form-label" for="folder-created">Created on</label>
 				</li>
-				<li class="form-component bookmark-details__panel-section" *ngIf="folder?.get( 'updated' )"
+				<li class="form-component bookmark-details__panel-section" *ngIf="folder?.get( 'updated' )">
 					<input class="form-input" id="folder-updated" type="text" [value]="folder?.get( 'updated' ) | date" readonly>
 					<label class="form-label" for="folder-updated">Last updated on</label>
 				</li>

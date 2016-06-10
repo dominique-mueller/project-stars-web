@@ -49,7 +49,7 @@
 		"zone.js": "0.6.x"
 	},
 	"devDependencies": {
-		"browser-sync": "2.12.x",
+		"browser-sync": "2.13.x",
 		"chai": "3.5.x",
 		"codelyzer": "0.0.x",
 		"connect-history-api-fallback": "1.2.x",
@@ -62,6 +62,7 @@
 		"gulp-inline-ng2-template": "2.0.x",
 		"gulp-inline-source": "2.1.x",
 		"gulp-htmlmin": "2.0.x",
+		"gulp-open": "2.0.x",
 		"gulp-rename": "1.2.x",
 		"gulp-replace-task": "0.11.x",
 		"gulp-sass": "2.3.x",
@@ -76,8 +77,8 @@
 		"jasmine": "2.4.x",
 		"mocha": "2.4.x",
 		"run-sequence": "1.2.x",
-		"tslint": "3.10.x",
-		"typedoc": "0.3.x",
+		"tslint": "3.11.x",
+		"typedoc": "0.4.x",
 		"typings": "1.0.x",
 		"webpack": "1.13.x"
 	},

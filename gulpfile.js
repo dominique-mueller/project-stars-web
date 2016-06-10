@@ -33,7 +33,7 @@ const cssBuild 			= require( './gulp/styles/css-build.js' );
  * Gulp task: Build application - for development
  */
 gulp.task( 'build:dev', '### BUILD FOR DEVELOPMENT', ( done ) => {
-	gutil.log( gutil.colors.green( 'Running build process for development environment ...' ) );
+	gutil.log( gutil.colors.green( 'Running build process for development environment ... (may take some seconds)' ) );
 	runSequence(
 		[ 'env:clean:build' ],
 		[ 'setup:assets', 'setup:config', 'css:build--dev', 'sass:build--dev', 'typescript:build--dev' ],
@@ -46,7 +46,7 @@ gulp.task( 'build:dev', '### BUILD FOR DEVELOPMENT', ( done ) => {
  * Gulp task: Build application - for production
  */
 gulp.task( 'build:prod', '### BUILD FOR PRODUCTION', ( done ) => {
-	gutil.log( gutil.colors.green( 'Running build process for production environment ...' ) );
+	gutil.log( gutil.colors.green( 'Running build process for production environment ... (may take some time)' ) );
 	runSequence(
 		[ 'env:clean:build' ],
 		[ 'setup:assets', 'sass:lint', 'typescript:lint', 'css:build--prod', 'sass:build--prod', 'typescript:bundle--prod' ],
@@ -60,10 +60,11 @@ gulp.task( 'build:prod', '### BUILD FOR PRODUCTION', ( done ) => {
  * Gulp task: Build documentations
  */
 gulp.task( 'build:docs', '### GENERATE DOCUMENTATION', ( done ) => {
-	gutil.log( gutil.colors.green( 'Generating documentation ...' ) );
+	gutil.log( gutil.colors.green( 'Generating documentation ... (may take some seconds)' ) );
 	runSequence(
 		[ 'env:clean:docs' ],
 		[ 'docs:frontend' ],
+		[ 'docs:frontend--open' ],
 		done
 	);
 } );

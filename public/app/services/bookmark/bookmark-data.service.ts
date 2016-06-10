@@ -162,7 +162,7 @@ export class BookmarkDataService {
 				// Dispatch action
 				.subscribe(
 					( data: any ) => {
-						// updatedBookmark.updated = data.data.updated;
+						// TODO: updatedBookmark.updated = data.data.updated;
 						this.store.dispatch( {
 							payload: {
 								data: updatedBookmark,

@@ -168,7 +168,7 @@ export class FolderDataService {
 				// Dispatch action
 				.subscribe(
 					( data: any ) => {
-						// updatedFolder.updated = data.data.updated;
+						// TODO: updatedFolder.updated = data.data.updated;
 						this.store.dispatch( {
 							payload: {
 								data: updatedFolder,

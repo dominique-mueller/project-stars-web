@@ -1,4 +1,8 @@
 /**
+ * Bookmark Directory component
+ */
+
+/**
  * External imports
  */
 import { Component, Input, Output, EventEmitter, HostBinding, OnInit,
