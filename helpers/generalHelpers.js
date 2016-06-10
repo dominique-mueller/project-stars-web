@@ -23,6 +23,10 @@ module.exports = {
 			self.res.status(httpStatus.BAD_REQUEST)
 			.json({'error':message});
 		}
+	},
+
+	databaseDateToFrontEndDate: function(date){
+		return date.split('T')[0];
 	}
 
 }

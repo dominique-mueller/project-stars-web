@@ -9,7 +9,8 @@ var folder = new mongoose.Schema({
 	isRoot: {type: Boolean, default:false},
 	// numberOfContainedElements: {type: Number, default:0},
 	numberOfContainedFolders: {type: Number, default:0},
-	numberOfContainedBookmarks: {type: Number, default:0}
+	numberOfContainedBookmarks: {type: Number, default:0},
+	created: {type: Date, default: Date.now}
 });
 
 var Folder = module.exports = mongoose.model('Folder', folder);

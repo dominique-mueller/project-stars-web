@@ -24,17 +24,23 @@ var BookmarksController = function(req, res, authentication){
 
 	//#### PRIVATE FUNCTIONS ####
 
-	function manageNumberOfContainedBookmarks(getOldBookmarkPromise){
-		var promiseList = new Array();
-		getOldBookmarkPromise.then(function(oldBookmark){
-			if(self.reqBody.hasOwnProperty('path')){
-				promiseList.push(self.Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1)); //because new bookmark is created
-				promiseList.push(self.Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1)); //because old bookmark is deleted
-			}
-		})
-		.catch(helpers.respondWithError('failed bookmarksController manageNumberOfContainedBookmarks'));
+	function updateBookmarkPath(){
+		var getOldBookmarkPromise = self.Bookmark.findOne(self.req.params.bookmark_id);
+		var incrementNewPathPromise = self.Folder.changeNumberOfContainedBookmarks(self.reqBody.path, 1);
+		incrementNewPathPromise.then(function(highestPosition){
+			
+			var updateBookmarkPathPromise = self.Bookmark.updateMoveBookmarkToNewFolder(self.req.params.bookmark_id, self.reqBody, highestPosition);
+			var decrementOldPathPromise;
+			getOldBookmarkPromise.then(function(oldBookmark){
+				decrementOldPathPromise = self.Folder.changeNumberOfContainedBookmarks(oldBookmark.path, -1);
+			});
 
-		return promiseList;
+			Promise.all([updateBookmarkPathPromise, decrementOldPathPromise]).then(function(){
+				self.res.status(httpStatus.NO_CONTENT).end();
+			})
+			.catch(helpers.respondWithError("Failed to move bookmark"));
+		})
+		.catch(helpers.respondWithError("Failed to move bookmark"));
 	}
 	
 
@@ -94,16 +100,16 @@ var BookmarksController = function(req, res, authentication){
 	}
 
 	this.put = function(){
-		var promiseList = new Array();
-		// var update = Bookmark.update(self.req.params.bookmark_id, self.reqBody, function(oldBookmark){
-		var getOldBookmarkPromise = self.Bookmark.findOne(self.req.params.bookmark_id);
-		if(self.reqBody.hasOwnProperty('path') || self.reqBody.hasOwnProperty('position')){
-			promiseList.push(self.Bookmark.updateMoveBookmarksFolderOrPosition(self.req.params.bookmark_id, self.reqBody));
-			promiseList.concat(manageNumberOfContainedBookmarks(getOldBookmarkPromise));
-			Promise.all(promiseList).then(function(){
+
+		if(self.reqBody.hasOwnProperty('path')){
+			updateBookmarkPath();
+		}
+		else if(self.reqBody.hasOwnProperty('position')){
+			var updateBookmarkPositionPromise = self.Bookmark.updateMoveBookmarkToNewPosition(self.req.params.bookmark_id, self.reqBody);
+			updateBookmarkPositionPromise.then(function(){
 				self.res.status(httpStatus.NO_CONTENT).end();
 			})
-			.catch(helpers.respondWithError("Failed to update bookmark"));
+			.catch(helpers.respondWithError("Failed to update bookmark's position"));
 		}
 		else{
 			var updateBookmarkEditablesPromise = self.Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);

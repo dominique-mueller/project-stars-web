@@ -129,10 +129,13 @@ var FoldersController = function(req, res, authentication){
 		var folderUpdatePromise;
 		var folderUpdate = self.Folder.update(self.req.params.folder_id, self.reqBody);
 		if(self.reqBody.hasOwnProperty('name')){
-			folderUpdatePromise = folderUpdate.updateFolderEditables();
+			folderUpdatePromise = folderUpdate.folderEditables();
+		}
+		else if(self.reqBody.hasOwnProperty('path')){
+			folderUpdatePromise = folderUpdate.moveFolderToNewPath();
 		}
 		else{
-			folderUpdatePromise = folderUpdate.updateMoveFolderPathOrPosition();
+			folderUpdatePromise = folderUpdate.moveFoldersPosition();
 		}
 
 		folderUpdatePromise.then(function(){

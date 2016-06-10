@@ -105,8 +105,6 @@ var BookmarksModel = function(userId){
 					resolve(bookmark);
 				}
 			});
-			// })
-			// .catch(reject);
 		});
 	};
 
@@ -118,6 +116,8 @@ var BookmarksModel = function(userId){
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
 				logger.debug("UPDATE THIS BOOKMARK: " + bookmark);
+				// bookmark.updated = Date();
+
 				if(bookmarkData.hasOwnProperty('title')){
 					bookmark['title'] = bookmarkData.title;
 				}
@@ -150,26 +150,40 @@ var BookmarksModel = function(userId){
 	};
 
 
-	this.updateMoveBookmarksFolderOrPosition = function(bookmarkId, bookmarkData){
+	this.updateMoveBookmarkToNewFolder = function(bookmarkId, bookmarkData, highestPositionInNewPath){
 		return new Promise(function(resolve, reject){
-			var promiseList = new Array();
 			var bookmarkPromise = self.findOne(bookmarkId);
 			bookmarkPromise.then(function(bookmark){
-				logger.debug('model moveBookmark: ' + bookmark.title);
 				
-				if(bookmarkData.hasOwnProperty('path')){
-					promiseList.push(self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1));
-					bookmark.path = bookmarkData.path;
-					logger.debug('set new path');
-				}
-				// if(bookmarkData.hasOwnProperty('position')){
-				bookmark.position = bookmarkData.position;
-					// logger.debug('set new position');
-				// }
-
-				promiseList.push(self.shiftBookmarksPosition(bookmark.path, bookmark.position -1, 1));
-				Promise.all(promiseList).then(function(results){
+				var shiftBookmarksOldPositionPomise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1);
+				bookmark.path = bookmarkData.path;
+				bookmark.position = highestPositionInNewPath;
+				
+				shiftBookmarksOldPositionPomise.then(function(results){
 					logger.debug('moving bookmark was successful');
+					saveAndReturnPromise(bookmark).then(function(){
+						resolve();
+					})
+					.catch(reject);
+				}) 
+				.catch(reject);
+			})
+			.catch(function(err){
+				logger.error('An error occured in bookamarks.model.update when trying to find the bookmark:' + err);
+			});
+		});
+	};
+
+	this.updateMoveBookmarkToNewPosition = function(bookmarkId, bookmarkData){
+		return new Promise(function(resolve, reject){
+			var bookmarkPromise = self.findOne(bookmarkId);
+			bookmarkPromise.then(function(bookmark){
+				
+				var shiftBookmarksOldPositionPomise = self.shiftBookmarksPosition(bookmark.path, bookmark.position, -1);
+				var shiftBookmarksNewPositionPomise = self.shiftBookmarksPosition(bookmark.path, bookmarkData.position -1, 1);
+				
+				Promise.all([shiftBookmarksOldPositionPomise, shiftBookmarksNewPositionPomise]).then(function(results){
+					bookmark.position = bookmarkData.position;
 					saveAndReturnPromise(bookmark).then(function(){
 						resolve();
 					})

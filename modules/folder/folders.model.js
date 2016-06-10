@@ -223,10 +223,9 @@ var FoldersModel = function(userId){
 
 	this.update = function(folderId, folderData){
 		return {
-			updateMoveFolderPathOrPosition: function(){
-				logger.debug("updateMoveFolderPathOrPosition");
+			moveFolderToNewPath: function(){
+				logger.debug("moveFolderToNewPath");
 				return new Promise(function(resolve, reject){
-					var promiseList = new Array();
 					var folderPromise = self.findOne(folderId);
 					folderPromise.then(function(folder){
 						
@@ -234,32 +233,30 @@ var FoldersModel = function(userId){
 							reject(new Error("Root folder can not be manipulated"));
 						}
 
-						if(folderData.hasOwnProperty('path')){ //if a path is in the update data, there has also to be a position
-							promiseList.push(self.shiftFoldersPosition(folder.path, folder.position, -1));
-							promiseList.push(self.changeNumberOfContainedFolders(folder.path, -1));
-							folder.path = folderData.path;
-							promiseList.push(self.changeNumberOfContainedFolders(folder.path, 1));
-							logger.debug("folder path will be changed");
-						}
-
-						folder.position = folderData.position;
-						promiseList.push(self.shiftFoldersPosition(folder.path, folder.position -1, 1));
-
-						Promise.all(promiseList).then(function(){
-							saveAndReturnPromise(folder).then(function(){
-								resolve();
+						var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+						var decrementOldFolderPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
+						folder.path = folderData.path;
+						var incrementNewFolderPromise =self.changeNumberOfContainedFolders(folder.path, 1);
+						
+						incrementNewFolderPromise.then(function(highestPosition){
+							folder.position = highestPosition;
+							
+							Promise.all([shiftFoldersPromise, decrementOldFolderPromsie]).then(function(){
+								saveAndReturnPromise(folder).then(function(){
+									resolve();
+								})
+								.catch(reject)
 							})
-							.catch(reject)
+							.catch(reject);
 						})
 						.catch(reject);
-
 					})
 					.catch(reject);			
 	
 				});
 			},
 
-			updateFolderEditables: function(){
+			folderEditables: function(){
 				logger.debug("updateFolderEditables");
 
 				return new Promise(function(resolve, reject){
@@ -271,6 +268,32 @@ var FoldersModel = function(userId){
 							resolve();
 						}
 					});
+				});
+			},
+
+			moveFoldersPosition: function(){
+				logger.debug("moveFoldersPosition");
+				return new Promise(function(resolve, reject){
+					var folderPromise = self.findOne(folderId);
+					folderPromise.then(function(folder){
+						
+						if(folder.isRoot){
+							reject(new Error("Root folder can not be manipulated"));
+						}
+
+						var shiftFoldersOldPositionPormise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+						var shiftFoldersNewPositionPromise = self.shiftFoldersPosition(folder.path, folderData.position -1, 1);
+
+						Promise.all([shiftFoldersOldPositionPormise, shiftFoldersNewPositionPromise]).then(function(){
+							folder.position = folderData.position;
+							saveAndReturnPromise(folder).then(function(){
+								resolve();
+							})
+							.catch(reject)
+						})
+						.catch(reject);
+					})
+					.catch(reject);
 				});
 			}
 		};
