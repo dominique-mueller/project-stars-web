@@ -17,5 +17,3 @@ git clone https://gitlab.dominique-mueller.de/dominique-mueller/project-stars-we
 You will be asked to enter your username and password of your GitLab account. Git will now download the source code onto your machine.
 
 > Please DO ONLY USE the HTTPS-way of cloning the repository. The SSH-way is not reommended any longer and may not even be working on this GitLab.
-
-> Note: If you are behind a proxy, additional configuration for Git may be required. Read more in the Git installation instructions.

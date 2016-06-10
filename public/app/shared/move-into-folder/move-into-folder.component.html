@@ -24,7 +24,7 @@
 			(click)="onSwitchToFolder( visibleFolder, 'up' )">
 			<app-icon name="chevron_left" size="18" color="#606060">
 			</app-icon>
-			{{ visibleFolder.get( 'name' ) }}
+			{{ visibleFolder.get( 'isRoot' ) ? 'Bookmarks' : visibleFolder.get( 'name' ) }}
 		</button>
 
 		<!-- Temporary dropdown subheader showing the current folder, for animation purposes -->
@@ -32,7 +32,7 @@
 			[class.is-root]="nextVisibleFolder.get( 'isRoot' )" [class.is-animating-in]="isNavigating !== ''">
 			<app-icon name="chevron_left" size="18" color="#606060">
 			</app-icon>
-			{{ nextVisibleFolder.get( 'name' ) }}
+			{{ nextVisibleFolder.get( 'isRoot' ) ? 'Bookmarks' : nextVisibleFolder.get( 'name' ) }}
 		</button>
 
 

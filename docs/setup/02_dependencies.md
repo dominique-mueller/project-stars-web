@@ -16,8 +16,6 @@ npm install
 
 This process will install *all* project dependencies locally into the `node_modules` folder. After that, it will take the `typings.json` file in the root folder and installs all TypeScript Type Definitions into the `typings` folder.
 
-> Note: If you are behind a proxy, additional configuration for NodeJS or NPM may be required. The installation of typings currently doesn't work behind a proxy. Read more in the NodeJS installation instructions.
-
 <br>
 
 ### Install Gulp globally (optional)
@@ -27,5 +25,3 @@ Gulp recommends to be installed globally. This may not be necessary but might fi
 <pre>
 npm install -g gulp-cli
 </pre>
-
-> Note: If you are behind a proxy, additional configuration for NodeJS or NPM may be required. Read more in the NodeJS installation instructions.

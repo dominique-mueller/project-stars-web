@@ -1,4 +1,8 @@
 /**
+ * Header component
+ */
+
+/**
  * External imports
  */
 import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy,

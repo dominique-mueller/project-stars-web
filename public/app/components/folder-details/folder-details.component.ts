@@ -1,4 +1,8 @@
 /**
+ * Folder details component
+ */
+
+/**
  * External imports
  */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
@@ -154,6 +158,12 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 					if ( this.folder === null ) {
 						this.onClose();
 					} else {
+
+						// Convert date strings into date objects (for view only, makes the date pipe work properly)
+						this.folder = <Folder> this.folder.set( 'created', new Date( this.folder.get( 'created' ) ) );
+						if ( this.folder.get( 'updated' ) !== null ) {
+							this.folder = <Folder> this.folder.set( 'updated', new Date( this.folder.get( 'updated' ) ) );
+						}
 
 						// Update UI state
 						// This should notify other components, like the bookmark list one

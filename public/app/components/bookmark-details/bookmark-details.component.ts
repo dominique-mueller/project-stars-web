@@ -1,4 +1,8 @@
 /**
+ * Bookmark details component
+ */
+
+/**
  * External imports
  */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
@@ -200,6 +204,12 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 					if ( this.bookmark === null ) {
 						this.onClose();
 					} else {
+
+						// Convert date strings into date objects (for view only, makes the date pipe work properly)
+						this.bookmark = <Bookmark> this.bookmark.set( 'created', new Date( this.bookmark.get( 'created' ) ) );
+						if ( this.bookmark.get( 'updated' ) !== null ) {
+							this.bookmark = <Bookmark> this.bookmark.set( 'updated', new Date( this.bookmark.get( 'updated' ) ) );
+						}
 
 						// Update UI state
 						// This should notify other components, like the bookmark list one

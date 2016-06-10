@@ -54,7 +54,7 @@ To build the frontend for a development environment, open up your command line a
 npm run gulp build:prod
 </pre>
 
-> Note: This may take some (more) seconds.
+> Note: This may take some (more) seconds. Additionally, due to some issues the SASS linter doesn't recognize animation keyframes - so just ignore these problems.
 
 <br>
 
@@ -65,8 +65,6 @@ To dynamically generate the frontend documentation, open up your command line an
 <pre>
 npm run gulp build:docs
 </pre>
-
-> Note: Ignore the errors. It's a TypeDoc bug that (hopefully) will be fixed some day.
 
 <br>
 

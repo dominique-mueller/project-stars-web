@@ -1,4 +1,8 @@
 /**
+ * App component
+ */
+
+/**
  * External imports
  */
 import { Component, OnInit, provide } from '@angular/core';
@@ -74,7 +78,7 @@ import { NotifierComponent } from './../../shared/notifier/notifier.component';
 			}
 		} )
 	],
-	selector: 'app',
+	selector: 'app-root',
 	templateUrl: './app.component.html'
 } )
 @Routes( [

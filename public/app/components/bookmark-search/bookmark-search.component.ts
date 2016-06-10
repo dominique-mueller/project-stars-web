@@ -1,4 +1,8 @@
 /**
+ * Bookmark search component
+ */
+
+/**
  * External imports
  */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';

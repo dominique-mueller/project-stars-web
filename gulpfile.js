@@ -22,7 +22,6 @@ const envCleanBuild 	= require( './gulp/env/env-clean-build.js' );
 const envCleanDocs 		= require( './gulp/env/env-clean-docs.js' );
 const typescriptBuild 	= require( './gulp/scripts/typescript-build.js' );
 const typescriptLint 	= require( './gulp/scripts/typescript-lint.js' );
-const setupApimock 		= require( './gulp/setup/setup-apimock.js' );
 const setupAssets 		= require( './gulp/setup/setup-assets.js' );
 const setupConfig 		= require( './gulp/setup/setup-config.js' );
 const setupIndex 		= require( './gulp/setup/setup-index.js' );
@@ -32,13 +31,12 @@ const cssBuild 			= require( './gulp/styles/css-build.js' );
 
 /**
  * Gulp task: Build application - for development
- * TODO: Remove apimock
  */
 gulp.task( 'build:dev', '### BUILD FOR DEVELOPMENT', ( done ) => {
-	gutil.log( gutil.colors.green( 'Running build process for development environment ...' ) );
+	gutil.log( gutil.colors.green( 'Running build process for development environment ... (may take some seconds)' ) );
 	runSequence(
 		[ 'env:clean:build' ],
-		[ 'setup:assets', 'setup:config', 'setup:apimock', 'css:build--dev', 'sass:build--dev', 'typescript:build--dev' ],
+		[ 'setup:assets', 'setup:config', 'css:build--dev', 'sass:build--dev', 'typescript:build--dev' ],
 		[ 'setup:index--dev' ],
 		done
 	);
@@ -46,10 +44,9 @@ gulp.task( 'build:dev', '### BUILD FOR DEVELOPMENT', ( done ) => {
 
 /**
  * Gulp task: Build application - for production
- * TODO: Remove apimock
  */
 gulp.task( 'build:prod', '### BUILD FOR PRODUCTION', ( done ) => {
-	gutil.log( gutil.colors.green( 'Running build process for production environment ...' ) );
+	gutil.log( gutil.colors.green( 'Running build process for production environment ... (may take some time)' ) );
 	runSequence(
 		[ 'env:clean:build' ],
 		[ 'setup:assets', 'sass:lint', 'typescript:lint', 'css:build--prod', 'sass:build--prod', 'typescript:bundle--prod' ],
@@ -63,10 +60,11 @@ gulp.task( 'build:prod', '### BUILD FOR PRODUCTION', ( done ) => {
  * Gulp task: Build documentations
  */
 gulp.task( 'build:docs', '### GENERATE DOCUMENTATION', ( done ) => {
-	gutil.log( gutil.colors.green( 'Generating documentation ...' ) );
+	gutil.log( gutil.colors.green( 'Generating documentation ... (may take some seconds)' ) );
 	runSequence(
 		[ 'env:clean:docs' ],
 		[ 'docs:frontend' ],
+		[ 'docs:frontend--open' ],
 		done
 	);
 } );

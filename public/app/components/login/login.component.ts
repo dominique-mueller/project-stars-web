@@ -1,4 +1,8 @@
 /**
+ * Login component
+ */
+
+/**
  * External imports
  */
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';

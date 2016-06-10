@@ -1,4 +1,8 @@
 /**
+ * Format URL pipe
+ */
+
+/**
  * External imports
  */
 import { Pipe, PipeTransform } from '@angular/core';
