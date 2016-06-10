@@ -141,6 +141,10 @@ export class UserAuthService {
 	public logoutUser(): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
+
+			// resolve();
+			// this.deleteAuthenticationDetails();
+
 			this.authHttp
 
 				// Fetch data and parse response
@@ -152,14 +156,15 @@ export class UserAuthService {
 					( data: any ) => {
 						this.deleteAuthenticationDetails();
 						console.log( 'APP > User Authentication Service > JWT removed.' );
-						resolve();
 					},
 					( error: any ) => {
+						this.deleteAuthenticationDetails();
 						console.log( 'APP > User Authentication Service > Error while logging out user.' );
 						console.log( error );
 						reject();
 					}
 				);
+
 		} );
 
 	}

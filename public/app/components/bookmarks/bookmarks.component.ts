@@ -335,22 +335,25 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onLogout(): void {
 
-		// Remove UI state
-		this.uiService.unsetSelectedElement();
-		this.uiService.unsetOpenedFolderId();
-		this.uiService.resetSearch();
-
-		// Try to log the user out, then navigate to the login page
+		// Try to log the user out, then navigate to the login page anyways (similar to finally)
 		this.userAuthService.logoutUser()
-
-			// Success
 			.then( ( data: any ) => {
-				this.router.navigate( [ 'login' ] ); // Absolute
-			} )
 
-			// Error
-			.catch( ( error: any ) => {
+				// Navigate to login page, remove UI state
 				this.router.navigate( [ 'login' ] ); // Absolute
+				this.uiService.unsetSelectedElement();
+				this.uiService.unsetOpenedFolderId();
+				this.uiService.resetSearch();
+
+			} )
+			.catch( ( error: any ) => {
+
+				// Navigate to login page, remove UI state
+				this.router.navigate(['login']); // Absolute
+				this.uiService.unsetSelectedElement();
+				this.uiService.unsetOpenedFolderId();
+				this.uiService.resetSearch();
+
 			} );
 
 	}
