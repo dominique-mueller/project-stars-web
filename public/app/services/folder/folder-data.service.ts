@@ -129,6 +129,7 @@ export class FolderDataService {
 				.subscribe(
 					( data: any ) => {
 						newFolder.id = data.data.id;
+						newFolder.created = data.data.created;
 						this.store.dispatch( {
 							payload: {
 								data: newFolder
@@ -167,6 +168,7 @@ export class FolderDataService {
 				// Dispatch action
 				.subscribe(
 					( data: any ) => {
+						// updatedFolder.updated = data.data.updated;
 						this.store.dispatch( {
 							payload: {
 								data: updatedFolder,

@@ -121,7 +121,9 @@ export class BookmarkDataService {
 				// Dispatch action
 				.subscribe(
 					( data: any ) => {
-						newBookmark.id = data.data.id; // TODO: Set also the favicon?
+						newBookmark.id = data.data.id;
+						newBookmark.created = data.data.created;
+						// TODO: Set also the favicon?
 						this.store.dispatch( {
 							payload: {
 								data: newBookmark
@@ -160,6 +162,7 @@ export class BookmarkDataService {
 				// Dispatch action
 				.subscribe(
 					( data: any ) => {
+						// updatedBookmark.updated = data.data.updated;
 						this.store.dispatch( {
 							payload: {
 								data: updatedBookmark,

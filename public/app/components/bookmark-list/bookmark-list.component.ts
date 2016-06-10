@@ -245,7 +245,7 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 					let openedFolder: Folder = this.folderLogicService.getFolderByFolderId( folders, this.openedFolderId );
 					if ( openedFolder !== null ) {
 						this.folders = this.folderLogicService.getSubfoldersByFolderId( folders, this.openedFolderId );
-						this.openedFolderName = openedFolder.get( 'name' );
+						this.openedFolderName = openedFolder.get( 'isRoot' ) ? 'Bookmarks' : openedFolder.get( 'name' );
 						this.uiService.setDocumentTitle( this.openedFolderName );
 						this.changeDetector.markForCheck(); // Trigger change detection
 					} else {
