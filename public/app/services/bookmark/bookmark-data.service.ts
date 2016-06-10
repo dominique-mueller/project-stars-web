@@ -81,7 +81,7 @@ export class BookmarkDataService {
 
 				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/bookmarks` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -116,7 +116,7 @@ export class BookmarkDataService {
 
 				// Send data and parse response
 				.post( `${ this.appService.API_URL }/bookmarks`, JSON.stringify( { data: newBookmark } ) )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -155,7 +155,7 @@ export class BookmarkDataService {
 
 				// Send data and parse response
 				.put( `${ this.appService.API_URL }/bookmarks/${ bookmarkId }`, JSON.stringify( { data: updatedBookmark } ) )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -249,7 +249,7 @@ export class BookmarkDataService {
 
 				// Send data and parse response
 				.delete( `${ this.appService.API_URL }/bookmarks/${ bookmarkId }` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(

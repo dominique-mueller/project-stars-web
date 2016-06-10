@@ -89,7 +89,7 @@ export class UserAuthService {
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
 			// Prepare data
-			const authenticationData: any = {
+			const authData: any = {
 				emailAddress: emailAddress,
 				password: password
 			};
@@ -104,8 +104,8 @@ export class UserAuthService {
 			this.http
 
 				// Fetch data and parse response
-				.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authenticationData } ), options )
-				.map( ( response: Response ) => <any> response.json() )
+				.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authData } ), options )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Save authentication information
 				.subscribe(
@@ -141,15 +141,11 @@ export class UserAuthService {
 	public logoutUser(): Promise<any> {
 
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-
-			// resolve();
-			// this.deleteAuthenticationDetails();
-
 			this.authHttp
 
 				// Fetch data and parse response
 				.delete( `${ this.appService.API_URL }/authenticate/logout` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Delete all authentication information
 				.subscribe(
@@ -164,7 +160,6 @@ export class UserAuthService {
 						reject();
 					}
 				);
-
 		} );
 
 	}

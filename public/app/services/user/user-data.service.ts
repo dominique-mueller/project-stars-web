@@ -77,7 +77,7 @@ export class UserDataService {
 
 				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/users/${ userId }` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(

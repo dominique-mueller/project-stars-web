@@ -87,7 +87,7 @@ export class LabelDataService {
 
 				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/labels` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -122,7 +122,7 @@ export class LabelDataService {
 
 				// Send data and parse response
 				.post( `${ this.appService.API_URL }/labels`, JSON.stringify( { data: newLabel } ) )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -161,7 +161,7 @@ export class LabelDataService {
 
 				// Send data and parse response
 				.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( { data: updatedLabel } ) )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -199,7 +199,7 @@ export class LabelDataService {
 
 				// Send data and parse response
 				.delete( `${ this.appService.API_URL }/labels/${ labelId }` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(

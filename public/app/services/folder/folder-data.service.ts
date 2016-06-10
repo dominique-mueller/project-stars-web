@@ -88,7 +88,7 @@ export class FolderDataService {
 
 				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/folders` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -123,7 +123,7 @@ export class FolderDataService {
 
 				// Send data and parse response
 				.post( `${ this.appService.API_URL }/folders`, JSON.stringify( { data: newFolder } ) )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -162,7 +162,7 @@ export class FolderDataService {
 
 				// Send data and parse response
 				.put( `${ this.appService.API_URL }/folders/${ folderId }`, JSON.stringify( { data: updatedFolder } ) )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
@@ -197,12 +197,12 @@ export class FolderDataService {
 	 */
 	public deleteFolder( folderId: string, subfolderIds: Array<string> ): Promise<any> {
 
-		return new Promise<any>((resolve: Function, reject: Function) => {
+		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
 
 				// Send data and parse response
 				.delete( `${ this.appService.API_URL }/folders/${ folderId }` )
-				.map( ( response: Response ) => <any> response.json() )
+				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
 
 				// Dispatch action
 				.subscribe(
