@@ -10,13 +10,12 @@
 /docs/frontend
 /docs/backend
 
-# Generated error logs (mostly by Node)
+# Generated error logs (mostly by Node.js)
 *.log
 /undefinederror.json
 /undefinedinfo.json
 /info.log.json
 /error.log.json
-/npm-debug.log
 
 # Editor settings
 /*.sublime-workspace
@@ -26,3 +25,4 @@
 *.todo
 *.old
 *.temp
+*.TMP
