@@ -2,7 +2,7 @@
 
 # Install Git on Windows
 
-We use **Git** as our software version control solution. The source code of this project is entirely managed via Git in combination with GitLab. You need to install Git not only to download but also to develop on this project.
+We use **Git** as our software version control solution. The source code of this project is entirely managed via Git, in combination with **GitLab**. You need to install Git not only to download but also to develop on this project.
 
 <br>
 
@@ -20,11 +20,9 @@ git --version
 
 ### Step 2: Configure Git
 
-After the installation you need to configure Git. All you need to do is tell Git you user information. Please use the data you provided for your GitLab account. Open up your command line and run:
+After the installation you need to configure Git. All you need to do is tell Git you user information. *Please use the data you provided for your GitLab account.* Open up your command line and run:
 
 <pre>
 	git config --global user.name "[YOUR_USER_NAME]"
 	git config --global user.email "[YOUR_USER_EMAIL]"
 </pre>
-
-> Note: If you are behind a proxy, additional configuration may be required.

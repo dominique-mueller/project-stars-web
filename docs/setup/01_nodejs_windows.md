@@ -27,7 +27,5 @@ node --version
 NodeJS comes (similar to other programing languages) with an integrated package manager called **Node Package Manager**, or short **NPM**. This package manager is able to update itself to its latest version. We highly recommend to do this in order to prevent possible issues. Open up your command line and run:
 
 <pre>
-	npm install -g npm
+npm install -g npm
 </pre>
-
-> Note: If you are behind a proxy, additional configuration for NodeJS as well as NPM may be required.

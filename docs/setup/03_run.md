@@ -2,32 +2,38 @@
 
 # Run the app
 
-TODO: Description
+Finally. It's getting interesting.
 
 <br>
 
 ### Step 1: Start MongoDB
 
-First up, we need to start our database. You can run the MongoDB server by opening up your command line and run (update parameters if necessary):
+First up, we need to get our database running. You can start the MongoDB server by opening up your command line and run (with your parameters):
 
 <pre>
-	mongod --config "C:\mongodb\mongo.config"
+mongod --config "C:\mongodb\mongo.config"
 </pre>
 
-> The MongoDB server runs now in this console window, so DO NOT close it.
+> The MongoDB server runs now in this console window, so DO NOT CLOSE it.
 
 <br>
 
-### Step 2: Fill MongoDB with sample data
+### Step 2: Fill MongoDB with our sample data
 
-Due to this application only being a prototype, there is no way (yet) of registering a new user. As a consequence, we provide you with database sample data you can use to try out the application. We put the MongoDB dump in the `docs\db-dump` folder.
+Because this application is only a prototype, there is no way (yet) of registering a new user. As a consequence, we provide you with database sample data you can use to try out the application.
 
-TODO: First up configure user
-
-To restore this dump in the (currently running) MongoDB, open up a **new** command line, navigate to the `docs\db-dump` folder and run:
+We put the MongoDB dump in the `docs\db-dump` folder. To read this dump into the (currently running) MongoDB, open up a **new** command line, navigate to the `docs` folder and run:
 
 <pre>
-	mongorestore db-dump
+mongorestore db-dump
+</pre>
+
+This restores our sample data into the MongoDB. Next, we need to setup the user our Node.js backend needs to connect with the MongoDB. Run the following commands in order to connect to the MongoDB and create the necessary user:
+
+<pre>
+mongo
+use dev
+db.createUser( { user: "devAdmin", pwd: "stars-web", roles: [ { role: "dbAdmin", db: "dev" } ] } )
 </pre>
 
 > If the command finished successfully you can close the console as it is no longer needed.
@@ -39,18 +45,18 @@ To restore this dump in the (currently running) MongoDB, open up a **new** comma
 It's simple. It's eay. Open up a **new** command line, navigate to the project root folder and run:
 
 <pre>
-	node app
+npm start
 </pre>
 
-> The Node.js backend runs now in this console window, so DO NOT close it.
+> The Node.js backend runs now in this console window, so DO NOT CLOSE it.
 
 <br>
 
 ### Step 4: Visit the application
 
-Open your favourite browser (not IE please ...) and simply navigate to `https://localhost` - that's it.
+Open your favourite browser (not IE please ...) and simply navigate to <a href="https://localhost" target="_blank">https://localhost</a> - that's it.
 
-> Sidenote: While developing we're only using a self-signed SSL certificate. As a consequence, you need to accept our certificate in the browser.
+> Sidenote: During development we're using a *self-signed SSL certificate*. As a consequence, you need to accept our certificate in the browser.
 
 **The following user accounts are provided:**
 

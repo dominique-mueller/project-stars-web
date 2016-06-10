@@ -31,7 +31,7 @@ Now we need to add MongoDB to both the system and the user variables. Do this fo
 After the process you need to restart the command line if opened. You can make sure this configuration process worked out by opening up your command line and run:
 
 <pre>
-	mongod
+mongod
 </pre>
 
 <br>

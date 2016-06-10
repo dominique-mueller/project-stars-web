@@ -19,7 +19,8 @@
 	"scripts": {
 		"gulp": "gulp",
 		"typings": "typings",
-		"postinstall": "typings install"
+		"postinstall": "typings install",
+		"start": "node app.js"
 	},
 	"dependencies": {
 		"@angular/common": "2.0.0-rc.1",
