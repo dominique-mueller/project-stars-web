@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Loader component
  */
+
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**

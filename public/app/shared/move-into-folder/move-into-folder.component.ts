@@ -1,15 +1,13 @@
 /**
- * External imports
+ * File: Move into folder component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Folder, FolderLogicService } from './../../services/folder';
-import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Shared component: Move into folder
@@ -17,8 +15,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent,
-		ClickOutsideDirective
+		ClickOutsideDirective,
+		IconComponent
 	],
 	host: {
 		class: 'move-into-folder scrollbar-small'
@@ -100,6 +98,8 @@ export class MoveIntoFolderComponent {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}  changeDetector     Change detector
+	 * @param {FolderLogicService} folderLogicService Folder logic service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
@@ -146,36 +146,27 @@ export class MoveIntoFolderComponent {
 	 * @param {HTMLElement} trigger Trigger HTML element
 	 */
 	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
-
-		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
 		if ( $event.path.indexOf( trigger ) === -1 ) {
 			this.closeDropdown();
 		}
-
 	}
 
 	/**
 	 * Confirm the movement
 	 */
 	private onClickOnMove(): void {
-
-		// Only emit event when the folder ID actually changed
 		if ( this.visibleFolder.get( 'id' ) !== this.currentPathId ) {
 			this.select.emit( this.visibleFolder.get( 'id' ) );
 		}
 		this.closeDropdown(); // Close anyway
-
 	}
 
 	/**
 	 * Initialize folder content
 	 */
 	private initializeFolder(): void {
-
-		// Get current folder and all its subfolders
 		this.visibleFolder = this.folderLogicService.getFolderByFolderId( this.folders, this.currentPathId );
 		this.visibleSubfolders = this.folderLogicService.getSubfoldersByFolderId( this.folders, this.currentPathId );
-
 	}
 
 	/**

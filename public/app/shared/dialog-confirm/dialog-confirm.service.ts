@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Dialog confirm service
  */
+
 import { Injectable } from '@angular/core';
 
 /**

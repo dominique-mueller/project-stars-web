@@ -1,32 +1,22 @@
 /**
- * Bookmark list component
+ * File: Bookmark list component
  */
 
-/**
- * External imports
- */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, Route, Routes, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
-import { NotifierService } from './../../shared/notifier/notifier.service';
+import { UiService } from './../../services/ui';
 import { LoginComponent } from './../login/login.component';
 import { BookmarkDetailsComponent } from './../bookmark-details/bookmark-details.component';
 import { FolderDetailsComponent } from './../folder-details/folder-details.component';
-import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
-import { FolderComponent } from './../../shared/folder/folder.component';
-import { CreateBookmarkComponent } from './../../shared/create-bookmark/create-bookmark.component';
-import { CreateFolderComponent } from './../../shared/create-folder/create-folder.component';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { BookmarkComponent, CreateBookmarkComponent, CreateFolderComponent, FolderComponent, IconComponent,
+	NotifierService } from './../../shared';
 
 /**
  * View component (smart): Bookmark list
@@ -36,9 +26,9 @@ import { IconComponent } from './../../shared/icon/icon.component';
 	directives: [
 		ROUTER_DIRECTIVES,
 		BookmarkComponent,
-		FolderComponent,
 		CreateBookmarkComponent,
 		CreateFolderComponent,
+		FolderComponent,
 		IconComponent
 	],
 	host: {
@@ -160,6 +150,15 @@ export class BookmarkListComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {Router}               router               Router
+	 * @param {ChangeDetectorRef}    changeDetector       Change detector
+	 * @param {UiService}            uiService            UI service
+	 * @param {BookmarkDataService}  bookmarkDataService  Bookmark data service
+	 * @param {BookmarkLogicService} bookmarkLogicService Bookmark logic service
+	 * @param {FolderDataService}    folderDataService    Folder data service
+	 * @param {FolderLogicService}   folderLogicService   Folder logic service
+	 * @param {LabelDataService}     labelDataService     Label data service
+	 * @param {NotifierService}      notifierService      Notifier service
 	 */
 	constructor(
 		router: Router,

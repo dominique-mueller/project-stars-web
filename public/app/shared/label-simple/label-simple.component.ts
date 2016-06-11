@@ -1,11 +1,9 @@
 /**
- * External imports
+ * File: Label simple component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
-/**
- * Internal imports
- */
 import { Label } from './../../services/label';
 import { IconComponent } from './../icon/icon.component';
 

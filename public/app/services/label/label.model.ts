@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Label model
  */
+
 import { Map } from 'immutable';
 
 /**

@@ -1,25 +1,21 @@
 /**
- * External imports
+ * File: User authentication service
  */
+
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
-/**
- * Internal imports
- */
 import { AppService } from './../app';
 
 /**
  * User authentication service
- * Contains functions for authenticating the user, including login, logout
- * TODO: Next steps would be: Register / sign up, forgot password, login via third party service
  */
 @Injectable()
 export class UserAuthService {
 
 	/**
-	 * HTTP service
+	 * Default HTTP service
 	 */
 	private http: Http;
 
@@ -40,7 +36,7 @@ export class UserAuthService {
 
 	/**
 	 * Constructor
-	 * @param {Http}       http       HTTP service
+	 * @param {Http}       http       Default HTTP service
 	 * @param {AuthHttp}   authHttp   Authenticated HTTP service
 	 * @param {JwtHelper}  jwtHelper  JWT helper
 	 * @param {AppService} appService App service
@@ -61,16 +57,24 @@ export class UserAuthService {
 	}
 
 	/**
-	 * Checks if the user is logged in
+	 * Check if a user is logged in
 	 * This function checks that the JWT exists and is valid (expiration time) AS WELL AS checks that the user ID is set
-	 * @return {boolean} Status: true / false
+	 * @return {boolean} Status as a boolean result
 	 */
 	public isUserLoggedIn(): boolean {
 		return tokenNotExpired( 'jwt' ) && localStorage.getItem( 'userId' ) !== null;
 	}
 
 	/**
-	 * Gets the current user ID (or null implicitely if it doesn't exist)
+	 * Check if a user is a goat
+	 * @return {boolean} Goat status
+	 */
+	public isUserAGoat(): boolean {
+		return !( +new Date() % 2 ); // Mystery goat calculations ...
+	}
+
+	/**
+	 * Get the current user ID (or null if it doesn't exist)
 	 * @return {string} User ID
 	 */
 	public getUserId(): string {
@@ -78,14 +82,12 @@ export class UserAuthService {
 	}
 
 	/**
-	 * Unauthenticated API request
-	 * Logs the user in, receives a JWT and saves all authentication details to the local storage
+	 * API request: Log the user in, receive a JWT and save all authentication details to the local storage
 	 * @param  {string}       emailAddress E-Mail address
 	 * @param  {string}       password     Password
 	 * @return {Promise<any>}              Promise when done
 	 */
 	public loginUser( emailAddress: string, password: string ): Promise<any> {
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 
 			// Prepare data
@@ -94,64 +96,55 @@ export class UserAuthService {
 				password: password
 			};
 
-			// Set request type explicitely (because its only set for authenticated HTTP requests)
-			const options: RequestOptions = new RequestOptions( {
+			// Set request content type (because its only set for authenticated HTTP requests for now)
+			const requestOptions: RequestOptions = new RequestOptions( {
 				headers: new Headers( {
 					'Content-Type': 'application/json'
 				} )
 			} );
 
 			this.http
-
-				// Fetch data and parse response
-				.post( `${ this.appService.API_URL }/authenticate/login`, JSON.stringify( { data: authData } ), options )
-				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Save authentication information
+				.post(
+					`${ this.appService.API_URL }/authenticate/login`,
+					JSON.stringify( { data: authData } ),
+					requestOptions
+				)
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
-
-						// If the returned JWT is valid, safe it in the local storage
-						if ( tokenNotExpired( 'jwt', data.data ) ) {
-							this.saveAuthenticationDetails( data.data );
-							console.log( 'APP > User Authentication Service > JWT is valid.' );
+						if ( tokenNotExpired( 'jwt', data ) ) {
+							this.saveAuthenticationDetails( data );
+							console.log( 'APP > User Authentication Service > User login successful. (JWT is valid)' );
 							resolve();
 						} else {
-							console.log( 'APP > User Authentication Service > JWT is invalid.' );
+							console.log( 'APP > User Authentication Service > User login unsuccessful. (JWT is invalid)' );
 							reject();
 						}
-
 					},
 					( error: any ) => {
-						console.log( 'APP > User Authentication Service > Error while logging in user.' );
+						console.log( 'APP > User Authentication Service > Error while logging in the user.' );
 						console.log( error );
 						reject();
 					}
 				);
 
 		} );
-
 	}
 
 	/**
-	 * Authenticated API request
-	 * Explicitely log the user out, and remove all authentication details from the local storage
-	 * @return {Promise<any>} Promise to tell we're done
+	 * API request: Log the user out, and remove all authentication details from the local storage
+	 * @return {Promise<any>} Promise when done
 	 */
 	public logoutUser(): Promise<any> {
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Fetch data and parse response
 				.delete( `${ this.appService.API_URL }/authenticate/logout` )
-				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Delete all authentication information
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
 						this.deleteAuthenticationDetails();
-						console.log( 'APP > User Authentication Service > JWT removed.' );
+						console.log( 'APP > User Authentication Service > User logout successful. (JWT deleted)' );
+						resolve();
 					},
 					( error: any ) => {
 						this.deleteAuthenticationDetails();
@@ -161,12 +154,10 @@ export class UserAuthService {
 					}
 				);
 		} );
-
 	}
 
 	/**
-	 * Save all authentication details
-	 * This saves the JWT as well as the current user ID to the local storage
+	 * Save all authentication details (JWT, user ID) to the local storage
 	 * Sidenote: Used in combination with the login functionality, therefore not public
 	 * @param {string} jwt JSON Web token
 	 */
@@ -176,8 +167,7 @@ export class UserAuthService {
 	}
 
 	/**
-	 * Delete all authentication details
-	 * This deletes the JWT as well as the current user ID from the local storage
+	 * Delete all authentication details (JWT, user ID) from the local storage
 	 * Sidenote: Used in combination with the login functionality, therefore not public
 	 */
 	private deleteAuthenticationDetails(): void {

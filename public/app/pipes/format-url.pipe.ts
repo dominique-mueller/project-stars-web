@@ -1,10 +1,7 @@
 /**
- * Format URL pipe
+ * File: Format URL pipe
  */
 
-/**
- * External imports
- */
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
@@ -23,7 +20,7 @@ export class FormatUrlPipe implements PipeTransform {
 	 */
 	public transform( value: string ): string {
 
-		// Skip of data are not here yet
+		// Skip of data are not here yet (async)
 		if ( typeof value === 'undefined' ) {
 			return value;
 		}
@@ -32,17 +29,13 @@ export class FormatUrlPipe implements PipeTransform {
 		let parser: HTMLAnchorElement = document.createElement( 'a' );
 		parser.href = value;
 
-		// Make the hostname bold
+		// Make the hostname bold and a https connection green
 		value = value.replace( parser.hostname, `<strong>${ parser.hostname }</strong>` );
-
-		// Mark the protocol green when the website uses a secure https connection
 		if ( parser.protocol === 'https:' ) {
 			value = value.replace( 'https', '<em>https</em>' );
 		}
 
-		// Done
 		return value;
-
 	}
 
 }

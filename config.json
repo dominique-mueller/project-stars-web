@@ -3,9 +3,5 @@
 	"server": {
 		"host": "https://localhost",
 		"api": "https://localhost/api/v1"
-	},
-	"database": {
-		"url": "mongodb://localhost/",
-		"database": "dev"
 	}
 }

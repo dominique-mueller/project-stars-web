@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: App service
  */
+
 import { Injectable } from '@angular/core';
 import { List } from 'immutable';
 

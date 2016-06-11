@@ -1,16 +1,14 @@
 /**
- * External imports
+ * File: Create folder component
  */
+
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators } from '@angular/common';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Folder } from './../../services/folder';
-import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Shared component: Create folder
@@ -19,8 +17,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		FORM_DIRECTIVES,
-		IconComponent,
-		ClickOutsideDirective
+		ClickOutsideDirective,
+		IconComponent
 	],
 	host: {
 		class: 'create-bookmark',
@@ -60,6 +58,7 @@ export class CreateFolderComponent implements OnInit {
 
 	/**
 	 * Constructor
+	 * @param {FormBuilder} formBuilder Form builder
 	 */
 	constructor(
 		formBuilder: FormBuilder
@@ -127,15 +126,10 @@ export class CreateFolderComponent implements OnInit {
 	 * Submit the form and emit an event for creating a new folder
 	 */
 	private onSubmit(): void {
-
-		// Construct data
 		let newFolder: any = this.template.toJS();
 		newFolder.name = this.createFolderForm.value.name;
-
-		// Emit event and close dropdown
 		this.create.emit( newFolder );
 		this.closeDropdown();
-
 	}
 
 }

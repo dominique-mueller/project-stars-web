@@ -1,11 +1,9 @@
 /**
- * External imports
+ * File: Folder component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
-/**
- * Internal imports
- */
 import { Folder } from './../../services/folder';
 import { IconComponent } from './../icon/icon.component';
 

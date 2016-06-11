@@ -44,6 +44,8 @@ db.createUser( { user: "devAdmin", pwd: "stars-web", roles: [ { role: "dbAdmin",
 
 It's simple. It's eay. Open up a **new** command line, navigate to the project root folder and run:
 
+> On Linux you need to run the command with `sudo`.
+
 <pre>
 npm start
 </pre>

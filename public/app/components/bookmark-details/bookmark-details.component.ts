@@ -1,29 +1,18 @@
 /**
- * Bookmark details component
+ * File: Bookmark details component
  */
 
-/**
- * External imports
- */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService, LabelLogicService } from './../../services/label';
-import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
-import { NotifierService } from './../../shared/notifier/notifier.service';
-import { LabelSimpleComponent } from './../../shared/label-simple/label-simple.component';
-import { IconComponent } from './../../shared/icon/icon.component';
-import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
-import { AssignLabelComponent } from './../../shared/assign-label/assign-label.component';
-import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-into-folder.component';
+import { UiService } from './../../services/ui';
+import { DialogConfirmService, AssignLabelComponent, EditableInputComponent, IconComponent, LabelSimpleComponent,
+	MoveIntoFolderComponent, NotifierService } from './../../shared';
 
 /**
  * View component (smart): Bookmark details
@@ -32,10 +21,10 @@ import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-in
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		LabelSimpleComponent,
-		IconComponent,
-		EditableInputComponent,
 		AssignLabelComponent,
+		EditableInputComponent,
+		IconComponent,
+		LabelSimpleComponent,
 		MoveIntoFolderComponent
 	],
 	providers: [
@@ -137,6 +126,17 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {Router}               router               Router
+	 * @param {ChangeDetectorRef}    changeDetector       Change detector
+	 * @param {UiService}            uiService            UI service
+	 * @param {BookmarkDataService}  bookmarkDataService  Bookmark data service
+	 * @param {BookmarkLogicService} bookmarkLogicService Bookmark logic service
+	 * @param {FolderDataService}    folderDataService    Folder data service
+	 * @param {FolderLogicService}   folderLogicService   Folder logic service
+	 * @param {LabelDataService}     labelDataService     Label data service
+	 * @param {LabelLogicService}    labelLogicService    Label logic service
+	 * @param {DialogConfirmService} dialogConfirmService Dialog confirm service
+	 * @param {NotifierService}      notifierService      Notifier service
 	 */
 	constructor(
 		router: Router,
@@ -204,8 +204,6 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 					if ( this.bookmark === null ) {
 						this.onClose();
 					} else {
-
-						console.log(this.bookmark); // TODO
 
 						// Convert date strings into date objects (for view only, makes the date pipe work properly)
 						this.bookmark = <Bookmark> this.bookmark.set( 'created', new Date( this.bookmark.get( 'created' ) ) );

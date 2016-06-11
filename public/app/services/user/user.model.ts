@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: User model
  */
+
 import { Map } from 'immutable';
 
 /**
@@ -27,15 +28,5 @@ export interface User extends Map<string, any> {
 	 * E-Mail address
 	 */
 	emailAddress: string;
-
-	/**
-	 * Profile image (base64 encoded image)
-	 */
-	profileImage?: string;
-
-	/**
-	 * Time when the user registered to the application
-	 */
-	registered: Date;
 
 }

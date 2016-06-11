@@ -1,23 +1,17 @@
 /**
- * Bookmarks component
+ * File: Bookmarks component
  */
 
-/**
- * External imports
- */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router, OnActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
+import { UiService } from './../../services/ui';
 import { UserDataService, UserAuthService } from './../../services/user';
 import { LoginComponent } from './../login/login.component';
 import { HeaderComponent } from './../header/header.component';
@@ -25,8 +19,7 @@ import { BookmarkListComponent } from './../bookmark-list/bookmark-list.componen
 import { BookmarkSearchComponent } from './../bookmark-search/bookmark-search.component';
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
 import { LabelListComponent } from './../label-list/label-list.component';
-import { IconComponent } from './../../shared/icon/icon.component';
-import { LoaderComponent } from './../../shared/loader/loader.component';
+import { IconComponent, LoaderComponent } from './../../shared';
 
 /**
  * View component (smart): Bookmarks
@@ -159,6 +152,15 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}   changeDetector      Change detector
+	 * @param {Router}              router              Router
+	 * @param {UiService}           uiService           UI service
+	 * @param {BookmarkDataService} bookmarkDataService Bookmark data service
+	 * @param {FolderDataService}   folderDataService   Folder data service
+	 * @param {FolderLogicService}  folderLogicService  Folder logic service
+	 * @param {LabelDataService}    labelDataService    Label data service
+	 * @param {UserDataService}     userDataService     User data service
+	 * @param {UserAuthService}     userAuthService     User authentication service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
@@ -342,22 +344,16 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		// Try to log the user out, then navigate to the login page anyways (similar to finally)
 		this.userAuthService.logoutUser()
 			.then( ( data: any ) => {
-
-				// Navigate to login page, remove UI state
 				this.router.navigate( [ 'login' ] ); // Absolute
 				this.uiService.unsetSelectedElement();
 				this.uiService.unsetOpenedFolderId();
 				this.uiService.resetSearch();
-
 			} )
 			.catch( ( error: any ) => {
-
-				// Navigate to login page, remove UI state
-				this.router.navigate(['login']); // Absolute
+				this.router.navigate( [ 'login' ] ); // Absolute
 				this.uiService.unsetSelectedElement();
 				this.uiService.unsetOpenedFolderId();
 				this.uiService.resetSearch();
-
 			} );
 
 	}

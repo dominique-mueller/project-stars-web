@@ -72,7 +72,6 @@ function Authentication(){
 	}
 
 	this.logout = function(payload){
-			//TODO: delete session in db
 	}
 
 	/*

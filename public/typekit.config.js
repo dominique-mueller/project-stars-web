@@ -1,5 +1,5 @@
 /**
- * Adobe TypeKit configuration
+ * Adobe TypeKit configuration (for web fonts)
  */
 ( function( d ) {
 	var config = {

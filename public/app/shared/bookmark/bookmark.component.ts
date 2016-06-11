@@ -1,17 +1,15 @@
 /**
- * External imports
+ * File: Bookmark component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Bookmark } from './../../services/bookmark';
 import { Label } from './../../services/label';
 import { FormatUrlPipe } from './../../pipes/format-url.pipe';
-import { LabelSimpleComponent } from './../label-simple/label-simple.component';
 import { IconComponent } from './../icon/icon.component';
+import { LabelSimpleComponent } from './../label-simple/label-simple.component';
 
 /**
  * Share component: Bookmark
@@ -19,8 +17,8 @@ import { IconComponent } from './../icon/icon.component';
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		LabelSimpleComponent,
-		IconComponent
+		IconComponent,
+		LabelSimpleComponent
 	],
 	host: {
 		class: 'bookmark'

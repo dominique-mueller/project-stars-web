@@ -1,16 +1,14 @@
 /**
- * External imports
+ * File: Create bookmark component
  */
+
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Control, Validators } from '@angular/common';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Bookmark } from './../../services/bookmark';
-import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Shared component: Create bookmark
@@ -19,8 +17,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
 		FORM_DIRECTIVES,
-		IconComponent,
-		ClickOutsideDirective
+		ClickOutsideDirective,
+		IconComponent
 	],
 	host: {
 		class: 'create-bookmark',
@@ -60,6 +58,7 @@ export class CreateBookmarkComponent implements OnInit {
 
 	/**
 	 * Constructor
+	 * @param {FormBuilder} formBuilder Form builder
 	 */
 	constructor(
 		formBuilder: FormBuilder
@@ -129,16 +128,11 @@ export class CreateBookmarkComponent implements OnInit {
 	 * Submit the form and emit an event for creating a new bookmark
 	 */
 	private onSubmit(): void {
-
-		// Construct data
 		let newBookmark: any = this.template.toJS();
 		newBookmark.title = this.createBookmarkForm.value.title;
 		newBookmark.url = this.createBookmarkForm.value.url;
-
-		// Emit event and close dropdown
 		this.create.emit( newBookmark );
 		this.closeDropdown();
-
 	}
 
 }

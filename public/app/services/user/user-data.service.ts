@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: User data service
  */
+
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
@@ -8,9 +9,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
 
-/**
- * Internal imports
- */
 import { AppStore, AppService } from './../app';
 import { User } from './user.model';
 import {
@@ -19,8 +17,6 @@ import {
 
 /**
  * User data service
- * Contains functions for loading users
- * TODO: Next steps would be: Create, update, delete users
  */
 @Injectable()
 export class UserDataService {
@@ -47,6 +43,9 @@ export class UserDataService {
 
 	/**
 	 * Constructor
+	 * @param {AuthHttp}        authHttp   Authenticated HTTP service
+	 * @param {AppService}      appService App service
+	 * @param {Store<AppStore>} store      App store
 	 */
 	constructor(
 		authHttp: AuthHttp,
@@ -65,25 +64,19 @@ export class UserDataService {
 	}
 
 	/**
-	 * Authenticated API request
-	 * Load the user
+	 * API request: Load a user
 	 * @param  {string}       userId User ID
 	 * @return {Promise<any>}        Promise when done
 	 */
 	public loadUser( userId: string ): Promise<any> {
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/users/${ userId }` )
-				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Dispatch action
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
 						this.store.dispatch( {
-							payload: data.data,
+							payload: data,
 							type: LOAD_USER
 						} );
 						console.log( 'APP > User Data Service > User successfully loaded.' );
@@ -96,7 +89,6 @@ export class UserDataService {
 					}
 				);
 		} );
-
 	}
 
 }

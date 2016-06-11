@@ -1,5 +1,5 @@
 /**
- * System JS configuration
+ * System JS configuration (for module loading)
  */
 ( function( window ) {
 
@@ -7,7 +7,14 @@
 	var map = {
 
 		// App
-		'app': 			'/build',
+		'main': 		'/build',
+		'app': 			'/build/services/app',
+		'bookmark': 	'/build/services/bookmark',
+		'folder': 		'/build/services/folder',
+		'label': 		'/build/services/label',
+		'ui': 			'/build/services/ui',
+		'user': 		'/build/services/user',
+		'shared': 		'/build/shared',
 
 		// Libraries
 		'@ngrx': 		'/node_modules/@ngrx',
@@ -18,13 +25,41 @@
 
 	};
 
-	// Tell SystemHS which files to actually load
+	// Tell SystemJS which files should be loaded
 	var packages = {
 
 		// App
-		'app': {
+		'main': {
 			defaultExtension: 'js',
 			main: 'main.js'
+		},
+		'app': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
+		'bookmark': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
+		'folder': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
+		'label': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
+		'ui': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
+		'user': {
+			defaultExtension: 'js',
+			main: 'index.js'
+		},
+		'shared': {
+			defaultExtension: 'js',
+			main: 'index.js'
 		},
 
 		// Libraries
@@ -85,7 +120,7 @@
 	} );
 
 	// Run SystemJS
-	System.import( 'app' ).catch( function( error ) {
+	System.import( 'main' ).catch( function( error ) {
 		console.error( error );
 	} );
 
