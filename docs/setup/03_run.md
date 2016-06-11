@@ -62,10 +62,10 @@ Open your favourite browser (not IE please ...) and simply navigate to <a href="
 
 **The following user accounts are provided:**
 
-- *Standard-Nutzer 1*<br>
+- *Standard-Nutzer: Tim Tester*<br>
   E-Mail Addresse: `tim.tester@stars-web.de`<br>
   Passwort: `stars-web-1`
 
-- *Administrator*<br>
+- *Administrator: TODO*<br>
   E-Mail-Adresse: `TODO`
   Passwort: `TODO`
