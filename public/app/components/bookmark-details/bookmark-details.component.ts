@@ -205,6 +205,8 @@ export class BookmarkDetailsComponent implements OnActivate, OnInit, OnDestroy {
 						this.onClose();
 					} else {
 
+						console.log(this.bookmark); // TODO
+
 						// Convert date strings into date objects (for view only, makes the date pipe work properly)
 						this.bookmark = <Bookmark> this.bookmark.set( 'created', new Date( this.bookmark.get( 'created' ) ) );
 						if ( this.bookmark.get( 'updated' ) !== null ) {

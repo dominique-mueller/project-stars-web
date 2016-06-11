@@ -23,12 +23,14 @@ export const DELETE_FOLDERS: string = 'DELETE_FOLDERS';
  */
 const initialState: List<Folder> = List<Folder>();
 const initialFolderState: Folder = <Folder> Map<string, any>( {
+	created: null,
 	description: '',
 	id: null,
 	isRoot: false,
 	name: null,
 	path: null,
-	position: null
+	position: null,
+	updated: null
 } );
 
 /**
