@@ -138,7 +138,7 @@ var BookmarksModel = function(userId){
 						reject(err);
 					}
 					else{
-						resolve();
+						resolve(bookmark);
 					}
 				});
 

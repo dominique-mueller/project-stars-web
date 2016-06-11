@@ -113,8 +113,12 @@ var BookmarksController = function(req, res, authentication){
 		}
 		else{
 			var updateBookmarkEditablesPromise = self.Bookmark.updateBookmarkEditables(self.req.params.bookmark_id, self.reqBody);
-			updateBookmarkEditablesPromise.then(function(){
-				self.res.status(httpStatus.NO_CONTENT).end();
+			updateBookmarkEditablesPromise.then(function(updatedBookmark){
+				self.res.status(httpStatus.OK)
+				.json({'data':
+						helpers.mongooseObjToFrontEndObj(updatedBookmark)
+					}
+				);
 			})
 			.catch(helpers.respondWithError("Failed to update bookmark"));
 		}
