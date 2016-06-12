@@ -23,6 +23,6 @@ git --version
 After the installation you need to configure Git. All you need to do is tell Git you user information. *Please use the data you provided for your GitLab account.* Open up your command line and run:
 
 <pre>
-	git config --global user.name "[YOUR_USER_NAME]"
-	git config --global user.email "[YOUR_USER_EMAIL]"
+git config --global user.name "[YOUR_USER_NAME]"
+git config --global user.email "[YOUR_USER_EMAIL]"
 </pre>

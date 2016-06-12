@@ -232,12 +232,10 @@ export class FolderDataService {
 	 */
 	public getFolderTemplate(): Folder {
 		return <Folder> Map<string, any>( {
-			created: null,
 			description: '',
 			id: null,
 			isRoot: false,
-			name: 'Unnamed folder',
-			updated: null
+			name: 'Unnamed folder'
 		} );
 	}
 

@@ -21,7 +21,7 @@ export class FormatUrlPipe implements PipeTransform {
 	public transform( value: string ): string {
 
 		// Skip of data are not here yet (async)
-		if ( typeof value === 'undefined' ) {
+		if ( value === null ) {
 			return value;
 		}
 

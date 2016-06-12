@@ -52,7 +52,7 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 		// Add a bookmark
 		case ADD_BOOKMARK:
 			return <List<Bookmark>> state
-				.push( <Bookmark> fromJS( action.payload.data ) );
+				.push( <Bookmark> initialBookmarkState.merge( fromJS( action.payload.data ) ) );
 
 		// Update a bookmark, update positions if necessary
 		// TODO: Implement position swapping only

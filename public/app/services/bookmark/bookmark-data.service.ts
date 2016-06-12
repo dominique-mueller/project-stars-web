@@ -276,14 +276,12 @@ export class BookmarkDataService {
 	 */
 	public getBookmarkTemplate(): Bookmark {
 		return <Bookmark> Map<string, any>( {
-			created: null,
 			description: '',
 			id: null,
 			labels: List<string>(),
 			path: null,
 			position: null,
 			title: 'Unnamed bookmark',
-			updated: null,
 			url: ''
 		} );
 	}

@@ -50,7 +50,7 @@ export const folderReducer: ActionReducer<List<Folder>> =
 		// Add a folder
 		case ADD_FOLDER:
 			return <List<Folder>> state
-				.push( <Folder> fromJS( action.payload.data ) );
+				.push( <Folder> initialFolderState.merge( fromJS( action.payload.data ) ) );
 
 		// Update a folder, update positions if necessary
 		// TODO: Implement position swapping only
