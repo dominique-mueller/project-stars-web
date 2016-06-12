@@ -9,6 +9,7 @@ import { Map } from 'immutable';
  * Action constants
  */
 export const SET_ROOT_FOLDER_ID: string = 'SET_ROOT_FOLDER_ID';
+export const UNSET_ROOT_FOLDER_ID: string = 'UNSET_ROOT_FOLDER_ID';
 export const SET_OPENED_FOLDER_ID: string = 'SET_OPENED_FOLDER_ID';
 export const UNSET_OPENED_FOLDER_ID: string = 'UNSET_OPENED_FOLDER_ID';
 export const SET_SELECTED_ELEMENT: string = 'SET_SELECTED_ELEMENT';
@@ -42,6 +43,10 @@ export const uiReducer: ActionReducer<Map<string, any>> =
 		// Set root folder (update)
 		case SET_ROOT_FOLDER_ID:
 			return state.set( 'rootFolderId', action.payload );
+
+		// Unset root folder (update)
+		case UNSET_ROOT_FOLDER_ID:
+			return state.set( 'rootFolderId', null );
 
 		// Set current folder (update)
 		case SET_OPENED_FOLDER_ID:

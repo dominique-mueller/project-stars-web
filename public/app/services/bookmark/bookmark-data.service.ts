@@ -14,6 +14,7 @@ import { AppStore, AppService } from './../app';
 import { Bookmark } from './bookmark.model';
 import {
 	LOAD_BOOKMARKS,
+	UNLOAD_BOOKMARKS,
 	ADD_BOOKMARK,
 	UPDATE_BOOKMARK,
 	UPDATE_BOOKMARKS_UNASSIGN_LABEL,
@@ -93,6 +94,15 @@ export class BookmarkDataService {
 						reject();
 					}
 				);
+		} );
+	}
+
+	/**
+	 * Unload bookmarks
+	 */
+	public unloadBookmarks(): void {
+		this.store.dispatch( {
+			type: UNLOAD_BOOKMARKS
 		} );
 	}
 

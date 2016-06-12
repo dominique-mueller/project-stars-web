@@ -15,6 +15,7 @@ import { BookmarkDataService } from './../bookmark';
 import { Label } from './label.model';
 import {
 	LOAD_LABELS,
+	UNLOAD_LABELS,
 	ADD_LABEL,
 	UPDATE_LABEL,
 	DELETE_LABEL
@@ -100,6 +101,15 @@ export class LabelDataService {
 						reject();
 					}
 				);
+		} );
+	}
+
+	/**
+	 * Unload labels
+	 */
+	public unloadLabels(): void {
+		this.store.dispatch( {
+			type: UNLOAD_LABELS
 		} );
 	}
 

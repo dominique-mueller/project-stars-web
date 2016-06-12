@@ -11,6 +11,7 @@ import { Map } from 'immutable';
 import { AppStore, AppService } from './../app';
 import {
 	SET_ROOT_FOLDER_ID,
+	UNSET_ROOT_FOLDER_ID,
 	SET_OPENED_FOLDER_ID,
 	UNSET_OPENED_FOLDER_ID,
 	SET_SELECTED_ELEMENT,
@@ -79,6 +80,15 @@ export class UiService {
 	}
 
 	/**
+	 * Unset root folder ID
+	 */
+	public unsetRootFolderId(): void {
+		this.store.dispatch( {
+			type: UNSET_ROOT_FOLDER_ID
+		} );
+	}
+
+	/**
 	 * Set opened folder ID
 	 * @param {string} folderId ID of the new opened folder
 	 */
@@ -90,7 +100,7 @@ export class UiService {
 	}
 
 	/**
-	 * Unset opened folder ID (should really happen never)
+	 * Unset opened folder ID
 	 */
 	public unsetOpenedFolderId(): void {
 		this.store.dispatch( {

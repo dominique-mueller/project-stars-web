@@ -15,6 +15,7 @@ import { AppStore, AppService } from './../app';
 import { Folder } from './folder.model';
 import {
 	LOAD_FOLDERS,
+	UNLOAD_FOLDERS,
 	ADD_FOLDER,
 	UPDATE_FOLDER,
 	DELETE_FOLDER,
@@ -101,6 +102,15 @@ export class FolderDataService {
 						reject();
 					}
 				);
+		} );
+	}
+
+	/**
+	 * Unload folders
+	 */
+	public unloadFolders(): void {
+		this.store.dispatch( {
+			type: UNLOAD_FOLDERS
 		} );
 	}
 
