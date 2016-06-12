@@ -35,12 +35,13 @@ var UsersController = function(req, res, authentication){
 		logger.debug('getOne!!');
 		var userPromise = self.User.findOne(userId);
 		userPromise.then(function(user){
-			var u = user;
-			delete u.password;
+			// var u = user;
+			// delete u.password;
+			user.password = '';
 		 	logger.debug('userPromise then');
 		 	self.res.status(httpStatus.OK)
 		 		.json({"data":
-		 			helpers.mongooseObjToFrontEndObj(u)
+		 			helpers.mongooseObjToFrontEndObj(user)
 		 		}
 		 	);
 		})
