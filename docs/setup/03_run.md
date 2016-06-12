@@ -70,7 +70,7 @@ Open your favourite browser (not IE please ...) and simply navigate to <a href="
   Passwort: `stars-web-1`
 
 - *Bobby Pinguin (Administrator)*<br>
-  E-Mail-Adresse: `bobby.pinguin@email.com`
+  E-Mail-Adresse: `bobby.pinguin@email.com`<br>
   Passwort: `stars-web-2`
 
 ---

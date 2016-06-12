@@ -10,11 +10,9 @@ This is the official repository for our DHBW study research project called "Proj
 
 <br>
 
-### Warning sidenote
+### Warning
 
 This software is only a prototype implementation. Therefore not all planned functionality is yet implemented, and you still may find several bugs.
-
-> Current Status: Beta.0 *(backend and frontend still need to be fully merged)*
 
 <br>
 
