@@ -12,7 +12,7 @@ The frontend works on top of modern technologies which are not yet supported 100
 
 First up, building the application for development reasons is simple. The build process builds the application from the `public` folder into the `build` folder. The process runs the following tasks:
 
-- Clean the build diretory
+- Clean the build directory
 - Setup (simply copy) all static assets
 - Setup (simply copy) all configuration files
 - Setup and autoprefix the inline CSS file
@@ -28,7 +28,7 @@ To build the frontend for a development environment, open up your command line a
 npm run gulp build:dev
 </pre>
 
-> Note: This may take some seconds.
+> Note: The build process only takes some seconds. The development build is MUCH SLOWER than the production build.
 
 <br>
 
@@ -54,7 +54,9 @@ To build the frontend for a development environment, open up your command line a
 npm run gulp build:prod
 </pre>
 
-> Note: This may take some (more) seconds. Additionally, due to some issues the SASS linter doesn't recognize animation keyframes - so just ignore these problems.
+> Note: The build process only takes a bit longer. The production build is MUCH FASTER than the development build.
+
+> Additionally, due to some issues the SASS linter doesn't recognize animation keyframes - so just ignore these problems.
 
 <br>
 
@@ -65,6 +67,8 @@ To dynamically generate the frontend documentation, open up your command line an
 <pre>
 npm run gulp build:docs
 </pre>
+
+> The documentation will be automatically opened within a new browser window.
 
 <br>
 

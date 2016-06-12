@@ -1,12 +1,10 @@
 /**
- * External imports
+ * File: Folder store
  */
+
 import { Action, ActionReducer } from '@ngrx/store';
 import { List, Map, fromJS } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Folder } from './folder.model';
 
 /**
@@ -23,12 +21,14 @@ export const DELETE_FOLDERS: string = 'DELETE_FOLDERS';
  */
 const initialState: List<Folder> = List<Folder>();
 const initialFolderState: Folder = <Folder> Map<string, any>( {
+	created: null,
 	description: '',
 	id: null,
 	isRoot: false,
 	name: null,
 	path: null,
-	position: null
+	position: null,
+	updated: null
 } );
 
 /**
@@ -39,28 +39,21 @@ export const folderReducer: ActionReducer<List<Folder>> =
 
 	switch ( action.type ) {
 
-		// Load folders (overwriting all state to default)
+		// Load all folders (overwrites the previous state)
 		case LOAD_FOLDERS:
-
-			// Compute new state from initial state (with multiple mutations, better performance)
 			return initialState.withMutations( ( newState: List<Folder> ) => {
-
-				// Set folders as a list (because order is important)
 				action.payload.forEach( ( folder: any ) => {
 					newState.push( <Folder> initialFolderState.merge( fromJS( folder ) ) );
 				} );
-
 			} );
 
-		// Add folder
+		// Add a folder
 		case ADD_FOLDER:
-
-			// Push the folder to the list
 			return <List<Folder>> state
-				.push( <Folder> fromJS( action.payload.data ) );
+				.push( <Folder> initialFolderState.merge( fromJS( action.payload.data ) ) );
 
-		// Update folder
-		// TODO: Implement position swapping
+		// Update a folder, update positions if necessary
+		// TODO: Implement position swapping only
 		case UPDATE_FOLDER:
 
 			// Check whether path and position changed
@@ -77,13 +70,13 @@ export const folderReducer: ActionReducer<List<Folder>> =
 				hasPositionChanged = true;
 			}
 
-			// Save old folder position and path for later on
+			// Save old folder position and path (for later)
 			let oldPosition: number;
 			let oldPath: string;
 
 			return <List<Folder>> state
 
-				// Update the folder attributes, save old position and path for later
+				// Update the folder attributes, save old position and path
 				.map( ( folder: Folder ) => {
 					if ( folder.get( 'id' ) === action.payload.id ) {
 						oldPosition = folder.get( 'position' );
@@ -94,19 +87,17 @@ export const folderReducer: ActionReducer<List<Folder>> =
 					}
 				} )
 
-				// Update positions of other folders in the same old folder
+				// Update positions of other folders in the same old folder (if necessary)
 				.map( ( folder: Folder ) => {
-
-					// Only update positions if necessary and in the same old folder
 					if ( hasPositionChanged && folder.get( 'path' ) === oldPath && folder.get( 'position' ) > oldPosition) {
-						return folder.set( 'position', folder.get( 'position' ) - 1); // Move one up
+						return folder.set( 'position', folder.get( 'position' ) - 1 ); // Move one up
 					} else {
 						return folder;
 					}
 
-				});
+				} );
 
-		// Delete folder
+		// Delete a folder, update positions if necessary
 		case DELETE_FOLDER:
 
 			// Save temporary values of the deleted folder
@@ -136,14 +127,10 @@ export const folderReducer: ActionReducer<List<Folder>> =
 					}
 				} );
 
-		// Delete multiple folders
-		// This removes all folder in the list, and does not swap position or similar
+		// Delete multiple folders, this does not swap positions or similar
 		// Sidenote: This is used in combination with deleting a single folder
 		case DELETE_FOLDERS:
-
 			return <List<Folder>> state
-
-				// Filter out the folders that should be deleted
 				.filter( ( folder: Folder ) => {
 					if ( action.payload.folderIds.indexOf( folder.get( 'id' ) ) === -1 ) {
 						return true;

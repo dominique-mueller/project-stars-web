@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Notifier service
  */
+
 import { Injectable } from '@angular/core';
 
 /**

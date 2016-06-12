@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Label data service
  */
+
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
@@ -9,9 +10,6 @@ import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { AppStore, AppService } from './../app';
 import { BookmarkDataService } from './../bookmark';
 import { Label } from './label.model';
@@ -24,13 +22,12 @@ import {
 
 /**
  * Label data service
- * Contains functions for loading, creating, updating or deleting label data (on the server)
  */
 @Injectable()
 export class LabelDataService {
 
 	/**
-	 * Observable map of labels
+	 * Observable map of all labels
 	 */
 	public labels: Observable<Map<string, Label>>;
 
@@ -56,6 +53,10 @@ export class LabelDataService {
 
 	/**
 	 * Constructor
+	 * @param {AuthHttp}            authHttp            Authenticated HTTP service
+	 * @param {AppService}          appService          App service
+	 * @param {Store<AppStore>}     store               App store
+	 * @param {BookmarkDataService} bookmarkDataService Bookmark data service
 	 */
 	constructor(
 		authHttp: AuthHttp,
@@ -76,27 +77,21 @@ export class LabelDataService {
 	}
 
 	/**
-	 * Authenticated API request
-	 * Load all labels
+	 * API request: Load all labels
 	 * @return {Promise<any>} Promise when done
 	 */
 	public loadLabels(): Promise<any> {
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/labels` )
-				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Dispatch action
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
 						this.store.dispatch( {
-							payload: data.data,
+							payload: data,
 							type: LOAD_LABELS
 						} );
-						console.log( 'APP > Labels Data Service > Labels successfully loaded.' );
+						console.log( 'APP > Label Data Service > Labels successfully loaded.' );
 						resolve();
 					},
 					( error: any ) => {
@@ -106,64 +101,54 @@ export class LabelDataService {
 					}
 				);
 		} );
-
 	}
 
 	/**
-	 * Authenticated API request
-	 * Add a new label
-	 * @param  {any}          newLabel Data of the new label
-	 * @return {Promise<any>}          Promise when done
+	 * API request: Add a label
+	 * @param  {any}          newLabelData New label data
+	 * @return {Promise<any>}              Promise when done
 	 */
-	public addLabel( newLabel: any ): Promise<any> {
-
+	public addLabel( newLabelData: any ): Promise<any> {
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Send data and parse response
-				.post( `${ this.appService.API_URL }/labels`, JSON.stringify( { data: newLabel } ) )
-				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Dispatch action
+				.post( `${ this.appService.API_URL }/labels`, JSON.stringify( {
+					data: newLabelData
+				} ) )
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
-						newLabel.id = data.data.id;
+						newLabelData.id = data.id;
 						this.store.dispatch( {
 							payload: {
-								data: newLabel
+								data: newLabelData
 							},
 							type: ADD_LABEL
 						} );
-						console.log( 'APP > Labels Data Service > New label successfully added.' );
+						console.log( 'APP > Label Data Service > Label successfully added.' );
 						resolve();
 					},
 					( error: any ) => {
-						console.log( 'APP > Label Data Service > Error while adding a new label.' );
+						console.log( 'APP > Label Data Service > Error while adding a label.' );
 						console.log( error );
 						reject();
 					}
 				);
 		} );
-
 	}
 
 	/**
-	 * Authenticated API request
-	 * Update an existing label
+	 * API request: Update a label
 	 * @param  {string}       labelId      Label ID
 	 * @param  {any}          updatedLabel Updated label data
 	 * @return {Promise<any>}              Promise when done
 	 */
 	public updateLabel( labelId: string, updatedLabel: any ): Promise<any> {
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Send data and parse response
-				.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( { data: updatedLabel } ) )
-				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Dispatch action
+				.put( `${ this.appService.API_URL }/labels/${ labelId }`, JSON.stringify( {
+					data: updatedLabel
+				} ) )
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
 						this.store.dispatch( {
@@ -173,7 +158,7 @@ export class LabelDataService {
 							},
 							type: UPDATE_LABEL
 						} );
-						console.log( 'APP > Labels Data Service > Label successfully updated.' );
+						console.log( 'APP > Label Data Service > Label successfully updated.' );
 						resolve();
 					},
 					( error: any ) => {
@@ -183,29 +168,20 @@ export class LabelDataService {
 					}
 				);
 		} );
-
 	}
 
 	/**
-	 * Authenticated API request
-	 * Delete an existing bookmark
+	 * API request: Delete a label
 	 * @param  {string}       labelId Label ID
 	 * @return {Promise<any>}         Promise when done
 	 */
 	public deleteLabel( labelId: string ): Promise<any> {
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Send data and parse response
 				.delete( `${ this.appService.API_URL }/labels/${ labelId }` )
 				.map( ( response: Response ) => response.status !== 204 ? response.json() : null )
-
-				// Dispatch action
 				.subscribe(
 					( data: any ) => {
-
-						// Delete this label
 						this.store.dispatch( {
 							payload: {
 								id: labelId
@@ -215,9 +191,9 @@ export class LabelDataService {
 
 						// Also unassign this label from all bookmarks
 						this.bookmarkDataService.unassignLabelFromAllBookmarks( labelId );
-						console.log( 'APP > Labels Data Service > Label successfully deleted.' );
-						resolve();
 
+						console.log( 'APP > Label Data Service > Label successfully deleted.' );
+						resolve();
 					},
 					( error: any ) => {
 						console.log( 'APP > Label Data Service > Error while deleting a label.' );
@@ -226,11 +202,10 @@ export class LabelDataService {
 					}
 				);
 		} );
-
 	}
 
 	/**
-	 * Get label template, used when creating a new label
+	 * Get label template, used as a basis when creating a new label
 	 * @return {Label} Label template
 	 */
 	public getLabelTemplate(): Label {

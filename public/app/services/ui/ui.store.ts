@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: UI store
  */
+
 import { Action, ActionReducer } from '@ngrx/store';
 import { Map } from 'immutable';
 
@@ -16,7 +17,7 @@ export const SET_SEARCH: string = 'SET_SEARCH';
 export const RESET_SEARCH: string = 'RESET_SEARCH';
 
 /**
- * Initial state
+ * Initial state of the UI data (reset by default)
  */
 const initialState: Map<string, any> = Map( {
 	openedFolderId: null,

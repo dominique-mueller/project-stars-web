@@ -60,13 +60,7 @@ routerBackend.route('/authenticate/login')
 	});
 routerBackend.route('/authenticate/logout')
 	.delete(function(req, res){
-		var result = authentication.logout();
-		result.then(function(){
-			res.status(httpStatus.NO_CONTENT).end();
-		})
-		.catch(function(){
-			res.status(httpStatus.BAD_REQUEST).end();
-		});
+		res.status(httpStatus.NO_CONTENT).end();
 	});
 
 routerBackend.route('/authenticate/accountActivation')

@@ -1,14 +1,12 @@
 /**
- * External imports
+ * File: Color picker component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { List } from 'immutable';
 
-/**
- * Internal imports
- */
-import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Shared component: Color picker
@@ -16,8 +14,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent,
-		ClickOutsideDirective
+		ClickOutsideDirective,
+		IconComponent
 	],
 	host: {
 		class: 'color-picker',
@@ -91,12 +89,9 @@ export class ColorPickerComponent {
 	 * @param {HTMLElement} triggerElem Trigger HTML element
 	 */
 	private closeDropdownOnBlur( $event: any, triggerElem: HTMLElement ): void {
-
-		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
 		if ( $event.path.indexOf( triggerElem ) === -1 ) {
 			this.closeDropdown();
 		}
-
 	}
 
 	/**

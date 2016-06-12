@@ -34,10 +34,10 @@ module.exports = {
 function databaseDateToFrontEndDate(obj){
 	var object = obj
 	if(object.hasOwnProperty('created')){
-		object.created = JSON.stringify(object.created).split('T')[0];
+		object.created = object.created.split('T')[0];
 	}
 	if(object.hasOwnProperty('updated')){
-		object.updated = JSON.stringify(object.updated).split('T')[0];
+		object.updated = object.updated.split('T')[0];
 	}
 	return obj;
 }

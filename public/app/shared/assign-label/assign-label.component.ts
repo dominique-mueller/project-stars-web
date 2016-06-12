@@ -1,15 +1,13 @@
 /**
- * External imports
+ * File: Assign label component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Label } from './../../services/label';
-import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Shared component: Assign label
@@ -17,8 +15,8 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent,
-		ClickOutsideDirective
+		ClickOutsideDirective,
+		IconComponent
 	],
 	host: {
 		class: 'assign-label scrollbar-small',
@@ -30,7 +28,7 @@ import { ClickOutsideDirective } from './../click-outside/click-outside.directiv
 export class AssignLabelComponent {
 
 	/**
-	 * Input: List of labels
+	 * Input: List of all labels
 	 */
 	@Input()
 	private labels: Map<string, Label>;

@@ -1,12 +1,10 @@
 /**
- * External imports
+ * File: Label store
  */
+
 import { Action, ActionReducer } from '@ngrx/store';
 import { Map, fromJS } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Label } from './label.model';
 
 /**
@@ -35,30 +33,21 @@ export const labelReducer: ActionReducer<Map<string, Label>> =
 
 	switch ( action.type ) {
 
-		// Load labels (overwriting all state to default)
+		// Load all labels (overwrites the previous state)
 		case LOAD_LABELS:
-
-			// Compute new state from initial state (with multiple mutations, better performance)
 			return initialState.withMutations( ( newState: Map<string, Label> ) => {
-
-				// Set labels as a map (for easier access later on)
 				action.payload.forEach( ( label: any ) => {
 					newState.set( label.id, <Label> initialLabelState.merge( fromJS( label ) ) );
 				} );
-
 			} );
 
-		// Add label
+		// Add a label
 		case ADD_LABEL:
-
-			// Set label in the correct state
 			return <Map<string, Label>> state
 				.set( action.payload.data.id, <Label> initialLabelState.merge( fromJS( action.payload.data ) ) );
 
-		// Update label
+		// Update a label
 		case UPDATE_LABEL:
-
-			// Update only the changed values
 			return <Map<string, Label>> state
 				.map( ( label: Label ) => {
 					if ( label.get( 'id' ) === action.payload.id ) {
@@ -68,10 +57,8 @@ export const labelReducer: ActionReducer<Map<string, Label>> =
 					}
 				} );
 
-		// Delete label
+		// Delete a label
 		case DELETE_LABEL:
-
-			// Filter the deleted label out of the list
 			return <Map<string, Label>> state
 				.filterNot( ( label: Label ) => {
 					return label.get( 'id' ) === action.payload.id;

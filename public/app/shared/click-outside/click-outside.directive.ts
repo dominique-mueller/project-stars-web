@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Click outside directive
  */
+
 import { Directive, Output, EventEmitter } from '@angular/core';
 
 /**

@@ -1,21 +1,15 @@
 /**
- * Bookmark Directory component
+ * File: Bookmark Directory component
  */
 
-/**
- * External imports
- */
-import { Component, Input, Output, EventEmitter, HostBinding, OnInit,
-	OnDestroy, OnChanges, SimpleChange, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChange, ChangeDetectorRef,
+	ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { Folder, FolderLogicService } from './../../services/folder';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { UiService } from './../../services/ui';
+import { IconComponent } from './../../shared';
 
 /**
  * View component (dumb and partially smart, recursive): Bookmark directory
@@ -84,6 +78,9 @@ export class BookmarkDirectoryComponent implements OnInit, OnDestroy, OnChanges 
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}  changeDetector     Change detector
+	 * @param {FolderLogicService} folderLogicService Folder logic service
+	 * @param {UiService}          uiService          UI service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,

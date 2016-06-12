@@ -1,10 +1,7 @@
 /**
- * App component
+ * File: App component
  */
 
-/**
- * External imports
- */
 import { Component, OnInit, provide } from '@angular/core';
 import { FORM_PROVIDERS, Location } from '@angular/common';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Router, Routes, Route } from '@angular/router';
@@ -13,9 +10,6 @@ import { AUTH_PROVIDERS, AuthConfig, AuthHttp, JwtHelper } from 'angular2-jwt';
 import { provideStore } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
-/**
- * Internal imports
- */
 import { AppService } from './../../services/app';
 import { bookmarkReducer } from './../../services/bookmark';
 import { folderReducer } from './../../services/folder';
@@ -24,13 +18,10 @@ import { uiReducer, UiService } from './../../services/ui';
 import { userReducer, UserAuthService } from './../../services/user';
 import { BookmarksComponent } from './../bookmarks/bookmarks.component';
 import { LoginComponent } from './../login/login.component';
-import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
-import { DialogConfirmComponent } from './../../shared/dialog-confirm/dialog-confirm.component';
-import { NotifierService } from './../../shared/notifier/notifier.service';
-import { NotifierComponent } from './../../shared/notifier/notifier.component';
+import { DialogConfirmComponent, DialogConfirmService, NotifierService, NotifierComponent } from './../../shared';
 
 /**
- * View component (ROOT): App
+ * View component: App (as the ROOT)
  */
 @Component( {
 	directives: [
@@ -116,6 +107,9 @@ export class AppComponent implements OnInit {
 
 	/**
 	 * Constructor
+	 * @param {Router}          router          Router
+	 * @param {Location}        location        Location
+	 * @param {UserAuthService} userAuthService User authentication service
 	 */
 	constructor(
 		router: Router,

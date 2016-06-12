@@ -44,6 +44,8 @@ db.createUser( { user: "devAdmin", pwd: "stars-web", roles: [ { role: "dbAdmin",
 
 It's simple. It's eay. Open up a **new** command line, navigate to the project root folder and run:
 
+> On Linux you need to run the command with `sudo`.
+
 <pre>
 npm start
 </pre>
@@ -60,10 +62,10 @@ Open your favourite browser (not IE please ...) and simply navigate to <a href="
 
 **The following user accounts are provided:**
 
-- *Standard-Nutzer 1*<br>
+- *Standard-Nutzer: Tim Tester*<br>
   E-Mail Addresse: `tim.tester@stars-web.de`<br>
   Passwort: `stars-web-1`
 
-- *Administrator*<br>
+- *Administrator: TODO*<br>
   E-Mail-Adresse: `TODO`
   Passwort: `TODO`

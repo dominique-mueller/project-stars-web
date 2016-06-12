@@ -1,15 +1,13 @@
 /**
- * External imports
+ * File: UI service
  */
+
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { AppStore, AppService } from './../app';
 import {
 	SET_ROOT_FOLDER_ID,
@@ -28,7 +26,7 @@ import {
 export class UiService {
 
 	/**
-	 * UI state
+	 * Observable UI state
 	 */
 	public uiState: Observable<Map<string, any>>;
 
@@ -49,6 +47,9 @@ export class UiService {
 
 	/**
 	 * Constructor
+	 * @param {Store<AppStore>} store        App store
+	 * @param {Title}           titleService Title service
+	 * @param {AppService}      appService   App service
 	 */
 	constructor(
 		store: Store<AppStore>,
@@ -62,7 +63,7 @@ export class UiService {
 		this.appService = appService;
 
 		// Setup
-		this.uiState = <Observable<Map<string, any>>> this.store.select( 'ui' );
+		this.uiState = <Observable<Map<string, any>>> this.store.select('ui'); // Select returns an observable
 
 	}
 
@@ -143,8 +144,7 @@ export class UiService {
 	}
 
 	/**
-	 * Set document title
-	 * This will be visible in the browser tab / window, as well as in the history stack and bookmarks
+	 * Set document title, visible in the browser tab / window, as well as in the history stack and bookmarks
 	 * @param {string} title Document title
 	 */
 	public setDocumentTitle( title: string ): void {

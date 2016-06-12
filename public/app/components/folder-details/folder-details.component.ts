@@ -1,25 +1,16 @@
 /**
- * Folder details component
+ * File: Folder details component
  */
 
-/**
- * External imports
- */
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { List } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
-import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
-import { NotifierService } from './../../shared/notifier/notifier.service';
-import { IconComponent } from './../../shared/icon/icon.component';
-import { EditableInputComponent } from './../../shared/editable-input/editable-input.component';
-import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-into-folder.component';
+import { UiService } from './../../services/ui';
+import { DialogConfirmService, EditableInputComponent, IconComponent, MoveIntoFolderComponent,
+	NotifierService } from './../../shared';
 
 /**
  * View component (smart): Folder details
@@ -28,8 +19,8 @@ import { MoveIntoFolderComponent } from './../../shared/move-into-folder/move-in
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		IconComponent,
 		EditableInputComponent,
+		IconComponent,
 		MoveIntoFolderComponent
 	],
 	templateUrl: './folder-details.component.html'
@@ -98,6 +89,13 @@ export class FolderDetailsComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {Router}               router               Router
+	 * @param {ChangeDetectorRef}    changeDetector       Change detector
+	 * @param {UiService}            uiService            UI service
+	 * @param {FolderDataService}    folderDataService    Folder data service
+	 * @param {FolderLogicService}   folderLogicService   Folder logic service
+	 * @param {DialogConfirmService} dialogConfirmService Dialog confirm service
+	 * @param {NotifierService}      notifierService      Notifier service
 	 */
 	constructor(
 		router: Router,
