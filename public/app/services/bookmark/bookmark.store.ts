@@ -11,6 +11,7 @@ import { Bookmark } from './bookmark.model';
  * Action constants
  */
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
+export const UNLOAD_BOOKMARKS: string = 'UNLOAD_BOOKMARKS';
 export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
 export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
 export const UPDATE_BOOKMARKS_UNASSIGN_LABEL: string = 'UPDATE_BOOKMARKS_UNASSIGN_LABEL';
@@ -48,6 +49,10 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 					newState.push( <Bookmark> initialBookmarkState.merge( fromJS( bookmark ) ) );
 				} );
 			} );
+
+		// Unload all bookmarks / reset
+		case UNLOAD_BOOKMARKS:
+			return initialState;
 
 		// Add a bookmark
 		case ADD_BOOKMARK:

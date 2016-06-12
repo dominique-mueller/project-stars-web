@@ -12,7 +12,8 @@ import { Store, Action } from '@ngrx/store';
 import { AppStore, AppService } from './../app';
 import { User } from './user.model';
 import {
-	LOAD_USER
+	LOAD_USER,
+	UNLOAD_USER
 } from './user.store';
 
 /**
@@ -88,6 +89,15 @@ export class UserDataService {
 						reject();
 					}
 				);
+		} );
+	}
+
+	/**
+	 * Unload user
+	 */
+	public unloadUser(): void {
+		this.store.dispatch( {
+			type: UNLOAD_USER
 		} );
 	}
 

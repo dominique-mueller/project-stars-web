@@ -11,6 +11,7 @@ import { Label } from './label.model';
  * Action constants
  */
 export const LOAD_LABELS: string = 'LOAD_LABELS';
+export const UNLOAD_LABELS: string = 'UNLOAD_LABELS';
 export const UPDATE_LABEL: string = 'UPDATE_LABEL';
 export const DELETE_LABEL: string = 'DELETE_LABEL';
 export const ADD_LABEL: string = 'ADD_LABEL';
@@ -40,6 +41,10 @@ export const labelReducer: ActionReducer<Map<string, Label>> =
 					newState.set( label.id, <Label> initialLabelState.merge( fromJS( label ) ) );
 				} );
 			} );
+
+		// Unload all labels / reset
+		case UNLOAD_LABELS:
+			return initialState;
 
 		// Add a label
 		case ADD_LABEL:

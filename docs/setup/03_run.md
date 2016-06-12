@@ -34,6 +34,7 @@ This restores our sample data into the MongoDB. Next, we need to setup the user 
 mongo
 use dev
 db.createUser( { user: "devAdmin", pwd: "stars-web", roles: [ { role: "dbAdmin", db: "dev" } ] } )
+exit
 </pre>
 
 > If the command finished successfully you can close the console as it is no longer needed.
@@ -44,7 +45,7 @@ db.createUser( { user: "devAdmin", pwd: "stars-web", roles: [ { role: "dbAdmin",
 
 It's simple. It's eay. Open up a **new** command line, navigate to the project root folder and run:
 
-> On Linux you need to run the command with `sudo`.
+> On Linux you need to run the command with `sudo` because port mapping isn't configured.
 
 <pre>
 npm start
@@ -60,12 +61,18 @@ Open your favourite browser (not IE please ...) and simply navigate to <a href="
 
 > Sidenote: During development we're using a *self-signed SSL certificate*. As a consequence, you need to accept our certificate in the browser.
 
-**The following user accounts are provided:**
+---
 
-- *Standard-Nutzer: Tim Tester*<br>
-  E-Mail Addresse: `tim.tester@stars-web.de`<br>
+**The following user accounts are configured and can be used:**
+
+- *Tim Tester (Standard-Nutzer)*<br>
+  E-Mail Addresse: `tim.tester@email.com`<br>
   Passwort: `stars-web-1`
 
-- *Administrator: TODO*<br>
-  E-Mail-Adresse: `TODO`
-  Passwort: `TODO`
+- *Bobby Pinguin (Administrator)*<br>
+  E-Mail-Adresse: `bobby.pinguin@email.com`
+  Passwort: `stars-web-2`
+
+---
+
+> PS: Try to type in a wrong passwort and enjoy the animation ;)

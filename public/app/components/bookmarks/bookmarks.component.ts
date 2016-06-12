@@ -345,15 +345,25 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 		this.userAuthService.logoutUser()
 			.then( ( data: any ) => {
 				this.router.navigate( [ 'login' ] ); // Absolute
-				this.uiService.unsetSelectedElement();
+				this.uiService.unsetRootFolderId();
 				this.uiService.unsetOpenedFolderId();
+				this.uiService.unsetSelectedElement();
 				this.uiService.resetSearch();
+				this.bookmarkDataService.unloadBookmarks();
+				this.folderDataService.unloadFolders();
+				this.labelDataService.unloadLabels();
+				this.userDataService.unloadUser();
 			} )
 			.catch( ( error: any ) => {
 				this.router.navigate( [ 'login' ] ); // Absolute
-				this.uiService.unsetSelectedElement();
+				this.uiService.unsetRootFolderId();
 				this.uiService.unsetOpenedFolderId();
+				this.uiService.unsetSelectedElement();
 				this.uiService.resetSearch();
+				this.bookmarkDataService.unloadBookmarks();
+				this.folderDataService.unloadFolders();
+				this.labelDataService.unloadLabels();
+				this.userDataService.unloadUser();
 			} );
 
 	}

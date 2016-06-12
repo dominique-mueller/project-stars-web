@@ -11,6 +11,7 @@ import { Folder } from './folder.model';
  * Action constants
  */
 export const LOAD_FOLDERS: string = 'LOAD_FOLDERS';
+export const UNLOAD_FOLDERS: string = 'UNLOAD_FOLDERS';
 export const ADD_FOLDER: string = 'ADD_FOLDER';
 export const UPDATE_FOLDER: string = 'UPDATE_FOLDER';
 export const DELETE_FOLDER: string = 'DELETE_FOLDER';
@@ -46,6 +47,10 @@ export const folderReducer: ActionReducer<List<Folder>> =
 					newState.push( <Folder> initialFolderState.merge( fromJS( folder ) ) );
 				} );
 			} );
+
+		// Unload all folders / reset
+		case UNLOAD_FOLDERS:
+			return initialState;
 
 		// Add a folder
 		case ADD_FOLDER:
