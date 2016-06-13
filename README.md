@@ -8,19 +8,15 @@ This is the official repository for our DHBW study research project called "Proj
 
 ---
 
-<br>
-
-### Warning
-
-This software is only a prototype implementation. Therefore not all planned functionality is yet implemented, and you still may find several bugs.
+> This software is only a prototype implementation. Therefore not all planned functionality is yet implemented, and you still may find several bugs.
 
 <br>
 
 ### Project details
 
 **Project developers:**
-- Dominique Müller
-- Marco Rönfeldt
+- Dominique Müller (dominique.mueller@hpe.com)
+- Marco Rönfeldt (marco.roenfeldt@hpe.com)
 
 **Project organizer:**
 - Ramon Bisswanger
