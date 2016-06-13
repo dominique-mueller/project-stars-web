@@ -1,41 +1,14 @@
-
-require('es6-promise').polyfill();
 var Folder = require('../schemaExport.js').Folder;
 var logger = require('../../adapters/logger.js');
 
 
-var FoldersModel = function(caller, userId){
-	logger.debug('FOLDER MODEL');
+var FoldersModel = function(userId){
 
 	var self; //@see: adapters/authentication.js 
 	this.userId;
 
 	//#### PRIVATE FUNCTIONS ####
 
-	function createRootFolder(folder){
-		return new Promise(function(resolve, reject){
-			//TODO: FIX BUG change this check so no user can send a path with 'undefined'
-			// if a root folder is created, there is no path, so the path's id will be the folder itself
-			folder.position = 0;
-			folder.path = self.userId;
-			resolve(folder);
-		});
-	}
-
-	function createNormalFolder(folder){
-		return new Promise(function(resolve, reject){
-			var positionPromise = self.changeNumberOfContainedElements(folder.path, 1);
-			positionPromise.then(function(highestPosition){
-				logger.debug('highestPosition: '+highestPosition);
-				folder.position = highestPosition;
-				resolve(folder);
-			})
-			.catch(function(err){
-				logger.error("FUCKING ERROR: " + err);
-				reject(err);
-			});
-		});
-	}
 
 	function checkIfRootFolder(folderId){
 		return new Promise(function(resolve, reject){
@@ -44,7 +17,7 @@ var FoldersModel = function(caller, userId){
 					reject(err);
 				}
 				else{
-					if(folder.name !== '.'){
+					if(folder.isRoot){
 						resolve(folder);
 					}
 					else{
@@ -55,39 +28,8 @@ var FoldersModel = function(caller, userId){
 		}); 
 	}
 
-	function moveFolder(folderId, folderData, callback){
-		var folderPromise = self.findOne(folderId);
-		folderPromise.then(function(folder){
-			if(folderData.hasOwnProperty('path')){
-				folder.path = folderData.path;
-			}
-			if(folderData.hasOwnProperty('position')){
-				folder.position = folderData.position;
-			}
-
-			var deleteFolderPromise = self.delete(folderId);
-			deleteFolderPromise.then(function(){
-				logger.debug('NOW INSERT ON NEW position: ' + folder.position);
-				var changeNumberOfContainedElementsPromsie = self.changeNumberOfContainedElements(folder.path, +1);
-				var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position -1, +1);
-				var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position -1, +1);
-				//Something did not went ecwell, but it could have been also the work of another bug so maybe we should try it again
-				// var saveFolderPromise = saveFolderAndReturnPromise(folder);
-				var createFolderPromise = new Promise(function(resolve, reject){
-					Folder.create(folder);
-				});
-				Promise.all([changeNumberOfContainedElementsPromsie, shiftBookmarksPromise, shiftFoldersPromise, saveFolderAndReturnPromise])
-				.then(function(){
-					callback(null);
-				})
-				.catch(callback);
-			})
-			.catch(callback);
-		})
-		.catch(callback);	
-	}
-
-	function saveFolderAndReturnPromise(element){
+	//TODO: create model prototype and pull this function to the prototype
+	function saveAndReturnPromise(element){
 		return new Promise(function(resolve, reject){
 			element.save(function(err){
 				if(err){
@@ -100,41 +42,25 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 
+	//TODO: create model prototype and pull this function to the prototype
 	function sortFoldersAfterPositionASC(folders){
 		return folders.sort(function(a, b){
 			return a.position - b.position;
 		});
 	}
 
-	//This function will change the position of all other element in the folder 
-	//and decrement the numberOfContainedElements from path folder
-	function updateAffectedElements(folder){
-		return new Promise(function(resolve, reject){
-			var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
-			var shiftBookmarksPromise = caller.shiftBookmarksPosition(folder.path, folder.position, -1);
-			var changeNumberOfContainedElementsPromsie = self.changeNumberOfContainedElements(folder.path, -1);
-			Promise.all([shiftFoldersPromise, shiftBookmarksPromise, changeNumberOfContainedElementsPromsie]).then(function(resolveArray){
-				logger.debug('all updateAffectedElements resolve');
-				resolve();
-			})
-			.catch(function(){
-				logger.error('something went wrong with updateAffectedElements');
-				reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
-				//TODO Rollback of successful actions
-			});
-		});
-	}
-
 
 	//#### Public Functions #####
 
- 	this.checkIfPathRegardsToOwner = function(path){
-		return new Promise(function(resolve, reject){
-			//TODO !!!!
-			logger.debug('checkIfPathRegardsToOwner');
-			resolve(true);
-		});
-	}
+	//KEEP THESE FUNCTIONS. DUE TO FRONTEND COMPATIBILITY FOR RELEASE THEY HAD TO BE SIMPLICIFIED
+	
+ 	// 	this.checkIfPathRegardsToOwner = function(path){
+	// 	return new Promise(function(resolve, reject){
+	// 		//TODO !!!!
+	// 		logger.debug('checkIfPathRegardsToOwner');
+	// 		resolve(true);
+	// 	});
+	// }
 
 	/*
 	@param path: the folder id of the 'parent' folder, called path
@@ -142,21 +68,45 @@ var FoldersModel = function(caller, userId){
 	@resolve: gives back the new numberOfContainedElements 
 	@return: returns a promise 
 	*/
-	this.changeNumberOfContainedElements = function(path, changeBy){
-			// logger.debug('START: changeNumberOfContainedElements ');
+	// this.changeNumberOfContainedElements = function(path, changeBy){
+	// 	// logger.debug('START: changeNumberOfContainedElements ');
+	// 	logger.debug('folder model changeNumberOfContainedElements');
+	// 	return new Promise(function(resolve, reject){
+	// 		Folder.findById(path, function(err, folder){
+	// 			// logger.debug('changeNumberOfContainedElements folder: ' + folder.name);
+	// 			try{
+	// 				folder.numberOfContainedElements = folder.numberOfContainedElements + changeBy;
+	// 				folder.save(function(err, folder){
+	// 					if(err){
+	// 						logger.error(err);
+	// 						reject(err);
+	// 					}
+	// 					else{
+	// 						logger.debug('changeNumberOfContainedElements resolved');
+	// 						resolve(folder.numberOfContainedElements);
+	// 					}
+	// 				});
+	// 			}
+	// 			catch(err){
+	// 				reject(err);
+	// 			}
+	// 		});
+	// 	});
+	// }
+
+	this.changeNumberOfContainedFolders = function(path, changeBy){
 		return new Promise(function(resolve, reject){
-			Folder.findById(path, function(err, folder){
-				// logger.debug('changeNumberOfContainedElements folder: ' + folder.name);
+			Folder.findById(path, function(err, foundFolder){
 				try{
-					folder.numberOfContainedElements = folder.numberOfContainedElements + changeBy;
-					folder.save(function(err, folder){
+					foundFolder.numberOfContainedFolders = foundFolder.numberOfContainedFolders + changeBy;
+					foundFolder.save(function(err, savedFolder){
 						if(err){
 							logger.error(err);
 							reject(err);
 						}
 						else{
-							logger.debug('changeNumberOfContainedElements resolved');
-							resolve(folder.numberOfContainedElements);
+							logger.debug('changeNumberOfContainedFolders resolved');
+							resolve(savedFolder.numberOfContainedFolders);
 						}
 					});
 				}
@@ -167,27 +117,51 @@ var FoldersModel = function(caller, userId){
 		});
 	}
 
+	this.changeNumberOfContainedBookmarks = function(path, changeBy){
+		return new Promise(function(resolve, reject){
+			Folder.findById(path, function(err, foundFolder){
+				try{
+					foundFolder.numberOfContainedBookmarks = foundFolder.numberOfContainedBookmarks + changeBy;
+					foundFolder.save(function(err, savedFolder){
+						if(err){
+							logger.error(err);
+							reject(err);
+						}
+						else{
+							logger.debug('changeNumberOfContainedBookmarks resolved + ' + changeBy);
+							resolve(savedFolder.numberOfContainedBookmarks);
+						}
+					});
+				}
+				catch(err){
+					reject(err);
+				}
+			});
+		});
+	}
+
+
+	//The startPosition won't be affected, 
+	// so if you plan to shift folders to get an empty position you have set the startPosition to <planedFreePosition> - 1 
 	this.shiftFoldersPosition = function(path, startPosition, shift){
-		// logger.debug('shiftFoldersPosition');
+		logger.debug('folder model shiftFoldersPosition');
 		return new Promise(function(resolve, reject){
 			var allFolderPromise = self.findAll(path);
 			allFolderPromise.then(function(folderArray){
 				// logger.debug('shiftFolders');
 				folderArray = sortFoldersAfterPositionASC(folderArray);
-				// logger.debug('shift folders sorted: ' + folderArray);
-				logger.debug('FolderArray.length: ' + folderArray.length);
-				logger.debug('startPosition: ' + startPosition);
 				var savePromiseArray = new Array();
 				for(var i = 0; i < folderArray.length; i++){
-					logger.debug('FolderName: ' + folderArray[i].name);
+					//logger.debug('FolderName: ' + folderArray[i].name);
 					if(folderArray[i].position > startPosition){
-						logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
+						// logger.debug('new folder ('+ folderArray[i].name +') position: ' + folderArray[i].position);
 						folderArray[i].position = folderArray[i].position + shift;
-						savePromiseArray.push(saveFolderAndReturnPromise(folderArray[i]));
+						savePromiseArray.push(saveAndReturnPromise(folderArray[i]));
 					}
 				}
 				Promise.all(savePromiseArray).then(function(){
-					logger.debug('save all promise fullfiled');
+					logger.debug('shifted folder');
+					// logger.debug('save all promise fullfiled');
 					resolve();
 				})
 				.catch(reject);
@@ -196,6 +170,170 @@ var FoldersModel = function(caller, userId){
 		});
 	};
 
+
+	this.create = function(folderData){
+		return new Promise(function(resolve, reject){	
+			var folder = new Folder({
+				name: folderData.name,
+				owner: self.userId,
+				path: folderData.path
+			});
+
+			var positionPromise = self.changeNumberOfContainedFolders(folder.path, 1);
+			positionPromise.then(function(highestPosition){
+				// logger.debug('highestPosition: '+highestPosition);
+				folder.position = highestPosition;
+				folder.save(function(err, folder){
+					if(err){
+						reject(err);
+					}
+					else{
+						resolve(folder);
+					}
+				});
+			})
+			.catch(function(err){
+				logger.error("FUCKING ERROR: " + err);
+				reject(err);
+			});
+		});
+	};
+
+
+	this.createRootFolder = function(){
+		return new Promise(function(resolve, reject){
+			var folder = new Folder({
+				name: '.',
+				owner: self.userId,
+				isRoot: true,
+				position: 1
+			});
+			folder.path = folder._id;
+			folder.save(function(err, foldr){
+				if(err){
+					reject(err);
+				}
+				else{
+					resolve(folder);
+				}
+			});
+		});
+	};
+
+
+	this.update = function(folderId, folderData){
+		return {
+			moveFolderToNewPath: function(){
+				logger.debug("moveFolderToNewPath");
+				return new Promise(function(resolve, reject){
+					var folderPromise = self.findOne(folderId);
+					folderPromise.then(function(folder){
+						
+						if(folder.isRoot){
+							reject(new Error("Root folder can not be manipulated"));
+						}
+
+						var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+						var decrementOldFolderPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
+						folder.path = folderData.path;
+						var incrementNewFolderPromise =self.changeNumberOfContainedFolders(folder.path, 1);
+						
+						incrementNewFolderPromise.then(function(highestPosition){
+							folder.position = highestPosition;
+							
+							Promise.all([shiftFoldersPromise, decrementOldFolderPromsie]).then(function(){
+								saveAndReturnPromise(folder).then(function(){
+									resolve();
+								})
+								.catch(reject)
+							})
+							.catch(reject);
+						})
+						.catch(reject);
+					})
+					.catch(reject);			
+	
+				});
+			},
+
+			folderEditables: function(){
+				logger.debug("updateFolderEditables");
+
+				return new Promise(function(resolve, reject){
+					Folder.findByIdAndUpdate(folderId, {"name":folderData.name}, {new:true}, function(err){
+						if(err){
+							reject(err);
+						}
+						else{
+							resolve();
+						}
+					});
+				});
+			},
+
+			moveFoldersPosition: function(){
+				logger.debug("moveFoldersPosition");
+				return new Promise(function(resolve, reject){
+					var folderPromise = self.findOne(folderId);
+					folderPromise.then(function(folder){
+						
+						if(folder.isRoot){
+							reject(new Error("Root folder can not be manipulated"));
+						}
+
+						var shiftFoldersOldPositionPormise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+						var shiftFoldersNewPositionPromise = self.shiftFoldersPosition(folder.path, folderData.position -1, 1);
+
+						Promise.all([shiftFoldersOldPositionPormise, shiftFoldersNewPositionPromise]).then(function(){
+							folder.position = folderData.position;
+							saveAndReturnPromise(folder).then(function(){
+								resolve();
+							})
+							.catch(reject)
+						})
+						.catch(reject);
+					})
+					.catch(reject);
+				});
+			}
+		};
+	};
+
+	
+	this.delete = function(folderId){
+		return new Promise(function(resolve, reject){
+			var folderPromise = self.findOne(folderId);
+			folderPromise.then(function(folder){
+				// logger.debug('folderPromise');
+				if(!folder.isRoot){
+					// logger.debug('non root folder');
+					var shiftFoldersPromise = self.shiftFoldersPosition(folder.path, folder.position, -1);
+					var changeNumberOfContainedFoldersPromsie = self.changeNumberOfContainedFolders(folder.path, -1);
+					Promise.all([shiftFoldersPromise, changeNumberOfContainedFoldersPromsie]).then(function(resolveArray){
+						Folder.findByIdAndRemove(folderId, function(err){
+							if(err){
+								reject(err);
+							}
+							else{
+								resolve();
+							}
+						});
+					})
+					.catch(function(){
+						logger.error('something went wrong with updateAffectedElements');
+						reject(new Error('Something went wrong durring the deletion of the folder: ' + folderId));
+						//TODO Rollback of successful actions
+					});
+				}
+				else{
+					reject(new Error('The root folder can not be deleted'));
+				}
+			})
+			.catch(reject);
+		});
+	};
+
+	//@param path: if path is given this function will only search for folders within this path
 	this.findAll = function(path){
 		return new Promise(function(resolve, reject){
 			// Folder.find({owner:self.userId},{sort:[['position', 'desc']]}, function(err, folders){
@@ -216,89 +354,6 @@ var FoldersModel = function(caller, userId){
 		});
 	}; 
 
-	this.create = function(folderData){
-		return new Promise(function(resolve, reject){	
-			var folder = new Folder({
-				name: folderData.name,
-				owner: self.userId,
-				path: folderData.path
-			});
-			var folderPromise;
-			if(typeof folderData.path === 'undefined'){ 
-				folderPromise = createRootFolder(folder);
-			}
-			else{
-				logger.debug('call create normal folder ');
-				folderPromise = createNormalFolder(folder);
-			}
-			folderPromise.then(function(folder){
-				logger.debug("Name: " + folder.name + "_-_Position: " + self.userId);
-				folder.save(function(err, folder){
-					if(err){
-						reject(err);
-					}
-					else{
-						resolve(folder);
-					}
-				});
-			})
-			.catch(reject);
-		});
-	};
-
-	this.update = function(folderId, folderData){
-		return new Promise(function(resolve, reject){
-		if(folderData.hasOwnProperty('name')){
-			Folder.findByIdAndUpdate(folderId, {"name":folderData.name}, {new:true}, function(err){
-				if(err){
-					reject(err);
-				}
-				else{
-					resolve();
-				}
-			});
-		}
-		else{
-			moveFolder(folderId, folderData, function(err){
-				if(err){
-					reject();
-				}
-				else{
-					resolve();
-				}
-			});
-		}
-		});
-	};
-	
-	this.delete = function(folderId){
-		return new Promise(function(resolve, reject){
-			var folderPromise = self.findOne(folderId);
-			folderPromise.then(function(folder){
-				logger.debug('folderPromise');
-				if(folder.name !== '.'){
-					logger.debug('non root folder');
-					var updateAffectedElementsPromise = updateAffectedElements(folder);
-					updateAffectedElementsPromise.then(function(){
-						logger.debug('updateAffectedElementsPromise fullfiled');
-						Folder.findByIdAndRemove(folderId, function(err){
-							if(err){
-								reject(err);
-							}
-							else{
-								resolve();
-							}
-						});
-					})
-					.catch(reject);
-				}
-				else{
-					reject(new Error('The root folder can not be deleted'));
-				}
-			})
-			.catch(reject);
-		});
-	};
 
 	this.findOne = function(folderId){
 		return new Promise(function(resolve, reject){

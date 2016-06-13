@@ -1,12 +1,21 @@
 var logger = require('../adapters/logger.js');
 var httpStatus = require('../config.js').httpStatus;
+var helpers = require('../helpers/generalHelpers.js');
 
 var DevicesController = function(req, res, authentication){
 
-	var self; //@see: adapters/authentication.js 
-	this.Device = require('../modules/device/devices.model.js');
-	this.Device = new Device(authentication.tokenUserId);
-	this.req, this.res, this.authentication, this.data;
+	var self = this; //@see: adapters/authentication.js 
+	this.authentication = authentication
+	var d = require('../modules/device/devices.model.js');
+	this.Device = new d(authentication.tokenUserId);
+	this.req = req, this.res = res, this.reqBody;
+	
+
+	//CONSTRUCTOR
+	if(req.method != 'GET' && req.method != 'DELETE'){
+		// this.reqBody = JSON.parse(req.body.data);
+		this.reqBody = req.body.data;
+	}	
 
 
 	//#### PRIVATE FUNCTIONS ####
@@ -14,18 +23,27 @@ var DevicesController = function(req, res, authentication){
 
 	//#### PUBLIC FUNCTIONS ####
 
+	this.post = function(){
+
+	}
+
+	this.put = function(){
+
+	}
+
+	this.delete = function(){
+
+	}
+
+	this.getAll = function(){
+
+	}
+
+	this.getOne = function(){
+		
+	}
 
 
-
-	//CONSTRUCTOR
-	self = this;
-
-	this.req = req;
-	this.res = res;
-	this.authentication = authentication
-	if(req.method != 'GET' && req.method != 'DELETE'){
-		this.data = JSON.parse(req.body.data);
-	}	
 
 	return this;
 }

@@ -1,13 +1,12 @@
 //@see: https://github.com/scotch-io/node-token-authentication/blob/master/server.js
 var jwt = require('jsonwebtoken');
-// var scrypt = require('scrypt');
-// var scryptParameters = scrypt.paramsSync(0.1);
 var bcrypt = require('bcryptjs');
 var logger = require('./logger');
 var secret = require('../config.js').authentication.secret;
 
 
-function Authentication(token){
+// function Authentication(token){
+function Authentication(){
 	
 	var self; 
 	/*workaround for an ECMA bug in the scope of the 'this' propertie. 
@@ -15,7 +14,7 @@ function Authentication(token){
 	variable is set in the constructor (end of function)*/
 	this.token = null;
 	this.tokenUserId = null;
-	this.isAdmin = null; 
+	this.isAdmin = false; 
 
 	//#### PRIVATE FUNCTIONS ####
 
@@ -66,14 +65,13 @@ function Authentication(token){
 						userId: user._id,
 						admin: user.admin
 						//TODO device._id
-					}, secret,{expiresIn: '365d'}));	
+					}, secret,{expiresIn: '365d'})); //the expires time is set in days (d == day)
 				}
 			});	
 		});
 	}
 
 	this.logout = function(payload){
-			//TODO: delete session in db
 	}
 
 	/*
@@ -92,20 +90,13 @@ function Authentication(token){
 			return {token: "DUMMY ACTIVATION TOKEN", tempPassword:"ZERO"};
 		}
 	}
-
-	
-
-	// // function will compare the two input parameters whether they are equal or not. 
-	// // @param: takes to parameters. both parameters are the password the proceed. 
-	// // @return: returns a promise. the resolve's param is a hashed password with a salt in form algorithm$salt$hash. 
-	// // 		if params are not equal, the promise will reject with the Error message 'passwords are not equal'
 	
 	/*
 	@return: hashed password (input param) in form: algorithm$salt$hash
 	*/
 	this.convertRawPassword = function(password){
 		try{
-			var salt = bcrypt.genSaltSync(10);
+			var salt = bcrypt.genSaltSync(10);	//Magic number. See bcrypt api doc
 			var hash = bcrypt.hashSync(password, salt);
 			logger.debug('CONVERTED PASSWORD:: ' + hash);
 			return hash;
@@ -122,10 +113,11 @@ function Authentication(token){
 		The password is the plain newly generated password. The hash is the hashed new password.
 	*/
 	this.generatePassword = function(){
+		const passwordLength = 16;
 		var password = '',
 			hash = '',
 			charSet = '0987654321poiuztrewqlkjhgfdsamnbvcxyQWERTZUIOPASDFGHJKLYXCVBNM-+/\!?#*§$%&-+/\!?#*§$%&';
-		for(i = 0; i < 16; i++){
+		for(i = 0; i < passwordLength; i++){
 			password += charSet[Math.floor(Math.random() * charSet.length)]; 
 		}
 		hash = convertRawPassword(password, password);
@@ -150,16 +142,16 @@ function Authentication(token){
 
 	//#### CONSTRUCTOR ####
 	self = this;
-	if(token){
-		this.setToken(token, function(err){
-			if(err){
+	// if(token){
+	// 	this.setToken(token, function(err){
+	// 		if(err){
 
-			}
-		});
-	}
-	else{
+	// 		}
+	// 	});
+	// }
+	// else{
 
-	}
+	// }
 	
 	return this;
 }

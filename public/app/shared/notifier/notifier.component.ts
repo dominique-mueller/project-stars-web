@@ -1,11 +1,9 @@
 /**
- * External imports
+ * File: Notifier component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-/**
- * Internal imports
- */
 import { NotifierService } from './notifier.service';
 import { IconComponent } from './../icon/icon.component';
 
@@ -56,6 +54,8 @@ export class NotifierComponent {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef} changeDetector  Change detector
+	 * @param {NotifierService}   notifierService Notifier service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
@@ -82,8 +82,6 @@ export class NotifierComponent {
 	 * @param {string} message Notification message
 	 */
 	public notify( type: string, message: string ): void {
-
-		// Close old notification when necessary
 		if ( this.isOpen ) {
 			this.closeNotification();
 			setTimeout(
@@ -95,7 +93,6 @@ export class NotifierComponent {
 		} else {
 			this.openNotification( type, message );
 		}
-
 	}
 
 	/**
@@ -104,48 +101,35 @@ export class NotifierComponent {
 	 * @param {string} message Notification message
 	 */
 	public openNotification( type: string, message: string ): void {
-
-		// Set values
 		this.type = type;
 		this.message = message;
 		this.isOpen = true;
 		this.changeDetector.markForCheck(); // Trigger change detection
-
-		// Close automatically after 7s
 		this.timerToken = setTimeout(
 			() => {
 				this.closeNotification();
 			},
 			7000
 		);
-
 	}
 
 	/**
 	 * Close the notification
 	 */
 	public closeNotification(): void {
-
-		// Clear timer for old notification (if necessary)
 		if ( this.timerToken !== null ) {
 			clearTimeout( this.timerToken );
 			this.timerToken = null;
 		}
-
-		// Close notification and wait until the animation is done
 		this.isOpen = false;
 		setTimeout(
 			() => {
-
-				// Reset values
 				this.type = 'default';
 				this.message = '';
 				this.changeDetector.markForCheck(); // Trigger change detection
-
 			},
 			400 // Animation out takes 400ms
 		);
-
 	}
 
 }

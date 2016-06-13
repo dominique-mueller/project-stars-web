@@ -1,6 +1,7 @@
 /**
- * Internal imports
+ * File: Dropdown item model
  */
+
 import { Map } from 'immutable';
 
 /**

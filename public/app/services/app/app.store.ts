@@ -1,11 +1,9 @@
 /**
- * External imports
+ * File: App store
  */
+
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Bookmark } from './../bookmark';
 import { Folder } from './../folder';
 import { Label } from './../label';

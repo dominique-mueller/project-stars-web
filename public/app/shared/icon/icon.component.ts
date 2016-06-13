@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: Icon component
  */
+
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
@@ -35,7 +36,7 @@ export class IconComponent {
 	private size: number;
 
 	/**
-	 * Internal: Icon name prefix
+	 * Internal: Icon name prefix (constant)
 	 */
 	private prefix: string;
 

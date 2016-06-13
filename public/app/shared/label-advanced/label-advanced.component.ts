@@ -1,12 +1,10 @@
 /**
- * External imports
+ * File: Label advanced component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { List } from 'immutable';
 
-/**
- * Internal imports
- */
 import { AppService } from './../../services/app';
 import { Label } from './../../services/label';
 import { ColorPickerComponent } from './../color-picker/color-picker.component';
@@ -88,8 +86,11 @@ export class LabelAdvancedComponent {
 
 	/**
 	 * Constructor
+	 * @param {AppService} appService App service
 	 */
-	constructor( appService: AppService ) {
+	constructor(
+		appService: AppService
+	) {
 
 		// Initialize
 		this.appService = appService;

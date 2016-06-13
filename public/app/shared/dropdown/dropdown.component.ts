@@ -1,20 +1,13 @@
 /**
- * External imports
+ * File: Dropdown component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { List } from 'immutable';
 
-/**
- * Internal imports
- */
 import { DropdownItem } from './dropdown-item.model';
-import { IconComponent } from './../icon/icon.component';
 import { ClickOutsideDirective } from './../click-outside/click-outside.directive';
-
-/**
- * Exports
- */
-export { DropdownItem } from './dropdown-item.model';
+import { IconComponent } from './../icon/icon.component';
 
 /**
  * Shared component: Dropdown
@@ -82,12 +75,9 @@ export class DropdownComponent {
 	 * @param {HTMLElement} trigger Trigger HTML element
 	 */
 	private closeDropdownOnBlur( $event: any, trigger: HTMLElement ): void {
-
-		// Only close the dropdown when the outside-click event wasn't triggered by the trigger element
 		if ( $event.path.indexOf( trigger ) === -1 ) {
 			this.closeDropdown();
 		}
-
 	}
 
 	/**

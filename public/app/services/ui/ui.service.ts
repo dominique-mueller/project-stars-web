@@ -1,18 +1,17 @@
 /**
- * External imports
+ * File: UI service
  */
+
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { AppStore, AppService } from './../app';
 import {
 	SET_ROOT_FOLDER_ID,
+	UNSET_ROOT_FOLDER_ID,
 	SET_OPENED_FOLDER_ID,
 	UNSET_OPENED_FOLDER_ID,
 	SET_SELECTED_ELEMENT,
@@ -28,7 +27,7 @@ import {
 export class UiService {
 
 	/**
-	 * UI state
+	 * Observable UI state
 	 */
 	public uiState: Observable<Map<string, any>>;
 
@@ -49,6 +48,9 @@ export class UiService {
 
 	/**
 	 * Constructor
+	 * @param {Store<AppStore>} store        App store
+	 * @param {Title}           titleService Title service
+	 * @param {AppService}      appService   App service
 	 */
 	constructor(
 		store: Store<AppStore>,
@@ -62,7 +64,7 @@ export class UiService {
 		this.appService = appService;
 
 		// Setup
-		this.uiState = <Observable<Map<string, any>>> this.store.select( 'ui' );
+		this.uiState = <Observable<Map<string, any>>> this.store.select('ui'); // Select returns an observable
 
 	}
 
@@ -78,6 +80,15 @@ export class UiService {
 	}
 
 	/**
+	 * Unset root folder ID
+	 */
+	public unsetRootFolderId(): void {
+		this.store.dispatch( {
+			type: UNSET_ROOT_FOLDER_ID
+		} );
+	}
+
+	/**
 	 * Set opened folder ID
 	 * @param {string} folderId ID of the new opened folder
 	 */
@@ -89,7 +100,7 @@ export class UiService {
 	}
 
 	/**
-	 * Unset opened folder ID (should really happen never)
+	 * Unset opened folder ID
 	 */
 	public unsetOpenedFolderId(): void {
 		this.store.dispatch( {
@@ -143,8 +154,7 @@ export class UiService {
 	}
 
 	/**
-	 * Set document title
-	 * This will be visible in the browser tab / window, as well as in the history stack and bookmarks
+	 * Set document title, visible in the browser tab / window, as well as in the history stack and bookmarks
 	 * @param {string} title Document title
 	 */
 	public setDocumentTitle( title: string ): void {

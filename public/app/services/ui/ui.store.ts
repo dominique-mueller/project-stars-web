@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: UI store
  */
+
 import { Action, ActionReducer } from '@ngrx/store';
 import { Map } from 'immutable';
 
@@ -8,6 +9,7 @@ import { Map } from 'immutable';
  * Action constants
  */
 export const SET_ROOT_FOLDER_ID: string = 'SET_ROOT_FOLDER_ID';
+export const UNSET_ROOT_FOLDER_ID: string = 'UNSET_ROOT_FOLDER_ID';
 export const SET_OPENED_FOLDER_ID: string = 'SET_OPENED_FOLDER_ID';
 export const UNSET_OPENED_FOLDER_ID: string = 'UNSET_OPENED_FOLDER_ID';
 export const SET_SELECTED_ELEMENT: string = 'SET_SELECTED_ELEMENT';
@@ -16,7 +18,7 @@ export const SET_SEARCH: string = 'SET_SEARCH';
 export const RESET_SEARCH: string = 'RESET_SEARCH';
 
 /**
- * Initial state
+ * Initial state of the UI data (reset by default)
  */
 const initialState: Map<string, any> = Map( {
 	openedFolderId: null,
@@ -41,6 +43,10 @@ export const uiReducer: ActionReducer<Map<string, any>> =
 		// Set root folder (update)
 		case SET_ROOT_FOLDER_ID:
 			return state.set( 'rootFolderId', action.payload );
+
+		// Unset root folder (update)
+		case UNSET_ROOT_FOLDER_ID:
+			return state.set( 'rootFolderId', null );
 
 		// Set current folder (update)
 		case SET_OPENED_FOLDER_ID:

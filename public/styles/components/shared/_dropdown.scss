@@ -80,8 +80,8 @@
 }
 
 .dropdown__link {
-	position: relative;
 	display: block;
+	position: relative;
 	padding: 1.2rem 2.6rem 1.2rem 5.4rem;
 	transition: background-color $anim-speed-normal $anim-easing;
 	cursor: pointer; // Because a href does not exist
@@ -91,8 +91,8 @@
 	}
 
 	&:active {
-		background-color: $color-alto;
 		transition: none;
+		background-color: $color-alto;
 	}
 
 	.icon {

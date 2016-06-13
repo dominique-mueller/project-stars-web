@@ -1,17 +1,15 @@
 /**
- * External imports
+ * File: Bookmark Directory component
  */
-import { Component, Input, Output, EventEmitter, HostBinding, OnInit,
-	OnDestroy, OnChanges, SimpleChange, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChange, ChangeDetectorRef,
+	ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { Folder, FolderLogicService } from './../../services/folder';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { UiService } from './../../services/ui';
+import { IconComponent } from './../../shared';
 
 /**
  * View component (dumb and partially smart, recursive): Bookmark directory
@@ -80,6 +78,9 @@ export class BookmarkDirectoryComponent implements OnInit, OnDestroy, OnChanges 
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}  changeDetector     Change detector
+	 * @param {FolderLogicService} folderLogicService Folder logic service
+	 * @param {UiService}          uiService          UI service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
@@ -149,10 +150,8 @@ export class BookmarkDirectoryComponent implements OnInit, OnDestroy, OnChanges 
 	} ): void {
 
 		// Get / update the subfolders of this (the current) directory layer
-		// But only do this when the folders actually exist and changed
-		if ( changes.hasOwnProperty( 'folders' )
-			&& typeof changes.folders.currentValue !== 'undefined'
-			&& changes.folders.currentValue.size > 0 ) {
+		// But only do this when the folders actually changed (skip the initial change)
+		if ( changes.hasOwnProperty( 'folders' ) && changes.folders.currentValue.size > 0 ) {
 			this.subfolders = this.folderLogicService
 				.getSubfoldersByFolderId( changes.folders.currentValue, this.parentFolderId );
 		}

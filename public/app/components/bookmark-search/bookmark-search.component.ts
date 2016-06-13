@@ -1,20 +1,17 @@
 /**
- * External imports
+ * File: Bookmark search component
  */
+
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { Bookmark, BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { Label, LabelDataService } from './../../services/label';
-import { BookmarkComponent } from './../../shared/bookmark/bookmark.component';
-import { FolderComponent } from './../../shared/folder/folder.component';
+import { UiService } from './../../services/ui';
+import { BookmarkComponent, FolderComponent } from './../../shared';
 
 /**
  * View component (smart): Bookmark search
@@ -100,6 +97,14 @@ export class BookmarkSearchComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {Router}               router               Router
+	 * @param {ChangeDetectorRef}    changeDetector       Change detector
+	 * @param {UiService}            uiService            UI service
+	 * @param {BookmarkDataService}  bookmarkDataService  Bookmark data service
+	 * @param {BookmarkLogicService} bookmarkLogicService Bookmark logic service
+	 * @param {FolderDataService}    folderDataService    Folder data service
+	 * @param {FolderLogicService}   folderLogicService   Folder logic service
+	 * @param {LabelDataService}     labelDataService     Label data service
 	 */
 	constructor(
 		router: Router,

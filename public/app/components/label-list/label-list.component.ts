@@ -1,18 +1,13 @@
 /**
- * External imports
+ * File: Label list component
  */
+
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Map } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Label, LabelDataService } from './../../services/label';
-import { DialogConfirmService } from './../../shared/dialog-confirm/dialog-confirm.service';
-import { NotifierService } from './../../shared/notifier/notifier.service';
-import { LabelAdvancedComponent } from './../../shared/label-advanced/label-advanced.component';
-import { IconComponent } from './../../shared/icon/icon.component';
+import { DialogConfirmService, IconComponent, LabelAdvancedComponent, NotifierService } from './../../shared';
 
 /**
  * View component (smart): Label list
@@ -20,8 +15,8 @@ import { IconComponent } from './../../shared/icon/icon.component';
 @Component( {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	directives: [
-		LabelAdvancedComponent,
-		IconComponent
+		IconComponent,
+		LabelAdvancedComponent
 	],
 	host: {
 		class: 'label-list'
@@ -73,6 +68,10 @@ export class LabelListComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}    changeDetector       Change detector
+	 * @param {LabelDataService}     labelDataService     Label data service
+	 * @param {DialogConfirmService} dialogConfirmService Dialog confirm service
+	 * @param {NotifierService}      notifierService      Notifier service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,

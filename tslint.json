@@ -30,6 +30,10 @@
 		"jsdoc-format": true,
 		"label-position": true,
 		"label-undefined": true,
+		"linebreak-style": [
+			true,
+			"CRLF"
+		],
 		"max-line-length": [
 			true,
 			120
@@ -183,7 +187,8 @@
 			"app"
 		],
 		"component-class-suffix": true,
-		"directive-class-suffix": true
+		"directive-class-suffix": true,
+		"import-destructuring-spacing": true
 
 	}
 

@@ -1,4 +1,8 @@
 /**
+ * File: Header component
+ */
+
+/**
  * External imports
  */
 import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy,
@@ -15,9 +19,7 @@ import { List, Map } from 'immutable';
 import { AppService } from './../../services/app';
 import { UiService } from './../../services/ui';
 import { UserDataService, User } from './../../services/user';
-import { DropdownComponent, DropdownItem } from './../../shared/dropdown/dropdown.component';
-import { IconComponent } from './../../shared/icon/icon.component';
-import { NotifierService } from './../../shared/notifier/notifier.service';
+import { DropdownComponent, DropdownItem, IconComponent, NotifierService } from './../../shared';
 
 /**
  * View component (smart): Header
@@ -27,8 +29,8 @@ import { NotifierService } from './../../shared/notifier/notifier.service';
 	directives: [
 		ROUTER_DIRECTIVES,
 		FORM_DIRECTIVES,
-		IconComponent,
-		DropdownComponent
+		DropdownComponent,
+		IconComponent
 	],
 	selector: 'app-header',
 	templateUrl: './header.component.html'
@@ -104,6 +106,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef} changeDetector  Change detector
+	 * @param {AppService}        appService      App service
+	 * @param {UiService}         uiService       UI service
+	 * @param {UserDataService}   userDataService User data service
+	 * @param {NotifierService}   notifierService Notifier service
+	 * @param {FormBuilder}       formBuilder     Form builder
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,

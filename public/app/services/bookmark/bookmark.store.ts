@@ -1,18 +1,17 @@
 /**
- * External imports
+ * File: Bookmark store
  */
+
 import { Action, ActionReducer } from '@ngrx/store';
 import { List, Map, fromJS } from 'immutable';
 
-/**
- * Internal imports
- */
 import { Bookmark } from './bookmark.model';
 
 /**
  * Action constants
  */
 export const LOAD_BOOKMARKS: string = 'LOAD_BOOKMARKS';
+export const UNLOAD_BOOKMARKS: string = 'UNLOAD_BOOKMARKS';
 export const ADD_BOOKMARK: string = 'ADD_BOOKMARK';
 export const UPDATE_BOOKMARK: string = 'UPDATE_BOOKMARK';
 export const UPDATE_BOOKMARKS_UNASSIGN_LABEL: string = 'UPDATE_BOOKMARKS_UNASSIGN_LABEL';
@@ -26,7 +25,6 @@ const initialState: List<Bookmark> = List<Bookmark>();
 const initialBookmarkState: Bookmark = <Bookmark> Map<string, any>( {
 	created: null,
 	description: '',
-	favicon: null,
 	id: null,
 	labels: List<string>(),
 	path: null,
@@ -44,35 +42,32 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 
 	switch ( action.type ) {
 
-		// Load bookmarks (overwriting all state to default)
+		// Load all bookmarks (overwrites the previous state)
 		case LOAD_BOOKMARKS:
-
-			// Compute new state from initial state (with multiple mutations, better performance)
 			return initialState.withMutations( ( newState: List<Bookmark> ) => {
-
-				// Set bookmarks as a list (because order is important)
 				action.payload.forEach( ( bookmark: any ) => {
 					newState.push( <Bookmark> initialBookmarkState.merge( fromJS( bookmark ) ) );
 				} );
-
 			} );
 
-		// Add bookmark
+		// Unload all bookmarks / reset
+		case UNLOAD_BOOKMARKS:
+			return initialState;
+
+		// Add a bookmark
 		case ADD_BOOKMARK:
-
-			// Push the bookmark to the list
 			return <List<Bookmark>> state
-				.push( <Bookmark> fromJS( action.payload.data ) );
+				.push( <Bookmark> initialBookmarkState.merge( fromJS( action.payload.data ) ) );
 
-		// Update bookmark (only direct attributes, not labels)
-		// TODO: Implement position swapping
+		// Update a bookmark, update positions if necessary
+		// TODO: Implement position swapping only
 		case UPDATE_BOOKMARK:
 
 			// Check whether path and position changed
 			let hasPathChanged: boolean = action.payload.data.hasOwnProperty( 'path' );
 			let hasPositionChanged: boolean = action.payload.data.hasOwnProperty( 'position' );
 
-			// Calculate the new position if only the path changed
+			// Calculate the new position if only the path has changed
 			if ( hasPathChanged && !hasPositionChanged ) {
 				action.payload.data.position = ( state
 					.filter( ( bookmark: Bookmark ) => {
@@ -82,13 +77,13 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 				hasPositionChanged = true;
 			}
 
-			// Save old bookmark position and path for later on
+			// Save old bookmark position and path (for later)
 			let oldPosition: number;
 			let oldPath: number;
 
 			return <List<Bookmark>> state
 
-				// Update the bookmark attributes, save old position and path for later
+				// Update the bookmark attributes, save old position and path
 				.map( ( bookmark: Bookmark ) => {
 					if ( bookmark.get( 'id' ) === action.payload.id ) {
 						oldPosition = bookmark.get( 'position' );
@@ -99,22 +94,17 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 					}
 				} )
 
-				// Update positions of other bookmarks in the same old folder
+				// Update positions of other bookmarks in the same old folder (if necessary)
 				.map( ( bookmark: Bookmark ) => {
-
-					// Only update positions if necessary and in the same old folder
 					if ( hasPositionChanged && bookmark.get( 'path' ) === oldPath && bookmark.get( 'position' ) > oldPosition ) {
 						return bookmark.set( 'position', bookmark.get( 'position' ) - 1 ); // Move one up
 					} else {
 						return bookmark;
 					}
-
 				} );
 
 		// Unassign a label from all bookmarks this label is currently assigned to
 		case UPDATE_BOOKMARKS_UNASSIGN_LABEL:
-
-			// Delete label ID out of the label list of each bookmark (if it exists)
 			return <List<Bookmark>> state
 				.map( ( bookmark: Bookmark ) => {
 					let labelPosition: number = bookmark.get( 'labels' ).indexOf( action.payload.labelId );
@@ -125,7 +115,7 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 					}
 				} );
 
-		// Delete bookmark, update position for all the other bookmarks
+		// Delete a bookmark, update positions if necessary
 		case DELETE_BOOKMARK:
 
 			// Save temporary values of the deleted bookmark
@@ -156,10 +146,7 @@ export const bookmarkReducer: ActionReducer<List<Bookmark>> =
 
 		// Delete all bookmarks of folders
 		case DELETE_FOLDER_BOOKMARKS:
-
 			return <List<Bookmark>> state
-
-				// Filter all bookmarks living inside the folders
 				.filterNot( ( bookmark: Bookmark ) => {
 					return action.payload.folderIds.indexOf( bookmark.get( 'path' ) ) > -1;
 				} );

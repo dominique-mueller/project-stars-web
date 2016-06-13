@@ -1,18 +1,17 @@
 /**
- * External imports
+ * File: User store
  */
+
 import { Action, ActionReducer } from '@ngrx/store';
 import { Map, fromJS } from 'immutable';
 
-/**
- * Internal imports
- */
 import { User } from './user.model';
 
 /**
  * Actions constants
  */
 export const LOAD_USER: string = 'LOAD_USER';
+export const UNLOAD_USER: string = 'UNLOAD_USER';
 
 /**
  * Initial state of the user data (empty per default)
@@ -21,9 +20,7 @@ const initialState: User = <User> Map<string, any>( {
 	emailAddress: null,
 	firstName: null,
 	id: null,
-	lastName: null,
-	profileImage: null,
-	registered: null
+	lastName: null
 } );
 
 /**
@@ -34,9 +31,13 @@ export const userReducer: ActionReducer<User> =
 
 	switch ( action.type ) {
 
-		// Load user (overwriting all state to default)
+		// Load user (overwrites the previous state)
 		case LOAD_USER:
 			return <User> initialState.merge( fromJS( action.payload ) );
+
+		// Unload user / reset
+		case UNLOAD_USER:
+			return initialState;
 
 		// Default fallback
 		default:

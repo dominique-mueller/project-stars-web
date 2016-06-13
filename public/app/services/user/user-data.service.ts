@@ -1,6 +1,7 @@
 /**
- * External imports
+ * File: User data service
  */
+
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
@@ -8,19 +9,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store, Action } from '@ngrx/store';
 
-/**
- * Internal imports
- */
 import { AppStore, AppService } from './../app';
 import { User } from './user.model';
 import {
-	LOAD_USER
+	LOAD_USER,
+	UNLOAD_USER
 } from './user.store';
 
 /**
  * User data service
- * Contains functions for loading users
- * TODO: Next steps would be: Create, update, delete users
  */
 @Injectable()
 export class UserDataService {
@@ -47,6 +44,9 @@ export class UserDataService {
 
 	/**
 	 * Constructor
+	 * @param {AuthHttp}        authHttp   Authenticated HTTP service
+	 * @param {AppService}      appService App service
+	 * @param {Store<AppStore>} store      App store
 	 */
 	constructor(
 		authHttp: AuthHttp,
@@ -65,59 +65,19 @@ export class UserDataService {
 	}
 
 	/**
-	 * Authenticated API request
-	 * Load the user
+	 * API request: Load a user
 	 * @param  {string}       userId User ID
 	 * @return {Promise<any>}        Promise when done
 	 */
 	public loadUser( userId: string ): Promise<any> {
-
-		return new Promise<any>( ( resolve: Function, reject: Function ) => {
-			setTimeout(
-				() => {
-
-					this.authHttp
-
-						// Fetch data and parse response
-						.get( `${ this.appService.API_URL}/user.mock.json` )
-						.map( ( response: Response ) => <any> response.json() )
-
-						// Dispatch action
-						.subscribe(
-							( data: any ) => {
-								this.store.dispatch( {
-									payload: data.data,
-									type: LOAD_USER
-								} );
-								console.log( 'APP > User Data Service > User successfully loaded.' );
-								resolve();
-							},
-							( error: any ) => {
-								console.log( 'APP > User Data Service > Error while loading user.' );
-								console.log( error );
-								reject();
-							}
-						);
-
-				},
-				Math.floor( Math.random() * 3000 ) + 1
-			);
-		} );
-
-		/* TODO: This is the production code
-
 		return new Promise<any>( ( resolve: Function, reject: Function ) => {
 			this.authHttp
-
-				// Fetch data and parse response
 				.get( `${ this.appService.API_URL }/users/${ userId }` )
-				.map( ( response: Response ) => <any> response.json() )
-
-				// Dispatch action
+				.map( ( response: Response ) => response.status !== 204 ? response.json().data : null )
 				.subscribe(
 					( data: any ) => {
 						this.store.dispatch( {
-							payload: data.data,
+							payload: data,
 							type: LOAD_USER
 						} );
 						console.log( 'APP > User Data Service > User successfully loaded.' );
@@ -130,9 +90,15 @@ export class UserDataService {
 					}
 				);
 		} );
+	}
 
-		*/
-
+	/**
+	 * Unload user
+	 */
+	public unloadUser(): void {
+		this.store.dispatch( {
+			type: UNLOAD_USER
+		} );
 	}
 
 }

@@ -1,11 +1,9 @@
 /**
- * External imports
+ * File: Editable input component
  */
+
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-/**
- * Internal imports
- */
 import { IconComponent } from './../icon/icon.component';
 
 /**
@@ -73,8 +71,11 @@ export class EditableInputComponent {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef} changeDetector Change detector
 	 */
-	constructor( changeDetector: ChangeDetectorRef ) {
+	constructor(
+		changeDetector: ChangeDetectorRef
+	) {
 
 		// Initialize
 		this.changeDetector = changeDetector;

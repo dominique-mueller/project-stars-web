@@ -1,16 +1,19 @@
-// var mongoose = require('mongoose');
 var Label = require('../schemaExport.js').Label;
 var logger = require('../../adapters/logger.js');
-// var errorHandler = require('../../helpers/errorHandler.js');
 
-module.exports = {
-	create: function(labelData, userId) {
-		logger.debug('create Label. param labelData:' + labelData.name + '::' + labelData.color + '::'+userId);
+function LabelsModel(userId){
+
+	var self = this; //@see: adapters/authentication.js 
+	this.userId = userId;
+
+
+	this.create = function(labelData) {
+		logger.debug('create Label. param labelData:' + labelData.name + '::' + labelData.color + '::'+self.userId);
 		return new Promise(function(resolve, reject){	
 			var label = new Label({
 				name: labelData.name,
 				color: labelData.color,
-				owner: userId,
+				owner: self.userId
 			});
 			label.save(function(err, label){
 				if(err){
@@ -25,7 +28,7 @@ module.exports = {
 		});
 	},
 
-	update: function(labelId, labelData){
+	this.update = function(labelId, labelData){
 		logger.debug('update label. param labelData: ' + labelData);
 		return new Promise(function(resolve, reject){
 			// var labelId = labelData._id; // safe the label id
@@ -43,7 +46,7 @@ module.exports = {
 		});
 	},
 
-	delete: function(labelId){
+	this.delete = function(labelId){
 		logger.debug('delete label. param labelId: ' + labelId);
 		return new Promise(function(resolve, reject){
 			Label.findByIdAndRemove(labelId, function(err){
@@ -57,10 +60,10 @@ module.exports = {
 		});
 	},
 
-	findOne: function(labelId){
+	this.findOne = function(labelId){
 		logger.debug('findOne label. param labelId: ' + labelId);
 		return new Promise(function(resolve, reject){
-			Label.findById(labelId, function(err, label){
+			Label.findOne({'_id':labelId, 'owner':self.userId}, function(err, label){
 				if(err){
 					reject(err);
 				} 
@@ -71,10 +74,10 @@ module.exports = {
 		});
 	},
 
-	findAll: function(userId){
-		logger.debug('findAll labels with userId: ' + userId);
+	this.findAll = function(){
+		logger.debug('findAll labels with userId: ' + self.userId);
 		return new Promise(function(resolve, reject){
-			Label.find({owner:userId}, function(err, labels){
+			Label.find({'owner':self.userId}, function(err, labels){
 				if(err){
 					reject(err);
 				}
@@ -85,5 +88,8 @@ module.exports = {
 			});
 		});
 	}
+
+	return this;
 };
 
+module.exports = LabelsModel;

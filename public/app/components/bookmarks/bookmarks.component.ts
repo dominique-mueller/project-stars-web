@@ -1,27 +1,25 @@
 /**
- * External imports
+ * File: Bookmarks component
  */
+
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ROUTER_DIRECTIVES, Routes, Route, RouteSegment, RouteTree, Router, OnActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { List, Map } from 'immutable';
 
-/**
- * Internal imports
- */
-import { UiService } from './../../services/ui';
 import { BookmarkDataService, BookmarkLogicService } from './../../services/bookmark';
 import { Folder, FolderDataService, FolderLogicService } from './../../services/folder';
 import { LabelDataService } from './../../services/label';
+import { UiService } from './../../services/ui';
 import { UserDataService, UserAuthService } from './../../services/user';
+import { LoginComponent } from './../login/login.component';
 import { HeaderComponent } from './../header/header.component';
 import { BookmarkListComponent } from './../bookmark-list/bookmark-list.component';
 import { BookmarkSearchComponent } from './../bookmark-search/bookmark-search.component';
 import { BookmarkDirectoryComponent } from './../bookmark-directory/bookmark-directory.component';
 import { LabelListComponent } from './../label-list/label-list.component';
-import { IconComponent } from './../../shared/icon/icon.component';
-import { LoaderComponent } from './../../shared/loader/loader.component';
+import { IconComponent, LoaderComponent } from './../../shared';
 
 /**
  * View component (smart): Bookmarks
@@ -62,6 +60,12 @@ import { LoaderComponent } from './../../shared/loader/loader.component';
 	new Route( {
 		component: BookmarkSearchComponent,
 		path: '/search'
+	} ),
+	// Hacky 'otherwhise' functionality, redirects to bookmarks over login
+	// We do this because of issues occuring when redirecting directly to the bookmarks route
+	new Route( {
+		component: LoginComponent,
+		path: '*'
 	} )
 ] )
 export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
@@ -148,6 +152,15 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}   changeDetector      Change detector
+	 * @param {Router}              router              Router
+	 * @param {UiService}           uiService           UI service
+	 * @param {BookmarkDataService} bookmarkDataService Bookmark data service
+	 * @param {FolderDataService}   folderDataService   Folder data service
+	 * @param {FolderLogicService}  folderLogicService  Folder logic service
+	 * @param {LabelDataService}    labelDataService    Label data service
+	 * @param {UserDataService}     userDataService     User data service
+	 * @param {UserAuthService}     userAuthService     User authentication service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
@@ -213,8 +226,6 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 				// Update opened folder (only when the value actually changed)
 				if ( uiState.get( 'openedFolderId' ) !== this.openedFolderId ) {
 					this.openedFolderId = uiState.get( 'openedFolderId' );
-
-					// We select the root folder when the opened folder gets unselected
 					if ( this.openedFolderId === null ) {
 						this.onSelectFolder( this.rootFolderId );
 					}
@@ -223,10 +234,11 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 
 				// If the root folder changed and the opened folder is still not set, then set and navigate to the root folder
 				if ( uiState.get( 'rootFolderId' ) !== this.rootFolderId ) {
+					this.rootFolderId = uiState.get( 'rootFolderId' );
 					if ( this.openedFolderId === null ) {
-						this.rootFolderId = uiState.get( 'rootFolderId' );
 						this.onSelectFolder( this.rootFolderId );
 					}
+					this.changeDetector.markForCheck(); // Trigger change detection
 				}
 
 			}
@@ -329,19 +341,29 @@ export class BookmarksComponent implements OnActivate, OnInit, OnDestroy {
 	 */
 	private onLogout(): void {
 
-		// Try to log the user out, then navigate to the login page
+		// Try to log the user out, then navigate to the login page anyways (similar to finally)
 		this.userAuthService.logoutUser()
-
-			// Success
 			.then( ( data: any ) => {
-				console.log( 'APP > Logout successful.' );
 				this.router.navigate( [ 'login' ] ); // Absolute
+				this.uiService.unsetRootFolderId();
+				this.uiService.unsetOpenedFolderId();
+				this.uiService.unsetSelectedElement();
+				this.uiService.resetSearch();
+				this.bookmarkDataService.unloadBookmarks();
+				this.folderDataService.unloadFolders();
+				this.labelDataService.unloadLabels();
+				this.userDataService.unloadUser();
 			} )
-
-			// Error
 			.catch( ( error: any ) => {
-				console.warn( 'APP > Logout not completely successful, only client-side.' );
 				this.router.navigate( [ 'login' ] ); // Absolute
+				this.uiService.unsetRootFolderId();
+				this.uiService.unsetOpenedFolderId();
+				this.uiService.unsetSelectedElement();
+				this.uiService.resetSearch();
+				this.bookmarkDataService.unloadBookmarks();
+				this.folderDataService.unloadFolders();
+				this.labelDataService.unloadLabels();
+				this.userDataService.unloadUser();
 			} );
 
 	}

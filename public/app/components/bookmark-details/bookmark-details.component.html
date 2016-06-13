@@ -79,11 +79,11 @@
 		<fieldset class="form-fieldset">
 			<ul>
 				<li class="form-component bookmark-details__panel-section">
-					<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' )" readonly>
+					<input class="form-input" id="bookmark-created" type="text" [value]="bookmark?.get( 'created' ) | date" readonly>
 					<label class="form-label" for="bookmark-created">Created on</label>
 				</li>
-				<li class="form-component bookmark-details__panel-section" *ngIf="bookmark?.get( 'updated' )">
-					<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' )" readonly>
+				<li class="form-component bookmark-details__panel-section" *ngIf="bookmark?.get( 'updated' ) !== null">
+					<input class="form-input" id="bookmark-updated" type="text" [value]="bookmark?.get( 'updated' ) | date" readonly>
 					<label class="form-label" for="bookmark-updated">Last updated on</label>
 				</li>
 			</ul>

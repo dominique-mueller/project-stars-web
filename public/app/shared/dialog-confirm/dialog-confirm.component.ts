@@ -1,11 +1,9 @@
 /**
- * External imports
+ * File: Dialog confirm component
  */
+
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-/**
- * Internal imports
- */
 import { DialogConfirmService } from './dialog-confirm.service';
 import { IconComponent } from './../icon/icon.component';
 
@@ -69,6 +67,8 @@ export class DialogConfirmComponent {
 
 	/**
 	 * Constructor
+	 * @param {ChangeDetectorRef}    changeDetector       Change detector
+	 * @param {DialogConfirmService} dialogConfirmService Dialog confirm service
 	 */
 	constructor(
 		changeDetector: ChangeDetectorRef,
@@ -98,15 +98,10 @@ export class DialogConfirmComponent {
 	 * @return {Promise<boolean>}         Promise, tells the result as a boolean value
 	 */
 	public requestConfirmation( options: any ): Promise<boolean> {
-
-		// Setup content and open dialog
 		this.openDialog( options );
-
-		// Create and return the promise
 		return new Promise<boolean>( ( resolve: Function ) => {
 			this.resolve = resolve;
 		} );
-
 	}
 
 	/**
@@ -114,43 +109,31 @@ export class DialogConfirmComponent {
 	 * @param {any} options Options object
 	 */
 	private openDialog( options: any ): void {
-
-		// Set values
 		this.title = options.title;
 		this.yesText = options.yesText;
 		this.noText = options.noText;
 		this.message = options.message;
 		this.type = options.type;
 		this.isOpen = true;
-
 		this.changeDetector.markForCheck(); // Trigger change detection
-
 	}
 
 	/**
 	 * Close dialog
 	 */
 	private closeDialog(): void {
-
-		// Close dialog
 		this.isOpen = false;
-
-		// Wait until the animation is done (takes 250ms)
 		setTimeout(
 			() => {
-
-				// Reset values
 				this.title = 'Confirm';
 				this.yesText = 'Yes';
 				this.noText = 'No';
 				this.message = '';
 				this.type = 'primary';
 				this.changeDetector.markForCheck(); // Trigger change detection
-
 			},
 			300
 		);
-
 	}
 
 	/**

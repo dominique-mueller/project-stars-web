@@ -12,11 +12,11 @@
 	<!-- inject:favicon -->
 	<!-- endinject -->
 
-	<!-- Inject inline CSS file -->
+	<!-- Inject inline CSS -->
 	<!-- inject:css:inline -->
 	<!-- endinject -->
 
-	<!-- Inject CSS file -->
+	<!-- Inject CSS -->
 	<!-- inject:css -->
 	<!-- endinject -->
 
@@ -24,7 +24,7 @@
 	<!-- inject:js -->
 	<!-- endinject -->
 
-	<!-- Inject TypeKit and SystemJS configuration -->
+	<!-- Inject inline TypeKit and SystemJS configurations -->
 	<!-- inject:js:inline -->
 	<!-- endinject -->
 
@@ -32,17 +32,13 @@
 <body>
 
 <div class="svgstore">
-
 	<!-- Inject SVG -->
 	<!-- inject:svg -->
 	<!-- endinject -->
-
 </div>
+<app-root>
 
-<!-- App container for Angular 2 -->
-<app>
-
-	<!-- Temporary loading spinner while downloading and bootstrapping the application -->
+	<!-- Temporary loading spinner during application download and bootstrap -->
 	<div class="inline__background">
 		<div class="inline__loading-box">
 			<div class="inline__loading-spinner inline__loading-spinner-one">
@@ -52,7 +48,6 @@
 		</div>
 	</div>
 
-</app>
-
+</app-root>
 </body>
 </html>

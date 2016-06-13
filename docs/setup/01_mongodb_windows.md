@@ -31,7 +31,7 @@ Now we need to add MongoDB to both the system and the user variables. Do this fo
 After the process you need to restart the command line if opened. You can make sure this configuration process worked out by opening up your command line and run:
 
 <pre>
-	mongod
+mongod
 </pre>
 
 <br>
@@ -50,8 +50,8 @@ dbpath=C:\mongodb\data
 logpath=C:\mongodb\mongo.log
 </pre>
 
-You're now able to start the MongoDB server by openening up your command line and run (update parameters if necessary):
+<br>
 
-<pre>
-	mongod --config "C:\mongodb\mongo.config"
-</pre>
+### Step 4: Install MongoDB GUI (optional)
+
+You can recommend [Admin Mongo](https://github.com/mrvautin/adminMongo) if you want to use and manage the MongoDB via a graphical UI.

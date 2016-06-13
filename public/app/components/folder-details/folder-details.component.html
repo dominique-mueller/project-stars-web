@@ -49,11 +49,11 @@
 		<fieldset class="form-fieldset">
 			<ul>
 				<li class="form-component bookmark-details__panel-section">
-					<input class="form-input" id="folder-created" type="text" [value]="folder?.get( 'created' )" readonly>
+					<input class="form-input" id="folder-created" type="text" [value]="folder?.get( 'created' ) | date" readonly>
 					<label class="form-label" for="folder-created">Created on</label>
 				</li>
-				<li class="form-component bookmark-details__panel-section">
-					<input class="form-input" id="folder-updated" type="text" [value]="folder?.get( 'updated' )" readonly>
+				<li class="form-component bookmark-details__panel-section" *ngIf="folder?.get( 'updated' ) !== null">
+					<input class="form-input" id="folder-updated" type="text" [value]="folder?.get( 'updated' ) | date" readonly>
 					<label class="form-label" for="folder-updated">Last updated on</label>
 				</li>
 			</ul>

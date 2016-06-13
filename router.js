@@ -1,11 +1,11 @@
 var logger = require('./adapters/logger.js');
 var httpStatus = require('./config.js').httpStatus;
 var authentication;
-// var sync = require('synchronize');
+var helpers = require('./helpers/generalHelpers.js');
 var routerBackend = require('express').Router(), 
 	routerFrontend = require('express').Router(),
 	routerHTTPRedirect = require('express').Router();
-var usersController, bookmarksController;
+var usersController, bookmarksController, foldersController, labelsController;
 
 
 // middleware to use for all requests
@@ -21,15 +21,22 @@ routerHTTPRedirect.use(function(req, res, next) {
 
 routerBackend.use(function(req, res, next){
 	//a new Authentication object has to be created here, because it only is for this request
-	authentication = require('./adapters/authentication.js')();
+	logger.debug("REQUEST: " + req.body.data);
+	var a = require('./adapters/authentication.js');
+	authentication = new a();
 	next();
 });
 
 
 //###### Frontend API ######
 
-routerFrontend.get('',function(req, res){
-	res.sendFile('public/assets/index.html', {root:__dirname});
+/*
+this router will route every request to the index.html in the project root folder
+the frontend router is the last router who is checked for url matching. @see app.js 
+*/
+routerFrontend.route('*').all(function(req, res){
+	res.sendFile('index.html', {root:__dirname});
+	// res.end();
 });
 
 
@@ -37,8 +44,9 @@ routerFrontend.get('',function(req, res){
 
 routerBackend.route('/authenticate/login')
 	.post(function(req, res){
-		logger.debug('LOGIN::');
-		var result = authentication.login(JSON.parse(req.body.data));
+		logger.debug('LOGIN:: ' + req);
+		var result = authentication.login(req.body.data);
+		// var result = authentication.login(JSON.parse(req.body.data));
 		result.then(function(token){
 			logger.debug('resolve JWT::' + token);
 			res.status(httpStatus.OK).json({data:token});
@@ -52,13 +60,7 @@ routerBackend.route('/authenticate/login')
 	});
 routerBackend.route('/authenticate/logout')
 	.delete(function(req, res){
-		var result = authentication.logout();
-		result.then(function(){
-			res.status(httpStatus.NO_CONTENT).end();
-		})
-		.catch(function(){
-			res.status(httpStatus.BAD_REQUEST).end();
-		});
+		res.status(httpStatus.NO_CONTENT).end();
 	});
 
 routerBackend.route('/authenticate/accountActivation')
@@ -73,7 +75,8 @@ routerBackend.route('/authenticate/newEMailAddress')
 	});
 
 routerBackend.use('/users', function(req, res, next){
-	usersController = require('./controller/usersController.js')(req, res, authentication);
+	var u = require('./controller/usersController.js');
+	usersController = new u(req, res, authentication);
 	next();
 });
 routerBackend.route('/users/register')
@@ -87,7 +90,7 @@ routerBackend.use(function(req, res, next) {
 	//if the Authorization is set in the request header and this token is vaild (our token & not expired)
     var message = null;
     if(req.headers.authorization){
-    	authentication.setToken(req.headers.authorization, function(err){
+    	authentication.setToken(req.headers.authorization.split(" ")[1], function(err){ //split because of authorization header prefix
     		if(err){ //Everything in this if body is error handling and redirecting
     			logger.debug('authentication failed. Error: ' + err);
     			if(err.name == 'TokenExpiredError'){
@@ -143,7 +146,8 @@ routerBackend.route('/users/:user_id')
 	});
 
 routerBackend.use('/bookmarks', function(req, res, next){
-	bookmarksController = require('./controller/bookmarksController.js')(req, res, authentication);
+	var b = require('./controller/bookmarksController.js');
+	bookmarksController = new b(req, res, authentication);
 	next();
 });
 routerBackend.route('/bookmarks')
@@ -168,7 +172,7 @@ routerBackend.route('/bookmarks/:bookmark_id')
 	});
 routerBackend.route('/bookmarks/folders')
 	.get(function(req, res){
-
+		res.end();
 	});
 // routerBackend.route('bookmarks/user/:user_id')
 // 	.get(function(req, res){
@@ -176,7 +180,8 @@ routerBackend.route('/bookmarks/folders')
 // 	});
 
 routerBackend.use('/folders', function(req, res, next){
-	foldersController = require('./controller/foldersController.js')(req, res, authentication);
+	var f = require('./controller/foldersController.js');
+	foldersController = new f(req, res, authentication);
 	next();
 });
 routerBackend.route('/folders')
@@ -249,62 +254,34 @@ routerBackend.route('/settings/:setting_id')
 	});
 
 
+routerBackend.use('/labels', function(req, res, next){
+	var l = require('./controller/labelsController.js');
+	labelsController = new l(req, res, authentication);
+	next();
+});
+
 routerBackend.route('/labels')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findAll(authentication.tokenUserId);
-		result.then(function(labels){
-			res.json({data:labels});
-			res.end();
-		})
-		.catch(function(reason){
-			res.send('{"error":"Failed to get Labels"}');
-		});
+		labelsController.getAll();
 	})
 
 	.post(function(req, res){
-		logger.debug('CREATE LABEL userId: ' + authentication.tokenUserId)
-		var result = require('./modules/label/labels.model.js').create(JSON.parse(req.body.data), authentication.tokenUserId);
-		result.then(function(label) {
-			res.json({data:label});
-			res.end();
-		})
-		.catch(function() {
-			res.send('{"error":"Failed to create Label"}');
-		});
+		labelsController.post();
 	});
 routerBackend.route('/labels/:label_id')
 	.get(function(req, res){
-		var result = require('./modules/label/labels.model.js').findOne(req.params.label_id);
-		result.then(function(label){
-			res.json({data:label});
-			res.end();
-		})
-		.catch(function(reason){
-			res.send('{"error":"Failed to get Label"}');
-		});
-		// res.send('Label GET id: ' + req.params.label_id);
+		labelsController.get();
 	})
 
 	.put(function(req, res){
-		var result = require('./modules/label/labels.model.js').update(req.params.label_id, JSON.parse(req.body.data));
-		result.then(function(){
-			res.status(httpStatus.NO_CONTENT);
-			res.end();
-		})
-		.catch(function(reason){
-			res.send('{"error":"Failed to update Label"}');
-		});
+		labelsController.put();
 	})
 
 	.delete(function(req, res){
-		var result = require('./modules/label/labels.model.js').delete(req.params.label_id);
-		result.then(function(msg){
-			res.end();
-		})
-		.catch(function(reason){
-			res.status(httpStatus.INVALID_INPUT).send('{"error":"Failed to delete Label"}');
-		});
+		labelsController.delete();
 	});
+
+
 
 
 //##### HTTP Redirect #####
