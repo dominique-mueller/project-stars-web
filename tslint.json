@@ -30,10 +30,6 @@
 		"jsdoc-format": true,
 		"label-position": true,
 		"label-undefined": true,
-		"linebreak-style": [
-			true,
-			"CRLF"
-		],
 		"max-line-length": [
 			true,
 			120
